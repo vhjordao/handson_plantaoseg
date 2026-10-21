@@ -1,0 +1,25 @@
+flowchart TB
+    U["Usuários: coordenadores e médicos (web),<br/>médicos (Telegram) e plateia (QR code)"]
+    subgraph APP["Aplicação na VPS"]
+        W["Web app (Next.js)<br/>coordenador, médico e telão"]
+        N["n8n (orquestração)<br/>cascata, lembretes, rotinas"]
+        M["Matching API (FastAPI)<br/>filtro, ranking, explicação"]
+    end
+    subgraph DADOS["Dados e IA"]
+        S["Supabase<br/>Postgres, Auth, RLS, Realtime e Storage"]
+        AI["Serviços de IA<br/>LLM, ranking e previsão"]
+    end
+    G["Governança: Langfuse (traços e avaliações de IA)<br/>e trilha de auditoria em Postgres"]
+    U --> W
+    U -->|Telegram| N
+    N -->|HTTP| M
+    W --> S
+    N --> S
+    M -->|lê e grava| S
+    M --> AI
+    S -.-> G
+    AI -.-> G
+    classDef central fill:#dbeafe,stroke:#1d4ed8,stroke-width:2px
+    classDef gov fill:#f3f4f6,stroke:#6b7280,stroke-dasharray:4 4
+    class M central
+    class G gov

@@ -1,0 +1,14 @@
+flowchart LR
+    A["1. Vaga publicada<br/>em texto livre"] --> B["2. Demanda (LLM)<br/>extrai os campos"]
+    B --> C["3. Filtro (código)<br/>CRM, jornada, raio"]
+    C --> D["4. Ranking<br/>chance de aceitar"]
+    D --> E["5. Explicação<br/>motivos do ranking"]
+    E --> F["6. Coordenador<br/>decide e confirma"]
+    F --> G["7. Oferta (n8n)<br/>cascata de ofertas"]
+    G --> H["8. Aceite<br/>check-in e pagamento"]
+    AUD["Toda recomendação, explicação e contestação<br/>fica na trilha de auditoria"]
+    H -.-> AUD
+    classDef humano fill:#dbeafe,stroke:#1d4ed8,stroke-width:2px
+    classDef trilha fill:#f3f4f6,stroke:#6b7280,stroke-dasharray:4 4
+    class F humano
+    class AUD trilha
