@@ -4,7 +4,7 @@
 
 Projeto final da disciplina **Hands On – Aplicação de IA nos negócios** (pós-graduação, Mackenzie), Prof. Fabio Versolatto.
 
-> **Status:** Entrega 1 (descoberta) e arquitetura documentadas. Ainda não há código da aplicação neste repositório; a prova de conceito é a Etapa 2 (27 a 31/10/2026).
+> **Status:** Entrega 1 (descoberta) realizada, com documento final de 8 páginas, e arquitetura documentada. Ainda não há código da aplicação neste repositório; a prova de conceito é a Etapa 2 (27 a 31/10/2026).
 > Projeto acadêmico: todos os dados da demonstração serão sintéticos e nenhum documento gerado tem validade médica ou legal.
 
 ## A ideia em um parágrafo
@@ -53,7 +53,7 @@ Custo estimado do mês da apresentação: US$ 36 a US$ 42 (preços lidos em 20/1
 
 | Documento | Conteúdo |
 | --- | --- |
-| [docs/01-entrega-1-descoberta.md](docs/01-entrega-1-descoberta.md) | Problema, público, evidências, concorrência, oportunidade de IA, proposta, indicadores, riscos e conformidade, escopo, cronograma, frase-síntese e referências |
+| [docs/01-entrega-1-descoberta.md](docs/01-entrega-1-descoberta.md) | **Entrega 1 realizada** (documento de 8 páginas): problema, público, evidências, concorrência, oportunidade de IA, proposta, jornada, indicadores, riscos e conformidade, dados, gestão do projeto, frase-síntese e referências |
 | [docs/02-arquitetura-e-ferramentas.md](docs/02-arquitetura-e-ferramentas.md) | Arquitetura em camadas, decisões, ferramentas por etapa, modelo de dados, controles de segurança e conformidade, custo, plano de construção e riscos técnicos |
 | [docs/diagrams/](docs/diagrams) | Fontes Mermaid dos diagramas (fluxo da recomendação, arquitetura em camadas, cronograma) |
 
@@ -61,7 +61,7 @@ Custo estimado do mês da apresentação: US$ 36 a US$ 42 (preços lidos em 20/1
 
 | Período | Marco |
 | --- | --- |
-| 20 a 24/10 | Etapa 1: descoberta (documentos deste repositório) |
+| 20 a 24/10 | Etapa 1: descoberta, **realizada** (Entrega 1 neste repositório) |
 | 27 a 31/10 | Etapa 2: prova de conceito |
 | 3 a 7/11 | Etapa 3: validação |
 | 10/11 | Aula de storytelling |
