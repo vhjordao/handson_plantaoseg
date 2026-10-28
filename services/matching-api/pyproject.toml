@@ -1,0 +1,16 @@
+[project]
+name = "plantaoseguro-matching-api"
+version = "0.0.1"
+description = "API de matching do PlantãoSeguro: extração, filtro, ranking e explicação (PoC com dados sintéticos)"
+requires-python = ">=3.12"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

@@ -1,0 +1,84 @@
+# Esteira de CI do PlantãoSeguro. Roda em todo PR para a main e em push na main.
+# Entram nas fases seguintes: web (lint e build, Fase 3), SQL/RLS (Fase 1) e e2e (Fase 4).
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  segredos:
+    name: Segredos e material do professor
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: .env e docs/aulas não podem estar versionados
+        run: |
+          if git ls-files | grep -E '(^|/)\.env($|\.)' | grep -v -E '\.env\.example$'; then
+            echo "::error::Arquivo .env versionado."; exit 1
+          fi
+          if git ls-files | grep -E '^docs/aulas/'; then
+            echo "::error::Material do professor (docs/aulas) versionado."; exit 1
+          fi
+
+      - name: Padrões de chaves conhecidos
+        run: |
+          # Anthropic (sk-ant-), JWT (chaves do Supabase) e token de bot do Telegram.
+          if git grep -nIE '(sk-ant-[A-Za-z0-9_-]{20,}|eyJ[A-Za-z0-9_-]{30,}\.[A-Za-z0-9_-]{30,}\.[A-Za-z0-9_-]{10,}|[0-9]{8,10}:AA[A-Za-z0-9_-]{30,})' -- . ':!.github/workflows/ci.yml'; then
+            echo "::error::Possível segredo no repositório."; exit 1
+          fi
+
+  python:
+    name: Lint e testes (matching-api)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/matching-api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: services/matching-api/requirements-dev.txt
+      - run: pip install -r requirements-dev.txt
+      - name: Lint (ruff)
+        run: ruff check .
+      - name: Testes (pytest)
+        run: python -m pytest -q
+
+  neutralidade:
+    name: Neutralidade econômica (Res. CFM 2.460)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/matching-api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: services/matching-api/requirements-dev.txt
+      - run: pip install -r requirements-dev.txt
+      - name: Pagamento e valor do plantão não podem entrar no ranking
+        run: python -m pytest -q tests/test_neutralidade_economica.py
+
+  compose:
+    name: Validação do Docker Compose
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: docker compose config
+        run: docker compose --env-file .env.example -f infra/docker-compose.yml config -q
