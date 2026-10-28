@@ -1,6 +1,6 @@
 ## O que mudou
 
-<!-- Fase e resumo em poucas linhas. Branch por fase: fase-N-nome. -->
+<!-- Fase, frente e resumo em poucas linhas. Branch por tarefa com o prefixo da fase: fN/tarefa. -->
 
 ## Como rodar
 
@@ -28,6 +28,8 @@
 - [ ] Afirmações legais citam a fonte e dizem "validar com jurídico"
 - [ ] Métricas em dados sintéticos rotuladas como simulação, com baseline
 - [ ] Documentos atualizados no mesmo PR (`docs/02`, `CLAUDE.md`, diário de bordo) se uma decisão mudou
+- [ ] Documentação do componente: ficha no README da pasta (como foi feito, código-chave, ferramentas e versões, por que esta e não outra, como rodar, limites), ADR se houve decisão e diário com o uso de IA
+- [ ] Revisado por outra pessoa da equipe (não pelo autor)
 
 ## Riscos e pendências
 

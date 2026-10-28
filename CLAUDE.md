@@ -71,7 +71,7 @@ No Windows, `make` e Python precisam ser instalados (ver `make doctor`); use `ma
 
 ## Fluxo de trabalho e regras de PR (esteira)
 
-1. **Uma branch por fase**: `fase-0-base`, `fase-1-banco`, `fase-2-matching`, `fase-3-telas`, `fase-4-demo`. Nunca push direto na `main`, nunca reescrever histórico, nunca commitar segredo.
+1. **Uma branch por tarefa, com o prefixo da fase**: `f1/rls-politicas`, `f2/ranking-baseline` (a `fase-0-base` é a exceção histórica). Não use `fase-1` e `fase-1/x` juntos: o Git não aceita os dois nomes. Nunca push direto na `main`, nunca reescrever histórico, nunca commitar segredo.
 2. **Commits pequenos**, mensagem em português, terminando com `Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>`.
 3. **Testes antes de cada commit**; diga o que rodou e o que passou. Se algo não pôde rodar (falta de ferramenta), diga e aponte a CI.
 4. **PR para `main`** com o modelo de `.github/pull_request_template.md`: o que mudou, como rodar, testes e resultado, checklist de conformidade, linhas da rastreabilidade tocadas e riscos. Termina com `🤖 Generated with [Claude Code](https://claude.com/claude-code)`.
@@ -80,12 +80,30 @@ No Windows, `make` e Python precisam ser instalados (ver `make doctor`); use `ma
 7. **Fim de cada fase:** o que ficou pronto, como rodar, o que ficou pendente e o risco para o prazo (máx. 8 linhas). Registre no diário de bordo.
 8. A cada fase: sequência **fazer, testar, abrir PR, conferir CI, avançar**; o professor-avaliador (`revisor-professor`) revisa antes de fechar.
 
+## Documentar enquanto faz (obrigatório em todo PR)
+
+Quem faz documenta, e o PR só é aceito com a documentação junto. Isso alimenta `docs/03` (o professor cobra a justificativa de cada escolha).
+
+- **Ficha do componente**: cada componente tem um README próprio, no modelo de `docs/templates/ficha-componente.md` (o que é, como funciona, como foi feito, código-chave, ferramentas e versões, por que esta e não outra, como rodar, testes, segurança, limites, uso de IA).
+- **Código**: docstring nas funções públicas e comentário só onde o porquê não é óbvio; contratos (SQL, Pydantic, JSON Schema) comentados.
+- **Decisão não trivial**: ADR curto em `docs/adr/`. **Ferramenta nova**: linha em `docs/ferramentas-agentes.md` ou na tabela de `docs/02`, com versão, motivo, alternativa descartada e custo.
+- **Uso de IA**: registre no diário de bordo o que foi pedido ao Claude e o que foi aceito ou corrigido (vira a seção "Uso de IA no desenvolvimento").
+- **Mudou arquitetura ou comportamento**: atualize `docs/02` e a rastreabilidade no mesmo PR.
+- **Antes de executar**: explique ao Victor, em poucas linhas, o que vai fazer (arquivos, ferramentas, riscos) e espere o "ok"; use o modo plano.
+
+## Trabalho em equipe (6 pessoas, cada uma com Claude Code)
+
+- Guia de entrada: `docs/CONTRIBUINDO.md`. Plano e frentes: `docs/plano-etapa-2.md`.
+- Cada pessoa cuida de uma frente e das pastas dela; mexer em arquivo de outra frente só combinando antes.
+- Arquivos compartilhados (`CLAUDE.md`, rastreabilidade, diário, `docs/02`): PR pequeno e aviso no grupo.
+- Outra pessoa revisa cada PR; o Victor faz o merge. O repositório é **público**: nada de segredo, dado real ou slide do professor.
+
 ## Ciclo do feedback do professor
 
 Quando Victor colar um feedback ou disser "novo feedback", use a skill `incorporar-feedback-professor`: salvar na íntegra em `docs/feedback/AAAA-MM-DD-etapa-N.md`, classificar (obrigatório, sugestão, ambíguo), atualizar a rastreabilidade, virar tarefas e resumir em 5 linhas. Conflito com princípio do projeto: não aplicar em silêncio; explicar e propor alternativa.
 
 ## Estado atual (atualize ao fechar cada fase)
 
-- Etapa 1 entregue. **Fase 0** (base, esteira, subagentes) em andamento na branch `fase-0-base`.
+- Etapa 1 entregue. **Fase 0** no PR #1 (`fase-0-base`), CI verde (4 verificações), aguardando o merge do Victor. Plano da Etapa 2 em `docs/plano-etapa-2.md` (proposta, aguardando aprovação).
 - Ambiente local de 28/10: sem Docker, Node, make, Supabase CLI e ffmpeg; Python de `C:\Python312` incompleto. A CI do GitHub é a evidência de testes até instalar.
 - Vídeo da aula de 27/10 não processado (ver rastreabilidade A3-13).
