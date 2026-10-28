@@ -4,7 +4,7 @@
 
 Projeto final da disciplina **Hands On – Aplicação de IA nos negócios** (pós-graduação, Mackenzie), Prof. Fabio Versolatto.
 
-> **Status:** Entrega 1 (descoberta) realizada, com documento final de 8 páginas, e arquitetura documentada. Ainda não há código da aplicação neste repositório; a prova de conceito é a Etapa 2 (27 a 31/10/2026).
+> **Status (28/10/2026):** Entrega 1 (descoberta) realizada. A prova de conceito (Etapa 2, entrega em 31/10) está em construção por fases, uma branch e um PR por fase; a Fase 0 traz a base do repositório, a esteira de CI, o contrato de neutralidade econômica do ranking e as decisões de escopo do feedback do professor. A aplicação ainda não roda: veja [CLAUDE.md](CLAUDE.md) e o [diário de bordo](docs/diario-de-bordo.md).
 > Projeto acadêmico: todos os dados da demonstração serão sintéticos e nenhum documento gerado tem validade médica ou legal.
 
 ## A ideia em um parágrafo
@@ -56,6 +56,15 @@ Custo estimado do mês da apresentação: US$ 36 a US$ 42 (preços lidos em 20/1
 | [docs/01-entrega-1-descoberta.md](docs/01-entrega-1-descoberta.md) | **Entrega 1 realizada** (documento de 8 páginas): problema, público, evidências, concorrência, oportunidade de IA, proposta, jornada, indicadores, riscos e conformidade, dados, gestão do projeto, frase-síntese e referências |
 | [docs/02-arquitetura-e-ferramentas.md](docs/02-arquitetura-e-ferramentas.md) | Arquitetura em camadas, decisões, ferramentas por etapa, modelo de dados, controles de segurança e conformidade, custo, plano de construção e riscos técnicos |
 | [docs/diagrams/](docs/diagrams) | Fontes Mermaid dos diagramas (fluxo da recomendação, arquitetura em camadas, cronograma) |
+| [docs/rastreabilidade-professor.md](docs/rastreabilidade-professor.md) | Exigências do professor (feedback da Entrega 1 e slides da Etapa 2), com status e onde cada uma está atendida |
+| [docs/adr/](docs/adr) | Decisões: [segmento inicial](docs/adr/0001-segmento-inicial.md) e [escopo da PoC](docs/adr/0002-escopo-da-poc.md) |
+| [docs/conformidade/](docs/conformidade/README.md) | Plano de verificação dos textos oficiais das normas (não é parecer jurídico) |
+| [docs/diario-de-bordo.md](docs/diario-de-bordo.md) | Decisões do dia e uso de IA no planejamento |
+| [docs/ferramentas-agentes.md](docs/ferramentas-agentes.md) | Subagentes, skills e integrações usados no projeto |
+
+## Como contribuir (esteira)
+
+Uma branch por fase (`fase-0-base`, `fase-1-banco`...), PR para `main` com o [modelo de PR](.github/pull_request_template.md) e CI verde (segredos, lint e testes, neutralidade econômica e Compose). Sem push direto na `main`. Comandos: `make doctor`, `make up`, `make test`, `make lint`.
 
 ## Cronograma
 
