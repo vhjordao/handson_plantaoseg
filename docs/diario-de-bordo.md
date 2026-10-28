@@ -2,7 +2,23 @@
 
 Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra também o uso de IA no planejamento do projeto (Gestão de Projetos com IA). Mais recente no topo.
 
-## 28/10/2026 (terça): Fase 0, base do repositório
+## 28/10/2026 (quarta), à noite: documentação contínua, equipe e plano da Etapa 2
+
+**Pedido do Victor:** documentar tudo enquanto se faz (código, como foi feito, ferramentas), explicar cada passo antes de executar para ele aprovar, preparar a entrada dos 5 colegas (cada um com Claude Code) e montar o plano da Etapa 2.
+
+**O que foi feito**
+
+- A CI do PR #1 passou nas 4 verificações no GitHub (segredos, ruff e pytest, neutralidade econômica e Compose): é a primeira evidência real de pytest, ruff e `docker compose config`.
+- Política de documentação contínua no `CLAUDE.md`, com ficha do componente ([modelo](templates/ficha-componente.md)) e itens novos no modelo de PR.
+- [Guia de entrada da equipe](CONTRIBUINDO.md) e [plano da Etapa 2](plano-etapa-2.md) com 6 frentes, portões de aprovação (G0 a G4) e metas com linha de base. Plano é **proposta**, aguardando o Victor.
+- Nome de branch passou de "uma por fase" para "uma por tarefa com prefixo da fase" (`f1/...`), porque seis pessoas trabalham em paralelo e o Git não aceita `fase-1` e `fase-1/x` juntos.
+- Correção: o dia 28/10/2026 é quarta-feira (a entrada abaixo dizia terça).
+
+**Estado do repositório no GitHub:** público; `main` sem proteção; só o Victor é colaborador. Pendências do Victor: convidar os colegas e proteger a `main`.
+
+**Uso de IA:** o Claude redigiu o guia, o plano e a política de documentação; o Victor aprova ou ajusta.
+
+## 28/10/2026 (quarta): Fase 0, base do repositório
 
 **Quem fez:** Victor, com o Claude Code (modelo Sonnet 5.5) como parceiro de engenharia.
 

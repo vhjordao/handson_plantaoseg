@@ -59,12 +59,15 @@ Custo estimado do mês da apresentação: US$ 36 a US$ 42 (preços lidos em 20/1
 | [docs/rastreabilidade-professor.md](docs/rastreabilidade-professor.md) | Exigências do professor (feedback da Entrega 1 e slides da Etapa 2), com status e onde cada uma está atendida |
 | [docs/adr/](docs/adr) | Decisões: [segmento inicial](docs/adr/0001-segmento-inicial.md) e [escopo da PoC](docs/adr/0002-escopo-da-poc.md) |
 | [docs/conformidade/](docs/conformidade/README.md) | Plano de verificação dos textos oficiais das normas (não é parecer jurídico) |
+| [docs/plano-etapa-2.md](docs/plano-etapa-2.md) | Plano da Etapa 2: escopo, frentes, cronograma com portões de aprovação, contratos e metas com linha de base (proposta) |
+| [docs/CONTRIBUINDO.md](docs/CONTRIBUINDO.md) | Guia de entrada da equipe: ferramentas, primeiro dia, uso do Claude Code, fluxo de Git e documentação obrigatória |
+| [docs/templates/ficha-componente.md](docs/templates/ficha-componente.md) | Modelo da ficha de cada componente (como foi feito, ferramentas, justificativas) |
 | [docs/diario-de-bordo.md](docs/diario-de-bordo.md) | Decisões do dia e uso de IA no planejamento |
 | [docs/ferramentas-agentes.md](docs/ferramentas-agentes.md) | Subagentes, skills e integrações usados no projeto |
 
 ## Como contribuir (esteira)
 
-Uma branch por fase (`fase-0-base`, `fase-1-banco`...), PR para `main` com o [modelo de PR](.github/pull_request_template.md) e CI verde (segredos, lint e testes, neutralidade econômica e Compose). Sem push direto na `main`. Comandos: `make doctor`, `make up`, `make test`, `make lint`.
+Uma branch por tarefa com o prefixo da fase (`f1/rls-politicas`...), PR para `main` com o [modelo de PR](.github/pull_request_template.md), revisão de outra pessoa e CI verde (segredos, lint e testes, neutralidade econômica e Compose). Sem push direto na `main`. Quem entra na equipe começa pelo [guia de entrada](docs/CONTRIBUINDO.md). Comandos: `make doctor`, `make up`, `make test`, `make lint`.
 
 ## Cronograma
 
