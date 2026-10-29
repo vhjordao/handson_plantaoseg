@@ -34,8 +34,8 @@ jobs:
 
       - name: Padrões de chaves conhecidos
         run: |
-          # Anthropic (sk-ant-), JWT (chaves do Supabase) e token de bot do Telegram.
-          if git grep -nIE '(sk-ant-[A-Za-z0-9_-]{20,}|eyJ[A-Za-z0-9_-]{30,}\.[A-Za-z0-9_-]{30,}\.[A-Za-z0-9_-]{10,}|[0-9]{8,10}:AA[A-Za-z0-9_-]{30,})' -- . ':!.github/workflows/ci.yml'; then
+          # Google/Gemini (AIza), Anthropic (sk-ant-), JWT (chaves do Supabase) e token de bot do Telegram.
+          if git grep -nIE '(AIza[0-9A-Za-z_-]{35}|sk-ant-[A-Za-z0-9_-]{20,}|eyJ[A-Za-z0-9_-]{30,}\.[A-Za-z0-9_-]{30,}\.[A-Za-z0-9_-]{10,}|[0-9]{8,10}:AA[A-Za-z0-9_-]{30,})' -- . ':!.github/workflows/ci.yml'; then
             echo "::error::Possível segredo no repositório."; exit 1
           fi
 

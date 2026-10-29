@@ -44,3 +44,13 @@ Nenhuma adotada. A busca com `npx skills find` não rodou em 28/10 porque o Node
 | Docker Compose | n8n, worker, Redis e Postgres do n8n | **Ausente** na máquina; instalar Docker Desktop |
 
 Não criamos contas nem compramos nada. As chaves que o Victor providencia ficam em `.env.example`, sem valor.
+
+## LLM do produto (não é ferramenta de desenvolvimento)
+
+| Item | Escolha | Observação |
+| --- | --- | --- |
+| Provedor | Gemini API (Google), SDK `google-genai` | Decisão do Victor, 28/10/2026 ([ADR 0003](adr/0003-llm-do-produto-gemini.md)) |
+| Modelos | `gemini-3.5-flash-lite` e `gemini-3.8-flash` | IDs e preços lidos nas páginas oficiais em 28/10/2026; reconferir antes de fixar |
+| Dados na camada gratuita | Só sintéticos | O Google usa o conteúdo para melhorar produtos; na demo, camada paga |
+
+O Claude Code (usado por cada integrante para desenvolver) não faz parte do produto.

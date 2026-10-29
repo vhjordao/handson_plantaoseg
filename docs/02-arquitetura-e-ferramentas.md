@@ -2,6 +2,8 @@
 
 20/10/2026 · Victor
 
+> **Atualizado em 28/10/2026:** o LLM do produto passou de Claude para **Gemini** ([ADR 0003](adr/0003-llm-do-produto-gemini.md)) e a construção do protótipo foi **adiada** ([ADR 0004](adr/0004-prototipo-adiado.md)). O restante deste documento descreve a arquitetura-alvo.
+
 ## Visão geral
 
 A arquitetura tem quatro camadas: usuários, aplicação na VPS, dados e IA, e uma camada de governança que atravessa todas as outras.
@@ -58,7 +60,7 @@ Cada etapa do fluxo tem uma ferramenta principal e uma alternativa; a escolha pr
 | Interface (coordenador, médico e telão) | Next.js, Tailwind e shadcn/ui, como PWA | Vite com React | A plateia entra por QR code, sem instalar nada |
 | Login e perfis | Supabase Auth, com login anônimo e persona para a plateia | Magic link por e-mail | O JWT carrega hospital e papel, que a RLS usa |
 | Entrada da vaga | Formulário no web app que chama um webhook do n8n | Telegram | Texto livre, com campos opcionais |
-| Extração dos campos | Claude Haiku 5.5 com saída estruturada (JSON Schema) e validação com Pydantic | Sonnet 5.5 nos casos ambíguos | Nome, CRM e telefone nunca vão ao modelo |
+| Extração dos campos | Gemini 3.5 Flash-Lite (SDK `google-genai`) com saída estruturada (JSON Schema) e validação com Pydantic | Gemini 3.8 Flash nos casos ambíguos | Nome, CRM e telefone nunca vão ao modelo; na demo, camada paga (ADR 0003) |
 | Filtro de regras | Funções SQL no Postgres e política por hospital em tabela | Regras em Python | Determinístico, testável e auditável |
 | Ranking | Regressão logística e LightGBM (scikit-learn), mais baseline heurístico | CatBoost | Versione o modelo e guarde as métricas |
 | Explicação | LLM redige a partir dos fatores do modelo | Template fixo se a API falhar | Recebe só os fatores, então não inventa motivos |
@@ -114,18 +116,18 @@ Cada resolução e cada risco de segurança vira um controle técnico que pode s
 
 ## Infraestrutura e custo
 
-O mês da apresentação custa entre US$ 36 e US$ 42 (VPS, Supabase Pro e LLM), e o resto é gratuito. Preços lidos nas páginas oficiais em 20/10/2026, em dólar e sem impostos.
+O mês da apresentação custa entre US$ 34 e US$ 41 (VPS, Supabase Pro e LLM), e o resto é gratuito. Preços de VPS e Supabase lidos nas páginas oficiais em 20/10/2026 e os do Gemini em 28/10/2026, em dólar e sem impostos.
 
 | Item | Escolha | Custo | O que observar |
 | --- | --- | --- | --- |
 | VPS | [Hostinger KVM 2](https://www.hostinger.com/vps-hosting): 2 vCPU, 8 GB de RAM, 100 GB NVMe | US$ 8,79 por mês no preço promocional, pago adiantado; renova a US$ 14,99 por mês | A própria página indica o KVM 2 para apps de médio porte como o n8n. Há [datacenter no Brasil](https://www.hostinger.com/support/1583267-where-are-hostinger-servers-located/), e a localização fica fixa após a configuração, então escolha o Brasil na compra |
 | n8n | Community, auto-hospedado | US$ 0 | A [licença](https://docs.n8n.io/n8n-community-license/community-license/license-faq.md) cobre uso interno do negócio; se virar produto vendido a hospitais, falar antes com a n8n |
 | Supabase | Free para desenvolver; Pro no mês da apresentação | US$ 0 e US$ 25 por mês | No [plano Free](https://supabase.com/pricing) o projeto pausa após 1 semana sem atividade e o Realtime aceita 200 conexões simultâneas; o Pro aceita 500 e inclui US$ 10 de crédito, que cobrem uma instância Micro |
-| LLM | [Claude Haiku 5.5](https://platform.claude.com/docs/pt-BR/models/sonnet-5-5/overview) para extração e explicação; Sonnet 5.5 se precisar | Haiku 5.5 a partir de US$ 0,10 de entrada e US$ 0,50 de saída por milhão de tokens; Sonnet 5.5 a US$ 2 e US$ 10 | Estimativa: 200 chamadas de 2.000 tokens de entrada e 500 de saída custam cerca de US$ 0,09 com Haiku e US$ 1,80 com Sonnet (premissa minha; preços da tabela de modelos da documentação) |
+| LLM | [Gemini 3.5 Flash-Lite](https://ai.google.dev/gemini-api/docs/models) para extração e explicação; [Gemini 3.8 Flash](https://ai.google.dev/gemini-api/docs/pricing) nos casos ambíguos (ADR 0003) | Flash-Lite a US$ 0,30 de entrada e US$ 2,50 de saída por milhão de tokens; 3.8 Flash a US$ 0,75 e US$ 3,75 até 31/12/2026 (depois US$ 1,50 e US$ 7,50) | Estimativa: 200 chamadas de 2.000 tokens de entrada e 500 de saída custam cerca de US$ 0,37 com o Flash-Lite e US$ 0,68 com o 3.8 Flash (premissa minha; a saída inclui tokens de raciocínio e pode ser maior). A camada gratuita existe, mas o Google usa o conteúdo para melhorar produtos: usar a paga na demo |
 | Observabilidade de IA | Langfuse Cloud | Plano gratuito | Confirmar os limites do plano gratuito na criação da conta |
 | Mensagens | Bot do Telegram | Sem custo por mensagem | O WhatsApp cobra por template entregue |
 
-O total de US$ 36 a US$ 42 soma VPS (promocional ou na renovação), Supabase Pro e 200 chamadas de Sonnet; usando Haiku, o LLM praticamente some da conta. Se a plateia passar de umas 150 pessoas conectadas ao telão, o Pro deixa de ser opcional por causa do limite de conexões do Realtime.
+O total de US$ 34 a US$ 41 soma VPS (promocional ou na renovação), Supabase Pro e 200 chamadas do Gemini 3.8 Flash (cerca de US$ 0,68); com o Flash-Lite o LLM praticamente some da conta. Se a plateia passar de umas 150 pessoas conectadas ao telão, o Pro deixa de ser opcional por causa do limite de conexões do Realtime.
 
 ## Plano de construção até a Etapa 2
 
@@ -134,7 +136,7 @@ A Etapa 2 (31/10) pede um fluxo de ponta a ponta funcionando; o que não cabe ne
 | Período | Marco | O que construir |
 | --- | --- | --- |
 | 20 a 24/10 | Base e Entrega 1 | VPS com Docker Compose e Traefik; projeto Supabase com esquema, RLS e Auth; gerador de dados sintéticos; repositório com integração contínua mínima |
-| 27 a 31/10 | Entrega 2: prova de conceito | API de matching (extração, filtro, ranking e explicação); fluxos do n8n para vaga, recomendação e cascata; telas do coordenador e do médico; telão com Realtime; bot do Telegram |
+| 27 a 31/10 | Entrega 2: dados, análise, solução de IA e PoC | Dados sintéticos e análise; desenho da solução de IA, segurança e conformidade; documento da Etapa 2. **Protótipo adiado** (ADR 0004): API de matching, fluxos do n8n, telas, telão e bot do Telegram só entram quando o Victor aprovar o portão G-P ([plano](plano-etapa-2.md)) |
 | 3 a 7/11 | Entrega 3: validação | Previsão de vagas; relatório de equidade; kit para a Comissão de IA; testes de regras, de injeção de prompt e de carga; medição dos indicadores |
 | 8 a 17/11 | Ensaio e apresentação | Ensaio completo; plano B com respostas pré-carregadas; Supabase Pro ativo; congelar o código em 13/11 (sugestão minha) |
 
@@ -156,6 +158,7 @@ Cinco decisões precisam do grupo até a Etapa 2, e quatro riscos pedem plano B 
 - **Latência do LLM:** extração e explicação somam segundos por vaga. Mitigação: medir no ensaio e manter o template fixo como alternativa.
 - **Dependência de APIs externas:** LLM e Telegram podem falhar na hora. Mitigação: respostas pré-carregadas e vídeo gravado.
 - **Dados reais e LLM:** com dados reais, só com base legal, termo de uso e acordo de tratamento de dados com o provedor; na prova de conceito, nada real.
+- **Camada gratuita do Gemini:** o Google usa o conteúdo para melhorar produtos e revisores humanos podem lê-lo; a plateia digita texto livre na demo. Mitigação: camada paga na demo, aviso "não digite dados reais" na tela e só dados sintéticos nos testes (ADR 0003).
 
 ## Fontes consultadas
 
@@ -164,7 +167,7 @@ Páginas abertas em 20/10/2026; preços e limites mudam, então conferir antes d
 - [Hostinger: planos de VPS e preços](https://www.hostinger.com/vps-hosting)
 - [Hostinger: localização dos servidores](https://www.hostinger.com/support/1583267-where-are-hostinger-servers-located/)
 - [Supabase: preços e limites](https://supabase.com/pricing)
-- [Claude Sonnet 5.5: visão geral, preços e comparação com o Haiku 5.5](https://platform.claude.com/docs/pt-BR/models/sonnet-5-5/overview)
+- [Gemini API: modelos](https://ai.google.dev/gemini-api/docs/models), [preços](https://ai.google.dev/gemini-api/docs/pricing), [saída estruturada](https://ai.google.dev/gemini-api/docs/structured-output), [termos de uso dos dados](https://ai.google.dev/gemini-api/terms) e [SDKs](https://ai.google.dev/gemini-api/docs/libraries) (lidos em 28/10/2026)
 - [n8n: modo fila](https://docs.n8n.io/deploy/host-n8n/configure-n8n/scaling/enable-queue-mode/)
 - [n8n: FAQ da licença](https://docs.n8n.io/n8n-community-license/community-license/license-faq.md)
 - [Langfuse: auto-hospedagem](https://langfuse.com/self-hosting.md)

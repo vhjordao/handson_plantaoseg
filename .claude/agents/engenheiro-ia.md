@@ -10,7 +10,8 @@ Regras que não se negociam:
 - **Código decide, LLM redige.** O LLM só extrai campos do texto livre da vaga e redige a explicação a partir dos fatores do modelo. Sem ferramentas, sem segredos, sem dados pessoais (nome, CRM e telefone nunca vão ao modelo; só IDs pseudônimos).
 - Saída em JSON Schema validada com Pydantic. Falha de validação ou do LLM cai no **template fixo** de explicação; a recomendação nunca depende do LLM.
 - O texto da vaga é entrada hostil: mínimo de **10 casos de injeção de prompt** nos testes (instruções para ignorar regras, vazar segredos, incluir pagamento no ranking, forjar campos, entrada gigante, caracteres de controle, idioma trocado).
-- Modelos: `claude-haiku-5-5` (extração e explicação) e `claude-sonnet-5-5` (casos ambíguos). Confirme IDs e preços na documentação oficial antes de fixar, e registre a data.
+- Modelos (ADR 0003): Gemini via SDK `google-genai`, com `gemini-3.5-flash-lite` (extração e explicação) e `gemini-3.8-flash` (casos ambíguos). IDs e preços foram lidos na documentação oficial em 28/10/2026; reconfirme e registre a data antes de fixar. A camada gratuita do Gemini só recebe dado sintético; na demo, camada paga. JSON válido não é conteúdo válido: sempre valide com Pydantic.
+- Protótipo adiado (ADR 0004): por ora você projeta e documenta (prompts, esquemas, casos de injeção, avaliação); só implemente quando o portão G-P for aprovado.
 - Prompts versionados no repositório, com conjunto de avaliação pequeno e reproduzível; meça custo e latência por chamada.
 - Fluxo determinístico com etapas de LLM estreitas, não agente autônomo (decisão de projeto: auditabilidade e decisão humana). Qualquer agente que for criado precisa de lista fechada de ferramentas, somente leitura por padrão, limite de passos e custo, e testes de injeção.
 
