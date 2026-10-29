@@ -106,6 +106,6 @@ Quando Victor colar um feedback ou disser "novo feedback", use a skill `incorpor
 
 ## Estado atual (atualize ao fechar cada fase)
 
-- Etapa 1 entregue. **Fase 0** no PR #1 (`fase-0-base`), CI verde (4 verificações), aguardando o merge do Victor. Plano da Etapa 2 (versão 2) em `docs/plano-etapa-2.md`: proposta, aguardando aprovação. LLM do produto = Gemini; protótipo adiado.
+- Etapa 1 entregue. **Fase 0** no PR #1 (`fase-0-base`), CI verde (4 verificações), aguardando o merge do Victor. Plano da Etapa 2 (versão 2) em `docs/plano-etapa-2.md`: **G0 aprovado em 28/10**; próximo é o G1 (dicionário de dados v0, branch `f1/dicionario-dados`). LLM do produto = Gemini; protótipo adiado.
 - Ambiente local de 28/10: sem Docker, Node, make, Supabase CLI e ffmpeg; Python de `C:\Python312` incompleto. A CI do GitHub é a evidência de testes até instalar.
 - Vídeo da aula de 27/10 não processado (ver rastreabilidade A3-13).

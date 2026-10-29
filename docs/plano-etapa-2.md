@@ -1,6 +1,6 @@
 # Plano da Etapa 2
 
-- **Versão 2, de 28/10/2026 (noite).** Status: **proposta, aguardando aprovação do Victor**. Nenhum item é executado antes do "ok" do portão correspondente.
+- **Versão 2, de 28/10/2026 (noite).** Status: **G0 aprovado pelo Victor em 28/10/2026** (plano v2 e ADRs 0001 a 0004). Nenhum item é executado antes do "ok" do portão correspondente.
 - **Prazo:** entrega em **sábado, 31/10/2026**. Hoje é quarta (28/10): restam 3 dias de trabalho.
 - **O que o professor cobra** (slides de 27/10 e feedback): 4 entregáveis, **Dados, Análise, Solução de IA e PoC ou protótipo**, mais Cybersecurity em seção curta, em documento de **5 a 8 páginas**, amarrado ao problema e com **justificativa de cada escolha** ([rastreabilidade](rastreabilidade-professor.md)).
 
@@ -56,7 +56,7 @@ Em cada portão eu explico o que foi feito e o que vem, e só sigo com o "ok" do
 
 | Quando | O que acontece | Portão |
 | --- | --- | --- |
-| **Qua 28/10 (hoje)** | Victor aprova este plano e os ADRs 0001 a 0004; merge do PR #1; convites aos colegas e proteção da `main`; colegas instalam as ferramentas (`make doctor`) | **G0** |
+| **Qua 28/10 (hoje)** | Victor aprova este plano e os ADRs 0001 a 0004; merge do PR #1; convites aos colegas e proteção da `main`; colegas instalam as ferramentas (`make doctor`) | **G0** (aprovado em 28/10; faltam o merge do PR #1, os convites e a proteção da `main`) |
 | **Qui 29/10, manhã** | Eu preparo o **dicionário de dados v0** (o contrato de dados) e o Victor aprova; as frentes A1 a A5 começam em paralelo | **G1** |
 | **Qui 29/10, noite** | Dados gerados e análise preliminar; o Victor decide a **forma da PoC** (P1, P2 ou P3) | **G-P** |
 | **Sex 30/10** | A2 conclui a análise; A3 e A4 fecham o desenho; rascunho completo do `docs/03`; revisão do `revisor-professor`; se o G-P aprovou, constrói-se a PoC escolhida | **G3** |

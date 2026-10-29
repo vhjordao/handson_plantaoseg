@@ -2,6 +2,14 @@
 
 Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra também o uso de IA no planejamento do projeto (Gestão de Projetos com IA). Mais recente no topo.
 
+## 28/10/2026 (quarta), G0 aprovado
+
+**Decisão do Victor:** aprovou o plano v2 e os ADRs 0001 a 0004 (segmento inicial, escopo da PoC, Gemini e protótipo adiado) e pediu o dicionário de dados v0 na branch `f1/dicionario-dados`.
+
+**Ainda pendente do G0 (ações do Victor):** merge do PR #1, convites aos colegas, proteção da `main`, usuários do GitHub e donos das frentes A1 a A5, chave do Gemini. Eu não faço merge nem mexo em configurações do GitHub sem o ok explícito.
+
+**Próximo:** G1, aprovação do dicionário de dados v0 (contrato de dados das frentes A1 a A4).
+
 ## 28/10/2026 (quarta), mais tarde: LLM vira Gemini e protótipo adiado (plano v2)
 
 **Decisões do Victor**

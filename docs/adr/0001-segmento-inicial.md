@@ -1,6 +1,6 @@
 # ADR 0001: Segmento inicial da PoC
 
-- **Status:** proposta (28/10/2026); aguarda confirmação do grupo.
+- **Status:** aceita pelo Victor em 28/10/2026 (G0); o grupo pode pedir revisão.
 - **Origem:** feedback do professor sobre a Entrega 1 (FB-1) em [docs/rastreabilidade-professor.md](../rastreabilidade-professor.md).
 
 ## Contexto
