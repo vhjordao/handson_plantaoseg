@@ -8,7 +8,11 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 **Ainda pendente do G0 (ações do Victor):** merge do PR #1, convites aos colegas, proteção da `main`, usuários do GitHub e donos das frentes A1 a A5, chave do Gemini. Eu não faço merge nem mexo em configurações do GitHub sem o ok explícito.
 
-**Próximo:** G1, aprovação do dicionário de dados v0 (contrato de dados das frentes A1 a A4).
+**Feito:** [dicionário de dados v0](dados/dicionario-de-dados.md) na branch `f1/dicionario-dados`, aguardando o G1. Define 11 tabelas do núcleo, o papel de cada coluna (ranking, auditoria de viés, restrito econômico, dado pessoal simulado), as 9 variáveis do ranking idênticas ao `features.py`, as premissas do simulador, as regras de qualidade e 8 decisões para o Victor.
+
+**Convites no GitHub (28/10):** 3 pendentes de aceite e 2 colegas ainda sem convite.
+
+**Uso de IA:** o Claude redigiu o dicionário a partir de `docs/02`, do ADR 0001 e do `features.py`; os parâmetros do simulador são premissas dele, sem fonte, e o Victor decide no G1.
 
 ## 28/10/2026 (quarta), mais tarde: LLM vira Gemini e protótipo adiado (plano v2)
 
