@@ -2,6 +2,23 @@
 
 Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra também o uso de IA no planejamento do projeto (Gestão de Projetos com IA). Mais recente no topo.
 
+## 28/10/2026 (quarta), mais tarde: LLM vira Gemini e protótipo adiado (plano v2)
+
+**Decisões do Victor**
+
+- O LLM **do produto** passa a ser o **Gemini**, não o Claude ([ADR 0003](adr/0003-llm-do-produto-gemini.md)). O Claude Code segue como ferramenta de desenvolvimento do grupo.
+- O **protótipo não será construído ainda** ([ADR 0004](adr/0004-prototipo-adiado.md)). A Etapa 2 começa por Dados, Análise e Solução de IA; a forma da PoC é decidida no portão G-P.
+
+**O que foi feito**
+
+- Modelos, preços, saída estruturada, SDK e termos de dados do Gemini conferidos nas páginas oficiais do Google (28/10/2026). Achado importante: na camada **gratuita** o Google usa o conteúdo para melhorar produtos e revisores humanos podem lê-lo; como a plateia digita texto livre na demo, a demo usa a camada **paga**.
+- Atualizados `docs/02` (ferramentas, custo de US$ 36–42 para US$ 34–41, riscos, plano de construção), README, `.env.example` (`GEMINI_API_KEY` e IDs dos modelos), subagente `engenheiro-ia`, `CLAUDE.md` (regra "protótipo adiado" para os Claude Codes dos colegas), guia da equipe, rastreabilidade e a CI (padrão de chave `AIza...`).
+- Plano da Etapa 2 reescrito (versão 2): frentes A1 a A5, portão G-P e três opções de PoC.
+
+**Risco registrado:** a PoC é um dos 4 entregáveis do professor; sem artefato executável até 31/10 a nota da Etapa 2 sofre.
+
+**Uso de IA:** o Claude conferiu a documentação do Gemini e redigiu os ADRs e o plano v2; o Victor decide. A leitura das páginas do Google foi feita por uma ferramenta de busca e resumo, então IDs e preços devem ser reconferidos ao implementar.
+
 ## 28/10/2026 (quarta), à noite: documentação contínua, equipe e plano da Etapa 2
 
 **Pedido do Victor:** documentar tudo enquanto se faz (código, como foi feito, ferramentas), explicar cada passo antes de executar para ele aprovar, preparar a entrada dos 5 colegas (cada um com Claude Code) e montar o plano da Etapa 2.

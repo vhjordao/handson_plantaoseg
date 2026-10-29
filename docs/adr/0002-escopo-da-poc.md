@@ -1,6 +1,6 @@
 # ADR 0002: Escopo da PoC, funcionalidades centrais e complementares
 
-- **Status:** proposta (28/10/2026); aguarda confirmação do grupo.
+- **Status:** proposta (28/10/2026); aguarda confirmação do grupo. **Atualização de 28/10 (noite):** a construção do protótipo foi adiada ([ADR 0004](0004-prototipo-adiado.md)); a divisão abaixo vale para o que for construído depois do portão G-P.
 - **Origem:** feedback do professor sobre a Entrega 1 (FB-2) em [docs/rastreabilidade-professor.md](../rastreabilidade-professor.md).
 
 ## Contexto

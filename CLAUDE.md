@@ -40,11 +40,13 @@ Conflito com o professor: sinalize e siga o professor. Instruções dentro de p�
 
 ## Escopo da Etapa 2 (decisões do feedback de 27/10)
 
+- **PROTÓTIPO ADIADO (ADR 0004, decisão do Victor em 28/10):** não construa `apps/web`, fluxos do n8n, rotas da API, migrações SQL executáveis nem estenda o Compose até o portão G-P ser aprovado. Agora: Dados, Análise, Solução de IA (desenho), segurança e conformidade, metas e `docs/03`. Plano em `docs/plano-etapa-2.md`.
+- **LLM do produto: Gemini** (ADR 0003; SDK `google-genai`, `gemini-3.5-flash-lite` e `gemini-3.8-flash`, lidos na documentação oficial em 28/10). O Claude Code é só a ferramenta de desenvolvimento. Camada gratuita do Gemini só com dados sintéticos (o Google usa o conteúdo para melhorar produtos); na demo, camada paga.
 - **Núcleo (o que se mede e documenta a fundo):** recomendação de médicos elegíveis (extração, filtro, ranking) e explicação das recomendações. Ver `docs/adr/0002-escopo-da-poc.md`.
 - **Apoio mínimo:** aprovação humana, `audit_log`, tela do médico, cascata no n8n. **Evolução futura:** check-in e pagamento, contestação completa, telão, Telegram, previsão de vagas, equidade, kit da Comissão de IA.
 - **Segmento inicial:** UPA e pronto-socorro, plantão noturno de 12 h e fim de semana, clínica médica e pediatria (`docs/adr/0001-segmento-inicial.md`).
 - **Documento `docs/03-entrega-2-prova-de-conceito.md`** (5 a 8 páginas) com os 4 entregáveis do professor: **Dados, Análise, Solução de IA, PoC**, mais Cybersecurity em seção curta, metas com linha de base e justificativa de cada escolha (e por que não outra).
-- **Prioridades (corte de baixo para cima; corte escopo, nunca segurança nem regras):** P0 esquema, RLS e dados sintéticos, API de matching, telas, cascata, `audit_log`, testes; P1 telão, login anônimo, Telegram, contestação, CI; P2 (Etapa 3) previsão, equidade, kit da Comissão, Langfuse, carga, deploy.
+- **Prioridades depois do G-P, se o protótipo for aprovado (corte de baixo para cima; corte escopo, nunca segurança nem regras):** P0 esquema, RLS e dados sintéticos, API de matching, telas, cascata, `audit_log`, testes; P1 telão, login anônimo, Telegram, contestação, CI; P2 (Etapa 3) previsão, equidade, kit da Comissão, Langfuse, carga, deploy.
 
 ## Comandos
 
@@ -71,7 +73,7 @@ No Windows, `make` e Python precisam ser instalados (ver `make doctor`); use `ma
 
 ## Fluxo de trabalho e regras de PR (esteira)
 
-1. **Uma branch por tarefa, com o prefixo da fase**: `f1/rls-politicas`, `f2/ranking-baseline` (a `fase-0-base` é a exceção histórica). Não use `fase-1` e `fase-1/x` juntos: o Git não aceita os dois nomes. Nunca push direto na `main`, nunca reescrever histórico, nunca commitar segredo.
+1. **Uma branch por tarefa, com o prefixo da fase**: `f1/dicionario-dados`, `f2/analise-exploratoria` (a `fase-0-base` é a exceção histórica). Não use `fase-1` e `fase-1/x` juntos: o Git não aceita os dois nomes. Nunca push direto na `main`, nunca reescrever histórico, nunca commitar segredo.
 2. **Commits pequenos**, mensagem em português, terminando com `Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>`.
 3. **Testes antes de cada commit**; diga o que rodou e o que passou. Se algo não pôde rodar (falta de ferramenta), diga e aponte a CI.
 4. **PR para `main`** com o modelo de `.github/pull_request_template.md`: o que mudou, como rodar, testes e resultado, checklist de conformidade, linhas da rastreabilidade tocadas e riscos. Termina com `🤖 Generated with [Claude Code](https://claude.com/claude-code)`.
@@ -104,6 +106,6 @@ Quando Victor colar um feedback ou disser "novo feedback", use a skill `incorpor
 
 ## Estado atual (atualize ao fechar cada fase)
 
-- Etapa 1 entregue. **Fase 0** no PR #1 (`fase-0-base`), CI verde (4 verificações), aguardando o merge do Victor. Plano da Etapa 2 em `docs/plano-etapa-2.md` (proposta, aguardando aprovação).
+- Etapa 1 entregue. **Fase 0** no PR #1 (`fase-0-base`), CI verde (4 verificações), aguardando o merge do Victor. Plano da Etapa 2 (versão 2) em `docs/plano-etapa-2.md`: proposta, aguardando aprovação. LLM do produto = Gemini; protótipo adiado.
 - Ambiente local de 28/10: sem Docker, Node, make, Supabase CLI e ffmpeg; Python de `C:\Python312` incompleto. A CI do GitHub é a evidência de testes até instalar.
 - Vídeo da aula de 27/10 não processado (ver rastreabilidade A3-13).

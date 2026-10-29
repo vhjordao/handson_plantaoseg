@@ -4,7 +4,7 @@
 
 Projeto final da disciplina **Hands On – Aplicação de IA nos negócios** (pós-graduação, Mackenzie), Prof. Fabio Versolatto.
 
-> **Status (28/10/2026):** Entrega 1 (descoberta) realizada. A prova de conceito (Etapa 2, entrega em 31/10) está em construção por fases, uma branch e um PR por fase; a Fase 0 traz a base do repositório, a esteira de CI, o contrato de neutralidade econômica do ranking e as decisões de escopo do feedback do professor. A aplicação ainda não roda: veja [CLAUDE.md](CLAUDE.md) e o [diário de bordo](docs/diario-de-bordo.md).
+> **Status (28/10/2026):** Entrega 1 (descoberta) realizada. A Etapa 2 (entrega em 31/10) começa por Dados, Análise e Solução de IA; o **protótipo está adiado** por decisão do grupo ([ADR 0004](docs/adr/0004-prototipo-adiado.md)) e o LLM do produto é o **Gemini** ([ADR 0003](docs/adr/0003-llm-do-produto-gemini.md)). A Fase 0 traz a base do repositório, a esteira de CI, o contrato de neutralidade econômica do ranking e as decisões de escopo. A aplicação não roda: veja [CLAUDE.md](CLAUDE.md), o [plano da Etapa 2](docs/plano-etapa-2.md) e o [diário de bordo](docs/diario-de-bordo.md).
 > Projeto acadêmico: todos os dados da demonstração serão sintéticos e nenhum documento gerado tem validade médica ou legal.
 
 ## A ideia em um parágrafo
@@ -45,9 +45,9 @@ Os detalhes, as fontes e os pontos que ainda precisam de validação estão na [
 
 ## Stack prevista
 
-Next.js, Tailwind e shadcn/ui (PWA) · FastAPI (API de matching) · n8n em modo fila (Redis + Postgres próprio) · Supabase (Postgres, Auth, RLS, Realtime) · Claude Haiku 5.5 e Sonnet 5.5 com saída estruturada · scikit-learn e LightGBM (ranking) · Fairlearn (equidade) · Langfuse (observabilidade de IA) · Docker Compose e Traefik em VPS Hostinger no Brasil · GitHub Actions.
+Next.js, Tailwind e shadcn/ui (PWA) · FastAPI (API de matching) · n8n em modo fila (Redis + Postgres próprio) · Supabase (Postgres, Auth, RLS, Realtime) · Gemini (3.5 Flash-Lite e 3.8 Flash) com saída estruturada · scikit-learn e LightGBM (ranking) · Fairlearn (equidade) · Langfuse (observabilidade de IA) · Docker Compose e Traefik em VPS Hostinger no Brasil · GitHub Actions.
 
-Custo estimado do mês da apresentação: US$ 36 a US$ 42 (preços lidos em 20/10/2026; conferir antes de contratar). Veja [Arquitetura e ferramentas](docs/02-arquitetura-e-ferramentas.md).
+Custo estimado do mês da apresentação: US$ 34 a US$ 41 (VPS e Supabase lidos em 20/10/2026; Gemini em 28/10/2026; conferir antes de contratar). Veja [Arquitetura e ferramentas](docs/02-arquitetura-e-ferramentas.md).
 
 ## Documentos
 
@@ -57,7 +57,7 @@ Custo estimado do mês da apresentação: US$ 36 a US$ 42 (preços lidos em 20/1
 | [docs/02-arquitetura-e-ferramentas.md](docs/02-arquitetura-e-ferramentas.md) | Arquitetura em camadas, decisões, ferramentas por etapa, modelo de dados, controles de segurança e conformidade, custo, plano de construção e riscos técnicos |
 | [docs/diagrams/](docs/diagrams) | Fontes Mermaid dos diagramas (fluxo da recomendação, arquitetura em camadas, cronograma) |
 | [docs/rastreabilidade-professor.md](docs/rastreabilidade-professor.md) | Exigências do professor (feedback da Entrega 1 e slides da Etapa 2), com status e onde cada uma está atendida |
-| [docs/adr/](docs/adr) | Decisões: [segmento inicial](docs/adr/0001-segmento-inicial.md) e [escopo da PoC](docs/adr/0002-escopo-da-poc.md) |
+| [docs/adr/](docs/adr) | Decisões: [segmento inicial](docs/adr/0001-segmento-inicial.md), [escopo da PoC](docs/adr/0002-escopo-da-poc.md), [LLM do produto: Gemini](docs/adr/0003-llm-do-produto-gemini.md) e [protótipo adiado](docs/adr/0004-prototipo-adiado.md) |
 | [docs/conformidade/](docs/conformidade/README.md) | Plano de verificação dos textos oficiais das normas (não é parecer jurídico) |
 | [docs/plano-etapa-2.md](docs/plano-etapa-2.md) | Plano da Etapa 2: escopo, frentes, cronograma com portões de aprovação, contratos e metas com linha de base (proposta) |
 | [docs/CONTRIBUINDO.md](docs/CONTRIBUINDO.md) | Guia de entrada da equipe: ferramentas, primeiro dia, uso do Claude Code, fluxo de Git e documentação obrigatória |
@@ -67,7 +67,7 @@ Custo estimado do mês da apresentação: US$ 36 a US$ 42 (preços lidos em 20/1
 
 ## Como contribuir (esteira)
 
-Uma branch por tarefa com o prefixo da fase (`f1/rls-politicas`...), PR para `main` com o [modelo de PR](.github/pull_request_template.md), revisão de outra pessoa e CI verde (segredos, lint e testes, neutralidade econômica e Compose). Sem push direto na `main`. Quem entra na equipe começa pelo [guia de entrada](docs/CONTRIBUINDO.md). Comandos: `make doctor`, `make up`, `make test`, `make lint`.
+Uma branch por tarefa com o prefixo da fase (`f1/dicionario-dados`...), PR para `main` com o [modelo de PR](.github/pull_request_template.md), revisão de outra pessoa e CI verde (segredos, lint e testes, neutralidade econômica e Compose). Sem push direto na `main`. Quem entra na equipe começa pelo [guia de entrada](docs/CONTRIBUINDO.md). Comandos: `make doctor`, `make up`, `make test`, `make lint`.
 
 ## Cronograma
 

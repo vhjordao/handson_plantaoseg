@@ -3,6 +3,8 @@
 Para quem entra no projeto (Roberval, Guilherme, Sergio, Lucas e Plinio) e para o Claude Code de cada um. O trabalho é dividido em frentes (ver [plano da Etapa 2](plano-etapa-2.md)); cada pessoa usa o seu próprio Claude Code, e o `CLAUDE.md` do repositório garante que todos os assistentes sigam as mesmas regras.
 
 > O repositório é **público**. Nunca coloque nele chaves, dados reais de médico, paciente ou hospital, nem os slides do professor.
+>
+> **Dois avisos de 28/10:** o **protótipo está adiado** ([ADR 0004](adr/0004-prototipo-adiado.md)): por ora não se constrói interface, API, n8n nem banco; o trabalho é Dados, Análise, Solução de IA e segurança. E o **LLM do produto é o Gemini** ([ADR 0003](adr/0003-llm-do-produto-gemini.md)); o Claude Code é só a ferramenta de desenvolvimento de cada um.
 
 ## 1. Antes de começar
 
@@ -25,11 +27,11 @@ Depois de instalar, rode `make doctor`: ele diz o que ainda falta. Se algo não 
    ```
    gh repo clone vhjordao/handson_plantaoseg C:\dev\handson_plantaoseg
    ```
-2. Crie o `.env` local: `cp .env.example .env`. Nunca commite esse arquivo. As chaves (Anthropic, Supabase) o Victor passa por canal privado (gerenciador de senhas), nunca no chat do grupo nem no repositório.
+2. Crie o `.env` local: `cp .env.example .env`. Nunca commite esse arquivo. As chaves (Gemini e, mais adiante, Supabase) o Victor passa por canal privado (gerenciador de senhas), nunca no chat do grupo nem no repositório. Para testes com dados sintéticos, cada pessoa pode criar a própria chave do Gemini no Google AI Studio; na camada gratuita o Google usa o conteúdo para melhorar produtos, então **nada de dado real**.
 3. Leia, nesta ordem: `README.md`, `CLAUDE.md`, `docs/plano-etapa-2.md`, `docs/rastreabilidade-professor.md` e `docs/adr/`.
 4. Abra o Claude Code na pasta do repositório e comece com este pedido, trocando a frente:
 
-   > Leia o CLAUDE.md, o docs/plano-etapa-2.md e o docs/CONTRIBUINDO.md. Minha frente é F3 (núcleo de matching). Antes de editar qualquer arquivo, explique em até 10 linhas o que vai fazer, quais arquivos vai tocar, quais ferramentas vai usar e como vai documentar, e espere o meu ok.
+   > Leia o CLAUDE.md, o docs/plano-etapa-2.md e o docs/CONTRIBUINDO.md. Minha frente é A3 (solução de IA: regras e ranking). Lembre que o protótipo está adiado. Antes de editar qualquer arquivo, explique em até 10 linhas o que vai fazer, quais arquivos vai tocar, quais ferramentas vai usar e como vai documentar, e espere o meu ok.
 
 ## 3. Como trabalhar com o Claude Code
 
@@ -44,11 +46,11 @@ Depois de instalar, rode `make doctor`: ele diz o que ainda falta. Se algo não 
 
 ```
 git switch main && git pull                  # sempre parta da main atualizada
-git switch -c f1/rls-politicas               # fN/tarefa-curta; N é a fase
+git switch -c f1/dicionario-dados            # fN/tarefa-curta; N é a fase
 # ... trabalhar, testar, documentar ...
 git add <arquivos>                           # só o que é da tarefa
 git commit                                   # mensagem em português, curta e clara
-git push -u origin f1/rls-politicas
+git push -u origin f1/dicionario-dados
 gh pr create                                 # preencha o modelo do PR
 ```
 
@@ -61,12 +63,13 @@ gh pr create                                 # preencha o modelo do PR
 
 | Frente | Pastas | Observação |
 | --- | --- | --- |
-| F1 Banco e RLS | `supabase/` | Migrações, políticas, função de jornada, testes SQL |
-| F2 Dados sintéticos e análise | `data/synthetic/`, `docs/analise/` | Gerador, dicionário, qualidade, figuras |
-| F3 Núcleo de matching | `services/matching-api/app/rules`, `.../ranking`, `tests/` | Filtro, ranking, métricas |
-| F4 LLM | `services/matching-api/app/llm` | Extração, explicação, injeção de prompt |
-| F5 Interface | `apps/web/` | Coordenador e médico |
-| F6 Orquestração e segurança | `n8n/`, `infra/`, `docs/seguranca-ameacas.md`, `docs/conformidade/` | Cascata, auditoria, ameaças |
+| A1 Dados sintéticos | `data/synthetic/`, `docs/dados/` | Gerador com semente, dicionário de dados, qualidade |
+| A2 Análise exploratória | `docs/analise/` | Estatísticas, correlações, padrões, análise textual, figuras |
+| A3 Solução de IA: regras e ranking | `docs/solucao-ia.md` | Filtro de elegibilidade e jornada, baseline e modelo, protocolo de avaliação |
+| A4 Solução de IA: LLM com Gemini | `docs/solucao-ia.md` (seção LLM) | Prompts, esquema de saída, guardrails, casos de injeção, fallback |
+| A5 Segurança, ética e conformidade | `docs/seguranca-ameacas.md`, `docs/conformidade/` | STRIDE, textos oficiais das normas, ficha de risco, viés |
+
+`apps/web/`, `n8n/`, `supabase/` e a API ficam **congelados** até o portão G-P (ADR 0004).
 
 Arquivos compartilhados e de alto risco de conflito: `CLAUDE.md`, `docs/rastreabilidade-professor.md`, `docs/diario-de-bordo.md`, `docs/02-arquitetura-e-ferramentas.md`, `README.md`. Mexa neles só em PR pequeno e avise no grupo.
 
