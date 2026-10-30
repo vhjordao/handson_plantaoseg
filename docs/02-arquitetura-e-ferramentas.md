@@ -2,7 +2,7 @@
 
 20/10/2026 · Victor
 
-> **Atualizado em 28/10/2026:** o LLM do produto passou de Claude para **Gemini** ([ADR 0003](adr/0003-llm-do-produto-gemini.md)) e a construção do protótipo foi **adiada** ([ADR 0004](adr/0004-prototipo-adiado.md)). O restante deste documento descreve a arquitetura-alvo.
+> **Atualizado em 28/10/2026:** o LLM do produto passou de Claude para **Gemini** ([ADR 0003](adr/0003-llm-do-produto-gemini.md)) e a construção do protótipo foi **adiada** ([ADR 0004](adr/0004-prototipo-adiado.md)). O restante deste documento descreve a arquitetura-alvo. A PoC mínima de 30/10/2026 implementa só o núcleo do motor (regras, ranking, explicação e auditoria) por linha de comando, em Python de biblioteca padrão ([ficha](../services/matching-api/README.md)); a classificação de risco proposta passou de baixo para **médio** e a Res. 2.462 tem aviso de suspensão judicial ([conformidade](conformidade/README.md)).
 
 ## Visão geral
 
@@ -109,7 +109,7 @@ Cada resolução e cada risco de segurança vira um controle técnico que pode s
 | Decisão humana | Sem o clique do coordenador não há oferta; tudo vai para o audit_log | Res. CFM 2.454 |
 | Explicabilidade e contestação | Tabela explanations e botão de contestar, com resposta registrada | Res. CFM 2.454 |
 | Neutralidade econômica | Lista fixa de variáveis do ranking, sem campos de pagamento, com teste automático na integração contínua | Res. CFM 2.460 |
-| Rastro de pagamentos | Prazos combinados e confirmações na tabela payments, com alertas de atraso | Res. CFM 2.462 |
+| Rastro de pagamentos | Prazos combinados e confirmações na tabela payments, com alertas de atraso | Res. CFM 2.462. **Nota de 30/10/2026:** o PDF oficial traz aviso de suspensão judicial integral; tratar como boa prática e evolução futura até confirmar a situação ([conformidade](conformidade/README.md)) |
 | Política de jornada | policy_config e função SQL que bloqueia ofertas fora do limite, com exceção justificada por humano | Segurança do paciente |
 | Segredos e acesso ao n8n | Segredos em variáveis do Docker; editor do n8n fora da internet pública (VPN ou lista de IPs); segredo nos webhooks; limite de requisições no Traefik | Cybersecurity |
 | Backups | [Backup semanal gratuito da Hostinger](https://www.hostinger.com/vps-hosting), cópia do Postgres do n8n fora da VPS e [backups diários de 7 dias no Supabase Pro](https://supabase.com/pricing) | Continuidade |

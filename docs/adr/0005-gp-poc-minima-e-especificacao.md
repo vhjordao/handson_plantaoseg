@@ -34,6 +34,14 @@ O ADR 0004 continua valendo para o resto: **não** se constrói interface web, f
 
 Do mais para o menos importante: dados e filtro, baseline e explicação em template, auditoria, modelo de regressão logística e avaliação, extração por regras, camada do Gemini, análise de disparidade. Segurança e regras inegociáveis não entram no corte.
 
+## Resultado (30/10/2026)
+
+- A PoC mínima ficou pronta e roda com `make poc` ([ficha do componente](../../services/matching-api/README.md)); a CI do GitHub a executa em Linux e confere que gera os mesmos checksums dos dados da máquina do autor.
+- O material de especificação ficou pronto: [solução de IA](../solucao-ia.md), [exemplo trabalhado](../exemplo-trabalhado.md), [wireframes](../wireframes/README.md), [segurança e ameaças](../seguranca-ameacas.md), [teste manual do Gemini](../teste-manual-gemini.md) e [conformidade](../conformidade/README.md).
+- O documento da entrega está em [docs/03](../03-entrega-2-prova-de-conceito.md), com PDF de 6 páginas em [docs/entrega-2](../entrega-2/LEIAME.md).
+- **O que não foi feito:** o Gemini não foi exercitado contra o serviço real (sem chave); contestação, interface, API, n8n e banco continuam desenhados e não construídos.
+- **Achados da execução** (todos corrigidos ou documentados): o histórico manual simulado não tinha violações de jornada até as "dobras" serem simuladas; a carga recente passou de variável do ranking a alerta; o texto ambíguo do gerador errava o período; os textos oficiais mostraram a suspensão judicial da Res. 2.462.
+
 ## Alternativas descartadas
 
 - **Só a especificação:** deixaria a PoC sem evidência executável.

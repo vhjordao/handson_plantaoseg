@@ -1,13 +1,13 @@
 # Dicionário de dados v0
 
-- **Versão:** v0.1, de 30/10/2026 (v0 de 28/10/2026). **Status:** proposta para o portão **G1** (aprovação do Victor).
+- **Versão:** v0.2, de 30/10/2026 (v0 de 28/10, v0.1 de 30/10). **Status:** em uso na PoC mínima; os padrões recomendados da seção 11 foram adotados no G1 ao autorizar a execução ([ADR 0005](../adr/0005-gp-poc-minima-e-especificacao.md)).
 - **Natureza:** documento de desenho, sem SQL e sem código. É o **contrato de dados** entre as frentes: A1 gera, A2 analisa, A3 modela o ranking, A4 desenha o uso do Gemini e A5 avalia privacidade e viés.
 - **Segmento:** pronto-socorro de hospitais privados, plantão noturno de 12 h e fim de semana, clínica médica e pediatria ([ADR 0001](../adr/0001-segmento-inicial.md)).
 - **Regra de ouro:** **todos os dados são sintéticos.** Nome, CRM e telefone são fictícios e marcados como simulação; nada tem validade médica ou legal.
 
 ## 1. Como usar este documento
 
-1. A1 implementa o gerador para produzir exatamente estas tabelas e colunas; qualquer mudança vira uma nova versão deste dicionário (v1, v2...) no mesmo PR.
+1. O gerador (`services/matching-api/app/synthetic`) produz exatamente estas tabelas e colunas; qualquer mudança vira uma nova versão deste dicionário (v1, v2...) no mesmo PR.
 2. A2, A3 e A4 escrevem contra estes nomes, antes de os dados existirem; A1 entrega cedo uma **amostra pequena** (até 50 linhas por tabela) para todos testarem.
 3. A5 usa a coluna **Papel** para decidir o que pode ir ao LLM, ao ranking e à análise de viés.
 
@@ -41,7 +41,8 @@
 | `shift_requests` | Pedidos de vaga em texto livre, com gabarito | A1 | A2, A4 |
 | `offers` | Histórico de ofertas, respostas e comparecimento | A1 | A2, A3 |
 | `policy_config` | Regras de jornada e parâmetros por organização | A1 | A3 |
-| `shift_compensation` | Valor simulado do plantão, **separado** de tudo | A1 (opcional) | Só o teste de neutralidade |
+| `shift_compensation` | Valor simulado do plantão, **separado** de tudo | A1 | Ninguém no ranking; existe para provar a separação |
+| `doctors_latent` | Confiabilidade latente do médico no simulador (**gabarito**) | A1 | Só a avaliação contrafactual; nunca o modelo, o LLM nem a amostra |
 | `recommendations`, `recommendation_exclusions`, `explanations`, `audit_log`, `model_registry` | Saídas do sistema | PoC (se aprovada) | A3, A4, A5 |
 | `payments`, `checkins`, `contestations`, `fairness_reports` | Evolução futura (ADR 0002) | Ninguém agora | Ninguém agora |
 
@@ -206,7 +207,7 @@ Fica **fora de qualquer visão usada pelo ranking e pelo LLM**. A A1 gera a tabe
 | Tabela | Colunas principais | Papel |
 | --- | --- | --- |
 | `recommendations` | `id`, `shift_id`, `doctor_id`, `rank`, `score`, `model_version`, `features` (jsonb com os valores de `RANKING_FEATURES`), `alerts` (jsonb com os alertas de jornada), `created_at` | sistema |
-| `recommendation_exclusions` | `id`, `shift_id`, `doctor_id`, `rule_code` (`crm_inactive`, `specialty_mismatch`, `outside_radius`, `unavailable`, `rest_violation`, `continuous_hours_exceeded`), `rule_text`, `created_at` | sistema |
+| `recommendation_exclusions` | `id`, `shift_id`, `doctor_id`, `rule_code` (`crm_inactive`, `specialty_mismatch`, `outside_radius`, `unavailable`, `schedule_conflict`, `rest_violation`, `continuous_hours_exceeded`), `rule_text`, `created_at` | sistema |
 | `explanations` | `id`, `recommendation_id`, `text`, `factors_cited` (text[]), `source` (`llm` ou `template`), `llm_model`, `prompt_version`, `validated` (bool), `created_at` | sistema |
 | `audit_log` | `id`, `occurred_at`, `actor_role` (`coordinator`, `doctor`, `system`), `actor_pseudo_id`, `action`, `entity_type`, `entity_id`, `model_version`, `details` (jsonb **sem dado pessoal**) | sistema; **somente inserção** |
 | `model_registry` | `model_version`, `kind` (`baseline`, `logistic_regression`, `lightgbm`), `trained_at`, `train_period`, `test_period`, `features` (text[], validada por `validar_features`), `metrics` (jsonb), `label` (sempre `simulacao`), `status` | sistema |
@@ -215,45 +216,61 @@ Fica **fora de qualquer visão usada pelo ranking e pelo LLM**. A A1 gera a tabe
 
 `payments` (prazo e data de pagamento; restrito-econômico), `checkins` (presença), `contestations` (contestação do médico e resposta) e `fairness_reports` (relatório de equidade).
 
+### 4.12 `doctors_latent` (gabarito do simulador)
+
+| Coluna | Tipo | Papel | Descrição e domínio |
+| --- | --- | --- | --- |
+| `doctor_id` | uuid | chave | |
+| `reliability` | numeric | gabarito | Entre 0 e 1 (sorteio Beta 5,3). Entra na probabilidade verdadeira de aceite e de comparecimento; **o ranking nunca a vê** |
+
 ## 5. Variáveis do ranking (contrato com `features.py`)
 
-As nove variáveis abaixo são **exatamente** as de `RANKING_FEATURES` em [`features.py`](../../services/matching-api/app/ranking/features.py). Todas são calculadas **no instante `offers.sent_at`**, usando apenas dados anteriores a ele (sem vazamento do futuro); a validação é temporal (treino em períodos anteriores, teste em posteriores).
+As **sete** variáveis abaixo são exatamente as de `RANKING_FEATURES` em [`features.py`](../../services/matching-api/app/ranking/features.py). Todas são calculadas **no instante `offers.sent_at`**, só com dados cujo resultado já era conhecido antes dele (`resolved_at < t`; a própria oferta nunca entra na sua conta). A validação é temporal: treino nos períodos anteriores a 01/08/2026, teste nos posteriores.
 
 | Variável | Cálculo | Fontes |
 | --- | --- | --- |
 | `specialty_match` | 1,0 se `doctors.specialty` = `shifts.specialty`; 0,5 se só `secondary_specialty` coincide e a política permite; senão o médico é excluído antes do ranking | `doctors`, `shifts`, `policy_config` |
 | `distance_km` | Distância em linha reta entre `doctors.home_lat/lon` e `units.lat/lon` | `doctors`, `units` |
-| `availability_overlap_hours` | Horas da vaga cobertas pelas janelas `available`, descontadas as `blocked` | `doctor_availability`, `shifts` |
-| `acceptance_rate_90d` | (aceites + 1) / (ofertas respondidas ou expiradas + 2) nos 90 dias anteriores; suavização que dá 0,5 a quem não tem histórico | `offers` |
-| `attendance_rate_90d` | (comparecimentos + 1) / (aceites + 2) nos 90 dias anteriores | `offers` |
-| `hours_since_last_shift` | Horas entre o fim do último plantão **atendido** e o início da vaga; limitado a 168 (7 dias) | `offers`, `shifts` |
-| `shifts_last_30d` | Plantões atendidos nos 30 dias anteriores | `offers`, `shifts` |
-| `offers_received_30d` | Ofertas recebidas nos 30 dias anteriores, com qualquer resposta | `offers` |
+| `availability_overlap_hours` | Horas da vaga cobertas pelas janelas `available`, descontados os dias `blocked` | `doctor_availability`, `shifts` |
+| `acceptance_rate_90d` | (aceites + 1) / (ofertas com resultado conhecido nos 90 dias anteriores + 2); dá 0,5 a quem não tem histórico | `offers` |
+| `attendance_rate_90d` | (comparecimentos + 1) / (aceites com plantão encerrado nos 90 dias anteriores + 2) | `offers`, `shifts` |
+| `hours_since_last_shift` | Horas entre o fim do último plantão **aceito e conhecido** antes do pedido e o início da vaga; limitado a 168 (7 dias) | `offers`, `shifts` |
 | `night_shift_preference_match` | 1 se `preferred_period` for `any` ou coincidir com o período da vaga (`weekend` coincide com `is_weekend`); senão 0 | `doctors`, `shifts` |
 
-**Observações para a A3 (decidir até o G2; mudar a lista exige atualizar `features.py` e o teste de neutralidade):**
+### Variáveis de contexto (calculadas, mas fora do ranking)
 
-- Com os padrões do filtro, `specialty_match` e `availability_overlap_hours` tendem a ser **constantes** entre os elegíveis. A A3 decide se mantém os nomes e relaxa o filtro (aceitar especialidade secundária e cobertura parcial, via `policy_config`) para as variáveis variarem, ou se as retira da lista.
-- `offers_received_30d` mede exposição: quem recebe mais ofertas ganha mais histórico, o que pode reforçar viés; a A5 avalia.
-- `distance_km` correlaciona com `home_zone` (proxy). Está permitida no ranking porque é critério operacional legítimo, mas entra na análise de viés.
-
-## 6. Premissas do simulador (valores iniciais sugeridos)
-
-**São premissas do simulador, sem fonte externa e sem validação com dados reais.** A A1 ajusta, grava no manifesto e justifica cada mudança.
-
-| Parâmetro | Valor inicial sugerido | Observação |
+| Variável | Cálculo | Uso |
 | --- | --- | --- |
-| Período do histórico | 12 meses, de 01/10/2025 a 30/09/2026 | Tudo no passado; últimos 2 meses reservados para teste temporal |
-| Hospitais (unidades) | 3 hospitais privados fictícios (1 rede), com 1 pronto-socorro cada | ADR 0001 |
-| Médicos | cerca de 300, mais ou menos 55% clínica médica e 45% pediatria | |
-| Vagas no período | ordem de 3.000, cerca de 60% noturnas e 35% em fim de semana | |
-| Ofertas no período | ordem de 12.000 (cerca de 4 por vaga) | |
-| Vagas que ficam sem cobertura | cerca de 8% | |
-| Comparecimento após aceite | cerca de 95% | |
-| Aceite | Modelo logístico com efeitos: distância (negativo), fadiga (negativo), preferência de período (positivo) e taxa histórica (positivo); coeficientes sorteados e gravados no manifesto | **O ranking aprende este simulador (circularidade)** |
-| Violações de descanso no histórico manual | cerca de 3% das atribuições, marcadas em `injected_violation` | Mostra o valor do filtro; é premissa, não achado |
-| `HISTORICAL_BIAS_SCENARIO` | **Ligado**: no processo manual simulado, médicos de zonas mais centrais e de certas faixas etárias recebem mais ofertas, sem que o aceite dependa do grupo | Reproduz o risco do exemplo de recrutamento do professor: modelo treinado no histórico herda o viés de seleção |
-| Textos de vaga | cerca de 400, nos 5 estilos; 10% a 15% adversariais, cobrindo os 10 tipos | A2 faz a análise textual; A4 avalia a extração |
+| `shifts_last_30d` | Plantões atendidos que terminaram nos 30 dias anteriores | Alerta de jornada (carga alta a partir de 8) e a verdade do simulador |
+| `offers_received_30d` | Ofertas recebidas nos 30 dias anteriores | Análise de exposição e de viés |
+
+**Por que saíram do ranking (30/10/2026).** Em simulação, o top-5 fica em 71,2% sem elas e em 71,3% com elas (AUC igual). `shifts_last_30d` ganhava peso positivo por confundimento (médicos confiáveis aceitam mais plantões), o que levaria a recomendar o mais sobrecarregado; `offers_received_30d` mede exposição e pode realimentar o viés de seleção.
+
+**Observações resolvidas na PoC:**
+
+- `availability_overlap_hours` é constante (12 h) entre os elegíveis, porque o filtro exige cobertura total (`min_overlap_ratio` = 1,0). Varia no treino, pois o processo manual também chamou médicos sem disponibilidade. Fica na lista: pesa no treino e não no uso.
+- `specialty_match` varia entre os elegíveis (1,0 e 0,5) enquanto a política aceitar especialidade secundária.
+- `distance_km` correlaciona com `home_zone` (proxy). Está permitida porque é critério operacional legítimo, mas médicos de zonas distantes quase não são recomendados: entra na análise de viés (`docs/resultados`).
+
+## 6. Premissas do simulador e o que a simulação mediu
+
+**São premissas do projeto, sem fonte externa e sem validação com dados reais.** Os valores abaixo são os de [`data/synthetic/params.json`](../../data/synthetic/params.json); a coluna da direita é o que a simulação produziu com a semente `20261030` (`docs/dados/relatorio-de-qualidade.md`).
+
+| Parâmetro | Valor usado | Resultado medido |
+| --- | --- | --- |
+| Período | 12 meses, de 01/10/2025 a 30/09/2026; teste temporal a partir de 01/08/2026 | n/d |
+| Hospitais | 3 hospitais privados fictícios (1 rede), com 1 pronto-socorro cada | n/d |
+| Médicos | 300, com 45% de pediatras (`share_pediatria`) | n/d |
+| Vagas | Noturnas todos os dias (probabilidade 0,9 por hospital e especialidade) e diurnas só no fim de semana (0,8) | 2.448 vagas |
+| Ofertas | Cascata de até 8 por vaga | 7.555 ofertas, 3,09 por vaga |
+| Vagas sem cobertura | Resultado da simulação | 4,8% |
+| Aceite | Modelo logístico com os coeficientes de `accept` em `params.json` | 30,8% das ofertas; sucesso (aceitou e compareceu) em 29,6% |
+| Comparecimento | 90% a 99% conforme a confiabilidade latente | Cerca de 96% dos aceites |
+| "Dobra" de plantão | Quem já está no hospital recebe peso 60 na escolha (`double_shift_boost`) e a contiguidade penaliza o aceite em 0,5 | **1,3% dos aceites violam a jornada** (cadeia acima de 24 h); a primeira versão, sem dobras, tinha 0 |
+| `HISTORICAL_BIAS_SCENARIO` | **Ligado**: exposição por zona (centro 1,8; leste e oeste 0,6) e por faixa etária (35 a 44 anos 1,5; 55 ou mais 0,5), sem efeito direto no aceite | Centro com 55,7% das ofertas e 31,3% dos médicos |
+| Textos de vaga | 400 pedidos em 5 estilos; 15% adversariais, 6 de cada um dos 10 tipos | 60 adversariais |
+
+Com plantões de 12 h em horários fixos, o intervalo entre plantões do mesmo médico é 0 ou 12 h ou mais; por isso o descanso de 11 h quase nunca é a regra que barra, e o limite de 24 h contínuas é o que aparece nas violações.
 
 ## 7. Regras de qualidade (a A1 reporta o resultado de cada uma)
 
@@ -272,9 +289,10 @@ As nove variáveis abaixo são **exatamente** as de `RANKING_FEATURES` em [`feat
 
 ## 8. Reprodutibilidade e formato
 
-- Parâmetros e semente em `data/synthetic/params.yaml` (a criar pela A1).
-- Saída em CSV UTF-8 em `data/synthetic/out/` (ignorada pelo Git; qualquer um regenera) e **amostra pequena** em `data/synthetic/sample/`, versionada.
-- `dataset_manifest.json` com versão deste dicionário, semente, parâmetros, contagem de linhas por tabela e checksums.
+- Parâmetros e semente em `data/synthetic/params.json`.
+- Saída em CSV UTF-8, com LF, em `data/synthetic/out/` (ignorada pelo Git; qualquer um regenera com `make seed`).
+- `data/synthetic/sample/` é um **conjunto pequeno e íntegro** (40 médicos, duas semanas, sem a tabela de gabarito), versionado, para as demais frentes testarem sem gerar tudo. Não é um recorte das primeiras linhas: é um mundo completo em miniatura.
+- `dataset_manifest.json` guarda a versão deste dicionário, a semente, os parâmetros, a contagem de linhas e o SHA-256 de cada tabela. Uma cópia fica em `docs/dados/manifesto-da-geracao.json` e a CI confere, de forma informativa, que a execução em Linux gera os mesmos checksums da máquina do autor.
 
 ## 9. Privacidade e o que pode ir ao Gemini (ADR 0003)
 
@@ -292,22 +310,23 @@ Mesmo sendo sintéticos, os dados são tratados como se fossem reais, para ensai
 - **Proxies:** `distance_km`, `home_zone` e `offers_received_30d` podem carregar viés mesmo sem atributos protegidos no modelo.
 - **Não é evidência de mercado:** nenhum número deste dicionário descreve hospitais ou médicos reais.
 
-## 11. Decisões para o G1 (padrão recomendado)
+## 11. Decisões do G1 (padrões recomendados adotados em 30/10/2026)
 
-| # | Pergunta | Padrão recomendado |
-| --- | --- | --- |
-| 1 | Período, volume e proporções da seção 6 estão bons como ponto de partida? | Sim; A1 ajusta e registra |
-| 2 | Ligar o `HISTORICAL_BIAS_SCENARIO` por padrão? | Sim: dá a análise de viés que o professor valoriza |
-| 3 | Atributos de auditoria: gênero, faixa etária e zona de residência; raça e origem fora da PoC? | Sim |
-| 4 | Gerar `shift_compensation` separada para o teste contrafactual de neutralidade? | Sim |
-| 5 | Formato CSV UTF-8 com manifesto e amostra pequena no Git? | Sim |
-| 6 | Organização-controle para teste de isolamento (RLS)? | Definida aqui, gerada só se houver PoC (G-P) |
-| 7 | `specialty_match` e `availability_overlap_hours` quase constantes: quem decide e quando? | A3, até o G2 |
-| 8 | Os 10 tipos de ataque da seção 4.6 como domínio inicial? | Sim; A4 pode ampliar |
+| # | Pergunta | Decisão | O que aconteceu |
+| --- | --- | --- | --- |
+| 1 | Período, volume e proporções da seção 6 | Adotados como ponto de partida | Saíram 2.448 vagas (e não cerca de 3.000) e 7.555 ofertas |
+| 2 | Ligar o `HISTORICAL_BIAS_SCENARIO` | Ligado | Produz a exposição desigual que a análise e o relatório de viés mostram |
+| 3 | Atributos de auditoria | Gênero, faixa etária e zona de residência; raça e origem fora da PoC | Mantidos; usados só para auditar |
+| 4 | Gerar `shift_compensation` separada | Gerada, em tabela própria | O ranking não a lê; a neutralidade é garantida pela lista fechada de variáveis (teste na CI) |
+| 5 | Formato | CSV UTF-8 com manifesto e amostra | A amostra virou um mini conjunto íntegro |
+| 6 | Organização-controle para RLS | Definida, não gerada | Sem RLS na PoC (ADR 0004) |
+| 7 | Variáveis quase constantes | A3 decide | Resolvido na seção 5 |
+| 8 | Os 10 tipos de ataque como domínio inicial | Adotados | Implementados em `app/synthetic/texts.py` |
 
 ## 12. Histórico
 
 | Versão | Data | Mudança |
 | --- | --- | --- |
 | v0 | 28/10/2026 | Primeira versão, para aprovação no G1 |
-| v0.1 | 30/10/2026 | Segmento ajustado pelo Victor: pronto-socorro de hospitais privados (`organizations`, `units` com `ownership`, exemplo de texto e premissas) |
+| v0.1 | 30/10/2026 | Segmento ajustado pelo Victor: pronto-socorro de hospitais privados |
+| v0.2 | 30/10/2026 | Alinhada à PoC: 7 variáveis no ranking e 2 de contexto; `doctors_latent`; código `schedule_conflict`; premissas com os resultados medidos; amostra como mini conjunto; decisões do G1 |

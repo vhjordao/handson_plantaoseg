@@ -4,6 +4,18 @@
 - **Prazo:** entrega em **sábado, 31/10/2026**. Hoje é quarta (28/10): restam 3 dias de trabalho.
 - **O que o professor cobra** (slides de 27/10 e feedback): 4 entregáveis, **Dados, Análise, Solução de IA e PoC ou protótipo**, mais Cybersecurity em seção curta, em documento de **5 a 8 páginas**, amarrado ao problema e com **justificativa de cada escolha** ([rastreabilidade](rastreabilidade-professor.md)).
 
+## Estado em 30/10/2026 (execução)
+
+| Item do plano | Situação |
+| --- | --- |
+| G0 (plano e ADRs) | Aprovado em 28/10 |
+| G1 (dicionário de dados) | Padrões recomendados adotados em 30/10; dicionário v0.2 em uso |
+| G-P (forma da PoC) | Decidido em 30/10 ([ADR 0005](adr/0005-gp-poc-minima-e-especificacao.md)): PoC mínima executável **e** o material de especificação |
+| A1 a A5 (dados, análise, IA, segurança) | **Entregues** (ver [rastreabilidade](rastreabilidade-professor.md)), feitas pelo Claude Code com decisões do Victor; a divisão por colegas não chegou a ser usada porque os convites ainda não tinham sido aceitos |
+| `docs/03` e PDF | Prontos em [docs/entrega-2](entrega-2/LEIAME.md) |
+| G3 e G4 | Pendentes: revisão do Victor, merge dos PRs #1 a #3, tag `etapa-2` e envio no Moodle |
+| Fora do escopo desta entrega | Interface, API, n8n e banco (ADR 0004); teste do Gemini com chave; validação jurídica |
+
 ## O que mudou em relação à versão 1
 
 | Mudança | Decisão |

@@ -2,6 +2,30 @@
 
 Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra também o uso de IA no planejamento do projeto (Gestão de Projetos com IA). Mais recente no topo.
 
+## 30/10/2026 (sexta), execução: PoC mínima e documento da Etapa 2
+
+**Pedido do Victor:** "faça os dois, execute e documente tudo para postagem da etapa 2" (PoC mínima executável e o material da opção sem executável).
+
+**O que foi feito**
+
+- PoC mínima em Python de biblioteca padrão: gerador de dados, regras de jornada, variáveis sem vazamento, baseline e regressão logística, explicação, extração com guardrails, trilha com hash e CLI (ADR 0005). Testes e lint passam; a CI roda a PoC em Linux e reproduz os checksums dos dados da máquina do autor.
+- Material de especificação: solução de IA, exemplo trabalhado, wireframes, ameaças e ficha de risco, plano do teste manual do Gemini.
+- Documento da Etapa 2 em Markdown e PDF de 6 páginas, com guia de postagem.
+- Dicionário de dados passou a v0.2 (ajustado ao que foi construído).
+
+**Resultados (simulação):** o modelo ganha 3,5 pontos percentuais sobre o baseline no top-5 (71,2% contra 67,7%; oráculo 75,8%); os 10% mais recomendados ocupam 50,7% dos lugares; zonas distantes quase não são recomendadas.
+
+**Achados que mudaram decisões**
+
+- A primeira simulação não tinha violações de jornada no histórico manual; foram acrescentadas as "dobras" e a taxa medida foi de 1,3%.
+- O modelo dava peso positivo à carga recente (confundimento) e a explicação citava "fez 9 plantões" a favor do candidato. Experimento: sem a variável o top-5 não muda (71,2%). Ela virou alerta de jornada.
+- O texto ambíguo do gerador errava o período; a extração não reconhecia "ter" como terça-feira.
+- **Normas:** o texto oficial da Res. 2.462 traz aviso de suspensão judicial integral (a Entrega 1 a trata como em vigor); a Res. 2.460 cita plataformas digitais; a classificação de risco da 2.454 deve ser reavaliada de baixo para médio. Tudo a validar com jurídico.
+
+**Pendências:** merge dos PRs #1 a #3 e tag `etapa-2` (Victor); envio no Moodle; teste do Gemini com chave; vídeo da aula não transcrito; convites dos colegas ainda pendentes.
+
+**Uso de IA:** o Claude Code (Sonnet 5.5) escreveu código, testes e documentos; as decisões de escopo foram do Victor. O Gemini não foi exercitado.
+
 ## 30/10/2026 (sexta): segmento ajustado para pronto-socorro de hospitais privados
 
 **Decisão do Victor:** o segmento da PoC passa de "UPA e pronto-socorro" para **pronto-socorro de hospitais privados**; seguem plantão noturno de 12 h, fim de semana, clínica médica e pediatria.

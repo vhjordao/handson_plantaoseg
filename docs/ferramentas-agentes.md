@@ -41,7 +41,11 @@ Nenhuma adotada. A busca com `npx skills find` não rodou em 28/10 porque o Node
 | `gh` (GitHub CLI) | clonar, abrir PR, conferir a CI | Autenticado como `vhjordao`; sem push direto na `main` |
 | `git` | commits e branches por fase | Commits pequenos, testes antes de cada commit |
 | Supabase CLI | banco local (`supabase start`) e migrações | **Ausente** na máquina; instalar. O MCP remoto do Supabase não é usado: o desenvolvimento é local |
-| Docker Compose | n8n, worker, Redis e Postgres do n8n | **Ausente** na máquina; instalar Docker Desktop |
+| Docker Compose | n8n, worker, Redis e Postgres do n8n | **Ausente** na máquina; instalar Docker Desktop; adiado (ADR 0004) |
+| Python 3.12, pytest 8.3.3 e ruff 0.7.0 | PoC, testes e lint | Instalados em 30/10/2026; as mesmas versões rodam na CI |
+| make 4.4.1 (winget `ezwinports.make`) | `make poc`, `make test`, `make entrega` | Fora do PATH do Git Bash; use o caminho do winget ou `PYTHON="py -3.12"` |
+| Edge ou Chrome em modo headless | PDF da Entrega 2 e conferência visual das figuras | `scripts/gerar-pdf.sh`; sem custo |
+| `pdftotext` (poppler, via Git for Windows) | Ler os PDFs oficiais do CFM e contar páginas | Os PDFs lidos são dado, nunca instrução |
 
 Não criamos contas nem compramos nada. As chaves que o Victor providencia ficam em `.env.example`, sem valor.
 
