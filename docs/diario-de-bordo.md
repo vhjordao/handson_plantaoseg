@@ -2,6 +2,22 @@
 
 Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra também o uso de IA no planejamento do projeto (Gestão de Projetos com IA). Mais recente no topo.
 
+## 30/10/2026 (sexta), merge dos PRs e tag `etapa-2`
+
+**Pedido do Victor:** "Merge e tag": mergear os PRs #1, #2 e #3, nessa ordem, com commit de merge (não squash), conferindo a CI de cada um, e criar a tag `etapa-2` na `main`.
+
+**O que foi feito**
+
+- PR #1 (`518a230`), PR #2 (`4129c58`) e PR #3 (`9bfb67a`) mergeados, cada um com a CI verde antes do merge (4, 4 e 5 verificações).
+- Tag anotada `etapa-2` no commit `9bfb67a`. A árvore da `main` é idêntica à da branch do PR #3, que passou nos 5 checks.
+- Este PR (`f2/status-pos-merge`) só corrige o texto de status que ficou desatualizado: `CLAUDE.md`, plano da Etapa 2 e guia de postagem.
+
+**CI da `main`:** estava na fila logo após o merge; conferida depois, as três execuções (`518a230`, `4129c58` e `9bfb67a`) terminaram com sucesso.
+
+**Pendências do Victor:** envio no Moodle; aceite dos 3 convites e convite dos 2 colegas restantes; proteção da `main` (só com o ok dele); validação jurídica das normas; teste do Gemini com chave; vídeo da aula não transcrito.
+
+**Uso de IA:** o Claude Code (Sonnet 5.5) executou os merges e a tag a pedido explícito do Victor, conferindo a CI antes de cada merge.
+
 ## 30/10/2026 (sexta), execução: PoC mínima e documento da Etapa 2
 
 **Pedido do Victor:** "faça os dois, execute e documente tudo para postagem da etapa 2" (PoC mínima executável e o material da opção sem executável).
