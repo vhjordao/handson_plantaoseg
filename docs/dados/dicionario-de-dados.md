@@ -1,8 +1,8 @@
 # Dicionário de dados v0
 
-- **Versão:** v0, de 28/10/2026. **Status:** proposta para o portão **G1** (aprovação do Victor).
+- **Versão:** v0.1, de 30/10/2026 (v0 de 28/10/2026). **Status:** proposta para o portão **G1** (aprovação do Victor).
 - **Natureza:** documento de desenho, sem SQL e sem código. É o **contrato de dados** entre as frentes: A1 gera, A2 analisa, A3 modela o ranking, A4 desenha o uso do Gemini e A5 avalia privacidade e viés.
-- **Segmento:** UPA e pronto-socorro, plantão noturno de 12 h e fim de semana, clínica médica e pediatria ([ADR 0001](../adr/0001-segmento-inicial.md)).
+- **Segmento:** pronto-socorro de hospitais privados, plantão noturno de 12 h e fim de semana, clínica médica e pediatria ([ADR 0001](../adr/0001-segmento-inicial.md)).
 - **Regra de ouro:** **todos os dados são sintéticos.** Nome, CRM e telefone são fictícios e marcados como simulação; nada tem validade médica ou legal.
 
 ## 1. Como usar este documento
@@ -35,7 +35,7 @@
 
 | Tabela | O que guarda | Quem gera | Quem consome |
 | --- | --- | --- | --- |
-| `organizations`, `units` | Rede e unidades fictícias | A1 | Todas |
+| `organizations`, `units` | Rede e hospitais privados fictícios | A1 | Todas |
 | `doctors`, `doctor_availability` | Médicos simulados e janelas de disponibilidade | A1 | A2, A3 |
 | `shifts` | Vagas de plantão (histórico) | A1 | A2, A3 |
 | `shift_requests` | Pedidos de vaga em texto livre, com gabarito | A1 | A2, A4 |
@@ -67,8 +67,8 @@ erDiagram
 | Coluna | Tipo | Papel | Descrição e domínio |
 | --- | --- | --- | --- |
 | `id` | uuid | chave | |
-| `name` | text | atributo | Nome fictício da rede (por exemplo, "Rede Urgência Exemplo") |
-| `kind` | enum | atributo | `rede_urgencia`; `controle_rls` (organização-controle para o teste de isolamento; só se houver PoC) |
+| `name` | text | atributo | Nome fictício da rede de hospitais privados (por exemplo, "Rede Hospitalar Modelo") |
+| `kind` | enum | atributo | `rede_hospitais_privados`; `controle_rls` (organização-controle para o teste de isolamento; só se houver PoC) |
 | `created_at` | timestamptz | meta | |
 
 ### 4.2 `units`
@@ -77,8 +77,9 @@ erDiagram
 | --- | --- | --- | --- |
 | `id` | uuid | chave | |
 | `organization_id` | uuid | chave | Rede dona da unidade |
-| `name` | text | atributo | Nome fictício: "UPA Centro", "UPA Norte", "Pronto-Socorro Sul". Aparece nos textos das vagas |
-| `kind` | enum | atributo | `UPA`, `PS` |
+| `name` | text | atributo | Nome fictício do hospital privado: "Hospital Modelo Centro", "Hospital Modelo Norte", "Hospital Modelo Sul". Aparece nos textos das vagas |
+| `kind` | enum | atributo | `PS` (pronto-socorro do hospital; todas as vagas do segmento são do PS) |
+| `ownership` | enum | atributo | `privado` (único valor nesta versão; permite ampliar o segmento depois) |
 | `zone` | text | atributo | Zona da cidade fictícia: `centro`, `norte`, `sul`, `leste`, `oeste` |
 | `lat`, `lon` | numeric | atributo | Coordenadas **fictícias** numa cidade imaginária; nunca endereço real |
 
@@ -153,7 +154,7 @@ Pedidos em texto livre, base da análise textual (A2) e da avaliação da extra�
 | `is_adversarial` | bool | meta | Verdadeiro nos casos de injeção de prompt |
 | `attack_type` | enum | meta | Pode ser nula. Domínio inicial (a A4 pode ampliar): `ignore_rules`, `leak_secret`, `inject_payment`, `forge_fields`, `oversize`, `control_chars`, `language_switch`, `role_play`, `pii_exfiltration`, `prompt_leak` |
 
-Exemplo (fictício): "Preciso de um pediatra para o plantão noturno de sexta, 19h às 7h, UPA Centro, urgência alta."
+Exemplo (fictício): "Preciso de um pediatra para o plantão noturno de sexta, 19h às 7h, PS do Hospital Modelo Centro, urgência alta."
 
 ### 4.7 `offers`
 
@@ -243,7 +244,7 @@ As nove variáveis abaixo são **exatamente** as de `RANKING_FEATURES` em [`feat
 | Parâmetro | Valor inicial sugerido | Observação |
 | --- | --- | --- |
 | Período do histórico | 12 meses, de 01/10/2025 a 30/09/2026 | Tudo no passado; últimos 2 meses reservados para teste temporal |
-| Unidades | 3 (1 rede) | ADR 0001 |
+| Hospitais (unidades) | 3 hospitais privados fictícios (1 rede), com 1 pronto-socorro cada | ADR 0001 |
 | Médicos | cerca de 300, mais ou menos 55% clínica médica e 45% pediatria | |
 | Vagas no período | ordem de 3.000, cerca de 60% noturnas e 35% em fim de semana | |
 | Ofertas no período | ordem de 12.000 (cerca de 4 por vaga) | |
@@ -267,7 +268,7 @@ As nove variáveis abaixo são **exatamente** as de `RANKING_FEATURES` em [`feat
 | Nulos e distribuições | Relatório por coluna, sem faixa normativa |
 | Sem dado real: `crm_sim` sempre com prefixo `SIM`; varredura de padrões de chave e de CRM real | 0 achados |
 | Reprodutibilidade: mesma semente e mesmos parâmetros dão os mesmos checksums | Exato |
-| Cobertura do segmento: toda vaga está nas duas especialidades e nas três unidades | 100% |
+| Cobertura do segmento: toda vaga está nas duas especialidades e nos três hospitais | 100% |
 
 ## 8. Reprodutibilidade e formato
 
@@ -309,3 +310,4 @@ Mesmo sendo sintéticos, os dados são tratados como se fossem reais, para ensai
 | Versão | Data | Mudança |
 | --- | --- | --- |
 | v0 | 28/10/2026 | Primeira versão, para aprovação no G1 |
+| v0.1 | 30/10/2026 | Segmento ajustado pelo Victor: pronto-socorro de hospitais privados (`organizations`, `units` com `ownership`, exemplo de texto e premissas) |

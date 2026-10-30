@@ -2,6 +2,20 @@
 
 Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra também o uso de IA no planejamento do projeto (Gestão de Projetos com IA). Mais recente no topo.
 
+## 30/10/2026 (sexta): segmento ajustado para pronto-socorro de hospitais privados
+
+**Decisão do Victor:** o segmento da PoC passa de "UPA e pronto-socorro" para **pronto-socorro de hospitais privados**; seguem plantão noturno de 12 h, fim de semana, clínica médica e pediatria.
+
+**O que mudou:** [ADR 0001](adr/0001-segmento-inicial.md), `CLAUDE.md`, plano da Etapa 2, rastreabilidade (FB-1), subagente `engenheiro-dados` e o [dicionário de dados](dados/dicionario-de-dados.md), que passa a v0.1 (rede de hospitais privados, unidades `PS` com `ownership = privado`, nomes e exemplo fictícios).
+
+**Correção de honestidade:** o ADR dizia que noite e fim de semana "são os que mais ficam descobertos"; não há dado para afirmar isso. Passou a **hipótese a validar nas entrevistas**.
+
+**A lembrar no `docs/03`:** a evidência pública da Entrega 1 (Canoas) é de unidade municipal; para hospitais privados a evidência é a da Flexzo (alegação da empresa) e as entrevistas, ainda por fazer. A contratação de médicos em hospital privado é ponto sensível: validar com jurídico.
+
+**Estado do GitHub em 30/10:** PRs #1 e #2 abertos com a CI verde, `main` só com a Entrega 1, 3 convites pendentes de aceite. Não há decisão registrada para os portões G1 (dicionário) e G-P (forma da PoC) do plano.
+
+**Uso de IA:** o Claude aplicou a troca nos documentos e apontou a frase sem base; o Victor decide.
+
 ## 28/10/2026 (quarta), G0 aprovado
 
 **Decisão do Victor:** aprovou o plano v2 e os ADRs 0001 a 0004 (segmento inicial, escopo da PoC, Gemini e protótipo adiado) e pediu o dicionário de dados v0 na branch `f1/dicionario-dados`.
