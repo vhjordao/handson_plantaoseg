@@ -256,6 +256,18 @@ def cmd_walkthrough(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_build_doc(args: argparse.Namespace) -> int:
+    from app.docbuild import render
+
+    source = Path(args.source)
+    html = render(source.read_text(encoding="utf-8"), source.parent)
+    out = Path(args.out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(html, encoding="utf-8")
+    print(f"HTML imprimível gravado em {out} ({len(html) // 1024} KB)")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="python -m app.cli", description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -289,6 +301,12 @@ def build_parser() -> argparse.ArgumentParser:
     walk.add_argument("--audit", default=str(DEFAULT_DATA / "audit_walkthrough.jsonl"))
     walk.add_argument("--out", default=str(REPO_ROOT / "docs" / "exemplo-trabalhado.md"))
     walk.set_defaults(func=cmd_walkthrough)
+
+    doc = sub.add_parser("build-doc", help="converte um documento Markdown em HTML imprimível")
+    docs_dir = REPO_ROOT / "docs"
+    doc.add_argument("--source", default=str(docs_dir / "03-entrega-2-prova-de-conceito.md"))
+    doc.add_argument("--out", default=str(docs_dir / "entrega-2" / "Entrega2-PlantaoSeguro.html"))
+    doc.set_defaults(func=cmd_build_doc)
 
     analyze = sub.add_parser("analyze", help="análise exploratória dos dados")
     analyze.add_argument("--data", default=str(DEFAULT_DATA))

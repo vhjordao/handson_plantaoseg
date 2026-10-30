@@ -1,0 +1,41 @@
+# Guia de postagem da Entrega 2
+
+O que postar no Moodle e como conferir antes. Prazo: **sábado, 31/10/2026**.
+
+## O que postar
+
+| Arquivo | Para quê |
+| --- | --- |
+| [Entrega2-PlantaoSeguro.pdf](Entrega2-PlantaoSeguro.pdf) | **O documento da entrega**, com 6 páginas (a faixa pedida é de 5 a 8) |
+| Link do repositório | https://github.com/vhjordao/handson_plantaoseg (código, dados sintéticos, testes e documentos) |
+| Link do PR da Etapa 2 | https://github.com/vhjordao/handson_plantaoseg/pull/3 (até o merge na `main`; depois, o link do repositório basta) |
+
+Se o Moodle aceitar só um arquivo, poste o PDF e escreva os links no campo de texto. Se aceitar vários, anexe também [`docs/exemplo-trabalhado.md`](../exemplo-trabalhado.md) e [`docs/analise/README.md`](../analise/README.md).
+
+## Antes de postar (conferência de 5 minutos)
+
+1. Abra o PDF e confira a primeira página (nomes do grupo e data) e as três figuras.
+2. Confirme que o PR #3 e os PRs anteriores foram mergeados, para os links do PDF apontarem para a `main`: os links relativos viram `https://github.com/vhjordao/handson_plantaoseg/blob/main/...`.
+3. Rode `make poc` e `make test` (ou veja a CI verde no PR) para a evidência estar fresca.
+4. Marque a tag `etapa-2` na `main` depois do merge: `git tag etapa-2 && git push origin etapa-2`.
+
+## Como regerar o PDF
+
+```
+make entrega        # gera o HTML imprimível e o PDF (precisa de Edge ou Chrome)
+```
+
+Equivale a `python -m app.cli build-doc` seguido de `sh scripts/gerar-pdf.sh`. O PDF sai do [`docs/03-entrega-2-prova-de-conceito.md`](../03-entrega-2-prova-de-conceito.md); **edite o Markdown e regere**, não o PDF. Os números do documento vêm de `docs/resultados` e um teste (`tests/test_docs_sync.py`) falha se divergirem.
+
+## O que o documento diz com todas as letras
+
+- Os dados e os resultados são **simulação**; não provam desempenho no mundo real.
+- O **Gemini não foi exercitado** contra o serviço real; há plano de teste manual em [`docs/teste-manual-gemini.md`](../teste-manual-gemini.md).
+- A interface, a API e o n8n foram **adiados** por decisão do grupo (ADR 0004); a PoC roda por linha de comando.
+- A Res. CFM 2.462 traz aviso de **suspensão judicial** no PDF oficial; a classificação de risco foi reavaliada para médio; tudo isso **depende de validação jurídica**.
+
+## Pendências conhecidas
+
+- O vídeo da aula de 27/10 não foi transcrito (A3-13 na rastreabilidade).
+- As entrevistas planejadas na Entrega 1 ainda não aconteceram, então a linha de base real do tempo de preenchimento não existe.
+- O teste do Gemini com chave e a validação jurídica ficam para a Etapa 3.
