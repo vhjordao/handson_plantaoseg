@@ -1,0 +1,38 @@
+# Material do professor: nao publicar no GitHub
+docs/aulas/
+
+# Segredos e ambiente
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+
+# Node
+node_modules/
+.next/
+out/
+
+# Supabase local, n8n e dados gerados
+supabase/.temp/
+supabase/.branches/
+infra/volumes/
+data/synthetic/out/
+
+# SO e editores
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Claude Code (estado local)
+.claude/settings.local.json
+.claude/scheduled_tasks.lock

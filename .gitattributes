@@ -1,0 +1,6 @@
+# Scripts e Makefile precisam de LF mesmo no Windows (senão o sh quebra com \r).
+*.sh text eol=lf
+Makefile text eol=lf
+*.yml text eol=lf
+*.md text eol=lf
+*.py text eol=lf
