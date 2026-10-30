@@ -70,6 +70,22 @@ def render_metrics(metrics: dict[str, Any]) -> str:
         f"percentuais** (erro-padrão {num(cf['model_minus_baseline_se'] * 100, 2)}), pareada por "
         "vaga.",
         "",
+        "## Concentração das recomendações (indicador da Entrega 1)",
+        "",
+        "Parcela dos lugares do top-5, somando as vagas de teste, ocupada pelos 10% de médicos "
+        "mais recomendados, e quantos elegíveis nunca aparecem no top-5. Quanto mais concentrado, "
+        "menos médicos recebem oferta.",
+        "",
+        "| Ranking | Lugares ocupados pelos 10% mais recomendados | Elegíveis que nunca aparecem |",
+        "| --- | ---: | ---: |",
+        f"| Modelo | {pct(cf['model_top10pct_share'])} | "
+        f"{cf['model_never_recommended']:.0f} de {cf['ever_eligible']:.0f} |",
+        f"| Baseline heurístico | {pct(cf['baseline_top10pct_share'])} | "
+        f"{cf['baseline_never_recommended']:.0f} de {cf['ever_eligible']:.0f} |",
+        "",
+        "Referência: se os lugares fossem distribuídos por igual entre todos, os 10% de médicos "
+        "ocupariam 10% dos lugares.",
+        "",
         "## Coeficientes do modelo (variáveis padronizadas)",
         "",
         "| Variável | Peso |",
@@ -100,11 +116,18 @@ def render_metrics(metrics: dict[str, Any]) -> str:
             f"| {pct(row['model_share'])} | {num(row['model_ratio'], 2)} "
             f"| {pct(row['baseline_share'])} | {num(row['baseline_ratio'], 2)} |"
         )
+    lowest = min(metrics["fairness"], key=lambda row: row["model_ratio"])
+    highest = max(metrics["fairness"], key=lambda row: row["model_ratio"])
     lines += [
         "",
-        "A distância funciona como proxy da zona de residência: quem mora perto do hospital é "
-        "recomendado mais vezes. É um critério operacional legítimo, mas precisa de "
-        "monitoramento e de revisão humana (ver `docs/seguranca-ameacas.md`).",
+        f"No modelo, a menor razão é a de {ATTRIBUTE_LABELS[lowest['attribute']].lower()} "
+        f"`{lowest['value']}` ({num(lowest['model_ratio'], 2)}) e a maior, a de "
+        f"{ATTRIBUTE_LABELS[highest['attribute']].lower()} `{highest['value']}` "
+        f"({num(highest['model_ratio'], 2)}). A distância funciona como proxy da zona de "
+        "residência: quem mora longe dos hospitais quase não é recomendado. É um critério "
+        "operacional legítimo (a chance de aceite cai com a distância), mas excluir na prática "
+        "zonas inteiras é um risco de viés a monitorar e a mitigar, com revisão humana "
+        "(ver `docs/seguranca-ameacas.md`).",
         "",
     ]
     return "\n".join(lines)

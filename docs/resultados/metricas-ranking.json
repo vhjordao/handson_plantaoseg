@@ -19,7 +19,12 @@
     "model_minus_baseline_se": 0.002204247497754335,
     "model_efficiency": 0.9397598948769911,
     "baseline_efficiency": 0.8937213866785431,
-    "random_efficiency": 0.6983336030627009
+    "random_efficiency": 0.6983336030627009,
+    "model_top10pct_share": 0.5066326530612245,
+    "model_never_recommended": 121.0,
+    "baseline_top10pct_share": 0.611734693877551,
+    "baseline_never_recommended": 165.0,
+    "ever_eligible": 257.0
   },
   "fairness": [
     {

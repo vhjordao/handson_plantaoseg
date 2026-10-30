@@ -7,7 +7,7 @@ COMPOSE := docker compose --env-file .env -f infra/docker-compose.yml
 API := services/matching-api
 CLI := cd $(API) && $(PYTHON) -m app.cli
 
-.PHONY: help doctor env up down logs seed evaluate demo analyze poc test lint
+.PHONY: help doctor env up down logs seed evaluate demo walkthrough analyze poc test lint
 
 help: ## Lista os comandos
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | sed 's/:.*## /\t/'
@@ -42,7 +42,10 @@ demo: ## Vaga em texto livre -> top 5 -> aprovação -> trilha de auditoria
 analyze: ## Análise exploratória (figuras e tabelas em docs/analise)
 	$(CLI) analyze
 
-poc: seed evaluate demo analyze ## Roda a PoC mínima inteira, na ordem
+walkthrough: ## Exemplo trabalhado (docs/exemplo-trabalhado.md) com as contas à vista
+	$(CLI) walkthrough
+
+poc: seed evaluate demo walkthrough analyze ## Roda a PoC mínima inteira, na ordem
 
 test: ## Roda o pytest da matching-api
 	cd $(API) && $(PYTHON) -m pytest -q

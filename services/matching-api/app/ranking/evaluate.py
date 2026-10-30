@@ -90,6 +90,8 @@ def counterfactual(
         attr: {"pool": Counter(), "model": Counter(), "baseline": Counter()}
         for attr in GROUP_ATTRIBUTES
     }
+    appearances: dict[str, Counter] = {"model": Counter(), "baseline": Counter()}
+    ever_eligible: set[str] = set()
     for shift in shifts:
         unit = dataset.units[shift.unit_id]
         moment = shift.published_at
@@ -144,6 +146,9 @@ def counterfactual(
                 "random": _mean([row[1] for row in pool]),
             }
         )
+        appearances["model"].update(row[0] for row in by_model)
+        appearances["baseline"].update(row[0] for row in by_base)
+        ever_eligible.update(row[0] for row in pool)
         for attr in GROUP_ATTRIBUTES:
             counters[attr]["pool"].update(getattr(dataset.doctors[r[0]], attr) for r in pool)
             counters[attr]["model"].update(getattr(dataset.doctors[r[0]], attr) for r in by_model)
@@ -165,6 +170,13 @@ def counterfactual(
     }
     for name in ("model", "baseline", "random"):
         summary[f"{name}_efficiency"] = summary[name] / summary["oracle"]
+    top_n = max(1, round(0.1 * len(dataset.doctors)))
+    for name in ("model", "baseline"):
+        counts = appearances[name]
+        slots = sum(counts.values()) or 1
+        summary[f"{name}_top10pct_share"] = sum(c for _, c in counts.most_common(top_n)) / slots
+        summary[f"{name}_never_recommended"] = float(len(ever_eligible - set(counts)))
+    summary["ever_eligible"] = float(len(ever_eligible))
     return summary, {"counters": counters}
 
 

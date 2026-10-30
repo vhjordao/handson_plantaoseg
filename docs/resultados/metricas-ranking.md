@@ -26,6 +26,17 @@ Para cada uma das 392 vagas do período de teste, o filtro de regras deixou em m
 
 Diferença modelo menos baseline: **3,5 pontos percentuais** (erro-padrão 0,22), pareada por vaga.
 
+## Concentração das recomendações (indicador da Entrega 1)
+
+Parcela dos lugares do top-5, somando as vagas de teste, ocupada pelos 10% de médicos mais recomendados, e quantos elegíveis nunca aparecem no top-5. Quanto mais concentrado, menos médicos recebem oferta.
+
+| Ranking | Lugares ocupados pelos 10% mais recomendados | Elegíveis que nunca aparecem |
+| --- | ---: | ---: |
+| Modelo | 50,7% | 121 de 257 |
+| Baseline heurístico | 61,2% | 165 de 257 |
+
+Referência: se os lugares fossem distribuídos por igual entre todos, os 10% de médicos ocupariam 10% dos lugares.
+
 ## Coeficientes do modelo (variáveis padronizadas)
 
 | Variável | Peso |
@@ -58,4 +69,4 @@ Razão = participação no top-5 dividida pela participação entre os elegívei
 | Zona de residência | oeste | 10,5% | 0,1% | 0,01 | 1,1% | 0,11 |
 | Zona de residência | sul | 20,3% | 37,0% | 1,82 | 36,1% | 1,78 |
 
-A distância funciona como proxy da zona de residência: quem mora perto do hospital é recomendado mais vezes. É um critério operacional legítimo, mas precisa de monitoramento e de revisão humana (ver `docs/seguranca-ameacas.md`).
+No modelo, a menor razão é a de zona de residência `leste` (0,01) e a maior, a de zona de residência `sul` (1,82). A distância funciona como proxy da zona de residência: quem mora longe dos hospitais quase não é recomendado. É um critério operacional legítimo (a chance de aceite cai com a distância), mas excluir na prática zonas inteiras é um risco de viés a monitorar e a mitigar, com revisão humana (ver `docs/seguranca-ameacas.md`).

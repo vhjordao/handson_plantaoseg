@@ -240,6 +240,22 @@ def cmd_analyze(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_walkthrough(args: argparse.Namespace) -> int:
+    from app.walkthrough import render_walkthrough
+
+    data_dir = Path(args.data)
+    dataset, params = _load(data_dir)
+    model = _load_model(data_dir, dataset, params)
+    markdown = render_walkthrough(
+        dataset, model, args.text or DEFAULT_TEXT, date.fromisoformat(args.today), Path(args.audit)
+    )
+    out = Path(args.out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(markdown, encoding="utf-8")
+    print(f"Exemplo trabalhado gravado em {out}")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="python -m app.cli", description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -265,6 +281,14 @@ def build_parser() -> argparse.ArgumentParser:
     demo.add_argument("--fresh", action="store_true", help="recomeça a trilha de auditoria")
     demo.add_argument("--yes", action="store_true", help="aprova os 3 primeiros (só para a demo)")
     demo.set_defaults(func=cmd_demo)
+
+    walk = sub.add_parser("walkthrough", help="exemplo trabalhado, passo a passo, em Markdown")
+    walk.add_argument("--data", default=str(DEFAULT_DATA))
+    walk.add_argument("--text", default=None)
+    walk.add_argument("--today", default="2026-10-01")
+    walk.add_argument("--audit", default=str(DEFAULT_DATA / "audit_walkthrough.jsonl"))
+    walk.add_argument("--out", default=str(REPO_ROOT / "docs" / "exemplo-trabalhado.md"))
+    walk.set_defaults(func=cmd_walkthrough)
 
     analyze = sub.add_parser("analyze", help="análise exploratória dos dados")
     analyze.add_argument("--data", default=str(DEFAULT_DATA))

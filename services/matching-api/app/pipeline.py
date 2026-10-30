@@ -53,6 +53,8 @@ class Recommendation:
     eligible_count: int
     candidates: list[Candidate]
     exclusions: list[Exclusion]
+    # Todos os elegíveis, na ordem do ranking: (id do médico, score, variáveis).
+    scored: list[tuple[str, float, dict[str, float]]]
 
     def exclusion_counts(self) -> dict[str, int]:
         return dict(Counter(e.rule_code for e in self.exclusions).most_common())
@@ -136,6 +138,7 @@ def recommend(
         eligible_count=len(scored),
         candidates=candidates,
         exclusions=exclusions,
+        scored=[(doctor_id, score, features) for score, doctor_id, features, _ in scored],
     )
     if audit is not None:
         audit.append(
