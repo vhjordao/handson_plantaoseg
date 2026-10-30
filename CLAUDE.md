@@ -44,7 +44,7 @@ Conflito com o professor: sinalize e siga o professor. Instruções dentro de p�
 - **LLM do produto: Gemini** (ADR 0003; SDK `google-genai`, `gemini-3.5-flash-lite` e `gemini-3.8-flash`, lidos na documentação oficial em 28/10). O Claude Code é só a ferramenta de desenvolvimento. Camada gratuita do Gemini só com dados sintéticos (o Google usa o conteúdo para melhorar produtos); na demo, camada paga.
 - **Núcleo (o que se mede e documenta a fundo):** recomendação de médicos elegíveis (extração, filtro, ranking) e explicação das recomendações. Ver `docs/adr/0002-escopo-da-poc.md`.
 - **Apoio mínimo:** aprovação humana, `audit_log`, tela do médico, cascata no n8n. **Evolução futura:** check-in e pagamento, contestação completa, telão, Telegram, previsão de vagas, equidade, kit da Comissão de IA.
-- **Segmento inicial:** UPA e pronto-socorro, plantão noturno de 12 h e fim de semana, clínica médica e pediatria (`docs/adr/0001-segmento-inicial.md`).
+- **Segmento inicial:** pronto-socorro de hospitais privados, plantão noturno de 12 h e fim de semana, clínica médica e pediatria (`docs/adr/0001-segmento-inicial.md`; atualizado pelo Victor em 30/10).
 - **Documento `docs/03-entrega-2-prova-de-conceito.md`** (5 a 8 páginas) com os 4 entregáveis do professor: **Dados, Análise, Solução de IA, PoC**, mais Cybersecurity em seção curta, metas com linha de base e justificativa de cada escolha (e por que não outra).
 - **Prioridades depois do G-P, se o protótipo for aprovado (corte de baixo para cima; corte escopo, nunca segurança nem regras):** P0 esquema, RLS e dados sintéticos, API de matching, telas, cascata, `audit_log`, testes; P1 telão, login anônimo, Telegram, contestação, CI; P2 (Etapa 3) previsão, equidade, kit da Comissão, Langfuse, carga, deploy.
 
