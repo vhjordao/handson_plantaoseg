@@ -12,7 +12,7 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 - Tag anotada `etapa-2` no commit `9bfb67a`. A árvore da `main` é idêntica à da branch do PR #3, que passou nos 5 checks.
 - Este PR (`f2/status-pos-merge`) só corrige o texto de status que ficou desatualizado: `CLAUDE.md`, plano da Etapa 2 e guia de postagem.
 
-**Não verificado:** a CI da própria `main` estava na fila quando conferi; olhar a aba Actions.
+**CI da `main`:** estava na fila logo após o merge; conferida depois, as três execuções (`518a230`, `4129c58` e `9bfb67a`) terminaram com sucesso.
 
 **Pendências do Victor:** envio no Moodle; aceite dos 3 convites e convite dos 2 colegas restantes; proteção da `main` (só com o ok dele); validação jurídica das normas; teste do Gemini com chave; vídeo da aula não transcrito.
 
