@@ -22,7 +22,7 @@
 | **Apoio mínimo (depois)** | Aprovação humana, `audit_log`, tela do médico, cascata no n8n | Só com aprovação |
 | **Evolução futura** | Check-in e pagamento, contestação completa, telão, Telegram, previsão, equidade, kit da Comissão de IA | Só descrita |
 
-Segmento: UPA e pronto-socorro, plantão noturno de 12 h e fim de semana, clínica médica e pediatria (ADR 0001).
+Segmento: pronto-socorro de hospitais privados, plantão noturno de 12 h e fim de semana, clínica médica e pediatria (ADR 0001, atualizado pelo Victor em 30/10).
 
 ## 2. O que será entregue, mapeado ao que o professor pede
 
@@ -110,6 +110,7 @@ Nenhum número abaixo é resultado: são o jeito de medir. Com dados sintéticos
 | Camada gratuita do Gemini expor texto digitado pela plateia | Camada paga na demo e aviso "não digite dados reais" (ADR 0003) |
 | Preço e modelos do Gemini mudarem | IDs e preços datados em 28/10; reconferir antes da demo |
 | Escopo crescer | ADRs 0002 e 0004 |
+| A evidência pública da Entrega 1 (Canoas) não ser do segmento privado | Dizer isso no `docs/03`; apoiar-se na Flexzo (alegação da empresa) e nas entrevistas, ainda por fazer (ADR 0001) |
 | Documento estourar 8 páginas | Orçamento por seção (seção 7) e fichas curtas |
 | Conflitos de merge | Uma frente por pessoa, pastas separadas, revisão cruzada |
 | Números sintéticos serem lidos como evidência | Rótulo "simulação", baseline e seção de limites |
