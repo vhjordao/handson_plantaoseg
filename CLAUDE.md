@@ -67,6 +67,7 @@ No Windows, `make` e Python precisam ser instalados (ver `make doctor`); use `ma
 - `docs/03-entrega-2-prova-de-conceito.md`: documento da Etapa 2 (a criar na Fase 4).
 - `docs/feedback/`, `docs/rastreabilidade-professor.md`: feedbacks na íntegra e a tabela de exigências.
 - `docs/adr/`, `docs/diario-de-bordo.md`, `docs/ferramentas-agentes.md`, `docs/conformidade/`.
+- `docs/dados/dicionario-de-dados.md`: contrato de dados (papéis das colunas, o que pode ir ao ranking e ao LLM). Mudança nele vira nova versão no mesmo PR.
 - `docs/aulas/`: slides do professor, **fora do Git** (`.gitignore`). Não publicar.
 - `apps/web`, `services/matching-api`, `supabase/migrations`, `data/synthetic`, `n8n/workflows`, `infra`, `.github/workflows`.
 - Subagentes em `.claude/agents/`; skills próprias em `.claude/skills/`.
