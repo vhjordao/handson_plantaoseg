@@ -8,16 +8,16 @@ O que postar no Moodle e como conferir antes. Prazo: **sábado, 31/10/2026**.
 | --- | --- |
 | [Entrega2-PlantaoSeguro.pdf](Entrega2-PlantaoSeguro.pdf) | **O documento da entrega**, com 6 páginas (a faixa pedida é de 5 a 8) |
 | Link do repositório | https://github.com/vhjordao/handson_plantaoseg (código, dados sintéticos, testes e documentos) |
-| Link do PR da Etapa 2 | https://github.com/vhjordao/handson_plantaoseg/pull/3 (até o merge na `main`; depois, o link do repositório basta) |
+| Link da versão entregue | https://github.com/vhjordao/handson_plantaoseg/tree/etapa-2 (tag `etapa-2`; o PR de origem é o [#3](https://github.com/vhjordao/handson_plantaoseg/pull/3), mergeado em 30/10/2026) |
 
 Se o Moodle aceitar só um arquivo, poste o PDF e escreva os links no campo de texto. Se aceitar vários, anexe também [`docs/exemplo-trabalhado.md`](../exemplo-trabalhado.md) e [`docs/analise/README.md`](../analise/README.md).
 
 ## Antes de postar (conferência de 5 minutos)
 
 1. Abra o PDF e confira a primeira página (nomes do grupo e data) e as três figuras.
-2. Confirme que o PR #3 e os PRs anteriores foram mergeados, para os links do PDF apontarem para a `main`: os links relativos viram `https://github.com/vhjordao/handson_plantaoseg/blob/main/...`.
-3. Rode `make poc` e `make test` (ou veja a CI verde no PR) para a evidência estar fresca.
-4. Marque a tag `etapa-2` na `main` depois do merge: `git tag etapa-2 && git push origin etapa-2`.
+2. Os PRs #1 a #3 já foram mergeados (30/10/2026), então os links do PDF apontam para a `main`: os links relativos viram `https://github.com/vhjordao/handson_plantaoseg/blob/main/...`.
+3. Rode `make poc` e `make test` (ou veja a CI verde na aba Actions) para a evidência estar fresca.
+4. A tag `etapa-2` já existe (commit de merge `9bfb67a`). Se algo mudar depois da postagem, não mova a tag: crie outra, por exemplo `etapa-2-rev1`.
 
 ## Como regerar o PDF
 

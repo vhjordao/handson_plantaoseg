@@ -67,7 +67,7 @@ No Windows, `make PYTHON="py -3.12" poc` se `python` não estiver no PATH (ver `
 ## Onde ficam as coisas
 
 - `docs/01-entrega-1-descoberta.md`, `docs/02-arquitetura-e-ferramentas.md`: fonte da verdade (atualize no mesmo commit se uma decisão mudar).
-- `docs/03-entrega-2-prova-de-conceito.md`: documento da Etapa 2 (a criar na Fase 4).
+- `docs/03-entrega-2-prova-de-conceito.md`: documento da Etapa 2 (PDF em `docs/entrega-2/`).
 - `docs/feedback/`, `docs/rastreabilidade-professor.md`: feedbacks na íntegra e a tabela de exigências.
 - `docs/adr/`, `docs/diario-de-bordo.md`, `docs/ferramentas-agentes.md`, `docs/conformidade/`.
 - `docs/dados/dicionario-de-dados.md`: contrato de dados (papéis das colunas, o que pode ir ao ranking e ao LLM). Mudança nele vira nova versão no mesmo PR.
@@ -110,6 +110,6 @@ Quando Victor colar um feedback ou disser "novo feedback", use a skill `incorpor
 
 ## Estado atual (atualize ao fechar cada fase)
 
-- Etapa 1 entregue. **Etapa 2 pronta para postar em 30/10:** PoC mínima executável, dados, análise, solução de IA, segurança, conformidade e PDF de 6 páginas (`docs/entrega-2/`). PRs abertos para a `main`, na ordem: #1 (base), #2 (dicionário) e #3 (PoC); **o merge é do Victor**. LLM do produto = Gemini (**não exercitado com chave**); protótipo (tela, API, n8n) adiado.
+- Etapa 1 entregue. **Etapa 2 na `main` e marcada com a tag `etapa-2` (30/10/2026, commit de merge `9bfb67a`):** PoC mínima executável, dados, análise, solução de IA, segurança, conformidade e PDF de 6 páginas (`docs/entrega-2/`). PRs #1 (base), #2 (dicionário) e #3 (PoC) mergeados com commit de merge; falta o envio no Moodle (Victor, até 31/10). O merge continua sendo do Victor. LLM do produto = Gemini (**não exercitado com chave**); protótipo (tela, API, n8n) adiado.
 - Ambiente local de 30/10: Python 3.12, pytest, ruff e make instalados; sem Docker, Node, Supabase CLI e ffmpeg. A CI do GitHub roda tudo, inclusive a PoC.
 - Vídeo da aula de 27/10 não processado (ver rastreabilidade A3-13).

@@ -13,7 +13,7 @@
 | G-P (forma da PoC) | Decidido em 30/10 ([ADR 0005](adr/0005-gp-poc-minima-e-especificacao.md)): PoC mínima executável **e** o material de especificação |
 | A1 a A5 (dados, análise, IA, segurança) | **Entregues** (ver [rastreabilidade](rastreabilidade-professor.md)), feitas pelo Claude Code com decisões do Victor; a divisão por colegas não chegou a ser usada porque os convites ainda não tinham sido aceitos |
 | `docs/03` e PDF | Prontos em [docs/entrega-2](entrega-2/LEIAME.md) |
-| G3 e G4 | Pendentes: revisão do Victor, merge dos PRs #1 a #3, tag `etapa-2` e envio no Moodle |
+| G3 e G4 | Merge dos PRs #1 a #3 (commit de merge `9bfb67a`) e tag `etapa-2` feitos em 30/10/2026. **Pendente:** envio no Moodle pelo Victor |
 | Fora do escopo desta entrega | Interface, API, n8n e banco (ADR 0004); teste do Gemini com chave; validação jurídica |
 
 ## O que mudou em relação à versão 1
@@ -68,7 +68,7 @@ Em cada portão eu explico o que foi feito e o que vem, e só sigo com o "ok" do
 
 | Quando | O que acontece | Portão |
 | --- | --- | --- |
-| **Qua 28/10 (hoje)** | Victor aprova este plano e os ADRs 0001 a 0004; merge do PR #1; convites aos colegas e proteção da `main`; colegas instalam as ferramentas (`make doctor`) | **G0** (aprovado em 28/10; faltam o merge do PR #1, os convites e a proteção da `main`) |
+| **Qua 28/10 (hoje)** | Victor aprova este plano e os ADRs 0001 a 0004; merge do PR #1; convites aos colegas e proteção da `main`; colegas instalam as ferramentas (`make doctor`) | **G0** (aprovado em 28/10; PR #1 mergeado em 30/10; faltam os convites e a proteção da `main`) |
 | **Qui 29/10, manhã** | Eu preparo o **dicionário de dados v0** (o contrato de dados) e o Victor aprova; as frentes A1 a A5 começam em paralelo | **G1** |
 | **Qui 29/10, noite** | Dados gerados e análise preliminar; o Victor decide a **forma da PoC** (P1, P2 ou P3) | **G-P** |
 | **Sex 30/10** | A2 conclui a análise; A3 e A4 fecham o desenho; rascunho completo do `docs/03`; revisão do `revisor-professor`; se o G-P aprovou, constrói-se a PoC escolhida | **G3** |
@@ -129,7 +129,7 @@ Nenhum número abaixo é resultado: são o jeito de medir. Com dados sintéticos
 
 ## 9. O que depende do Victor
 
-1. Aprovar este plano e os ADRs 0001 a 0004; fazer o merge do PR #1.
+1. Aprovar este plano e os ADRs 0001 a 0004 (feito em 28/10) e fazer o merge do PR #1 (feito em 30/10, junto com os PRs #2 e #3).
 2. Passar os usuários do GitHub dos colegas e escolher o dono de cada frente (A1 a A5).
 3. Convidar os colegas e proteger a `main` (passo a passo na resposta da sessão).
 4. Criar a chave do Gemini no Google AI Studio para testes com dados sintéticos e, para a demo, um projeto com faturamento ativo e alerta de orçamento.
