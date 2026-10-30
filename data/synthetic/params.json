@@ -1,0 +1,41 @@
+{
+  "accept": {
+    "b0": 0.2,
+    "contiguous": -0.5,
+    "distance": -0.09,
+    "load_30d": -0.15,
+    "not_covered": -2.0,
+    "preference": 0.7,
+    "reliability": 2.2,
+    "rest_lt_11": -2.0,
+    "rest_lt_24": -0.5,
+    "secondary_specialty": -0.5,
+    "urgency_high": 0.4
+  },
+  "age_exposure": {
+    "25-34": 0.8,
+    "35-44": 1.5,
+    "45-54": 1.0,
+    "55+": 0.5
+  },
+  "double_shift_boost": 60.0,
+  "end_date": "2026-09-30",
+  "historical_bias_scenario": true,
+  "max_offers_per_shift": 8,
+  "n_doctors": 300,
+  "p_night_shift": 0.9,
+  "p_weekend_day_shift": 0.8,
+  "seed": 20261030,
+  "share_pediatria": 0.45,
+  "start_date": "2025-10-01",
+  "test_start": "2026-08-01",
+  "text_requests": 400,
+  "ttl_minutes": 60,
+  "zone_exposure": {
+    "centro": 1.8,
+    "leste": 0.6,
+    "norte": 1.0,
+    "oeste": 0.6,
+    "sul": 1.0
+  }
+}
