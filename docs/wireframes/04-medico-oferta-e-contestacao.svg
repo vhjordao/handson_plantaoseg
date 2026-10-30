@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 500" role="img" aria-labelledby="t d" font-family='system-ui, -apple-system, "Segoe UI", sans-serif'>
+<title id="t">Tela 4: oferta ao médico com o motivo e contestação</title>
+<desc id="d">O médico vê só ofertas relevantes, com o motivo de ter sido chamado, aceita ou recusa e pode contestar uma recomendação ou exclusão; a resposta do coordenador fica registrada.</desc>
+<rect width="760" height="500" fill="#fcfcfb"/>
+<rect x="20" y="20" width="720" height="460" rx="10" fill="#fcfcfb" stroke="#c3c2b7"/>
+<rect x="20" y="20" width="720" height="40" rx="10" fill="#e1e0d9"/>
+<text x="40" y="46" font-size="14" font-weight="600" fill="#0b0b0b">PlantãoSeguro · Médico · Minhas ofertas</text>
+<text x="560" y="46" font-size="11" fill="#52514e">SIMULAÇÃO · dados sintéticos</text>
+
+<rect x="40" y="76" width="680" height="190" rx="8" fill="#ffffff" stroke="#c3c2b7"/>
+<text x="56" y="104" font-size="14" font-weight="600" fill="#0b0b0b">Pediatria · Hospital Modelo Centro</text>
+<text x="56" y="126" font-size="13" fill="#52514e">Sexta 02/10, 19h às 7h (12 h) · urgência alta · resposta até as 10h30</text>
+<text x="56" y="154" font-size="13" font-weight="600" fill="#0b0b0b">Por que você foi chamado</text>
+<text x="56" y="174" font-size="13" fill="#52514e">Mora a 1,4 km do hospital e prefere plantões noturnos.</text>
+<rect x="56" y="188" width="460" height="18" rx="9" fill="#e1e0d9"/>
+<text x="68" y="201" font-size="11" fill="#0b0b0b">Jornada: seu descanso desde o último plantão é de mais de 7 dias.</text>
+<rect x="56" y="222" width="120" height="32" rx="6" fill="#2a78d6"/><text x="116" y="243" font-size="13" font-weight="600" fill="#ffffff" text-anchor="middle">Aceitar</text>
+<rect x="188" y="222" width="120" height="32" rx="6" fill="#ffffff" stroke="#898781"/><text x="248" y="243" font-size="13" font-weight="600" fill="#0b0b0b" text-anchor="middle">Recusar</text>
+<rect x="320" y="222" width="150" height="32" rx="6" fill="#ffffff" stroke="#eb6834"/><text x="395" y="243" font-size="13" font-weight="600" fill="#0b0b0b" text-anchor="middle">Contestar motivo</text>
+
+<rect x="40" y="284" width="680" height="170" rx="8" fill="#ffffff" stroke="#eb6834"/>
+<text x="56" y="312" font-size="14" font-weight="600" fill="#0b0b0b">Contestação (direito do médico, Res. CFM 2.454, Anexo I, XX)</text>
+<rect x="56" y="324" width="648" height="52" rx="6" fill="#fcfcfb" stroke="#898781"/>
+<text x="68" y="346" font-size="12" fill="#52514e">Explique por que discorda da recomendação ou da exclusão. Não inclua dados de pacientes.</text>
+<rect x="56" y="388" width="150" height="30" rx="6" fill="#eb6834"/><text x="131" y="408" font-size="13" font-weight="600" fill="#ffffff" text-anchor="middle">Enviar contestação</text>
+<text x="222" y="408" font-size="12" fill="#52514e">Status: aguardando resposta do coordenador (prazo registrado).</text>
+<text x="56" y="438" font-size="11" fill="#898781">Texto, resposta e prazo ficam na trilha de auditoria. Desenho: a contestação não está construída na PoC.</text>
+</svg>

@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 540" role="img" aria-labelledby="t d" font-family='system-ui, -apple-system, "Segoe UI", sans-serif'>
+<title id="t">Tela 2: top 5 recomendado com motivos, alertas de jornada e aprovação</title>
+<desc id="d">Lista com cinco candidatos, cada um com posição, score, motivo em linguagem simples e alerta de jornada quando houver. O coordenador marca quem aprova; sem a aprovação nenhuma oferta sai.</desc>
+<rect width="760" height="540" fill="#fcfcfb"/>
+<rect x="20" y="20" width="720" height="500" rx="10" fill="#fcfcfb" stroke="#c3c2b7"/>
+<rect x="20" y="20" width="720" height="40" rx="10" fill="#e1e0d9"/>
+<text x="40" y="46" font-size="14" font-weight="600" fill="#0b0b0b">PlantãoSeguro · Recomendação · Pediatria, Hospital Modelo Centro, sex 19h</text>
+<text x="40" y="84" font-size="12" fill="#52514e">65 elegíveis entre 300 médicos · modelo logreg-v1 (simulação) · a IA recomenda, você decide</text>
+
+<g font-size="12">
+<rect x="40" y="96" width="680" height="62" rx="6" fill="#ffffff" stroke="#c3c2b7"/>
+<rect x="52" y="108" width="16" height="16" rx="3" fill="#ffffff" stroke="#2a78d6"/>
+<text x="80" y="122" font-size="13" font-weight="600" fill="#0b0b0b">1. Felipe F. S. · SIM-SP-000083 · score 0,69</text>
+<text x="80" y="144" fill="#52514e">Recomendado porque mora a 1,4 km, prefere o período desta vaga e tem taxa de aceite estimada de 45%.</text>
+
+<rect x="40" y="166" width="680" height="62" rx="6" fill="#ffffff" stroke="#c3c2b7"/>
+<rect x="52" y="178" width="16" height="16" rx="3" fill="#ffffff" stroke="#2a78d6"/>
+<text x="80" y="192" font-size="13" font-weight="600" fill="#0b0b0b">2. Felipe B. T. · SIM-SP-000289 · score 0,68</text>
+<text x="80" y="214" fill="#52514e">Recomendado porque mora a 3,0 km, tem taxa de aceite estimada de 56% e prefere o período.</text>
+
+<rect x="40" y="236" width="680" height="62" rx="6" fill="#ffffff" stroke="#c3c2b7"/>
+<rect x="52" y="248" width="16" height="16" rx="3" fill="#ffffff" stroke="#2a78d6"/>
+<text x="80" y="262" font-size="13" font-weight="600" fill="#0b0b0b">3. Olívia I. N. · SIM-SP-000145 · score 0,67</text>
+<text x="80" y="284" fill="#52514e">Recomendado porque mora a 3,2 km, tem taxa de aceite estimada de 50% e prefere o período.</text>
+
+<rect x="40" y="306" width="680" height="76" rx="6" fill="#ffffff" stroke="#eb6834"/>
+<rect x="52" y="318" width="16" height="16" rx="3" fill="#ffffff" stroke="#2a78d6"/>
+<text x="80" y="332" font-size="13" font-weight="600" fill="#0b0b0b">4. Ana R. T. · SIM-SP-000127 · score 0,66</text>
+<text x="80" y="354" fill="#52514e">Recomendado porque mora a 1,4 km, prefere o período e tem a especialidade principal.</text>
+<rect x="80" y="360" width="360" height="18" rx="9" fill="#eb6834"/>
+<text x="92" y="373" font-size="11" font-weight="600" fill="#ffffff">Atenção (jornada): carga recente alta, 9 plantões em 30 dias</text>
+
+<rect x="40" y="390" width="680" height="62" rx="6" fill="#ffffff" stroke="#c3c2b7"/>
+<rect x="52" y="402" width="16" height="16" rx="3" fill="#ffffff" stroke="#2a78d6"/>
+<text x="80" y="416" font-size="13" font-weight="600" fill="#0b0b0b">5. Renata F. S. · SIM-SP-000236 · score 0,66</text>
+<text x="80" y="438" fill="#52514e">Recomendado porque mora a 4,4 km, tem taxa de aceite estimada de 55% e prefere o período.</text>
+</g>
+<rect x="40" y="468" width="220" height="32" rx="6" fill="#eb6834"/>
+<text x="150" y="489" font-size="13" font-weight="600" fill="#ffffff" text-anchor="middle">Aprovar os selecionados</text>
+<text x="276" y="489" font-size="11" fill="#52514e">Registrado na trilha de auditoria com seu nome e a versão do modelo.</text>
+<text x="40" y="512" font-size="11" fill="#898781">Motivos mostram só o que diferencia o candidato da média dos elegíveis. Nomes e CRM são fictícios.</text>
+</svg>
