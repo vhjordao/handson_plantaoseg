@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="t d" font-family='system-ui, -apple-system, "Segoe UI", sans-serif'>
+<title id="t">Taxa de aceite cai com a distância</title><desc id="d">Colunas com a taxa de aceite das ofertas por faixa de distância.</desc>
+<rect width="640" height="360" fill="#fcfcfb"/>
+<text x="56" y="28" font-size="16" font-weight="600" fill="#0b0b0b">Taxa de aceite cai com a distância</text>
+<text x="56" y="48" font-size="12" fill="#52514e">Ofertas aceitas por faixa de distância até o hospital (simulação)</text>
+<line x1="56" x2="616" y1="296.0" y2="296.0" stroke="#c3c2b7" stroke-width="1"/><text x="48" y="300.0" font-size="11" text-anchor="end" fill="#898781">0%</text>
+<line x1="56" x2="616" y1="256.0" y2="256.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="260.0" font-size="11" text-anchor="end" fill="#898781">10%</text>
+<line x1="56" x2="616" y1="216.0" y2="216.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="220.0" font-size="11" text-anchor="end" fill="#898781">20%</text>
+<line x1="56" x2="616" y1="176.0" y2="176.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="180.0" font-size="11" text-anchor="end" fill="#898781">30%</text>
+<line x1="56" x2="616" y1="136.0" y2="136.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="140.0" font-size="11" text-anchor="end" fill="#898781">40%</text>
+<line x1="56" x2="616" y1="96.0" y2="96.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="100.0" font-size="11" text-anchor="end" fill="#898781">50%</text>
+<path d="M100.0,296.0 L100.0,140.4 Q100.0,136.4 104.0,136.4 L120.0,136.4 Q124.0,136.4 124.0,140.4 L124.0,296.0 Z" fill="#2a78d6"/>
+<text x="112.0" y="130.4" font-size="11" text-anchor="middle" fill="#52514e">40%</text>
+<text x="112.0" y="314.0" font-size="11" text-anchor="middle" fill="#52514e">0 a 5 km</text>
+<path d="M212.0,296.0 L212.0,165.7 Q212.0,161.7 216.0,161.7 L232.0,161.7 Q236.0,161.7 236.0,165.7 L236.0,296.0 Z" fill="#2a78d6"/>
+<text x="224.0" y="155.7" font-size="11" text-anchor="middle" fill="#52514e">34%</text>
+<text x="224.0" y="314.0" font-size="11" text-anchor="middle" fill="#52514e">5 a 10 km</text>
+<path d="M324.0,296.0 L324.0,197.9 Q324.0,193.9 328.0,193.9 L344.0,193.9 Q348.0,193.9 348.0,197.9 L348.0,296.0 Z" fill="#2a78d6"/>
+<text x="336.0" y="187.9" font-size="11" text-anchor="middle" fill="#52514e">26%</text>
+<text x="336.0" y="314.0" font-size="11" text-anchor="middle" fill="#52514e">10 a 15 km</text>
+<path d="M436.0,296.0 L436.0,212.4 Q436.0,208.4 440.0,208.4 L456.0,208.4 Q460.0,208.4 460.0,212.4 L460.0,296.0 Z" fill="#2a78d6"/>
+<text x="448.0" y="202.4" font-size="11" text-anchor="middle" fill="#52514e">22%</text>
+<text x="448.0" y="314.0" font-size="11" text-anchor="middle" fill="#52514e">15 a 20 km</text>
+<path d="M548.0,296.0 L548.0,230.6 Q548.0,226.6 552.0,226.6 L568.0,226.6 Q572.0,226.6 572.0,230.6 L572.0,296.0 Z" fill="#2a78d6"/>
+<text x="560.0" y="220.6" font-size="11" text-anchor="middle" fill="#52514e">17%</text>
+<text x="560.0" y="314.0" font-size="11" text-anchor="middle" fill="#52514e">20 km ou mais</text>
+</svg>

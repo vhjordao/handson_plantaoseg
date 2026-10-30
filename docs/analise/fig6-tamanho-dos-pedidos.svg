@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="t d" font-family='system-ui, -apple-system, "Segoe UI", sans-serif'>
+<title id="t">Tamanho médio dos pedidos por estilo</title><desc id="d">Colunas com o tamanho médio dos pedidos por estilo de escrita.</desc>
+<rect width="640" height="360" fill="#fcfcfb"/>
+<text x="56" y="28" font-size="16" font-weight="600" fill="#0b0b0b">Tamanho médio dos pedidos por estilo</text>
+<text x="56" y="48" font-size="12" fill="#52514e">Caracteres por pedido em texto livre (simulação)</text>
+<line x1="56" x2="616" y1="296.0" y2="296.0" stroke="#c3c2b7" stroke-width="1"/><text x="48" y="300.0" font-size="11" text-anchor="end" fill="#898781">0</text>
+<line x1="56" x2="616" y1="262.7" y2="262.7" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="266.7" font-size="11" text-anchor="end" fill="#898781">100</text>
+<line x1="56" x2="616" y1="229.3" y2="229.3" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="233.3" font-size="11" text-anchor="end" fill="#898781">200</text>
+<line x1="56" x2="616" y1="196.0" y2="196.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="200.0" font-size="11" text-anchor="end" fill="#898781">300</text>
+<line x1="56" x2="616" y1="162.7" y2="162.7" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="166.7" font-size="11" text-anchor="end" fill="#898781">400</text>
+<line x1="56" x2="616" y1="129.3" y2="129.3" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="133.3" font-size="11" text-anchor="end" fill="#898781">500</text>
+<line x1="56" x2="616" y1="96.0" y2="96.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="100.0" font-size="11" text-anchor="end" fill="#898781">600</text>
+<path d="M100.0,296.0 L100.0,285.7 Q100.0,281.7 104.0,281.7 L120.0,281.7 Q124.0,281.7 124.0,285.7 L124.0,296.0 Z" fill="#2a78d6"/>
+<text x="112.0" y="275.7" font-size="11" text-anchor="middle" fill="#52514e">43</text>
+<text x="112.0" y="314.0" font-size="11" text-anchor="middle" fill="#52514e">ambiguo</text>
+<path d="M212.0,296.0 L212.0,137.6 Q212.0,133.6 216.0,133.6 L232.0,133.6 Q236.0,133.6 236.0,137.6 L236.0,296.0 Z" fill="#2a78d6"/>
+<text x="224.0" y="127.6" font-size="11" text-anchor="middle" fill="#52514e">487</text>
+<text x="224.0" y="314.0" font-size="11" text-anchor="middle" fill="#52514e">adversarial</text>
+<path d="M324.0,296.0 L324.0,264.1 Q324.0,260.1 328.0,260.1 L344.0,260.1 Q348.0,260.1 348.0,264.1 L348.0,296.0 Z" fill="#2a78d6"/>
+<text x="336.0" y="254.1" font-size="11" text-anchor="middle" fill="#52514e">108</text>
+<text x="336.0" y="314.0" font-size="11" text-anchor="middle" fill="#52514e">formal</text>
+<path d="M436.0,296.0 L436.0,264.4 Q436.0,260.4 440.0,260.4 L456.0,260.4 Q460.0,260.4 460.0,264.4 L460.0,296.0 Z" fill="#2a78d6"/>
+<text x="448.0" y="254.4" font-size="11" text-anchor="middle" fill="#52514e">107</text>
+<text x="448.0" y="314.0" font-size="11" text-anchor="middle" fill="#52514e">com_erros</text>
+<path d="M548.0,296.0 L548.0,282.1 Q548.0,278.1 552.0,278.1 L568.0,278.1 Q572.0,278.1 572.0,282.1 L572.0,296.0 Z" fill="#2a78d6"/>
+<text x="560.0" y="272.1" font-size="11" text-anchor="middle" fill="#52514e">54</text>
+<text x="560.0" y="314.0" font-size="11" text-anchor="middle" fill="#52514e">abreviado</text>
+</svg>

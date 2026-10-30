@@ -31,6 +31,7 @@ logs: ## Acompanha os logs do Compose
 
 seed: ## Gera os dados sintéticos, o relatório de qualidade e a amostra pequena
 	$(CLI) seed --report ../../docs/dados/relatorio-de-qualidade.md --sample ../../data/synthetic/sample
+	cp data/synthetic/out/dataset_manifest.json docs/dados/manifesto-da-geracao.json
 
 evaluate: ## Treina o modelo e compara com o baseline (simulação)
 	$(CLI) evaluate --report-dir ../../docs/resultados

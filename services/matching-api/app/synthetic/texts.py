@@ -92,8 +92,9 @@ def _with_typos(text: str, rng: random.Random) -> str:
 def _ambiguous(shift: Shift, unit: Unit, created_at: datetime, rng: random.Random) -> str:
     when = _date_expression(created_at, shift.starts_at)
     zone = unit.zone.capitalize()
+    moment = "à noite" if shift.period == "night" else "de dia"
     variants = (
-        f"Preciso de alguém para {when} à noite, {zone}.",
+        f"Preciso de alguém para {when} {moment}, {zone}.",
         f"{_specialty_word(shift.specialty)} urgente {when}, não sei o horário exato.",
         f"Falta {_specialty_word(shift.specialty)} no {zone} {when}.",
     )
