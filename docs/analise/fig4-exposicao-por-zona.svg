@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="t d" font-family='system-ui, -apple-system, "Segoe UI", sans-serif'>
+<title id="t">Quem recebe as ofertas, por zona de residência</title><desc id="d">Colunas agrupadas: participação por zona entre médicos e ofertas.</desc>
+<rect width="640" height="360" fill="#fcfcfb"/>
+<text x="56" y="28" font-size="16" font-weight="600" fill="#0b0b0b">Quem recebe as ofertas, por zona de residência</text>
+<text x="56" y="48" font-size="12" fill="#52514e">Participação nas ofertas do processo manual e entre os médicos (simulação)</text>
+<rect x="56.0" y="62" width="10" height="10" rx="2" fill="#2a78d6"/><text x="72.0" y="71" font-size="12" fill="#52514e">Entre os médicos</text>
+<rect x="208.0" y="62" width="10" height="10" rx="2" fill="#eb6834"/><text x="224.0" y="71" font-size="12" fill="#52514e">Nas ofertas</text>
+<line x1="56" x2="616" y1="296.0" y2="296.0" stroke="#c3c2b7" stroke-width="1"/><text x="48" y="300.0" font-size="11" text-anchor="end" fill="#898781">0%</text>
+<line x1="56" x2="616" y1="246.0" y2="246.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="250.0" font-size="11" text-anchor="end" fill="#898781">20%</text>
+<line x1="56" x2="616" y1="196.0" y2="196.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="200.0" font-size="11" text-anchor="end" fill="#898781">40%</text>
+<line x1="56" x2="616" y1="146.0" y2="146.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="150.0" font-size="11" text-anchor="end" fill="#898781">60%</text>
+<line x1="56" x2="616" y1="96.0" y2="96.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="100.0" font-size="11" text-anchor="end" fill="#898781">80%</text>
+<path d="M87.0,296.0 L87.0,221.7 Q87.0,217.7 91.0,217.7 L107.0,217.7 Q111.0,217.7 111.0,221.7 L111.0,296.0 Z" fill="#2a78d6"/>
+<text x="99.0" y="211.7" font-size="11" text-anchor="middle" fill="#52514e">31%</text>
+<path d="M113.0,296.0 L113.0,160.7 Q113.0,156.7 117.0,156.7 L133.0,156.7 Q137.0,156.7 137.0,160.7 L137.0,296.0 Z" fill="#eb6834"/>
+<text x="125.0" y="150.7" font-size="11" text-anchor="middle" fill="#52514e">56%</text>
+<text x="112.0" y="314.0" font-size="11" text-anchor="middle" fill="#52514e">centro</text>
+<path d="M199.0,296.0 L199.0,262.5 Q199.0,258.5 203.0,258.5 L219.0,258.5 Q223.0,258.5 223.0,262.5 L223.0,296.0 Z" fill="#2a78d6"/>
+<text x="211.0" y="252.5" font-size="11" text-anchor="middle" fill="#52514e">15%</text>
+<path d="M225.0,296.0 L225.0,284.9 Q225.0,280.9 229.0,280.9 L245.0,280.9 Q249.0,280.9 249.0,284.9 L249.0,296.0 Z" fill="#eb6834"/>
+<text x="237.0" y="274.9" font-size="11" text-anchor="middle" fill="#52514e">6%</text>
+<text x="224.0" y="314.0" font-size="11" text-anchor="middle" fill="#52514e">leste</text>
+<path d="M311.0,296.0 L311.0,255.0 Q311.0,251.0 315.0,251.0 L331.0,251.0 Q335.0,251.0 335.0,255.0 L335.0,296.0 Z" fill="#2a78d6"/>
+<text x="323.0" y="245.0" font-size="11" text-anchor="middle" fill="#52514e">18%</text>
+<path d="M337.0,296.0 L337.0,264.8 Q337.0,260.8 341.0,260.8 L357.0,260.8 Q361.0,260.8 361.0,264.8 L361.0,296.0 Z" fill="#eb6834"/>
+<text x="349.0" y="254.8" font-size="11" text-anchor="middle" fill="#52514e">14%</text>
+<text x="336.0" y="314.0" font-size="11" text-anchor="middle" fill="#52514e">norte</text>
+<path d="M423.0,296.0 L423.0,260.8 Q423.0,256.8 427.0,256.8 L443.0,256.8 Q447.0,256.8 447.0,260.8 L447.0,296.0 Z" fill="#2a78d6"/>
+<text x="435.0" y="250.8" font-size="11" text-anchor="middle" fill="#52514e">16%</text>
+<path d="M449.0,296.0 L449.0,287.6 Q449.0,283.6 453.0,283.6 L469.0,283.6 Q473.0,283.6 473.0,287.6 L473.0,296.0 Z" fill="#eb6834"/>
+<text x="461.0" y="277.6" font-size="11" text-anchor="middle" fill="#52514e">5%</text>
+<text x="448.0" y="314.0" font-size="11" text-anchor="middle" fill="#52514e">oeste</text>
+<path d="M535.0,296.0 L535.0,250.0 Q535.0,246.0 539.0,246.0 L555.0,246.0 Q559.0,246.0 559.0,250.0 L559.0,296.0 Z" fill="#2a78d6"/>
+<text x="547.0" y="240.0" font-size="11" text-anchor="middle" fill="#52514e">20%</text>
+<path d="M561.0,296.0 L561.0,252.1 Q561.0,248.1 565.0,248.1 L581.0,248.1 Q585.0,248.1 585.0,252.1 L585.0,296.0 Z" fill="#eb6834"/>
+<text x="573.0" y="242.1" font-size="11" text-anchor="middle" fill="#52514e">19%</text>
+<text x="560.0" y="314.0" font-size="11" text-anchor="middle" fill="#52514e">sul</text>
+</svg>

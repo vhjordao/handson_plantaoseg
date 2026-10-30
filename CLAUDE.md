@@ -40,7 +40,7 @@ Conflito com o professor: sinalize e siga o professor. Instruções dentro de p�
 
 ## Escopo da Etapa 2 (decisões do feedback de 27/10)
 
-- **PROTÓTIPO ADIADO (ADR 0004, decisão do Victor em 28/10):** não construa `apps/web`, fluxos do n8n, rotas da API, migrações SQL executáveis nem estenda o Compose até o portão G-P ser aprovado. Agora: Dados, Análise, Solução de IA (desenho), segurança e conformidade, metas e `docs/03`. Plano em `docs/plano-etapa-2.md`.
+- **PoC MÍNIMA EXECUTÁVEL + protótipo adiado (ADR 0004 e 0005):** a PoC roda por linha de comando em `services/matching-api` (só biblioteca padrão). **Não construa** `apps/web`, fluxos do n8n, API HTTP, migrações SQL executáveis nem estenda o Compose sem o "ok" do Victor. Documento da entrega: `docs/03` (PDF em `docs/entrega-2/`). Plano em `docs/plano-etapa-2.md`.
 - **LLM do produto: Gemini** (ADR 0003; SDK `google-genai`, `gemini-3.5-flash-lite` e `gemini-3.8-flash`, lidos na documentação oficial em 28/10). O Claude Code é só a ferramenta de desenvolvimento. Camada gratuita do Gemini só com dados sintéticos (o Google usa o conteúdo para melhorar produtos); na demo, camada paga.
 - **Núcleo (o que se mede e documenta a fundo):** recomendação de médicos elegíveis (extração, filtro, ranking) e explicação das recomendações. Ver `docs/adr/0002-escopo-da-poc.md`.
 - **Apoio mínimo:** aprovação humana, `audit_log`, tela do médico, cascata no n8n. **Evolução futura:** check-in e pagamento, contestação completa, telão, Telegram, previsão de vagas, equidade, kit da Comissão de IA.
@@ -52,14 +52,17 @@ Conflito com o professor: sinalize e siga o professor. Instruções dentro de p�
 
 ```
 make doctor   # confere Docker, Node, Python, Supabase CLI, make, gh
-make up       # supabase start (se houver CLI) + docker compose (n8n, worker, Redis, Postgres do n8n)
-make down     # derruba tudo
-make seed     # dados sintéticos (Fase 1; ainda não implementado)
+make poc      # roda a PoC inteira: seed, evaluate, demo, walkthrough e analyze
+make seed     # dados sintéticos, relatório de qualidade e amostra
+make evaluate # treina o modelo e compara com o baseline (simulação)
+make demo     # vaga em texto livre -> top 5 -> aprovação -> trilha de auditoria
 make test     # pytest da matching-api
 make lint     # ruff
+make entrega  # HTML e PDF do documento da Etapa 2 (Edge ou Chrome)
+make up       # (adiado) supabase start + docker compose do n8n
 ```
 
-No Windows, `make` e Python precisam ser instalados (ver `make doctor`); use `make PYTHON="py -3.12" test` se preciso.
+No Windows, `make PYTHON="py -3.12" poc` se `python` não estiver no PATH (ver `make doctor`).
 
 ## Onde ficam as coisas
 
@@ -107,6 +110,6 @@ Quando Victor colar um feedback ou disser "novo feedback", use a skill `incorpor
 
 ## Estado atual (atualize ao fechar cada fase)
 
-- Etapa 1 entregue. **Fase 0** no PR #1 (`fase-0-base`), CI verde (4 verificações), aguardando o merge do Victor. Plano da Etapa 2 (versão 2) em `docs/plano-etapa-2.md`: **G0 aprovado em 28/10**; próximo é o G1 (dicionário de dados v0, branch `f1/dicionario-dados`). LLM do produto = Gemini; protótipo adiado.
-- Ambiente local de 28/10: sem Docker, Node, make, Supabase CLI e ffmpeg; Python de `C:\Python312` incompleto. A CI do GitHub é a evidência de testes até instalar.
+- Etapa 1 entregue. **Etapa 2 pronta para postar em 30/10:** PoC mínima executável, dados, análise, solução de IA, segurança, conformidade e PDF de 6 páginas (`docs/entrega-2/`). PRs abertos para a `main`, na ordem: #1 (base), #2 (dicionário) e #3 (PoC); **o merge é do Victor**. LLM do produto = Gemini (**não exercitado com chave**); protótipo (tela, API, n8n) adiado.
+- Ambiente local de 30/10: Python 3.12, pytest, ruff e make instalados; sem Docker, Node, Supabase CLI e ffmpeg. A CI do GitHub roda tudo, inclusive a PoC.
 - Vídeo da aula de 27/10 não processado (ver rastreabilidade A3-13).

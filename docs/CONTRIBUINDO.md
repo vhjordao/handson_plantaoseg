@@ -4,6 +4,8 @@ Para quem entra no projeto (Roberval, Guilherme, Sergio, Lucas e Plinio) e para 
 
 > O repositório é **público**. Nunca coloque nele chaves, dados reais de médico, paciente ou hospital, nem os slides do professor.
 >
+> **Atualização de 30/10:** a **PoC mínima já existe e roda**: comece por `make poc` e pela [ficha do componente](../services/matching-api/README.md). O que falta é a Etapa 3 (entrevistas, teste do Gemini com chave, mitigar o viés de distância, previsão de vagas e, com o ok do Victor, interface, API e n8n).
+>
 > **Dois avisos de 28/10:** o **protótipo está adiado** ([ADR 0004](adr/0004-prototipo-adiado.md)): por ora não se constrói interface, API, n8n nem banco; o trabalho é Dados, Análise, Solução de IA e segurança. E o **LLM do produto é o Gemini** ([ADR 0003](adr/0003-llm-do-produto-gemini.md)); o Claude Code é só a ferramenta de desenvolvimento de cada um.
 
 ## 1. Antes de começar

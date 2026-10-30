@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="t d" font-family='system-ui, -apple-system, "Segoe UI", sans-serif'>
+<title id="t">Preferência de período muda o aceite</title><desc id="d">Colunas agrupadas com a taxa de aceite quando a preferência coincide ou não.</desc>
+<rect width="640" height="360" fill="#fcfcfb"/>
+<text x="56" y="28" font-size="16" font-weight="600" fill="#0b0b0b">Preferência de período muda o aceite</text>
+<text x="56" y="48" font-size="12" fill="#52514e">Taxa de aceite por período da vaga e preferência do médico (simulação)</text>
+<rect x="56.0" y="62" width="10" height="10" rx="2" fill="#2a78d6"/><text x="72.0" y="71" font-size="12" fill="#52514e">Preferência coincide</text>
+<rect x="236.0" y="62" width="10" height="10" rx="2" fill="#eb6834"/><text x="252.0" y="71" font-size="12" fill="#52514e">Não coincide</text>
+<line x1="56" x2="616" y1="296.0" y2="296.0" stroke="#c3c2b7" stroke-width="1"/><text x="48" y="300.0" font-size="11" text-anchor="end" fill="#898781">0%</text>
+<line x1="56" x2="616" y1="256.0" y2="256.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="260.0" font-size="11" text-anchor="end" fill="#898781">10%</text>
+<line x1="56" x2="616" y1="216.0" y2="216.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="220.0" font-size="11" text-anchor="end" fill="#898781">20%</text>
+<line x1="56" x2="616" y1="176.0" y2="176.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="180.0" font-size="11" text-anchor="end" fill="#898781">30%</text>
+<line x1="56" x2="616" y1="136.0" y2="136.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="140.0" font-size="11" text-anchor="end" fill="#898781">40%</text>
+<line x1="56" x2="616" y1="96.0" y2="96.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="100.0" font-size="11" text-anchor="end" fill="#898781">50%</text>
+<path d="M171.0,296.0 L171.0,151.9 Q171.0,147.9 175.0,147.9 L191.0,147.9 Q195.0,147.9 195.0,151.9 L195.0,296.0 Z" fill="#2a78d6"/>
+<text x="183.0" y="141.9" font-size="11" text-anchor="middle" fill="#52514e">37%</text>
+<path d="M197.0,296.0 L197.0,227.7 Q197.0,223.7 201.0,223.7 L217.0,223.7 Q221.0,223.7 221.0,227.7 L221.0,296.0 Z" fill="#eb6834"/>
+<text x="209.0" y="217.7" font-size="11" text-anchor="middle" fill="#52514e">18%</text>
+<text x="196.0" y="314.0" font-size="11" text-anchor="middle" fill="#52514e">Vaga noturna</text>
+<path d="M451.0,296.0 L451.0,137.6 Q451.0,133.6 455.0,133.6 L471.0,133.6 Q475.0,133.6 475.0,137.6 L475.0,296.0 Z" fill="#2a78d6"/>
+<text x="463.0" y="127.6" font-size="11" text-anchor="middle" fill="#52514e">41%</text>
+<path d="M477.0,296.0 L477.0,234.4 Q477.0,230.4 481.0,230.4 L497.0,230.4 Q501.0,230.4 501.0,234.4 L501.0,296.0 Z" fill="#eb6834"/>
+<text x="489.0" y="224.4" font-size="11" text-anchor="middle" fill="#52514e">16%</text>
+<text x="476.0" y="314.0" font-size="11" text-anchor="middle" fill="#52514e">Vaga diurna</text>
+</svg>

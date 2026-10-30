@@ -4,3 +4,8 @@ Makefile text eol=lf
 *.yml text eol=lf
 *.md text eol=lf
 *.py text eol=lf
+# Dados tabulares e imagens: sempre LF, para os checksums baterem entre Windows e Linux.
+*.csv text eol=lf
+*.json text eol=lf
+*.jsonl text eol=lf
+*.svg text eol=lf

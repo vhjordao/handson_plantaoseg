@@ -1,0 +1,2 @@
+organization_id,max_continuous_hours,min_rest_hours,allow_secondary_specialty,min_overlap_ratio,default_radius_km,offer_ttl_minutes,top_k,effective_from
+557162e6-8f6b-408f-b841-b47d8b9a3652,24,11,true,1,15,60,5,2026-09-01

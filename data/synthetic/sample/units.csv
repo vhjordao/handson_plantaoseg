@@ -1,0 +1,4 @@
+id,organization_id,name,kind,ownership,zone,lat,lon
+bbdd76e8-0991-4455-a96d-99f4dd919733,557162e6-8f6b-408f-b841-b47d8b9a3652,Hospital Modelo Centro,PS,privado,centro,-10,-50
+d89739ca-9755-4f36-8454-ce39cb12cfda,557162e6-8f6b-408f-b841-b47d8b9a3652,Hospital Modelo Norte,PS,privado,norte,-9.9,-49.98
+1f99fc83-4521-4a6f-a274-8d16430f55e4,557162e6-8f6b-408f-b841-b47d8b9a3652,Hospital Modelo Sul,PS,privado,sul,-10.09,-50.03

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 500" role="img" aria-labelledby="t d" font-family='system-ui, -apple-system, "Segoe UI", sans-serif'>
+<title id="t">Tela 1: nova vaga em texto livre e conferência dos campos extraídos</title>
+<desc id="d">O coordenador digita a vaga em texto livre, o sistema extrai cinco campos e o coordenador confere e confirma antes de ver candidatos. Um aviso aparece quando o texto tem sinais de injeção de prompt.</desc>
+<rect width="760" height="500" fill="#fcfcfb"/>
+<rect x="20" y="20" width="720" height="460" rx="10" fill="#fcfcfb" stroke="#c3c2b7"/>
+<rect x="20" y="20" width="720" height="40" rx="10" fill="#e1e0d9"/>
+<text x="40" y="46" font-size="14" font-weight="600" fill="#0b0b0b">PlantãoSeguro · Coordenador · Nova vaga</text>
+<text x="560" y="46" font-size="11" fill="#52514e">SIMULAÇÃO · dados sintéticos</text>
+
+<text x="40" y="90" font-size="13" font-weight="600" fill="#0b0b0b">1. Descreva a vaga em texto livre</text>
+<rect x="40" y="100" width="680" height="70" rx="6" fill="#ffffff" stroke="#898781"/>
+<text x="52" y="124" font-size="13" fill="#0b0b0b">Preciso de um pediatra para o plantão noturno de sexta,</text>
+<text x="52" y="146" font-size="13" fill="#0b0b0b">19h às 7h, Hospital Modelo Centro, urgência alta</text>
+<rect x="40" y="180" width="150" height="32" rx="6" fill="#2a78d6"/>
+<text x="115" y="201" font-size="13" font-weight="600" fill="#ffffff" text-anchor="middle">Extrair campos</text>
+<text x="205" y="201" font-size="11" fill="#52514e">Não digite dados reais de pessoas.</text>
+
+<text x="40" y="246" font-size="13" font-weight="600" fill="#0b0b0b">2. Confira os campos extraídos (fonte: regras)</text>
+<g font-size="13" fill="#52514e">
+<text x="52" y="276">Hospital</text><rect x="180" y="260" width="300" height="24" rx="4" fill="#ffffff" stroke="#2a78d6"/><text x="190" y="277" fill="#0b0b0b">Hospital Modelo Centro</text>
+<text x="52" y="308">Especialidade</text><rect x="180" y="292" width="300" height="24" rx="4" fill="#ffffff" stroke="#2a78d6"/><text x="190" y="309" fill="#0b0b0b">Pediatria</text>
+<text x="52" y="340">Início</text><rect x="180" y="324" width="300" height="24" rx="4" fill="#ffffff" stroke="#2a78d6"/><text x="190" y="341" fill="#0b0b0b">sexta, 02/10 às 19h</text>
+<text x="52" y="372">Fim</text><rect x="180" y="356" width="300" height="24" rx="4" fill="#ffffff" stroke="#2a78d6"/><text x="190" y="373" fill="#0b0b0b">sábado, 03/10 às 07h</text>
+<text x="52" y="404">Urgência</text><rect x="180" y="388" width="300" height="24" rx="4" fill="#ffffff" stroke="#2a78d6"/><text x="190" y="405" fill="#0b0b0b">Alta</text>
+</g>
+<rect x="510" y="260" width="210" height="76" rx="6" fill="#fcfcfb" stroke="#eb6834"/>
+<text x="522" y="282" font-size="12" font-weight="600" fill="#0b0b0b">Texto com sinal suspeito?</text>
+<text x="522" y="302" font-size="11" fill="#52514e">Quando houver, aparece aqui:</text>
+<text x="522" y="320" font-size="11" fill="#52514e">"instruções ignoradas; só regras".</text>
+<rect x="40" y="432" width="200" height="32" rx="6" fill="#eb6834"/>
+<text x="140" y="453" font-size="13" font-weight="600" fill="#ffffff" text-anchor="middle">Confirmar e ver candidatos</text>
+<text x="256" y="453" font-size="11" fill="#52514e">Sem a confirmação humana, nada avança.</text>
+</svg>

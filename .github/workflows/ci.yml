@@ -75,6 +75,49 @@ jobs:
       - name: Pagamento e valor do plantão não podem entrar no ranking
         run: python -m pytest -q tests/test_neutralidade_economica.py
 
+  poc:
+    name: PoC mínima (dados, avaliação e demonstração)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/matching-api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Gera os dados sintéticos e o relatório de qualidade
+        run: python -m app.cli seed --report /tmp/evidencias/relatorio-de-qualidade.md
+      - name: Treina e avalia o ranking (simulação)
+        run: python -m app.cli evaluate --report-dir /tmp/evidencias/resultados
+      - name: Demonstração com aprovação e trilha de auditoria
+        run: |
+          mkdir -p /tmp/evidencias
+          python -m app.cli demo --yes --fresh | tee /tmp/evidencias/demo.txt
+      - name: Análise exploratória
+        run: python -m app.cli analyze --out /tmp/evidencias/analise
+      - name: Reprodutibilidade entre máquinas (informativo, não reprova)
+        continue-on-error: true
+        run: |
+          python - <<'EOF'
+          import json, pathlib
+          ci = json.loads(pathlib.Path("../../data/synthetic/out/dataset_manifest.json").read_text())
+          autor = json.loads(pathlib.Path("../../docs/dados/manifesto-da-geracao.json").read_text())
+          same_counts = ci["row_counts"] == autor["row_counts"]
+          same_hashes = ci["sha256"] == autor["sha256"]
+          print("contagens iguais às da máquina do autor:", same_counts)
+          print("checksums dos CSV iguais às da máquina do autor:", same_hashes)
+          raise SystemExit(0 if same_counts and same_hashes else 1)
+          EOF
+      - uses: actions/upload-artifact@v4
+        with:
+          name: poc-evidencias
+          path: |
+            /tmp/evidencias
+            data/synthetic/out/audit_log.jsonl
+            data/synthetic/out/dataset_manifest.json
+            data/synthetic/out/model_registry.json
+
   compose:
     name: Validação do Docker Compose
     runs-on: ubuntu-latest

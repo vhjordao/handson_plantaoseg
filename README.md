@@ -4,7 +4,7 @@
 
 Projeto final da disciplina **Hands On – Aplicação de IA nos negócios** (pós-graduação, Mackenzie), Prof. Fabio Versolatto.
 
-> **Status (28/10/2026):** Entrega 1 (descoberta) realizada. A Etapa 2 (entrega em 31/10) começa por Dados, Análise e Solução de IA; o **protótipo está adiado** por decisão do grupo ([ADR 0004](docs/adr/0004-prototipo-adiado.md)) e o LLM do produto é o **Gemini** ([ADR 0003](docs/adr/0003-llm-do-produto-gemini.md)). A Fase 0 traz a base do repositório, a esteira de CI, o contrato de neutralidade econômica do ranking e as decisões de escopo. A aplicação não roda: veja [CLAUDE.md](CLAUDE.md), o [plano da Etapa 2](docs/plano-etapa-2.md) e o [diário de bordo](docs/diario-de-bordo.md).
+> **Status (30/10/2026):** Entrega 1 (descoberta) realizada; **Entrega 2 pronta**: dados sintéticos, análise, solução de IA e uma **PoC mínima executável** (recomendação e explicação, por linha de comando), com o documento em [PDF de 6 páginas](docs/entrega-2/Entrega2-PlantaoSeguro.pdf) e o [guia de postagem](docs/entrega-2/LEIAME.md). Interface, API e n8n estão **adiados** ([ADR 0004](docs/adr/0004-prototipo-adiado.md) e [0005](docs/adr/0005-gp-poc-minima-e-especificacao.md)); o LLM do produto é o **Gemini** ([ADR 0003](docs/adr/0003-llm-do-produto-gemini.md)), ainda **não exercitado** com chave.
 > Projeto acadêmico: todos os dados da demonstração serão sintéticos e nenhum documento gerado tem validade médica ou legal.
 
 ## A ideia em um parágrafo
@@ -43,9 +43,21 @@ A IA atua nas etapas 2, 4 e 5; filtro, prazos e registros ficam em código, e a 
 
 Os detalhes, as fontes e os pontos que ainda precisam de validação estão na [Entrega 1](docs/01-entrega-1-descoberta.md), seção 13.
 
-## Stack prevista
+## Como rodar a PoC
 
-Next.js, Tailwind e shadcn/ui (PWA) · FastAPI (API de matching) · n8n em modo fila (Redis + Postgres próprio) · Supabase (Postgres, Auth, RLS, Realtime) · Gemini (3.5 Flash-Lite e 3.8 Flash) com saída estruturada · scikit-learn e LightGBM (ranking) · Fairlearn (equidade) · Langfuse (observabilidade de IA) · Docker Compose e Traefik em VPS Hostinger no Brasil · GitHub Actions.
+Precisa só do Python 3.12 e do `make` (no Windows, `make PYTHON="py -3.12" ...` se preciso). Sem Docker, banco ou chave de API.
+
+```
+make poc      # gera os dados, treina e avalia, roda a demonstração, o exemplo trabalhado e a análise
+make test     # testes automatizados
+make entrega  # PDF da Entrega 2 (precisa de Edge ou Chrome)
+```
+
+A demonstração recebe uma vaga em texto livre, mostra os campos extraídos, o top 5 com o motivo de cada um, os excluídos com a regra que barrou, registra a aprovação e verifica a trilha de auditoria. Tudo é simulação com dados sintéticos. Detalhes na [ficha do componente](services/matching-api/README.md) e no [exemplo trabalhado](docs/exemplo-trabalhado.md).
+
+## Stack da PoC e stack prevista
+
+**PoC (hoje):** Python 3.12 (só biblioteca padrão), pytest, ruff, GitHub Actions. **Prevista:** Next.js, Tailwind e shadcn/ui (PWA) · FastAPI (API de matching) · n8n em modo fila (Redis + Postgres próprio) · Supabase (Postgres, Auth, RLS, Realtime) · Gemini (3.5 Flash-Lite e 3.8 Flash) com saída estruturada · scikit-learn e LightGBM (ranking) · Fairlearn (equidade) · Langfuse (observabilidade de IA) · Docker Compose e Traefik em VPS Hostinger no Brasil · GitHub Actions.
 
 Custo estimado do mês da apresentação: US$ 34 a US$ 41 (VPS e Supabase lidos em 20/10/2026; Gemini em 28/10/2026; conferir antes de contratar). Veja [Arquitetura e ferramentas](docs/02-arquitetura-e-ferramentas.md).
 
@@ -56,9 +68,12 @@ Custo estimado do mês da apresentação: US$ 34 a US$ 41 (VPS e Supabase lidos 
 | [docs/01-entrega-1-descoberta.md](docs/01-entrega-1-descoberta.md) | **Entrega 1 realizada** (documento de 8 páginas): problema, público, evidências, concorrência, oportunidade de IA, proposta, jornada, indicadores, riscos e conformidade, dados, gestão do projeto, frase-síntese e referências |
 | [docs/02-arquitetura-e-ferramentas.md](docs/02-arquitetura-e-ferramentas.md) | Arquitetura em camadas, decisões, ferramentas por etapa, modelo de dados, controles de segurança e conformidade, custo, plano de construção e riscos técnicos |
 | [docs/diagrams/](docs/diagrams) | Fontes Mermaid dos diagramas (fluxo da recomendação, arquitetura em camadas, cronograma) |
+| [docs/03-entrega-2-prova-de-conceito.md](docs/03-entrega-2-prova-de-conceito.md) | **Entrega 2**: dados, análise, solução de IA, PoC, segurança, conformidade e metas. PDF em [docs/entrega-2](docs/entrega-2/LEIAME.md) |
+| [docs/solucao-ia.md](docs/solucao-ia.md), [docs/exemplo-trabalhado.md](docs/exemplo-trabalhado.md), [docs/analise](docs/analise/README.md), [docs/resultados](docs/resultados/metricas-ranking.md) | Desenho da solução de IA, o passo a passo de uma vaga com as contas, a análise exploratória e os resultados da avaliação (simulação) |
+| [docs/seguranca-ameacas.md](docs/seguranca-ameacas.md), [docs/wireframes](docs/wireframes/README.md), [docs/teste-manual-gemini.md](docs/teste-manual-gemini.md) | Ameaças e ficha de risco, telas desenhadas e o plano de teste manual do Gemini (ainda não executado) |
 | [docs/rastreabilidade-professor.md](docs/rastreabilidade-professor.md) | Exigências do professor (feedback da Entrega 1 e slides da Etapa 2), com status e onde cada uma está atendida |
-| [docs/adr/](docs/adr) | Decisões: [segmento inicial](docs/adr/0001-segmento-inicial.md), [escopo da PoC](docs/adr/0002-escopo-da-poc.md), [LLM do produto: Gemini](docs/adr/0003-llm-do-produto-gemini.md) e [protótipo adiado](docs/adr/0004-prototipo-adiado.md) |
-| [docs/conformidade/](docs/conformidade/README.md) | Plano de verificação dos textos oficiais das normas (não é parecer jurídico) |
+| [docs/adr/](docs/adr) | Decisões: [segmento inicial](docs/adr/0001-segmento-inicial.md), [escopo da PoC](docs/adr/0002-escopo-da-poc.md), [LLM do produto: Gemini](docs/adr/0003-llm-do-produto-gemini.md), [protótipo adiado](docs/adr/0004-prototipo-adiado.md) e [PoC mínima e especificação](docs/adr/0005-gp-poc-minima-e-especificacao.md) |
+| [docs/conformidade/](docs/conformidade/README.md) | O que os textos oficiais das Res. CFM 2.454, 2.460 e 2.462 dizem, lidos em 30/10/2026, e o que depende de jurídico (não é parecer jurídico) |
 | [docs/plano-etapa-2.md](docs/plano-etapa-2.md) | Plano da Etapa 2: escopo, frentes, cronograma com portões de aprovação, contratos e metas com linha de base (proposta) |
 | [docs/CONTRIBUINDO.md](docs/CONTRIBUINDO.md) | Guia de entrada da equipe: ferramentas, primeiro dia, uso do Claude Code, fluxo de Git e documentação obrigatória |
 | [docs/templates/ficha-componente.md](docs/templates/ficha-componente.md) | Modelo da ficha de cada componente (como foi feito, ferramentas, justificativas) |
@@ -68,14 +83,14 @@ Custo estimado do mês da apresentação: US$ 34 a US$ 41 (VPS e Supabase lidos 
 
 ## Como contribuir (esteira)
 
-Uma branch por tarefa com o prefixo da fase (`f1/dicionario-dados`...), PR para `main` com o [modelo de PR](.github/pull_request_template.md), revisão de outra pessoa e CI verde (segredos, lint e testes, neutralidade econômica e Compose). Sem push direto na `main`. Quem entra na equipe começa pelo [guia de entrada](docs/CONTRIBUINDO.md). Comandos: `make doctor`, `make up`, `make test`, `make lint`.
+Uma branch por tarefa com o prefixo da fase (`f1/dicionario-dados`...), PR para `main` com o [modelo de PR](.github/pull_request_template.md), revisão de outra pessoa e CI verde (segredos, lint e testes, neutralidade econômica e Compose). Sem push direto na `main`. Quem entra na equipe começa pelo [guia de entrada](docs/CONTRIBUINDO.md). Comandos: `make doctor`, `make poc`, `make test`, `make lint`, `make entrega`.
 
 ## Cronograma
 
 | Período | Marco |
 | --- | --- |
 | 20 a 24/10 | Etapa 1: descoberta, **realizada** (Entrega 1 neste repositório) |
-| 27 a 31/10 | Etapa 2: prova de conceito |
+| 27 a 31/10 | Etapa 2: dados, análise, solução de IA e PoC mínima, **pronta** (entrega em 31/10) |
 | 3 a 7/11 | Etapa 3: validação |
 | 10/11 | Aula de storytelling |
 | 17/11 | Apresentação final (presencial) |
@@ -87,5 +102,5 @@ Victor Jordão, Roberval Silva, Guilherme Tarrago, Sergio Freitas, Lucas Barbosa
 ## Avisos
 
 - Os números de mercado da Flexzo são alegações da própria empresa, não auditadas; as metas dos indicadores são hipóteses a validar nas entrevistas.
-- Vários links de referência são notícias e análises de escritórios; confirme o texto oficial das normas antes de citá-las.
+- Os textos oficiais das Res. CFM 2.454, 2.460 e 2.462 foram lidos em 30/10/2026 ([conformidade](docs/conformidade/README.md)); a 2.462 traz aviso de suspensão judicial e o enquadramento da plataforma depende de jurídico. A Entrega 1, já entregue, não foi alterada e ainda cita a 2.462 como em vigor.
 - Este material não é aconselhamento jurídico, médico ou financeiro.

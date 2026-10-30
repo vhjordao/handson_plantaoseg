@@ -1,0 +1,70 @@
+{
+  "dictionary_version": "v0.2",
+  "generator_version": "0.1.0",
+  "label": "simulacao",
+  "params": {
+    "accept": {
+      "b0": 0.2,
+      "contiguous": -0.5,
+      "distance": -0.09,
+      "load_30d": -0.15,
+      "not_covered": -2.0,
+      "preference": 0.7,
+      "reliability": 2.2,
+      "rest_lt_11": -2.0,
+      "rest_lt_24": -0.5,
+      "secondary_specialty": -0.5,
+      "urgency_high": 0.4
+    },
+    "age_exposure": {
+      "25-34": 0.8,
+      "35-44": 1.5,
+      "45-54": 1.0,
+      "55+": 0.5
+    },
+    "double_shift_boost": 60.0,
+    "end_date": "2026-09-14",
+    "historical_bias_scenario": true,
+    "max_offers_per_shift": 8,
+    "n_doctors": 40,
+    "p_night_shift": 0.9,
+    "p_weekend_day_shift": 0.8,
+    "seed": 20261030,
+    "share_pediatria": 0.45,
+    "start_date": "2026-09-01",
+    "test_start": "2026-09-10",
+    "text_requests": 30,
+    "ttl_minutes": 60,
+    "zone_exposure": {
+      "centro": 1.8,
+      "leste": 0.6,
+      "norte": 1.0,
+      "oeste": 0.6,
+      "sul": 1.0
+    }
+  },
+  "python": "3.12.10",
+  "row_counts": {
+    "doctor_availability": 444,
+    "doctors": 40,
+    "offers": 434,
+    "organizations": 1,
+    "policy_config": 1,
+    "shift_compensation": 95,
+    "shift_requests": 30,
+    "shifts": 95,
+    "units": 3
+  },
+  "seed": 20261030,
+  "sha256": {
+    "doctor_availability": "43e8d279e780aeb817ad59449edecd60c3e6043af1fcc6eed053dc1b418d4d35",
+    "doctors": "be15928a0a2c43594f0fc1b4219e624ea8b22c8ee8cff9820a45004e5e7285c4",
+    "offers": "a896deaac534617958d60564de82d625e2c2b30e35a0f85e3d82991f3fa59a01",
+    "organizations": "738505d8a312dc6c2cae80e1934aec2cb7117e1daad9d2c042d1b2b088c0b53b",
+    "policy_config": "15e67822b2cdbb0eb4f6e9f3ea299794ec1dd8dc486f52a62dfeaed118719392",
+    "shift_compensation": "d9a929d020c811f33165f2dc5d0e94d93448287dbf126b7b12290dd3083656b6",
+    "shift_requests": "1752d8bbff86208ab94711506e02e5a66d2425830e6f262836b1221e4cdec742",
+    "shifts": "71a8a0bfc35f203d8cc097e4dcb68291f521023cd008e7c315849492ffd173cd",
+    "units": "7d164f85c090bb70f5374e45981e790f85b0e95bf9783efe058eb928c017659f"
+  }
+}

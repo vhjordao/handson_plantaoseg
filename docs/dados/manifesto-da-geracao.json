@@ -1,0 +1,72 @@
+{
+  "dictionary_version": "v0.2",
+  "generator_version": "0.1.0",
+  "label": "simulacao",
+  "params": {
+    "accept": {
+      "b0": 0.2,
+      "contiguous": -0.5,
+      "distance": -0.09,
+      "load_30d": -0.15,
+      "not_covered": -2.0,
+      "preference": 0.7,
+      "reliability": 2.2,
+      "rest_lt_11": -2.0,
+      "rest_lt_24": -0.5,
+      "secondary_specialty": -0.5,
+      "urgency_high": 0.4
+    },
+    "age_exposure": {
+      "25-34": 0.8,
+      "35-44": 1.5,
+      "45-54": 1.0,
+      "55+": 0.5
+    },
+    "double_shift_boost": 60.0,
+    "end_date": "2026-09-30",
+    "historical_bias_scenario": true,
+    "max_offers_per_shift": 8,
+    "n_doctors": 300,
+    "p_night_shift": 0.9,
+    "p_weekend_day_shift": 0.8,
+    "seed": 20261030,
+    "share_pediatria": 0.45,
+    "start_date": "2025-10-01",
+    "test_start": "2026-08-01",
+    "text_requests": 400,
+    "ttl_minutes": 60,
+    "zone_exposure": {
+      "centro": 1.8,
+      "leste": 0.6,
+      "norte": 1.0,
+      "oeste": 0.6,
+      "sul": 1.0
+    }
+  },
+  "python": "3.12.10",
+  "row_counts": {
+    "doctor_availability": 3391,
+    "doctors": 300,
+    "doctors_latent": 300,
+    "offers": 7555,
+    "organizations": 1,
+    "policy_config": 1,
+    "shift_compensation": 2448,
+    "shift_requests": 400,
+    "shifts": 2448,
+    "units": 3
+  },
+  "seed": 20261030,
+  "sha256": {
+    "doctor_availability": "34f0453d94c97eefc8c75f803fab5aaac6949658df65be6a31a1d8dbc3e7122f",
+    "doctors": "14c5bebd92c568b708e25ad8bc5af8b0de7e335797522d0adac5aef3d96ff45e",
+    "doctors_latent": "d0fdbbf322e03fd97c77011c7404f348f4c23fd6fec74dbfd9066a84daa710bc",
+    "offers": "de8ab96cee1833bfd0d4eccaa9a95e16983517850cd578cd0c4afecde907d0e3",
+    "organizations": "78a919b0d20d9507f672b78d061e5f80d7b27296c422ad493153a2b5d1ae8b37",
+    "policy_config": "d852760c71cf8bbee759e8ea1e144c67cf046589adf03740eedf899a168e7407",
+    "shift_compensation": "53181140943a82c564d467b6d8fd201b919bb10ccf1a1c2182eef2bb2889b16e",
+    "shift_requests": "aa6e17d3ea92448a151fcbec326c021b86c39727f014e714e6c94a3fafa2400d",
+    "shifts": "886dca3fcc448c927b9213cc15b5120140e8b9a68136ccc07c8907ec825640db",
+    "units": "7d164f85c090bb70f5374e45981e790f85b0e95bf9783efe058eb928c017659f"
+  }
+}

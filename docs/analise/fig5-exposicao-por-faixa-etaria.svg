@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="t d" font-family='system-ui, -apple-system, "Segoe UI", sans-serif'>
+<title id="t">Quem recebe as ofertas, por faixa etária</title><desc id="d">Colunas agrupadas: participação por faixa etária entre médicos e ofertas.</desc>
+<rect width="640" height="360" fill="#fcfcfb"/>
+<text x="56" y="28" font-size="16" font-weight="600" fill="#0b0b0b">Quem recebe as ofertas, por faixa etária</text>
+<text x="56" y="48" font-size="12" fill="#52514e">Participação nas ofertas do processo manual e entre os médicos (simulação)</text>
+<rect x="56.0" y="62" width="10" height="10" rx="2" fill="#2a78d6"/><text x="72.0" y="71" font-size="12" fill="#52514e">Entre os médicos</text>
+<rect x="208.0" y="62" width="10" height="10" rx="2" fill="#eb6834"/><text x="224.0" y="71" font-size="12" fill="#52514e">Nas ofertas</text>
+<line x1="56" x2="616" y1="296.0" y2="296.0" stroke="#c3c2b7" stroke-width="1"/><text x="48" y="300.0" font-size="11" text-anchor="end" fill="#898781">0%</text>
+<line x1="56" x2="616" y1="262.7" y2="262.7" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="266.7" font-size="11" text-anchor="end" fill="#898781">10%</text>
+<line x1="56" x2="616" y1="229.3" y2="229.3" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="233.3" font-size="11" text-anchor="end" fill="#898781">20%</text>
+<line x1="56" x2="616" y1="196.0" y2="196.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="200.0" font-size="11" text-anchor="end" fill="#898781">30%</text>
+<line x1="56" x2="616" y1="162.7" y2="162.7" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="166.7" font-size="11" text-anchor="end" fill="#898781">40%</text>
+<line x1="56" x2="616" y1="129.3" y2="129.3" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="133.3" font-size="11" text-anchor="end" fill="#898781">50%</text>
+<line x1="56" x2="616" y1="96.0" y2="96.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="100.0" font-size="11" text-anchor="end" fill="#898781">60%</text>
+<path d="M101.0,296.0 L101.0,223.3 Q101.0,219.3 105.0,219.3 L121.0,219.3 Q125.0,219.3 125.0,223.3 L125.0,296.0 Z" fill="#2a78d6"/>
+<text x="113.0" y="213.3" font-size="11" text-anchor="middle" fill="#52514e">23%</text>
+<path d="M127.0,296.0 L127.0,241.4 Q127.0,237.4 131.0,237.4 L147.0,237.4 Q151.0,237.4 151.0,241.4 L151.0,296.0 Z" fill="#eb6834"/>
+<text x="139.0" y="231.4" font-size="11" text-anchor="middle" fill="#52514e">18%</text>
+<text x="126.0" y="314.0" font-size="11" text-anchor="middle" fill="#52514e">25-34</text>
+<path d="M241.0,296.0 L241.0,184.4 Q241.0,180.4 245.0,180.4 L261.0,180.4 Q265.0,180.4 265.0,184.4 L265.0,296.0 Z" fill="#2a78d6"/>
+<text x="253.0" y="174.4" font-size="11" text-anchor="middle" fill="#52514e">35%</text>
+<path d="M267.0,296.0 L267.0,127.8 Q267.0,123.8 271.0,123.8 L287.0,123.8 Q291.0,123.8 291.0,127.8 L291.0,296.0 Z" fill="#eb6834"/>
+<text x="279.0" y="117.8" font-size="11" text-anchor="middle" fill="#52514e">52%</text>
+<text x="266.0" y="314.0" font-size="11" text-anchor="middle" fill="#52514e">35-44</text>
+<path d="M381.0,296.0 L381.0,205.6 Q381.0,201.6 385.0,201.6 L401.0,201.6 Q405.0,201.6 405.0,205.6 L405.0,296.0 Z" fill="#2a78d6"/>
+<text x="393.0" y="195.6" font-size="11" text-anchor="middle" fill="#52514e">28%</text>
+<path d="M407.0,296.0 L407.0,215.9 Q407.0,211.9 411.0,211.9 L427.0,211.9 Q431.0,211.9 431.0,215.9 L431.0,296.0 Z" fill="#eb6834"/>
+<text x="419.0" y="205.9" font-size="11" text-anchor="middle" fill="#52514e">25%</text>
+<text x="406.0" y="314.0" font-size="11" text-anchor="middle" fill="#52514e">45-54</text>
+<path d="M521.0,296.0 L521.0,253.3 Q521.0,249.3 525.0,249.3 L541.0,249.3 Q545.0,249.3 545.0,253.3 L545.0,296.0 Z" fill="#2a78d6"/>
+<text x="533.0" y="243.3" font-size="11" text-anchor="middle" fill="#52514e">14%</text>
+<path d="M547.0,296.0 L547.0,281.6 Q547.0,277.6 551.0,277.6 L567.0,277.6 Q571.0,277.6 571.0,281.6 L571.0,296.0 Z" fill="#eb6834"/>
+<text x="559.0" y="271.6" font-size="11" text-anchor="middle" fill="#52514e">6%</text>
+<text x="546.0" y="314.0" font-size="11" text-anchor="middle" fill="#52514e">55+</text>
+</svg>

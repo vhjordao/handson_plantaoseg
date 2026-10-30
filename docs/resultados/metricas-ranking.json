@@ -1,0 +1,160 @@
+{
+  "label": "simulacao",
+  "model_version": "logreg-v1",
+  "test_start": "2026-08-01",
+  "n_train_offers": 6259,
+  "n_test_offers": 1296,
+  "train_success_rate": 0.3008467806358843,
+  "test_success_rate": 0.27314814814814814,
+  "auc_model": 0.7622500509794043,
+  "auc_baseline": 0.7019324193026018,
+  "counterfactual": {
+    "n_shifts": 392.0,
+    "mean_pool": 49.892857142857146,
+    "oracle": 0.7580091864951594,
+    "model": 0.7123466334164845,
+    "baseline": 0.6774490212695282,
+    "random": 0.5293432863597914,
+    "model_minus_baseline": 0.03489761214695642,
+    "model_minus_baseline_se": 0.002204247497754335,
+    "model_efficiency": 0.9397598948769911,
+    "baseline_efficiency": 0.8937213866785431,
+    "random_efficiency": 0.6983336030627009,
+    "model_top10pct_share": 0.5066326530612245,
+    "model_never_recommended": 121.0,
+    "baseline_top10pct_share": 0.611734693877551,
+    "baseline_never_recommended": 165.0,
+    "ever_eligible": 257.0
+  },
+  "fairness": [
+    {
+      "attribute": "gender",
+      "value": "F",
+      "pool_share": 0.47029348604151755,
+      "model_share": 0.5622448979591836,
+      "baseline_share": 0.6459183673469387,
+      "model_ratio": 1.1955192122511105,
+      "baseline_ratio": 1.3734367719690614
+    },
+    {
+      "attribute": "gender",
+      "value": "M",
+      "pool_share": 0.5297065139584825,
+      "model_share": 0.4377551020408163,
+      "baseline_share": 0.35408163265306125,
+      "model_ratio": 0.8264106453392167,
+      "baseline_ratio": 0.6684487038058468
+    },
+    {
+      "attribute": "age_band",
+      "value": "25-34",
+      "pool_share": 0.25150833418549956,
+      "model_share": 0.2836734693877551,
+      "baseline_share": 0.20918367346938777,
+      "model_ratio": 1.1278889437458253,
+      "baseline_ratio": 0.8317166671506985
+    },
+    {
+      "attribute": "age_band",
+      "value": "35-44",
+      "pool_share": 0.34461601390735247,
+      "model_share": 0.2857142857142857,
+      "baseline_share": 0.27091836734693875,
+      "model_ratio": 0.829080118694362,
+      "baseline_ratio": 0.7861456125476897
+    },
+    {
+      "attribute": "age_band",
+      "value": "45-54",
+      "pool_share": 0.2614275488291236,
+      "model_share": 0.2403061224489796,
+      "baseline_share": 0.33622448979591835,
+      "model_ratio": 0.919207342628035,
+      "baseline_ratio": 1.2861096365007962
+    },
+    {
+      "attribute": "age_band",
+      "value": "55+",
+      "pool_share": 0.14244810307802433,
+      "model_share": 0.1903061224489796,
+      "baseline_share": 0.1836734693877551,
+      "model_ratio": 1.335968105835299,
+      "baseline_ratio": 1.2894062147472056
+    },
+    {
+      "attribute": "home_zone",
+      "value": "centro",
+      "pool_share": 0.38557112179159425,
+      "model_share": 0.3346938775510204,
+      "baseline_share": 0.3056122448979592,
+      "model_ratio": 0.8680470570405592,
+      "baseline_ratio": 0.7926222365355106
+    },
+    {
+      "attribute": "home_zone",
+      "value": "leste",
+      "pool_share": 0.13079046937314653,
+      "model_share": 0.0010204081632653062,
+      "baseline_share": 0.0,
+      "model_ratio": 0.007801854127108233,
+      "baseline_ratio": 0.0
+    },
+    {
+      "attribute": "home_zone",
+      "value": "norte",
+      "pool_share": 0.176245014827692,
+      "model_share": 0.29336734693877553,
+      "baseline_share": 0.3224489795918367,
+      "model_ratio": 1.664542666500891,
+      "baseline_ratio": 1.829549504745327
+    },
+    {
+      "attribute": "home_zone",
+      "value": "oeste",
+      "pool_share": 0.1046119235095613,
+      "model_share": 0.0010204081632653062,
+      "baseline_share": 0.011224489795918367,
+      "model_ratio": 0.009754224270353303,
+      "baseline_ratio": 0.10729646697388633
+    },
+    {
+      "attribute": "home_zone",
+      "value": "sul",
+      "pool_share": 0.20278147049800593,
+      "model_share": 0.36989795918367346,
+      "baseline_share": 0.3607142857142857,
+      "model_ratio": 1.824121100785246,
+      "baseline_ratio": 1.7788325769036812
+    }
+  ],
+  "coefficients": [
+    {
+      "feature": "availability_overlap_hours",
+      "weight": 0.8221376921729131
+    },
+    {
+      "feature": "distance_km",
+      "weight": -0.42971454786548013
+    },
+    {
+      "feature": "night_shift_preference_match",
+      "weight": 0.2523146821187635
+    },
+    {
+      "feature": "specialty_match",
+      "weight": 0.15426547841614205
+    },
+    {
+      "feature": "hours_since_last_shift",
+      "weight": 0.14456754814882508
+    },
+    {
+      "feature": "acceptance_rate_90d",
+      "weight": 0.11628097898221425
+    },
+    {
+      "feature": "attendance_rate_90d",
+      "weight": 0.010471129668912534
+    }
+  ]
+}

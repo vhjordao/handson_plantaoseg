@@ -6,7 +6,12 @@ ou atributo protegido entre as variáveis do ranking.
 
 import pytest
 
-from app.ranking.features import RANKING_FEATURES, validar_features, violacoes_neutralidade
+from app.ranking.features import (
+    CONTEXT_VARIABLES,
+    RANKING_FEATURES,
+    validar_features,
+    violacoes_neutralidade,
+)
 
 CAMPOS_ECONOMICOS = [
     "payment_amount",
@@ -60,6 +65,11 @@ def test_barra_atributos_protegidos(campo):
     assert violacoes_neutralidade([campo]) != []
     with pytest.raises(ValueError, match="atributo protegido"):
         validar_features([*RANKING_FEATURES, campo])
+
+
+def test_variaveis_de_contexto_nao_entram_no_ranking_e_sao_neutras():
+    assert not set(CONTEXT_VARIABLES) & set(RANKING_FEATURES)
+    assert violacoes_neutralidade(CONTEXT_VARIABLES) == []
 
 
 def test_nao_ha_falso_positivo_nas_variaveis_legitimas():

@@ -9,8 +9,13 @@ ficam de fora por desenho:
   discriminação (Res. CFM 2.454/2026 e LGPD; validar com jurídico).
 
 O teste `tests/test_neutralidade_economica.py` falha se alguém violar isso, e
-ele roda na CI. A lista é provisória: a Fase 2 refina as variáveis, sempre
-passando por `validar_features`.
+ele roda na CI. Toda mudança na lista passa por `validar_features`.
+
+Histórico: em 30/10/2026 `shifts_last_30d` e `offers_received_30d` saíram do ranking e viraram
+variáveis de contexto. A avaliação em simulação mostrou que elas não melhoram o top-5 (71,2%
+sem elas contra 71,3% com elas); `shifts_last_30d` ganhava peso positivo por confundimento
+(quem é confiável aceita mais plantões), o que levaria a recomendar o mais sobrecarregado, e
+`offers_received_30d` mede exposição e pode realimentar viés de seleção.
 """
 
 import re
@@ -24,9 +29,13 @@ RANKING_FEATURES: tuple[str, ...] = (
     "acceptance_rate_90d",
     "attendance_rate_90d",
     "hours_since_last_shift",
+    "night_shift_preference_match",
+)
+
+# Calculadas junto, mas FORA do ranking: servem a alertas de jornada, à avaliação e à análise.
+CONTEXT_VARIABLES: tuple[str, ...] = (
     "shifts_last_30d",
     "offers_received_30d",
-    "night_shift_preference_match",
 )
 
 # Trechos que, em qualquer posição do nome, indicam campo econômico.

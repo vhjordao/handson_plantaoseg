@@ -1,6 +1,6 @@
 # ADR 0004: Protótipo adiado, a Etapa 2 começa por Dados, Análise e Solução de IA
 
-- **Status:** aceita por decisão do Victor em 28/10/2026; a decisão sobre **quando e como** construir a PoC fica no portão G-P (ver [plano da Etapa 2](../plano-etapa-2.md)).
+- **Status:** aceita por decisão do Victor em 28/10/2026. **Atualização de 30/10/2026:** o portão G-P foi decidido no [ADR 0005](0005-gp-poc-minima-e-especificacao.md) (PoC mínima executável por linha de comando, mais o material de especificação). **Continua adiado:** interface web, API HTTP, n8n, banco e RLS.
 - **Origem:** o Victor pediu para **não construir o protótipo ainda**.
 
 ## Contexto
