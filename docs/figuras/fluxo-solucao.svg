@@ -49,5 +49,5 @@
 <rect x="300" y="326" width="12" height="12" rx="2" fill="#e1e0d9"/><text x="320" y="337">Código determinístico, testado</text>
 <rect x="560" y="326" width="12" height="12" rx="2" fill="#eb6834"/><text x="580" y="337">Decisão humana</text>
 </g>
-<text x="20" y="366" font-size="11" fill="#898781">Simulação com dados sintéticos. Etapas 2 a 6 rodam na PoC; a oferta em cascata e a contestação são evolução futura.</text>
+<text x="20" y="366" font-size="11" fill="#898781">Simulação com dados sintéticos. As 8 etapas rodam na PoC (conferência e aprovação simuladas na demo); cascata e contestação são evolução futura.</text>
 </svg>

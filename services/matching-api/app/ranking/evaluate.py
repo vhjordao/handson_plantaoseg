@@ -15,7 +15,7 @@ from collections import Counter
 from datetime import datetime
 from typing import Any
 
-from app.models import Dataset, Offer, Shift
+from app.models import Dataset, Doctor, Offer, Shift
 from app.ranking.baseline import baseline_score
 from app.ranking.compute import FeatureStore
 from app.ranking.model import LogisticModel, train_model
@@ -76,6 +76,52 @@ def _standard_error(values: list[float]) -> float:
     return statistics.stdev(values) / math.sqrt(len(values)) if len(values) > 1 else float("nan")
 
 
+def eligible_pool(
+    dataset: Dataset, store: FeatureStore, shift: Shift
+) -> list[tuple[Doctor, dict[str, float]]]:
+    """Médicos elegíveis para a vaga, vistos no instante da publicação, com as suas variáveis."""
+    unit = dataset.units[shift.unit_id]
+    moment = shift.published_at
+    pool: list[tuple[Doctor, dict[str, float]]] = []
+    for doctor in dataset.doctors.values():
+        check = evaluate_candidate(
+            doctor,
+            specialty=shift.specialty,
+            starts_at=shift.starts_at,
+            ends_at=shift.ends_at,
+            unit=unit,
+            policy=dataset.policy,
+            windows=dataset.windows.get(doctor.id, []),
+            assignments=store.assignments_at(doctor.id, moment),
+        )
+        if not check.eligible:
+            continue
+        features = store.features(
+            doctor,
+            specialty=shift.specialty,
+            starts_at=shift.starts_at,
+            ends_at=shift.ends_at,
+            unit=unit,
+            policy=dataset.policy,
+            t=moment,
+        )
+        pool.append((doctor, features))
+    return pool
+
+
+def truth_state(features: dict[str, float], shift: Shift, duration: float) -> dict[str, Any]:
+    """Estado do par médico-vaga que o simulador usa para a chance verdadeira (`truth.py`)."""
+    return {
+        "distance_km": features["distance_km"],
+        "preference_match": features["night_shift_preference_match"],
+        "covered": features["availability_overlap_hours"] >= duration - 1e-9,
+        "hours_since_last": features["hours_since_last_shift"],
+        "shifts_last_30d": features["shifts_last_30d"],
+        "urgency": shift.urgency,
+        "specialty_match": features["specialty_match"],
+    }
+
+
 def counterfactual(
     dataset: Dataset,
     store: FeatureStore,
@@ -93,42 +139,13 @@ def counterfactual(
     appearances: dict[str, Counter] = {"model": Counter(), "baseline": Counter()}
     ever_eligible: set[str] = set()
     for shift in shifts:
-        unit = dataset.units[shift.unit_id]
-        moment = shift.published_at
         duration = (shift.ends_at - shift.starts_at).total_seconds() / 3600
         pool: list[tuple[str, float, float, float]] = []
-        for doctor in dataset.doctors.values():
-            check = evaluate_candidate(
-                doctor,
-                specialty=shift.specialty,
-                starts_at=shift.starts_at,
-                ends_at=shift.ends_at,
-                unit=unit,
-                policy=dataset.policy,
-                windows=dataset.windows.get(doctor.id, []),
-                assignments=store.assignments_at(doctor.id, moment),
-            )
-            if not check.eligible:
-                continue
-            f = store.features(
-                doctor,
-                specialty=shift.specialty,
-                starts_at=shift.starts_at,
-                ends_at=shift.ends_at,
-                unit=unit,
-                policy=dataset.policy,
-                t=moment,
-            )
+        for doctor, f in eligible_pool(dataset, store, shift):
             chance = truth.p_success(
                 accept_params,
                 reliability=dataset.latent[doctor.id],
-                distance_km=f["distance_km"],
-                preference_match=f["night_shift_preference_match"],
-                covered=f["availability_overlap_hours"] >= duration - 1e-9,
-                hours_since_last=f["hours_since_last_shift"],
-                shifts_last_30d=f["shifts_last_30d"],
-                urgency=shift.urgency,
-                specialty_match=f["specialty_match"],
+                **truth_state(f, shift, duration),
             )
             base = baseline_score(f, radius_km=doctor.max_radius_km, duration_h=duration)
             pool.append((doctor.id, chance, model.probability(f), base))

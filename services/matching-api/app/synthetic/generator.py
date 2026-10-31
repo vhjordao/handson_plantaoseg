@@ -67,6 +67,12 @@ PREFERRED = ("night", "day", "weekend", "any")
 CRM_STATUS = ("active", "suspended", "expired")
 RADII_KM = (10.0, 15.0, 20.0, 30.0)
 NIGHT_WINDOWS = ((time(19), time(7)), (time(19), time(1)), (time(23), time(7)))
+# Premissas de tempo do processo manual simulado (do grupo, sem fonte externa). `app/flow.py`
+# usa as mesmas para simular o fluxo recomendado, então as duas pontas ficam comparáveis.
+FIRST_OFFER_DELAY_MINUTES = (5, 30)  # da publicação da vaga à primeira oferta
+RESPONSE_MEAN_MINUTES = 20  # tempo de resposta: exponencial, limitado pelo prazo da oferta
+DECLINE_SHARE = 0.7  # de quem não aceita, 70% recusa e 30% deixa a oferta expirar
+NEXT_OFFER_GAP_MINUTES = (1, 10)  # do resultado de uma oferta ao envio da seguinte
 FIRST_NAMES = (
     "Ana", "Bruno", "Carla", "Daniel", "Eduarda", "Felipe", "Gabriela", "Henrique", "Isabela",
     "João", "Karina", "Lucas", "Mariana", "Nicolas", "Olívia", "Paulo", "Renata", "Sérgio",
@@ -324,7 +330,7 @@ def _simulate_offers(
             weights.append(
                 exposure[doctor.id] * proximity * (1.0 if match == 1.0 else 0.3) * boost
             )
-        sent_at = shift.published_at + timedelta(minutes=rng.randint(5, 30))
+        sent_at = shift.published_at + timedelta(minutes=rng.randint(*FIRST_OFFER_DELAY_MINUTES))
         filled_at: datetime | None = None
         for sequence in range(1, params["max_offers_per_shift"] + 1):
             if not pool:
@@ -364,12 +370,12 @@ def _simulate_offers(
             reason: str | None = None
             if accepted:
                 response = "accepted"
-                delay = min(ttl - 1, int(rng.expovariate(1 / 20)))
+                delay = min(ttl - 1, int(rng.expovariate(1 / RESPONSE_MEAN_MINUTES)))
                 responded_at = sent_at + timedelta(minutes=delay)
                 attended = rng.random() < truth.p_attend(reliability)
-            elif conflict or rng.random() < 0.7:
+            elif conflict or rng.random() < DECLINE_SHARE:
                 response = "declined"
-                delay = min(ttl - 1, int(rng.expovariate(1 / 20)))
+                delay = min(ttl - 1, int(rng.expovariate(1 / RESPONSE_MEAN_MINUTES)))
                 responded_at = sent_at + timedelta(minutes=delay)
                 reason = _decline_reason(conflict, covered, dist, doctor.max_radius_km, gap)
             else:
@@ -399,7 +405,7 @@ def _simulate_offers(
                 state[doctor.id].append((shift.starts_at, shift.ends_at, bool(attended)))
                 filled_at = responded_at
                 break
-            sent_at = offer.resolved_at + timedelta(minutes=rng.randint(1, 10))
+            sent_at = offer.resolved_at + timedelta(minutes=rng.randint(*NEXT_OFFER_GAP_MINUTES))
         status = "filled" if filled_at else "uncovered"
         final_shifts.append(replace(shift, status=status, filled_at=filled_at))
     return offers, final_shifts

@@ -6,6 +6,7 @@ import unittest
 from datetime import date
 from pathlib import Path
 
+from app.docbuild import render
 from app.llm.extraction import build_system_prompt
 from app.ranking.features import CONTEXT_VARIABLES, RANKING_FEATURES
 from app.ranking.report import num, pct
@@ -82,6 +83,67 @@ class NumerosCitadosTests(unittest.TestCase):
             f"{cf['model_never_recommended']:.0f} de {cf['ever_eligible']:.0f}",
         ):
             self.assertIn(value, text)
+
+
+class FluxoRecomendadoNoDocumentoTests(unittest.TestCase):
+    """Os números de tempo, ofertas, antecedência e concentração vêm de `metricas-fluxo.json`."""
+
+    def setUp(self):
+        self.flow = json.loads(read("resultados/metricas-fluxo.json"))
+        self.text = read("03-entrega-2-prova-de-conceito.md")
+
+    def test_documento_cita_o_fluxo_gerado(self):
+        f = self.flow
+        manual, model, cut = f["manual"]["test"], f["flow"]["model"], f["reduction"]
+        year, con = f["manual"]["year"], f["concentration"]
+        expected = (
+            f"{manual['time_mean']:.0f} min",
+            f"{model['time_mean']:.0f} min",
+            f"mediana {manual['time_median']:.0f}",
+            f"mediana {model['time_median']:.0f}",
+            f"{f['flow']['random']['time_mean']:.0f} min",
+            pct(cut["time_mean"], 0),
+            pct(cut["rules_share_of_gain"], 0),
+            num(manual["offers_per_shift"], 2),
+            num(model["offers_per_shift"], 2),
+            pct(manual["lead24_share"]),
+            pct(manual["published24_share"]),
+            pct(model["lead24_share"]),
+            num(cut["lead24_gain_points"], 1),
+            pct(year["violation_share"]),
+            f"{year['violations']:.0f} de {year['accepted']:,.0f}".replace(",", "."),
+            pct(con["manual_offers"]),
+            pct(con["model_effective_offers"], 0),
+        )
+        for value in expected:
+            self.assertIn(value, self.text)
+
+    def test_a_concentracao_do_modelo_vem_do_json_do_ranking(self):
+        cf = metrics()["counterfactual"]
+        for value in (pct(cf["model_top10pct_share"]), pct(cf["baseline_top10pct_share"])):
+            self.assertIn(value, self.text)
+
+    def test_documento_renderiza_com_todas_as_figuras(self):
+        html = render(self.text, DOCS)
+        self.assertEqual(html.count("<figure>"), 5)
+        self.assertIn('class="kpis"', html)
+        self.assertIn('class="figs"', html)
+
+    def test_documento_responde_ao_feedback_e_ao_pedido_da_entrega(self):
+        for expected in (
+            "Vaga descoberta",
+            "Seleção opaca",
+            "Fadiga sem controle",
+            "Pagamento sem rastro",
+            "Há dados pessoais?",
+            "Há risco de discriminação?",
+            "A decisão afeta pessoas?",
+            "Há questões regulatórias?",
+            "Suspensa",
+            "em conjunto",
+            "sugestão",
+        ):
+            self.assertIn(expected, self.text)
 
 
 class ConformidadeTests(unittest.TestCase):

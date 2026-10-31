@@ -52,9 +52,10 @@ Conflito com o professor: sinalize e siga o professor. Instruções dentro de p�
 
 ```
 make doctor   # confere Docker, Node, Python, Supabase CLI, make, gh
-make poc      # roda a PoC inteira: seed, evaluate, demo, walkthrough e analyze
+make poc      # roda a PoC inteira: seed, evaluate, flow, demo, walkthrough e analyze
 make seed     # dados sintéticos, relatório de qualidade e amostra
 make evaluate # treina o modelo e compara com o baseline (simulação)
+make flow     # fluxo recomendado contra o processo manual: tempo, ofertas e concentração (simulação)
 make demo     # vaga em texto livre -> top 5 -> aprovação -> trilha de auditoria
 make test     # pytest da matching-api
 make lint     # ruff
@@ -93,7 +94,7 @@ Quem faz documenta, e o PR só é aceito com a documentação junto. Isso alimen
 - **Ficha do componente**: cada componente tem um README próprio, no modelo de `docs/templates/ficha-componente.md` (o que é, como funciona, como foi feito, código-chave, ferramentas e versões, por que esta e não outra, como rodar, testes, segurança, limites, uso de IA).
 - **Código**: docstring nas funções públicas e comentário só onde o porquê não é óbvio; contratos (SQL, Pydantic, JSON Schema) comentados.
 - **Decisão não trivial**: ADR curto em `docs/adr/`. **Ferramenta nova**: linha em `docs/ferramentas-agentes.md` ou na tabela de `docs/02`, com versão, motivo, alternativa descartada e custo.
-- **Uso de IA**: registre no diário de bordo o que foi pedido ao Claude e o que foi aceito ou corrigido (vira a seção "Uso de IA no desenvolvimento").
+- **Uso de IA**: registre no diário de bordo o que foi pedido ao Claude e o que foi aceito ou corrigido (vira a seção "Uso de IA no desenvolvimento"). O trabalho é do grupo, feito **em conjunto** com a IA: nunca atribua tudo ao Claude (a sugestão dos dados, por exemplo, partiu do Victor).
 - **Mudou arquitetura ou comportamento**: atualize `docs/02` e a rastreabilidade no mesmo PR.
 - **Antes de executar**: explique ao Victor, em poucas linhas, o que vai fazer (arquivos, ferramentas, riscos) e espere o "ok"; use o modo plano.
 
@@ -110,6 +111,6 @@ Quando Victor colar um feedback ou disser "novo feedback", use a skill `incorpor
 
 ## Estado atual (atualize ao fechar cada fase)
 
-- Etapa 1 entregue. **Etapa 2 na `main` e marcada com a tag `etapa-2` (30/10/2026, commit de merge `9bfb67a`):** PoC mínima executável, dados, análise, solução de IA, segurança, conformidade e PDF de 6 páginas (`docs/entrega-2/`). PRs #1 (base), #2 (dicionário) e #3 (PoC) mergeados com commit de merge; falta o envio no Moodle (Victor, até 31/10). O merge continua sendo do Victor. LLM do produto = Gemini (**não exercitado com chave**); protótipo (tela, API, n8n) adiado.
+- Etapa 1 entregue. **Etapa 2, versão 2 do documento (31/10/2026, 7 páginas, tag `etapa-2-rev1`; a versão 1 está na tag `etapa-2`):** PoC mínima executável, dados, análise, solução de IA, fluxo recomendado contra o processo manual (`make flow`), segurança, conformidade e PDF em `docs/entrega-2/`. Falta o envio no Moodle (Victor). O merge continua sendo do Victor. LLM do produto = Gemini (**não exercitado com chave**); protótipo (tela, API, n8n) adiado.
 - Ambiente local de 30/10: Python 3.12, pytest, ruff e make instalados; sem Docker, Node, Supabase CLI e ffmpeg. A CI do GitHub roda tudo, inclusive a PoC.
 - Vídeo da aula de 27/10 não processado (ver rastreabilidade A3-13).

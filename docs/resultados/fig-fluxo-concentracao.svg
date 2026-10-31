@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 300" role="img" aria-labelledby="t d" font-family='system-ui, -apple-system, "Segoe UI", sans-serif'>
+<title id="t">Concentração nos 10% mais ofertados</title><desc id="d">Colunas com a parcela das ofertas ou dos lugares do top-5 recebida pelos 10% de médicos mais ofertados: processo manual, baseline, modelo e modelo com ofertas efetivas.</desc>
+<rect width="440" height="300" fill="#fcfcfb"/>
+<text x="56" y="28" font-size="16" font-weight="600" fill="#0b0b0b">Concentração nos 10% mais ofertados</text>
+<text x="56" y="48" font-size="12" fill="#52514e">Parcela em %; igualdade seria 10%; *estimativa superior</text>
+<line x1="56" x2="416" y1="236.0" y2="236.0" stroke="#c3c2b7" stroke-width="1"/><text x="48" y="240.0" font-size="11" text-anchor="end" fill="#898781">0%</text>
+<line x1="56" x2="416" y1="208.0" y2="208.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="212.0" font-size="11" text-anchor="end" fill="#898781">20%</text>
+<line x1="56" x2="416" y1="180.0" y2="180.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="184.0" font-size="11" text-anchor="end" fill="#898781">40%</text>
+<line x1="56" x2="416" y1="152.0" y2="152.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="156.0" font-size="11" text-anchor="end" fill="#898781">60%</text>
+<line x1="56" x2="416" y1="124.0" y2="124.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="128.0" font-size="11" text-anchor="end" fill="#898781">80%</text>
+<line x1="56" x2="416" y1="96.0" y2="96.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="100.0" font-size="11" text-anchor="end" fill="#898781">100%</text>
+<path d="M89.0,236.0 L89.0,196.5 Q89.0,192.5 93.0,192.5 L109.0,192.5 Q113.0,192.5 113.0,196.5 L113.0,236.0 Z" fill="#2a78d6"/>
+<text x="101.0" y="186.5" font-size="11" text-anchor="middle" fill="#52514e">31%</text>
+<text x="101.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">Manual:</text>
+<text x="101.0" y="268.0" font-size="11" text-anchor="middle" fill="#52514e">ofertas</text>
+<path d="M179.0,236.0 L179.0,154.4 Q179.0,150.4 183.0,150.4 L199.0,150.4 Q203.0,150.4 203.0,154.4 L203.0,236.0 Z" fill="#2a78d6"/>
+<text x="191.0" y="144.4" font-size="11" text-anchor="middle" fill="#52514e">61%</text>
+<text x="191.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">Baseline:</text>
+<text x="191.0" y="268.0" font-size="11" text-anchor="middle" fill="#52514e">top-5</text>
+<path d="M269.0,236.0 L269.0,169.1 Q269.0,165.1 273.0,165.1 L289.0,165.1 Q293.0,165.1 293.0,169.1 L293.0,236.0 Z" fill="#2a78d6"/>
+<text x="281.0" y="159.1" font-size="11" text-anchor="middle" fill="#52514e">51%</text>
+<text x="281.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">Modelo: top-5</text>
+<path d="M359.0,236.0 L359.0,125.1 Q359.0,121.1 363.0,121.1 L379.0,121.1 Q383.0,121.1 383.0,125.1 L383.0,236.0 Z" fill="#2a78d6"/>
+<text x="371.0" y="115.1" font-size="11" text-anchor="middle" fill="#52514e">82%</text>
+<text x="371.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">Modelo:</text>
+<text x="371.0" y="268.0" font-size="11" text-anchor="middle" fill="#52514e">ofertas*</text>
+</svg>

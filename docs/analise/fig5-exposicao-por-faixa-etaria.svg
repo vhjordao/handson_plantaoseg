@@ -1,35 +1,35 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="t d" font-family='system-ui, -apple-system, "Segoe UI", sans-serif'>
-<title id="t">Quem recebe as ofertas, por faixa etária</title><desc id="d">Colunas agrupadas: participação por faixa etária entre médicos e ofertas.</desc>
-<rect width="640" height="360" fill="#fcfcfb"/>
-<text x="56" y="28" font-size="16" font-weight="600" fill="#0b0b0b">Quem recebe as ofertas, por faixa etária</text>
-<text x="56" y="48" font-size="12" fill="#52514e">Participação nas ofertas do processo manual e entre os médicos (simulação)</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 300" role="img" aria-labelledby="t d" font-family='system-ui, -apple-system, "Segoe UI", sans-serif'>
+<title id="t">Ofertas por faixa etária</title><desc id="d">Colunas agrupadas: participação por faixa etária entre médicos e ofertas.</desc>
+<rect width="440" height="300" fill="#fcfcfb"/>
+<text x="56" y="28" font-size="16" font-weight="600" fill="#0b0b0b">Ofertas por faixa etária</text>
+<text x="56" y="48" font-size="12" fill="#52514e">Participação entre os médicos e nas ofertas (simulação)</text>
 <rect x="56.0" y="62" width="10" height="10" rx="2" fill="#2a78d6"/><text x="72.0" y="71" font-size="12" fill="#52514e">Entre os médicos</text>
 <rect x="208.0" y="62" width="10" height="10" rx="2" fill="#eb6834"/><text x="224.0" y="71" font-size="12" fill="#52514e">Nas ofertas</text>
-<line x1="56" x2="616" y1="296.0" y2="296.0" stroke="#c3c2b7" stroke-width="1"/><text x="48" y="300.0" font-size="11" text-anchor="end" fill="#898781">0%</text>
-<line x1="56" x2="616" y1="262.7" y2="262.7" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="266.7" font-size="11" text-anchor="end" fill="#898781">10%</text>
-<line x1="56" x2="616" y1="229.3" y2="229.3" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="233.3" font-size="11" text-anchor="end" fill="#898781">20%</text>
-<line x1="56" x2="616" y1="196.0" y2="196.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="200.0" font-size="11" text-anchor="end" fill="#898781">30%</text>
-<line x1="56" x2="616" y1="162.7" y2="162.7" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="166.7" font-size="11" text-anchor="end" fill="#898781">40%</text>
-<line x1="56" x2="616" y1="129.3" y2="129.3" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="133.3" font-size="11" text-anchor="end" fill="#898781">50%</text>
-<line x1="56" x2="616" y1="96.0" y2="96.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="100.0" font-size="11" text-anchor="end" fill="#898781">60%</text>
-<path d="M101.0,296.0 L101.0,223.3 Q101.0,219.3 105.0,219.3 L121.0,219.3 Q125.0,219.3 125.0,223.3 L125.0,296.0 Z" fill="#2a78d6"/>
-<text x="113.0" y="213.3" font-size="11" text-anchor="middle" fill="#52514e">23%</text>
-<path d="M127.0,296.0 L127.0,241.4 Q127.0,237.4 131.0,237.4 L147.0,237.4 Q151.0,237.4 151.0,241.4 L151.0,296.0 Z" fill="#eb6834"/>
-<text x="139.0" y="231.4" font-size="11" text-anchor="middle" fill="#52514e">18%</text>
-<text x="126.0" y="314.0" font-size="11" text-anchor="middle" fill="#52514e">25-34</text>
-<path d="M241.0,296.0 L241.0,184.4 Q241.0,180.4 245.0,180.4 L261.0,180.4 Q265.0,180.4 265.0,184.4 L265.0,296.0 Z" fill="#2a78d6"/>
-<text x="253.0" y="174.4" font-size="11" text-anchor="middle" fill="#52514e">35%</text>
-<path d="M267.0,296.0 L267.0,127.8 Q267.0,123.8 271.0,123.8 L287.0,123.8 Q291.0,123.8 291.0,127.8 L291.0,296.0 Z" fill="#eb6834"/>
-<text x="279.0" y="117.8" font-size="11" text-anchor="middle" fill="#52514e">52%</text>
-<text x="266.0" y="314.0" font-size="11" text-anchor="middle" fill="#52514e">35-44</text>
-<path d="M381.0,296.0 L381.0,205.6 Q381.0,201.6 385.0,201.6 L401.0,201.6 Q405.0,201.6 405.0,205.6 L405.0,296.0 Z" fill="#2a78d6"/>
-<text x="393.0" y="195.6" font-size="11" text-anchor="middle" fill="#52514e">28%</text>
-<path d="M407.0,296.0 L407.0,215.9 Q407.0,211.9 411.0,211.9 L427.0,211.9 Q431.0,211.9 431.0,215.9 L431.0,296.0 Z" fill="#eb6834"/>
-<text x="419.0" y="205.9" font-size="11" text-anchor="middle" fill="#52514e">25%</text>
-<text x="406.0" y="314.0" font-size="11" text-anchor="middle" fill="#52514e">45-54</text>
-<path d="M521.0,296.0 L521.0,253.3 Q521.0,249.3 525.0,249.3 L541.0,249.3 Q545.0,249.3 545.0,253.3 L545.0,296.0 Z" fill="#2a78d6"/>
-<text x="533.0" y="243.3" font-size="11" text-anchor="middle" fill="#52514e">14%</text>
-<path d="M547.0,296.0 L547.0,281.6 Q547.0,277.6 551.0,277.6 L567.0,277.6 Q571.0,277.6 571.0,281.6 L571.0,296.0 Z" fill="#eb6834"/>
-<text x="559.0" y="271.6" font-size="11" text-anchor="middle" fill="#52514e">6%</text>
-<text x="546.0" y="314.0" font-size="11" text-anchor="middle" fill="#52514e">55+</text>
+<line x1="56" x2="416" y1="236.0" y2="236.0" stroke="#c3c2b7" stroke-width="1"/><text x="48" y="240.0" font-size="11" text-anchor="end" fill="#898781">0%</text>
+<line x1="56" x2="416" y1="212.7" y2="212.7" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="216.7" font-size="11" text-anchor="end" fill="#898781">10%</text>
+<line x1="56" x2="416" y1="189.3" y2="189.3" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="193.3" font-size="11" text-anchor="end" fill="#898781">20%</text>
+<line x1="56" x2="416" y1="166.0" y2="166.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="170.0" font-size="11" text-anchor="end" fill="#898781">30%</text>
+<line x1="56" x2="416" y1="142.7" y2="142.7" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="146.7" font-size="11" text-anchor="end" fill="#898781">40%</text>
+<line x1="56" x2="416" y1="119.3" y2="119.3" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="123.3" font-size="11" text-anchor="end" fill="#898781">50%</text>
+<line x1="56" x2="416" y1="96.0" y2="96.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="100.0" font-size="11" text-anchor="end" fill="#898781">60%</text>
+<path d="M76.0,236.0 L76.0,186.3 Q76.0,182.3 80.0,182.3 L96.0,182.3 Q100.0,182.3 100.0,186.3 L100.0,236.0 Z" fill="#2a78d6"/>
+<text x="88.0" y="176.3" font-size="11" text-anchor="middle" fill="#52514e">23%</text>
+<path d="M102.0,236.0 L102.0,199.0 Q102.0,195.0 106.0,195.0 L122.0,195.0 Q126.0,195.0 126.0,199.0 L126.0,236.0 Z" fill="#eb6834"/>
+<text x="114.0" y="189.0" font-size="11" text-anchor="middle" fill="#52514e">18%</text>
+<text x="101.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">25-34</text>
+<path d="M166.0,236.0 L166.0,159.1 Q166.0,155.1 170.0,155.1 L186.0,155.1 Q190.0,155.1 190.0,159.1 L190.0,236.0 Z" fill="#2a78d6"/>
+<text x="178.0" y="149.1" font-size="11" text-anchor="middle" fill="#52514e">35%</text>
+<path d="M192.0,236.0 L192.0,119.5 Q192.0,115.5 196.0,115.5 L212.0,115.5 Q216.0,115.5 216.0,119.5 L216.0,236.0 Z" fill="#eb6834"/>
+<text x="204.0" y="109.5" font-size="11" text-anchor="middle" fill="#52514e">52%</text>
+<text x="191.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">35-44</text>
+<path d="M256.0,236.0 L256.0,173.9 Q256.0,169.9 260.0,169.9 L276.0,169.9 Q280.0,169.9 280.0,173.9 L280.0,236.0 Z" fill="#2a78d6"/>
+<text x="268.0" y="163.9" font-size="11" text-anchor="middle" fill="#52514e">28%</text>
+<path d="M282.0,236.0 L282.0,181.1 Q282.0,177.1 286.0,177.1 L302.0,177.1 Q306.0,177.1 306.0,181.1 L306.0,236.0 Z" fill="#eb6834"/>
+<text x="294.0" y="171.1" font-size="11" text-anchor="middle" fill="#52514e">25%</text>
+<text x="281.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">45-54</text>
+<path d="M346.0,236.0 L346.0,207.3 Q346.0,203.3 350.0,203.3 L366.0,203.3 Q370.0,203.3 370.0,207.3 L370.0,236.0 Z" fill="#2a78d6"/>
+<text x="358.0" y="197.3" font-size="11" text-anchor="middle" fill="#52514e">14%</text>
+<path d="M372.0,236.0 L372.0,227.2 Q372.0,223.2 376.0,223.2 L392.0,223.2 Q396.0,223.2 396.0,227.2 L396.0,236.0 Z" fill="#eb6834"/>
+<text x="384.0" y="217.2" font-size="11" text-anchor="middle" fill="#52514e">6%</text>
+<text x="371.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">55+</text>
 </svg>

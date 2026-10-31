@@ -48,7 +48,7 @@ Os detalhes, as fontes e os pontos que ainda precisam de validação estão na [
 Precisa só do Python 3.12 e do `make` (no Windows, `make PYTHON="py -3.12" ...` se preciso). Sem Docker, banco ou chave de API.
 
 ```
-make poc      # gera os dados, treina e avalia, roda a demonstração, o exemplo trabalhado e a análise
+make poc      # gera os dados, treina e avalia, mede o fluxo recomendado, roda a demonstração, o exemplo trabalhado e a análise
 make test     # testes automatizados
 make entrega  # PDF da Entrega 2 (precisa de Edge ou Chrome)
 ```
@@ -72,7 +72,7 @@ Custo estimado do mês da apresentação: US$ 34 a US$ 41 (VPS e Supabase lidos 
 | [docs/solucao-ia.md](docs/solucao-ia.md), [docs/exemplo-trabalhado.md](docs/exemplo-trabalhado.md), [docs/analise](docs/analise/README.md), [docs/resultados](docs/resultados/metricas-ranking.md) | Desenho da solução de IA, o passo a passo de uma vaga com as contas, a análise exploratória e os resultados da avaliação (simulação) |
 | [docs/seguranca-ameacas.md](docs/seguranca-ameacas.md), [docs/wireframes](docs/wireframes/README.md), [docs/teste-manual-gemini.md](docs/teste-manual-gemini.md) | Ameaças e ficha de risco, telas desenhadas e o plano de teste manual do Gemini (ainda não executado) |
 | [docs/rastreabilidade-professor.md](docs/rastreabilidade-professor.md) | Exigências do professor (feedback da Entrega 1 e slides da Etapa 2), com status e onde cada uma está atendida |
-| [docs/adr/](docs/adr) | Decisões: [segmento inicial](docs/adr/0001-segmento-inicial.md), [escopo da PoC](docs/adr/0002-escopo-da-poc.md), [LLM do produto: Gemini](docs/adr/0003-llm-do-produto-gemini.md), [protótipo adiado](docs/adr/0004-prototipo-adiado.md) e [PoC mínima e especificação](docs/adr/0005-gp-poc-minima-e-especificacao.md) |
+| [docs/adr/](docs/adr) | Decisões: [segmento inicial](docs/adr/0001-segmento-inicial.md), [escopo da PoC](docs/adr/0002-escopo-da-poc.md), [LLM do produto: Gemini](docs/adr/0003-llm-do-produto-gemini.md), [protótipo adiado](docs/adr/0004-prototipo-adiado.md), [PoC mínima e especificação](docs/adr/0005-gp-poc-minima-e-especificacao.md) e [metas medidas por simulação do fluxo](docs/adr/0006-fluxo-recomendado-medido-por-simulacao.md) |
 | [docs/conformidade/](docs/conformidade/README.md) | O que os textos oficiais das Res. CFM 2.454, 2.460 e 2.462 dizem, lidos em 30/10/2026, e o que depende de jurídico (não é parecer jurídico) |
 | [docs/plano-etapa-2.md](docs/plano-etapa-2.md) | Plano da Etapa 2: escopo, frentes, cronograma com portões de aprovação, contratos e metas com linha de base (proposta) |
 | [docs/CONTRIBUINDO.md](docs/CONTRIBUINDO.md) | Guia de entrada da equipe: ferramentas, primeiro dia, uso do Claude Code, fluxo de Git e documentação obrigatória |

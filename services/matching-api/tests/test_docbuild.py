@@ -64,6 +64,48 @@ class BlocosTests(unittest.TestCase):
         self.assertIn("data:image/svg+xml;base64,", html)
         self.assertIn("<figcaption>Figura</figcaption>", html)
 
+    def test_caixa_de_destaque_com_paragrafos_e_lista(self):
+        html = self.doc("> [!NOTE]\n> **Resumo.** Texto.\n>\n> - um\n> - dois")
+        self.assertIn('<blockquote class="note">', html)
+        self.assertIn("<p><strong>Resumo.</strong> Texto.</p>", html)
+        self.assertIn("<ul><li>um</li><li>dois</li></ul>", html)
+        self.assertNotIn("[!NOTE]", html)
+
+    def test_cartoes_de_indicadores(self):
+        table = "| Valor | Indicador | Nota |\n| --- | --- | --- |\n"
+        rows = "| 71,2% | chance | contra 67,7% |\n| 0 | falhas | |"
+        html = self.doc("<!-- kpis -->\n" + table + rows)
+        self.assertEqual(html.count('<div class="kpi">'), 2)
+        self.assertIn("<b>71,2%</b><span>chance</span><small>contra 67,7%</small>", html)
+        self.assertIn("<b>0</b><span>falhas</span></div>", html)
+        self.assertNotIn("<th", html)
+
+    def test_so_a_tabela_marcada_vira_cartoes(self):
+        table = "| A | B | C |\n| --- | --- | --- |\n| 1 | 2 | 3 |"
+        html = self.doc("<!-- kpis -->\n" + table + "\n\n" + table)
+        self.assertEqual(html.count('class="kpis"'), 1)
+        self.assertEqual(html.count("<table>"), 1)
+
+    def test_so_a_tabela_marcada_nao_quebra_entre_paginas(self):
+        table = "| A | B |\n| --- | --- |\n| 1 | 2 |"
+        html = self.doc("<!-- keep -->\n" + table + "\n\n" + table)
+        self.assertEqual(html.count('<table class="keep">'), 1)
+        self.assertEqual(html.count("<table>"), 1)
+        self.assertIn("table.keep", html)
+
+    def test_imagens_em_linhas_seguidas_ficam_lado_a_lado(self):
+        html = self.doc("![A](f.svg)\n![B](f.svg)\n\n![C](f.svg)", {"f.svg": SVG})
+        self.assertEqual(html.count('class="figs"'), 1)
+        self.assertEqual(html.count("<figure>"), 3)
+
+    def test_paragrafo_logo_depois_do_titulo_e_a_identificacao(self):
+        html = self.doc("# T\n\nDisciplina X\n\nOutro")
+        self.assertIn('<p class="meta">Disciplina X</p>', html)
+        self.assertIn("<p>Outro</p>", html)
+
+    def test_rodape_numera_as_paginas(self):
+        self.assertIn("counter(page)", self.doc("# T"))
+
     def test_documento_e_autonomo(self):
         html = self.doc("# T\n\nTexto")
         self.assertTrue(html.startswith("<!doctype html>"))
