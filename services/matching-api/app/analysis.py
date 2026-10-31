@@ -10,7 +10,7 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
-from app.charts import column_chart
+from app.charts import COMPACT, column_chart
 from app.llm.extraction import extract_by_rules
 from app.llm.guardrails import detect_injection, normalize
 from app.models import Dataset, Offer
@@ -211,11 +211,12 @@ def write_analysis(dataset: Dataset, params: dict[str, Any], out_dir: Path) -> N
     (out_dir / "fig1-aceite-por-distancia.svg").write_text(
         column_chart(
             "Taxa de aceite cai com a distância",
-            "Ofertas aceitas por faixa de distância até o hospital (simulação)",
+            "Aceite por distância até o hospital (simulação)",
             [r[0] for r in by_distance],
             [("Taxa de aceite", [r[2] for r in by_distance])],
             lambda v: pct(v, 0),
             "Colunas com a taxa de aceite das ofertas por faixa de distância.",
+            **COMPACT,
         ),
         encoding="utf-8",
     )
@@ -324,13 +325,13 @@ def write_analysis(dataset: Dataset, params: dict[str, Any], out_dir: Path) -> N
     for slug, title, rows_, label in (
         (
             "fig4-exposicao-por-zona.svg",
-            "Quem recebe as ofertas, por zona de residência",
+            "Ofertas por zona de residência",
             zone_rows,
             "Zona",
         ),
         (
             "fig5-exposicao-por-faixa-etaria.svg",
-            "Quem recebe as ofertas, por faixa etária",
+            "Ofertas por faixa etária",
             age_rows,
             "Faixa etária",
         ),
@@ -338,7 +339,7 @@ def write_analysis(dataset: Dataset, params: dict[str, Any], out_dir: Path) -> N
         (out_dir / slug).write_text(
             column_chart(
                 title,
-                "Participação nas ofertas do processo manual e entre os médicos (simulação)",
+                "Participação entre os médicos e nas ofertas (simulação)",
                 [str(r["group"]) for r in rows_],
                 [
                     ("Entre os médicos", [r["doctor_share"] for r in rows_]),
@@ -346,6 +347,7 @@ def write_analysis(dataset: Dataset, params: dict[str, Any], out_dir: Path) -> N
                 ],
                 lambda v: pct(v, 0),
                 f"Colunas agrupadas: participação por {label.lower()} entre médicos e ofertas.",
+                **COMPACT,
             ),
             encoding="utf-8",
         )

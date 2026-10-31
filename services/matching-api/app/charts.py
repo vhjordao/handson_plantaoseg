@@ -22,6 +22,7 @@ SERIES = ("#2a78d6", "#eb6834")
 FONT = 'system-ui, -apple-system, "Segoe UI", sans-serif'
 
 WIDTH, HEIGHT = 640, 360
+COMPACT = {"width": 440, "height": 300}  # para figuras lado a lado em uma página A4
 LEFT, RIGHT, TOP, BOTTOM = 56, 24, 96, 64
 MAX_BAR = 24
 GAP = 2
@@ -70,25 +71,33 @@ def column_chart(
     series: list[tuple[str, list[float]]],
     fmt: Callable[[float], str],
     description: str,
+    *,
+    width: int = WIDTH,
+    height: int = HEIGHT,
 ) -> str:
-    """Gera o SVG de um gráfico de colunas simples (uma série) ou agrupado (até duas)."""
+    """Gera o SVG de um gráfico de colunas simples (uma série) ou agrupado (até duas).
+
+    `width` e `height` dão o tamanho do desenho. Um gráfico menor, mostrado na mesma largura
+    de página, fica com o texto proporcionalmente maior (títulos e rótulos têm de caber).
+    """
     if not 1 <= len(series) <= len(SERIES):
         raise ValueError("o gráfico aceita de 1 a 2 séries")
     top_value = max(max(values) for _, values in series)
     ticks = nice_ticks(top_value * 1.12)
     y_max = ticks[-1]
-    plot_left, plot_right = LEFT, WIDTH - RIGHT
-    plot_top, plot_base = TOP, HEIGHT - BOTTOM
+    plot_left, plot_right = LEFT, width - RIGHT
+    plot_top, plot_base = TOP, height - BOTTOM
     scale = (plot_base - plot_top) / y_max
     band = (plot_right - plot_left) / len(categories)
+    wrap = 14 if width == WIDTH else max(6, int(band / 6.4))
     count = len(series)
     thickness = min(MAX_BAR, (band * 0.7 - GAP * (count - 1)) / count)
     label_all = len(categories) * count <= 12
     parts = [
-        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {WIDTH} {HEIGHT}" role="img" '
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" role="img" '
         f"aria-labelledby=\"t d\" font-family='{FONT}'>",
         f'<title id="t">{escape(title)}</title><desc id="d">{escape(description)}</desc>',
-        f'<rect width="{WIDTH}" height="{HEIGHT}" fill="{SURFACE}"/>',
+        f'<rect width="{width}" height="{height}" fill="{SURFACE}"/>',
         f'<text x="{LEFT}" y="28" font-size="16" font-weight="600" fill="{INK}">'
         f"{escape(title)}</text>",
         f'<text x="{LEFT}" y="48" font-size="12" fill="{INK_2}">{escape(subtitle)}</text>',
@@ -130,7 +139,7 @@ def column_chart(
                     f'<text x="{x + thickness / 2:.1f}" y="{y - 6:.1f}" font-size="11" '
                     f'text-anchor="middle" fill="{INK_2}">{escape(fmt(value))}</text>'
                 )
-        for line, text in enumerate(_wrap(category)):
+        for line, text in enumerate(_wrap(category, wrap)):
             parts.append(
                 f'<text x="{plot_left + band * (index + 0.5):.1f}" '
                 f'y="{plot_base + 18 + 14 * line:.1f}" font-size="11" text-anchor="middle" '

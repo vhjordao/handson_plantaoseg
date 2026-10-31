@@ -1,38 +1,38 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="t d" font-family='system-ui, -apple-system, "Segoe UI", sans-serif'>
-<title id="t">Quem recebe as ofertas, por zona de residência</title><desc id="d">Colunas agrupadas: participação por zona entre médicos e ofertas.</desc>
-<rect width="640" height="360" fill="#fcfcfb"/>
-<text x="56" y="28" font-size="16" font-weight="600" fill="#0b0b0b">Quem recebe as ofertas, por zona de residência</text>
-<text x="56" y="48" font-size="12" fill="#52514e">Participação nas ofertas do processo manual e entre os médicos (simulação)</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 300" role="img" aria-labelledby="t d" font-family='system-ui, -apple-system, "Segoe UI", sans-serif'>
+<title id="t">Ofertas por zona de residência</title><desc id="d">Colunas agrupadas: participação por zona entre médicos e ofertas.</desc>
+<rect width="440" height="300" fill="#fcfcfb"/>
+<text x="56" y="28" font-size="16" font-weight="600" fill="#0b0b0b">Ofertas por zona de residência</text>
+<text x="56" y="48" font-size="12" fill="#52514e">Participação entre os médicos e nas ofertas (simulação)</text>
 <rect x="56.0" y="62" width="10" height="10" rx="2" fill="#2a78d6"/><text x="72.0" y="71" font-size="12" fill="#52514e">Entre os médicos</text>
 <rect x="208.0" y="62" width="10" height="10" rx="2" fill="#eb6834"/><text x="224.0" y="71" font-size="12" fill="#52514e">Nas ofertas</text>
-<line x1="56" x2="616" y1="296.0" y2="296.0" stroke="#c3c2b7" stroke-width="1"/><text x="48" y="300.0" font-size="11" text-anchor="end" fill="#898781">0%</text>
-<line x1="56" x2="616" y1="246.0" y2="246.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="250.0" font-size="11" text-anchor="end" fill="#898781">20%</text>
-<line x1="56" x2="616" y1="196.0" y2="196.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="200.0" font-size="11" text-anchor="end" fill="#898781">40%</text>
-<line x1="56" x2="616" y1="146.0" y2="146.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="150.0" font-size="11" text-anchor="end" fill="#898781">60%</text>
-<line x1="56" x2="616" y1="96.0" y2="96.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="100.0" font-size="11" text-anchor="end" fill="#898781">80%</text>
-<path d="M87.0,296.0 L87.0,221.7 Q87.0,217.7 91.0,217.7 L107.0,217.7 Q111.0,217.7 111.0,221.7 L111.0,296.0 Z" fill="#2a78d6"/>
-<text x="99.0" y="211.7" font-size="11" text-anchor="middle" fill="#52514e">31%</text>
-<path d="M113.0,296.0 L113.0,160.7 Q113.0,156.7 117.0,156.7 L133.0,156.7 Q137.0,156.7 137.0,160.7 L137.0,296.0 Z" fill="#eb6834"/>
-<text x="125.0" y="150.7" font-size="11" text-anchor="middle" fill="#52514e">56%</text>
-<text x="112.0" y="314.0" font-size="11" text-anchor="middle" fill="#52514e">centro</text>
-<path d="M199.0,296.0 L199.0,262.5 Q199.0,258.5 203.0,258.5 L219.0,258.5 Q223.0,258.5 223.0,262.5 L223.0,296.0 Z" fill="#2a78d6"/>
-<text x="211.0" y="252.5" font-size="11" text-anchor="middle" fill="#52514e">15%</text>
-<path d="M225.0,296.0 L225.0,284.9 Q225.0,280.9 229.0,280.9 L245.0,280.9 Q249.0,280.9 249.0,284.9 L249.0,296.0 Z" fill="#eb6834"/>
-<text x="237.0" y="274.9" font-size="11" text-anchor="middle" fill="#52514e">6%</text>
-<text x="224.0" y="314.0" font-size="11" text-anchor="middle" fill="#52514e">leste</text>
-<path d="M311.0,296.0 L311.0,255.0 Q311.0,251.0 315.0,251.0 L331.0,251.0 Q335.0,251.0 335.0,255.0 L335.0,296.0 Z" fill="#2a78d6"/>
-<text x="323.0" y="245.0" font-size="11" text-anchor="middle" fill="#52514e">18%</text>
-<path d="M337.0,296.0 L337.0,264.8 Q337.0,260.8 341.0,260.8 L357.0,260.8 Q361.0,260.8 361.0,264.8 L361.0,296.0 Z" fill="#eb6834"/>
-<text x="349.0" y="254.8" font-size="11" text-anchor="middle" fill="#52514e">14%</text>
-<text x="336.0" y="314.0" font-size="11" text-anchor="middle" fill="#52514e">norte</text>
-<path d="M423.0,296.0 L423.0,260.8 Q423.0,256.8 427.0,256.8 L443.0,256.8 Q447.0,256.8 447.0,260.8 L447.0,296.0 Z" fill="#2a78d6"/>
-<text x="435.0" y="250.8" font-size="11" text-anchor="middle" fill="#52514e">16%</text>
-<path d="M449.0,296.0 L449.0,287.6 Q449.0,283.6 453.0,283.6 L469.0,283.6 Q473.0,283.6 473.0,287.6 L473.0,296.0 Z" fill="#eb6834"/>
-<text x="461.0" y="277.6" font-size="11" text-anchor="middle" fill="#52514e">5%</text>
-<text x="448.0" y="314.0" font-size="11" text-anchor="middle" fill="#52514e">oeste</text>
-<path d="M535.0,296.0 L535.0,250.0 Q535.0,246.0 539.0,246.0 L555.0,246.0 Q559.0,246.0 559.0,250.0 L559.0,296.0 Z" fill="#2a78d6"/>
-<text x="547.0" y="240.0" font-size="11" text-anchor="middle" fill="#52514e">20%</text>
-<path d="M561.0,296.0 L561.0,252.1 Q561.0,248.1 565.0,248.1 L581.0,248.1 Q585.0,248.1 585.0,252.1 L585.0,296.0 Z" fill="#eb6834"/>
-<text x="573.0" y="242.1" font-size="11" text-anchor="middle" fill="#52514e">19%</text>
-<text x="560.0" y="314.0" font-size="11" text-anchor="middle" fill="#52514e">sul</text>
+<line x1="56" x2="416" y1="236.0" y2="236.0" stroke="#c3c2b7" stroke-width="1"/><text x="48" y="240.0" font-size="11" text-anchor="end" fill="#898781">0%</text>
+<line x1="56" x2="416" y1="201.0" y2="201.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="205.0" font-size="11" text-anchor="end" fill="#898781">20%</text>
+<line x1="56" x2="416" y1="166.0" y2="166.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="170.0" font-size="11" text-anchor="end" fill="#898781">40%</text>
+<line x1="56" x2="416" y1="131.0" y2="131.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="135.0" font-size="11" text-anchor="end" fill="#898781">60%</text>
+<line x1="56" x2="416" y1="96.0" y2="96.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="100.0" font-size="11" text-anchor="end" fill="#898781">80%</text>
+<path d="M67.0,236.0 L67.0,185.2 Q67.0,181.2 71.0,181.2 L87.0,181.2 Q91.0,181.2 91.0,185.2 L91.0,236.0 Z" fill="#2a78d6"/>
+<text x="79.0" y="175.2" font-size="11" text-anchor="middle" fill="#52514e">31%</text>
+<path d="M93.0,236.0 L93.0,142.5 Q93.0,138.5 97.0,138.5 L113.0,138.5 Q117.0,138.5 117.0,142.5 L117.0,236.0 Z" fill="#eb6834"/>
+<text x="105.0" y="132.5" font-size="11" text-anchor="middle" fill="#52514e">56%</text>
+<text x="92.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">centro</text>
+<path d="M139.0,236.0 L139.0,213.8 Q139.0,209.8 143.0,209.8 L159.0,209.8 Q163.0,209.8 163.0,213.8 L163.0,236.0 Z" fill="#2a78d6"/>
+<text x="151.0" y="203.8" font-size="11" text-anchor="middle" fill="#52514e">15%</text>
+<path d="M165.0,236.0 L165.0,229.5 Q165.0,225.5 169.0,225.5 L185.0,225.5 Q189.0,225.5 189.0,229.5 L189.0,236.0 Z" fill="#eb6834"/>
+<text x="177.0" y="219.5" font-size="11" text-anchor="middle" fill="#52514e">6%</text>
+<text x="164.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">leste</text>
+<path d="M211.0,236.0 L211.0,208.5 Q211.0,204.5 215.0,204.5 L231.0,204.5 Q235.0,204.5 235.0,208.5 L235.0,236.0 Z" fill="#2a78d6"/>
+<text x="223.0" y="198.5" font-size="11" text-anchor="middle" fill="#52514e">18%</text>
+<path d="M237.0,236.0 L237.0,215.3 Q237.0,211.3 241.0,211.3 L257.0,211.3 Q261.0,211.3 261.0,215.3 L261.0,236.0 Z" fill="#eb6834"/>
+<text x="249.0" y="205.3" font-size="11" text-anchor="middle" fill="#52514e">14%</text>
+<text x="236.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">norte</text>
+<path d="M283.0,236.0 L283.0,212.6 Q283.0,208.6 287.0,208.6 L303.0,208.6 Q307.0,208.6 307.0,212.6 L307.0,236.0 Z" fill="#2a78d6"/>
+<text x="295.0" y="202.6" font-size="11" text-anchor="middle" fill="#52514e">16%</text>
+<path d="M309.0,236.0 L309.0,231.3 Q309.0,227.3 313.0,227.3 L329.0,227.3 Q333.0,227.3 333.0,231.3 L333.0,236.0 Z" fill="#eb6834"/>
+<text x="321.0" y="221.3" font-size="11" text-anchor="middle" fill="#52514e">5%</text>
+<text x="308.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">oeste</text>
+<path d="M355.0,236.0 L355.0,205.0 Q355.0,201.0 359.0,201.0 L375.0,201.0 Q379.0,201.0 379.0,205.0 L379.0,236.0 Z" fill="#2a78d6"/>
+<text x="367.0" y="195.0" font-size="11" text-anchor="middle" fill="#52514e">20%</text>
+<path d="M381.0,236.0 L381.0,206.4 Q381.0,202.4 385.0,202.4 L401.0,202.4 Q405.0,202.4 405.0,206.4 L405.0,236.0 Z" fill="#eb6834"/>
+<text x="393.0" y="196.4" font-size="11" text-anchor="middle" fill="#52514e">19%</text>
+<text x="380.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">sul</text>
 </svg>
