@@ -2,6 +2,29 @@
 
 Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra também o uso de IA no planejamento do projeto (Gestão de Projetos com IA). Mais recente no topo.
 
+> **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
+
+## 31/10/2026 (sábado), versão 2 do documento da Entrega 2
+
+**Pedido do Victor:** conferir o que o feedback do professor pediu e se o documento é coerente com o pedido da Entrega 2; depois, melhorar muito o documento, preparar a nova versão para a entrega de hoje e deixar descrito que a sugestão dos dados foi dele e que o trabalho foi feito em conjunto.
+
+**O que o batimento achou**
+
+- **Metas:** das seis metas da Entrega 1, duas (antecedência e aceitação pelo coordenador) tinham sumido da tabela; a linha de base da jornada estava "n/d" apesar de medida (1,3%); o recall estava "Reformulada" sem dizer para quê.
+- **Dica 1 do professor:** o documento não citava nenhuma das quatro dores da Entrega 1 (a rastreabilidade dizia que sim).
+- **Ética:** só duas das quatro perguntas de Direito e Ética estavam respondidas de forma explícita, e faltava dizer que diagnóstico e prontuário ficam fora.
+- **Normas:** faltavam, no PDF, a vigência de cada uma e a lista de pendências para o jurídico.
+- **Concentração:** o documento só comparava o modelo com o baseline heurístico (61,2%); o processo manual simulado tem 31,1%. O modelo concentra mais.
+- **Afirmações sem lastro:** "LightGBM e scikit-learn não mostraram ganho" (nunca foram testados); "71,2% com e sem a carga recente" (o código diz 71,2% sem e 71,3% com); a legenda da figura do fluxo dizia que só as etapas 2 a 6 rodam (rodam as 8).
+
+**O que foi feito**
+
+- `app/flow.py` e `make flow`: o fluxo recomendado contra o processo manual simulado (tempo, ofertas, antecedência e concentração), com as mesmas premissas de tempo do gerador, testes (176 no total) e uma etapa na CI. Resultado em simulação: tempo médio de 110 para 47 min (57% a menos), com 72% do ganho vindo do filtro de regras; antecedência +4,1 pontos (a meta de +20 é inalcançável sem prever vagas); concentração **piora** (31,1% para 50,7%, e até 82% se a cascata seguir a ordem).
+- Documento reescrito, com 7 páginas: resumo e cartões de resultado, quatro dores, mapa do feedback, variáveis, "da análise à decisão", "por que IA e onde não" com o que se mediu, normas com vigência, quatro perguntas de ética, metas com linha de base e autoria em conjunto. O conversor ganhou cartões, caixas de destaque, figuras lado a lado e rodapé com páginas.
+- Corrigidas as afirmações sem lastro, em `docs/03`, `docs/solucao-ia.md` e na ficha do componente. Novas linhas de rastreabilidade (`PI-`) para o que o professor valoriza nas aulas de 06/10 e 20/10.
+
+**Uso de IA:** o trabalho foi feito em conjunto. O Victor pediu o batimento e definiu o rumo (melhorar o documento e deixar clara a autoria); a sugestão dos dados partiu dele. O Claude Code mediu, testou, redigiu e corrigiu. Os números novos saem de `docs/resultados/metricas-fluxo.json`.
+
 ## 30/10/2026 (sexta), merge dos PRs e tag `etapa-2`
 
 **Pedido do Victor:** "Merge e tag": mergear os PRs #1, #2 e #3, nessa ordem, com commit de merge (não squash), conferindo a CI de cada um, e criar a tag `etapa-2` na `main`.

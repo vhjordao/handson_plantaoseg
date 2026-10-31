@@ -13,7 +13,8 @@
 | G-P (forma da PoC) | Decidido em 30/10 ([ADR 0005](adr/0005-gp-poc-minima-e-especificacao.md)): PoC mínima executável **e** o material de especificação |
 | A1 a A5 (dados, análise, IA, segurança) | **Entregues** (ver [rastreabilidade](rastreabilidade-professor.md)), feitas pelo Claude Code com decisões do Victor; a divisão por colegas não chegou a ser usada porque os convites ainda não tinham sido aceitos |
 | `docs/03` e PDF | Prontos em [docs/entrega-2](entrega-2/LEIAME.md) |
-| G3 e G4 | Merge dos PRs #1 a #3 (commit de merge `9bfb67a`) e tag `etapa-2` feitos em 30/10/2026. **Pendente:** envio no Moodle pelo Victor |
+| Versão 2 do documento (31/10) | Batimento com o feedback e com os slides: metas com linha de base (fluxo recomendado contra o processo manual), as quatro dores da Entrega 1, normas com vigência e pendências jurídicas, as quatro perguntas de ética, autoria em conjunto; 7 páginas |
+| G3 e G4 | Merge dos PRs #1 a #3 (commit de merge `9bfb67a`) e tag `etapa-2` feitos em 30/10/2026; a versão 2 do documento recebe a tag `etapa-2-rev1`. **Pendente:** envio no Moodle pelo Victor |
 | Fora do escopo desta entrega | Interface, API, n8n e banco (ADR 0004); teste do Gemini com chave; validação jurídica |
 
 ## O que mudou em relação à versão 1

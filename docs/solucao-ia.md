@@ -25,7 +25,7 @@ A IA entra onde há **texto livre** e **incerteza**; onde a resposta tem de ser 
 | --- | --- | --- | --- |
 | Extração do texto | Sim (NLP) | Os pedidos variam: abreviações, erros, datas relativas, informação faltando | Formulário rígido: reduz a adoção. Só regras: acerta tudo em texto gerado por modelo, mas é otimista (circularidade) e frágil em texto real |
 | Filtro de elegibilidade e jornada | **Não** | Regra exata, testável e auditável; erro aqui é risco assistencial | LLM decidindo regras: não determinístico e não auditável |
-| Ranking | Sim (ML simples) | Combina sinais (distância, preferência, histórico) que uma pessoa pondera "no olho" | Só heurística: é o baseline; o modelo ganha 3,5 pontos percentuais. LightGBM: sem ganho demonstrado e perde a leitura por peso |
+| Ranking | Sim (ML simples) | Combina sinais (distância, preferência, histórico) que uma pessoa pondera "no olho" | Só heurística: é o baseline; o modelo ganha 3,5 pontos percentuais. LightGBM: não foi testado e perderia a leitura por peso (comparar na Etapa 3) |
 | Explicação | Quase não | Os fatores já são conhecidos; o LLM só pode reescrever | LLM gerando o motivo livremente: pode inventar motivo |
 | Aprovação | **Não** | Res. CFM 2.454, Art. 15: a solução não é soberana e a supervisão humana é obrigatória | Aprovação automática: viola o princípio do projeto |
 | Previsão de vagas descobertas | Evolução futura | Não é necessária para o núcleo | Fica para a Etapa 3 |
@@ -38,7 +38,7 @@ A IA entra onde há **texto livre** e **incerteza**; onde a resposta tem de ser 
 
 - pagamento e valor do plantão (Res. CFM 2.460; teste na CI);
 - atributos protegidos: gênero, faixa etária e zona de residência (usados só para auditar viés);
-- **carga recente** (`shifts_last_30d`) e **exposição** (`offers_received_30d`): em simulação não melhoram o top-5 (71,2% com e sem elas), a carga ganhava peso positivo por confundimento (quem é confiável aceita mais plantões) e a exposição pode realimentar viés. Viram variáveis de contexto: a carga alta vira **alerta de jornada**.
+- **carga recente** (`shifts_last_30d`) e **exposição** (`offers_received_30d`): em simulação não melhoram o top-5 (71,2% sem elas contra 71,3% com elas), a carga ganhava peso positivo por confundimento (quem é confiável aceita mais plantões) e a exposição pode realimentar viés. Viram variáveis de contexto: a carga alta vira **alerta de jornada**.
 
 **Baseline:** 70% proximidade (relativa ao raio do médico) e 30% cobertura da vaga. **Modelo:** regressão logística com padronização e regularização L2, treinada no passado e testada no período seguinte (teste temporal a partir de 01/08/2026).
 
@@ -102,14 +102,15 @@ A diferença modelo menos baseline é de 3,5 pontos percentuais (erro-padrão 0,
 | Ranking influenciado por pagamento | Teste na CI | n/d | 0 |
 | Extração por regras | Acerto dos 5 campos contra o gabarito | n/d | 100% em pedidos formais, abreviados e com erros; nos 45 ambíguos nenhum fica completo, com 53% dos campos deixados em branco para o coordenador e 4% errados |
 | Injeção de prompt | 10 tipos, 60 pedidos | n/d | 60 de 60 sinalizados |
-| Tempo de preenchimento (meta de 50% de redução) | Não mensurável em dados sintéticos | Entrevistas (Etapa 3) | Hipótese a validar |
+| Tempo de preenchimento (meta de 50% de redução) | Média de minutos até preencher, no processo manual simulado e no fluxo recomendado ([método](resultados/metricas-fluxo.md)) | Manual simulado: 110 min | 47 min (57% a menos), em simulação; a linha de base real vem das entrevistas (Etapa 3) |
+| Concentração de ofertas | Parcela recebida pelos 10% de médicos mais ofertados ou recomendados | Manual simulado: 31,1% | 50,7% dos lugares do top-5 (piora); mitigar na Etapa 3 |
 
 ## 7. Ferramentas e alternativas
 
 | Escolha | Alternativa | Por que esta |
 | --- | --- | --- |
 | Gemini (decisão do Victor) | Claude | ADR 0003 |
-| Regressão logística em Python puro | scikit-learn, LightGBM | Sem dependência, explicável por peso; sem ganho demonstrado nos outros |
+| Regressão logística em Python puro | scikit-learn, LightGBM | Sem dependência e explicável por peso; os outros não foram testados (comparação na Etapa 3) |
 | Linha de comando | API e tela | Protótipo adiado (ADR 0004) |
 | Trilha em arquivo com hash | Tabela `audit_log` no Postgres | Equivalente para a PoC; a tabela entra com o banco |
 | Esquema fechado escrito à mão | Pydantic | Sem dependência na PoC; Pydantic entra com a API |
