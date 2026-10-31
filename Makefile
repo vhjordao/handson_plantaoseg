@@ -7,7 +7,7 @@ COMPOSE := docker compose --env-file .env -f infra/docker-compose.yml
 API := services/matching-api
 CLI := cd $(API) && $(PYTHON) -m app.cli
 
-.PHONY: help doctor env up down logs seed evaluate demo walkthrough analyze entrega poc test lint
+.PHONY: help doctor env up down logs seed evaluate flow demo walkthrough analyze entrega poc test lint
 
 help: ## Lista os comandos
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | sed 's/:.*## /\t/'
@@ -36,6 +36,9 @@ seed: ## Gera os dados sintéticos, o relatório de qualidade e a amostra pequen
 evaluate: ## Treina o modelo e compara com o baseline (simulação)
 	$(CLI) evaluate --report-dir ../../docs/resultados
 
+flow: ## Fluxo recomendado contra o processo manual: tempo, ofertas e concentração (simulação)
+	$(CLI) flow --report-dir ../../docs/resultados
+
 demo: ## Vaga em texto livre -> top 5 -> aprovação -> trilha de auditoria
 	$(CLI) demo --yes --fresh
 
@@ -49,7 +52,7 @@ entrega: ## Gera o HTML e o PDF do documento da Etapa 2 (precisa de Edge ou Chro
 	$(CLI) build-doc
 	sh scripts/gerar-pdf.sh
 
-poc: seed evaluate demo walkthrough analyze ## Roda a PoC mínima inteira, na ordem
+poc: seed evaluate flow demo walkthrough analyze ## Roda a PoC mínima inteira, na ordem
 
 test: ## Roda o pytest da matching-api
 	cd $(API) && $(PYTHON) -m pytest -q

@@ -90,6 +90,8 @@ jobs:
         run: python -m app.cli seed --report /tmp/evidencias/relatorio-de-qualidade.md
       - name: Treina e avalia o ranking (simulação)
         run: python -m app.cli evaluate --report-dir /tmp/evidencias/resultados
+      - name: Fluxo recomendado contra o processo manual (simulação)
+        run: python -m app.cli flow --report-dir /tmp/evidencias/resultados
       - name: Demonstração com aprovação e trilha de auditoria
         run: |
           mkdir -p /tmp/evidencias

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 300" role="img" aria-labelledby="t d" font-family='system-ui, -apple-system, "Segoe UI", sans-serif'>
+<title id="t">Tempo médio até preencher (min)</title><desc id="d">Colunas com o tempo médio até preencher a vaga: processo manual, regras com sorteio, regras com baseline, regras com modelo e oráculo.</desc>
+<rect width="440" height="300" fill="#fcfcfb"/>
+<text x="56" y="28" font-size="16" font-weight="600" fill="#0b0b0b">Tempo médio até preencher (min)</text>
+<text x="56" y="48" font-size="12" fill="#52514e">392 vagas de teste, em simulação</text>
+<line x1="56" x2="416" y1="236.0" y2="236.0" stroke="#c3c2b7" stroke-width="1"/><text x="48" y="240.0" font-size="11" text-anchor="end" fill="#898781">0</text>
+<line x1="56" x2="416" y1="166.0" y2="166.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="170.0" font-size="11" text-anchor="end" fill="#898781">100</text>
+<line x1="56" x2="416" y1="96.0" y2="96.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="100.0" font-size="11" text-anchor="end" fill="#898781">200</text>
+<path d="M80.0,236.0 L80.0,163.2 Q80.0,159.2 84.0,159.2 L100.0,159.2 Q104.0,159.2 104.0,163.2 L104.0,236.0 Z" fill="#2a78d6"/>
+<text x="92.0" y="153.2" font-size="11" text-anchor="middle" fill="#52514e">110</text>
+<text x="92.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">Processo</text>
+<text x="92.0" y="268.0" font-size="11" text-anchor="middle" fill="#52514e">manual</text>
+<path d="M152.0,236.0 L152.0,194.4 Q152.0,190.4 156.0,190.4 L172.0,190.4 Q176.0,190.4 176.0,194.4 L176.0,236.0 Z" fill="#2a78d6"/>
+<text x="164.0" y="184.4" font-size="11" text-anchor="middle" fill="#52514e">65</text>
+<text x="164.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">Regras +</text>
+<text x="164.0" y="268.0" font-size="11" text-anchor="middle" fill="#52514e">sorteio</text>
+<path d="M224.0,236.0 L224.0,204.4 Q224.0,200.4 228.0,200.4 L244.0,200.4 Q248.0,200.4 248.0,204.4 L248.0,236.0 Z" fill="#2a78d6"/>
+<text x="236.0" y="194.4" font-size="11" text-anchor="middle" fill="#52514e">51</text>
+<text x="236.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">Regras +</text>
+<text x="236.0" y="268.0" font-size="11" text-anchor="middle" fill="#52514e">baseline</text>
+<path d="M296.0,236.0 L296.0,206.8 Q296.0,202.8 300.0,202.8 L316.0,202.8 Q320.0,202.8 320.0,206.8 L320.0,236.0 Z" fill="#2a78d6"/>
+<text x="308.0" y="196.8" font-size="11" text-anchor="middle" fill="#52514e">47</text>
+<text x="308.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">Regras +</text>
+<text x="308.0" y="268.0" font-size="11" text-anchor="middle" fill="#52514e">modelo</text>
+<path d="M368.0,236.0 L368.0,209.1 Q368.0,205.1 372.0,205.1 L388.0,205.1 Q392.0,205.1 392.0,209.1 L392.0,236.0 Z" fill="#2a78d6"/>
+<text x="380.0" y="199.1" font-size="11" text-anchor="middle" fill="#52514e">44</text>
+<text x="380.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">Oráculo</text>
+<text x="380.0" y="268.0" font-size="11" text-anchor="middle" fill="#52514e">(teto)</text>
+</svg>

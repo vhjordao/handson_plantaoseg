@@ -4,6 +4,7 @@ Uso, a partir de `services/matching-api`:
 
     python -m app.cli seed        # gera os dados sintéticos e o relatório de qualidade
     python -m app.cli evaluate    # treina o modelo e compara com o baseline (simulação)
+    python -m app.cli flow        # fluxo recomendado contra o processo manual (simulação)
     python -m app.cli demo --yes  # vaga em texto livre -> top 5 -> aprovação -> auditoria
     python -m app.cli analyze     # análise exploratória (figuras e tabelas)
 
@@ -240,6 +241,38 @@ def cmd_analyze(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_flow(args: argparse.Namespace) -> int:
+    from app.flow import concentration_chart, evaluate_flow, flow_chart, render_flow
+
+    data_dir = Path(args.data)
+    dataset, params = _load(data_dir)
+    model = _load_model(data_dir, dataset, params)
+    metrics = evaluate_flow(dataset, params, model)
+    if args.report_dir:
+        report_dir = Path(args.report_dir)
+        report_dir.mkdir(parents=True, exist_ok=True)
+        (report_dir / "metricas-fluxo.md").write_text(render_flow(metrics), encoding="utf-8")
+        (report_dir / "metricas-fluxo.json").write_text(
+            json.dumps(metrics, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+        (report_dir / "fig-fluxo-tempo.svg").write_text(flow_chart(metrics), encoding="utf-8")
+        (report_dir / "fig-fluxo-concentracao.svg").write_text(
+            concentration_chart(metrics), encoding="utf-8"
+        )
+    manual, flow, cut = metrics["manual"]["test"], metrics["flow"]["model"], metrics["reduction"]
+    print("Fluxo recomendado contra o processo manual (SIMULAÇÃO, dados sintéticos)")
+    print(f"  {metrics['n_shifts']} vagas de teste")
+    print(
+        f"  Tempo médio até preencher: manual {manual['time_mean']:.0f} min | "
+        f"modelo {flow['time_mean']:.0f} min ({_pt(cut['time_mean'] * 100, 0)}% a menos)"
+    )
+    print(
+        f"  Ofertas por vaga: manual {_pt(manual['offers_per_shift'])} | "
+        f"modelo {_pt(flow['offers_per_shift'])}"
+    )
+    return 0
+
+
 def cmd_walkthrough(args: argparse.Namespace) -> int:
     from app.walkthrough import render_walkthrough
 
@@ -283,6 +316,11 @@ def build_parser() -> argparse.ArgumentParser:
     ev.add_argument("--data", default=str(DEFAULT_DATA))
     ev.add_argument("--report-dir", default=None)
     ev.set_defaults(func=cmd_evaluate)
+
+    flow = sub.add_parser("flow", help="fluxo recomendado contra o processo manual (simulação)")
+    flow.add_argument("--data", default=str(DEFAULT_DATA))
+    flow.add_argument("--report-dir", default=None)
+    flow.set_defaults(func=cmd_flow)
 
     demo = sub.add_parser("demo", help="fluxo completo para uma vaga em texto livre")
     demo.add_argument("--data", default=str(DEFAULT_DATA))
