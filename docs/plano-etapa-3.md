@@ -1,0 +1,121 @@
+# Plano: protótipo e Etapa 3 (02/11 a 17/11)
+
+- **Status:** aprovado pelo Victor em 02/11/2026. **Nada foi construído ainda:** a construção só começa quando o Victor passar as contas novas. Até lá, continua valendo o [ADR 0004](adr/0004-prototipo-adiado.md).
+- **Prazos:** aula e feedback da Etapa 2 em 03/11; **Entrega 3 em 07/11 (até 2,0)**; **apresentação final em 17/11 (até 4,0)**, com a plateia usando o sistema pelo celular.
+
+## Contexto
+
+A Etapa 2 foi entregue com uma PoC por linha de comando. Não há interface, API HTTP, banco nem cascata: `apps/web`, `supabase/migrations` e `n8n/workflows` só têm `.gitkeep`. Este plano transforma o motor em um produto navegável. A validação da Etapa 3 corre em paralelo, porque o teste de usabilidade precisa da tela funcionando.
+
+**Contas (decisão do Victor):** Supabase, Vercel e Hostinger novas, só deste projeto. Contas de outros projetos não são usadas nem tocadas.
+
+**A Hostinger é necessária?** Sim. O n8n e a API precisam de um servidor ligado o tempo todo, e a Vercel não atende bem nenhum dos dois. Ela só precisa existir a partir do fim do M1; até lá, o desenvolvimento é local.
+
+**Divisão de trabalho (proposta; o Victor pode ajustar):** Victor e Claude Code constroem; os colegas ficam com entrevistas, teste de usabilidade e pitch.
+
+## Arquitetura
+
+| Camada | Tecnologia | Onde | O que faz |
+| --- | --- | --- | --- |
+| Web | Next.js 16, Tailwind, shadcn/ui | Vercel | Telas do coordenador e do médico, trilha e telão |
+| Dados | Postgres, Auth, RLS, Realtime | Supabase (São Paulo) | Fonte da verdade; login anônimo da plateia |
+| Motor | FastAPI sobre o motor atual | VPS Hostinger (Compose e Traefik) | Extrai, filtra, ranqueia, explica, aprova |
+| Orquestração | n8n | Mesma VPS | Só espera e chama a API; não decide |
+| LLM | Gemini, com reserva em regras | Google | Só extrai e reescreve; sem ferramentas nem segredos |
+
+A web lê direto do Supabase sob RLS. Toda escrita com regra passa pela API. A chave de serviço fica só no servidor.
+
+## Marcos
+
+Uma branch e um PR por item, CI verde, e nenhum merge sem o ok do Victor. As datas são metas e dependem de as contas chegarem até 03/11.
+
+### M0, assim que as contas chegarem: fundação
+
+- **Clone em `C:\dev\handson_plantaoseg`.** O OneDrive atrapalha `node_modules` e `.next`, e o [guia da equipe](CONTRIBUINDO.md) já pede isso. A pasta atual fica intacta; `docs/aulas/` é copiada à mão, pois não está no Git.
+- **`f3/adr-prototipo`:** ADR 0007 (fim do adiamento, infraestrutura e regras em Python em vez de funções SQL). Atualiza `CLAUDE.md`, `docs/02`, `docs/CONTRIBUINDO.md` e `.env.example`.
+- **`f3/banco-supabase`:**
+  - Migrações a partir do [dicionário de dados](dados/dicionario-de-dados.md) v0.2, mais `profiles`.
+  - `audit_log` só de inserção, com hash encadeado em gatilho.
+  - RLS por organização e papel; `shift_compensation` sem nenhum acesso público.
+  - `seed-db`: carrega os dados sintéticos deslocados em semanas inteiras, para o histórico terminar perto da data da demo. Preserva os dias da semana e não muda nenhuma métrica publicada. `doctors_latent` não vai para o banco.
+  - Job novo de CI com Supabase CLI e pgTAP: o GitHub tem Docker, a máquina local não precisa.
+
+### M1, até 05/11: fluxo de ponta a ponta
+
+- **`f3/api-matching`:** FastAPI em `services/matching-api/app/api/`, com Pydantic, validação do JWT do Supabase e rotas internas protegidas por segredo. Uma camada de repositório monta o `Dataset` a partir do Postgres. A CLI e o núcleo continuam funcionando só com biblioteca padrão.
+- **`f3/web-coordenador`:** telas 1 a 3 dos [wireframes](wireframes/README.md) (vaga em texto livre e conferência; top 5 com motivo e alertas; excluídos com a regra), com os estados de erro já listados lá.
+- **`f3/web-medico`:** tela 4 (oferta com motivo, aceitar ou recusar) e a trilha de auditoria.
+- **`f3/cascata-n8n`:** workflow em JSON que só espera e chama `POST /internal/cascade/{id}/advance`. Roda com `npx n8n` até a VPS existir.
+
+### M2, até 07/11: no ar e validado
+
+- **`f3/deploy`:** web na Vercel; API e n8n na VPS, com HTTPS e versão do n8n fixada.
+- Teste de usabilidade com 3 a 5 pessoas no link real, e a Entrega 3 (abaixo).
+
+### M3, de 08 a 13/11: demo com a plateia
+
+QR code com login anônimo e persona sorteada, telão em tempo real, contestação completa, limite de requisições, aviso "não digite dados reais", plano B (respostas pré-carregadas e vídeo) e teste de carga. **Código congelado em 13/11.**
+
+### M4, de 14 a 17/11: ensaio e pitch
+
+Ensaio completo com o roteiro da aula de 10/11. Se o prazo apertar, a ordem de corte é: telão, contestação, persona sorteada. Segurança e regras nunca entram no corte.
+
+**Fora do plano, salvo se sobrar tempo:** Telegram, check-in e pagamento, kit da Comissão de IA e Langfuse.
+
+## Etapa 3 em paralelo
+
+**Checkpoint em 03/11, depois da aula:** o Victor traz os slides e o feedback da Etapa 2; a skill `incorporar-feedback-professor` registra tudo e este plano é ajustado. A estrutura abaixo é provisória até lá.
+
+| Frente | O que sai | Quem | Meta |
+| --- | --- | --- | --- |
+| Entrevistas | Roteiro, consentimento e registro anonimizado; 3 a 5 coordenadores e 3 a 5 plantonistas (promessa da Entrega 1) | Claude Code prepara; colegas entrevistam | Roteiro em 03/11; entrevistas até 06/11 |
+| Concentração | Experimento com rodízio e limite de ofertas em `app/flow.py`, medindo o custo em tempo e na chance de sucesso; a política escolhida vai para a API | Claude Code | 05/11 |
+| Gemini real | Executar o [teste manual](teste-manual-gemini.md) com chave | Claude Code, com a chave do Victor | 05/11 |
+| Modelo | Comparar a regressão logística com LightGBM, como o documento da Etapa 2 prometeu | Claude Code | 06/11 |
+| Previsão de vagas | Baseline simples para a meta de recall 0,7, com resultado honesto mesmo se não atingir | Claude Code, se sobrar tempo | 06/11 |
+| Documento | `docs/04-entrega-3-validacao.md` e PDF: validação, resultados, riscos e plano de implementação | Claude Code redige; Victor revisa | 07/11 |
+
+## O que depende do Victor
+
+Quando as contas existirem, o Victor avisa; o clone novo e um `.env` vazio são criados, e ele cola as chaves lá. **Chaves nunca vão para o chat nem para o Git.**
+
+- **Até 03/11:**
+  - Conta Supabase e projeto `plantaoseguro` em **South America (São Paulo)**, porque a região não muda depois. As chaves incluem a conexão do pooler de sessão (IPv4).
+  - Chave do Gemini no Google AI Studio.
+  - Slides e feedback da aula; convite aos colegas (hoje só o Victor tem acesso ao repositório).
+- **Até 04/11:** conta Vercel. Uma conta do GitHub só se liga a uma conta Vercel; se o GitHub do projeto já estiver em outra, o deploy sai pelo GitHub Actions com um token.
+- **Até 05/11:** Hostinger KVM 2 no **datacenter do Brasil** (fixo depois da compra), com acesso SSH por chave.
+
+**Custo estimado em novembro:** Supabase e Vercel gratuitos (o Supabase Free aceita 200 conexões em tempo real e pausa após 1 semana parado), VPS de US$ 9 a 15 por mês e Gemini abaixo de US$ 1 por 200 chamadas. São preços lidos em outubro: reconferir na compra.
+
+## O que se reaproveita
+
+- `app/pipeline.py` (`recommend` e `approve`), `app/llm/extraction.py` (`extract`), `app/explain.py`, `app/rules.py` e `app/llm/guardrails.py`.
+- `app/ranking/compute.py` (`FeatureStore`), `app/ranking/model.py` (`LogisticModel.from_dict`) e `app/models.py` (`Dataset`).
+- `app/audit.py`: a trilha em banco mantém a mesma interface de `append`, para o pipeline não mudar.
+- `app/flow.py`, `app/docbuild.py` e `scripts/gerar-pdf.sh` para a Entrega 3.
+- `docs/wireframes/`, `infra/docker-compose.yml` e `docs/teste-manual-gemini.md`.
+
+## Regras que continuam valendo
+
+Só dados sintéticos; sem o clique do coordenador não sai oferta; nome, CRM e telefone nunca vão ao LLM; pagamento fora do ranking; n8n não decide; segredos fora do Git; números sempre rotulados como simulação. Cada componente novo ganha ficha, e o diário e a rastreabilidade acompanham cada PR.
+
+## Verificação
+
+- **Motor e API:** `pytest` e `ruff`; os 176 testes atuais continuam passando, com testes novos de rotas, injeção pela API e "sem aprovação não há oferta".
+- **Banco:** pgTAP na CI: hospital A não lê hospital B; médico só vê as próprias ofertas; `shift_compensation` inacessível; `audit_log` recusa UPDATE e DELETE; a cadeia de hash acusa adulteração.
+- **Neutralidade:** o teste atual é estendido para provar que o caminho da API não lê valor de plantão.
+- **Web:** `tsc`, lint e `next build` na CI; conferência visual no navegador; Playwright percorrendo a jornada inteira.
+- **M1 pronto quando:** o coordenador digita o pedido, confere os campos, vê o top 5 e os excluídos e aprova; o médico recebe a oferta com o motivo; se recusar ou deixar expirar, o próximo recebe; alguém aceita, a vaga fecha e a trilha mostra tudo com a cadeia íntegra.
+- **Antes de 13/11:** ensaio completo em celulares reais e teste de carga.
+
+## Riscos
+
+| Risco | Resposta |
+| --- | --- |
+| Prazo curto para web, API, banco, n8n e documento | Ordem de corte definida; a tela do coordenador vem antes de tudo |
+| Contas chegarem depois de 04/11 | O M1 encurta e o teste de usabilidade da Etapa 3 passa a usar os wireframes |
+| Entrevistas não acontecerem até 07/11 | Teste de usabilidade com colegas e conhecidos, com a limitação dita no documento |
+| Serviço externo cair ao vivo | Fallback em regras, respostas pré-carregadas e vídeo |
+| Plateia digitar dado real | Aviso na tela e camada paga do Gemini na demo |
+| Disco apertado na máquina local | Sem Docker local; imagens só na VPS e na CI |

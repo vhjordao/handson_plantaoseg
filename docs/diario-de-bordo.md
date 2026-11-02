@@ -4,6 +4,25 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 02/11/2026 (segunda): plano do protótipo e da Etapa 3
+
+**Pedido do Victor:** iniciar a continuação do projeto. Depois de ver a proposta, aprovou o plano e pediu para só publicá-lo, sem construir nada até passar as contas novas.
+
+**Decisões do Victor**
+
+- Contas novas de Supabase, Vercel e Hostinger, só deste projeto; contas de outros projetos não são usadas nem tocadas.
+- Nada é construído antes de as contas chegarem: até lá, continua valendo o [ADR 0004](adr/0004-prototipo-adiado.md).
+
+**O que foi feito:** o [plano](plano-etapa-3.md), com arquitetura, marcos M0 a M4, frentes da Etapa 3, o que depende do Victor, custos, verificação e riscos. Só documentação: nenhuma migração, API, tela, clone novo ou instalação.
+
+**O que o levantamento mostrou**
+
+- `apps/web`, `supabase/migrations` e `n8n/workflows` só têm `.gitkeep`; o motor da PoC é o que se reaproveita.
+- A máquina local segue sem Docker, WSL e Supabase CLI, e o disco está apertado. Por isso o plano não usa Docker local: o banco fica na nuvem e a CI do GitHub roda o Supabase CLI.
+- Só o Victor tem acesso ao repositório hoje; os convites aos colegas ainda não viraram acesso. Na Etapa 3, as entrevistas dependem deles.
+
+**Uso de IA:** o trabalho segue em conjunto. O Claude Code (a partir de hoje, modelo Opus 5.5) levantou o estado do projeto e redigiu o plano; as decisões foram do Victor.
+
 ## 31/10/2026 (sábado), versão 2 do documento da Entrega 2
 
 **Pedido do Victor:** conferir o que o feedback do professor pediu e se o documento é coerente com o pedido da Entrega 2; depois, melhorar muito o documento, preparar a nova versão para a entrega de hoje e deixar descrito que a sugestão dos dados foi dele e que o trabalho foi feito em conjunto.

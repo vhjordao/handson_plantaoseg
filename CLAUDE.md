@@ -69,6 +69,7 @@ No Windows, `make PYTHON="py -3.12" poc` se `python` não estiver no PATH (ver `
 
 - `docs/01-entrega-1-descoberta.md`, `docs/02-arquitetura-e-ferramentas.md`: fonte da verdade (atualize no mesmo commit se uma decisão mudar).
 - `docs/03-entrega-2-prova-de-conceito.md`: documento da Etapa 2 (PDF em `docs/entrega-2/`).
+- `docs/plano-etapa-3.md`: plano do protótipo e da Etapa 3 (aprovado; a construção aguarda as contas novas).
 - `docs/feedback/`, `docs/rastreabilidade-professor.md`: feedbacks na íntegra e a tabela de exigências.
 - `docs/adr/`, `docs/diario-de-bordo.md`, `docs/ferramentas-agentes.md`, `docs/conformidade/`.
 - `docs/dados/dicionario-de-dados.md`: contrato de dados (papéis das colunas, o que pode ir ao ranking e ao LLM). Mudança nele vira nova versão no mesmo PR.
@@ -79,7 +80,7 @@ No Windows, `make PYTHON="py -3.12" poc` se `python` não estiver no PATH (ver `
 ## Fluxo de trabalho e regras de PR (esteira)
 
 1. **Uma branch por tarefa, com o prefixo da fase**: `f1/dicionario-dados`, `f2/analise-exploratoria` (a `fase-0-base` é a exceção histórica). Não use `fase-1` e `fase-1/x` juntos: o Git não aceita os dois nomes. Nunca push direto na `main`, nunca reescrever histórico, nunca commitar segredo.
-2. **Commits pequenos**, mensagem em português, terminando com `Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>`.
+2. **Commits pequenos**, mensagem em português, terminando com a linha `Co-Authored-By` do modelo Claude em uso (por exemplo, `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`).
 3. **Testes antes de cada commit**; diga o que rodou e o que passou. Se algo não pôde rodar (falta de ferramenta), diga e aponte a CI.
 4. **PR para `main`** com o modelo de `.github/pull_request_template.md`: o que mudou, como rodar, testes e resultado, checklist de conformidade, linhas da rastreabilidade tocadas e riscos. Termina com `🤖 Generated with [Claude Code](https://claude.com/claude-code)`.
 5. **A CI (`.github/workflows/ci.yml`) precisa estar verde**: segredos e material do professor, lint e pytest, neutralidade econômica e validação do Compose.
@@ -111,6 +112,7 @@ Quando Victor colar um feedback ou disser "novo feedback", use a skill `incorpor
 
 ## Estado atual (atualize ao fechar cada fase)
 
-- Etapa 1 entregue. **Etapa 2, versão 2 do documento (31/10/2026, 7 páginas, tag `etapa-2-rev1`; a versão 1 está na tag `etapa-2`):** PoC mínima executável, dados, análise, solução de IA, fluxo recomendado contra o processo manual (`make flow`), segurança, conformidade e PDF em `docs/entrega-2/`. Falta o envio no Moodle (Victor). O merge continua sendo do Victor. LLM do produto = Gemini (**não exercitado com chave**); protótipo (tela, API, n8n) adiado.
+- Etapas 1 e 2 entregues. **Etapa 2, versão 2 do documento (31/10/2026, 7 páginas, tag `etapa-2-rev1`; a versão 1 está na tag `etapa-2`):** PoC mínima executável, dados, análise, solução de IA, fluxo recomendado contra o processo manual (`make flow`), segurança, conformidade e PDF em `docs/entrega-2/`. O merge continua sendo do Victor. LLM do produto = Gemini (**não exercitado com chave**); protótipo (tela, API, n8n) adiado.
+- **Próximo passo (plano aprovado em 02/11):** protótipo e Etapa 3, conforme `docs/plano-etapa-3.md`. **Não construa nada até o Victor passar as contas novas** (Supabase, Vercel e Hostinger); até lá vale o ADR 0004.
 - Ambiente local de 30/10: Python 3.12, pytest, ruff e make instalados; sem Docker, Node, Supabase CLI e ffmpeg. A CI do GitHub roda tudo, inclusive a PoC.
 - Vídeo da aula de 27/10 não processado (ver rastreabilidade A3-13).
