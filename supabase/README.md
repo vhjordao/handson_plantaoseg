@@ -73,9 +73,15 @@ A CI roda tudo a cada PR. Quando houver dados, a chave de serviço e o `.env` fi
 - **pgTAP:** 100 testes em três arquivos: estrutura e integridade (29), quem enxerga o quê (49) e trilha de auditoria (22).
 - **Contrato em Python:** 9 testes comparam as migrações com as colunas de `models.py`, as variáveis do ranking, as ações da trilha e as regras de exclusão.
 - **Dados:** a amostra e os 12 meses (300 médicos, 2.448 vagas e 7.555 ofertas) couberam em todas as restrições, e `accepted` e `y_success` bateram com o CSV em todas as ofertas. A CI repete a amostra; os 12 meses foram conferidos só na rodada local.
-- **Os testes acusam mesmo?** Abrimos 14 buracos de propósito, como expor o valor do plantão, desligar a RLS e permitir escrita pelo navegador. Treze foram acusados. O outro, dar `UPDATE` na trilha à chave de serviço, não abriu falha real, porque o gatilho continuou barrando, mas revelou um teste que faltava, agora incluído.
+- **Os testes acusam mesmo?** Abrimos 14 buracos de propósito, como expor o valor do plantão, desligar a RLS e permitir escrita pelo navegador. Treze foram acusados de primeira. O outro, dar `UPDATE` na trilha à chave de serviço, não abriu falha real, porque o gatilho continuou barrando, mas revelou um teste que faltava. Com ele, os 14 são acusados.
 
-Essas rodadas locais usaram um Postgres em WebAssembly (PGlite), que imita o Supabase e roda a versão 18. **O resultado que vale é o do job da CI**, com o Postgres 17 real do Supabase.
+Essas rodadas locais usaram um Postgres em WebAssembly (PGlite), que imita o Supabase e roda a versão 18. **O resultado que vale é o do job `banco` da CI**, na imagem `17.11.0.011` do Supabase, a mesma versão do projeto real:
+
+- **Migrações:** as três aplicaram em um banco novo.
+- **pgTAP:** 100 testes em 3 arquivos, todos aprovados.
+- **Amostra:** 40 médicos, 95 vagas e 434 ofertas entraram, e a carga foi desfeita no fim.
+- **Alertas do Supabase:** só informativos. Índices sem uso, porque as tabelas estão vazias, e `shift_compensation` sem política, que é de propósito.
+- **Lint das funções:** sem erros.
 
 ## 8. Dados e segurança
 
@@ -86,7 +92,7 @@ Essas rodadas locais usaram um Postgres em WebAssembly (PGlite), que imita o Sup
 
 ## 9. Limitações e honestidade
 
-- As migrações ainda não foram aplicadas no projeto real: isso vem depois do merge.
+- As migrações ainda não foram aplicadas no projeto real: isso vem depois do merge. Uma simulação (`db push --dry-run`) confirmou que o projeto está ao alcance e que as três estão pendentes, sem alterar nada.
 - As tabelas não têm dados até a carga. Por isso, o desempenho das políticas com volume ainda não foi medido.
 - Apagar os últimos registros da trilha não quebra a cadeia. Falta a cópia externa.
 - A proteção depende de a chave de serviço ficar no servidor: quem a tiver lê tudo.
