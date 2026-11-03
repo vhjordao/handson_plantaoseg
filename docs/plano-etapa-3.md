@@ -1,6 +1,6 @@
 # Plano: protótipo e Etapa 3 (02/11 a 17/11)
 
-- **Status:** aprovado pelo Victor em 02/11/2026. **Nada foi construído ainda:** a construção só começa quando o Victor passar as contas novas. Até lá, continua valendo o [ADR 0004](adr/0004-prototipo-adiado.md).
+- **Status:** aprovado pelo Victor em 02/11/2026 e ajustado em 03/11 com a Aula 4 e o feedback da Etapa 2. **Nada foi construído ainda:** a construção do protótipo só começa quando o Victor passar as contas novas. Até lá, continua valendo o [ADR 0004](adr/0004-prototipo-adiado.md).
 - **Prazos:** aula e feedback da Etapa 2 em 03/11; **Entrega 3 em 07/11 (até 2,0)**; **apresentação final em 17/11 (até 4,0)**, com a plateia usando o sistema pelo celular.
 
 ## Contexto
@@ -64,16 +64,30 @@ Ensaio completo com o roteiro da aula de 10/11. Se o prazo apertar, a ordem de c
 
 ## Etapa 3 em paralelo
 
-**Checkpoint em 03/11, depois da aula:** o Victor traz os slides e o feedback da Etapa 2; a skill `incorporar-feedback-professor` registra tudo e este plano é ajustado. A estrutura abaixo é provisória até lá.
+**Checkpoint de 03/11 feito:** os slides e o feedback da Etapa 2 estão na [rastreabilidade](rastreabilidade-professor.md) (A4-1 a A4-12 e FB2-1 a FB2-4). A entrega é um documento de **8 a 12 páginas**, com métricas numéricas e sem achismos, que amarra problema e solução em seis áreas:
+
+| Área | O que o professor pergunta | O que vamos mostrar |
+| --- | --- | --- |
+| **Critérios de sucesso (o centro)** | Como saberemos, depois de 6 meses, se o projeto deu certo? | Metas numéricas com linha de base e limiar de decisão aos 6 meses |
+| Resultado técnico | O que foi desenvolvido, como funciona, resultados, métricas e limitações | Motor e protótipo, métricas contra o baseline, análise de sensibilidade e curva de aprendizado |
+| Resultado para o negócio | Problema, benefício, KPI impactado e como medir o ROI | Caso de negócio com ROI em faixa, a partir de números das entrevistas |
+| Experiência | Como o usuário utilizará, jornada e protótipo ou interface | Jornadas do coordenador e do médico, protótipo e teste de usabilidade |
+| Segurança e ética | Riscos, privacidade, segurança, vieses, aspectos legais e responsabilidades | Matriz de riscos, mitigação da concentração medida e pendências jurídicas |
+| Implantação | Arquitetura, infraestrutura, integração, roadmap, recursos, custos e próximos passos | Como os dados são coletados, atualizados e integrados; piloto em modo sombra; roadmap e custos |
 
 | Frente | O que sai | Quem | Meta |
 | --- | --- | --- | --- |
-| Entrevistas | Roteiro, consentimento e registro anonimizado; 3 a 5 coordenadores e 3 a 5 plantonistas (promessa da Entrega 1) | Claude Code prepara; colegas entrevistam | Roteiro em 03/11; entrevistas até 06/11 |
+| Evidência do mundo real (FB2-1) | Agregados públicos comparados às premissas do simulador; tabela "premissa contra entrevistas"; análise de sensibilidade; desenho do piloto em modo sombra | Claude Code prepara; colegas coletam | 06/11 |
+| Dicionário concreto (FB2-2) | Tabela com nome, tipo, descrição e valores possíveis, gerada dos dados e com teste de sincronia | Claude Code | 04/11 |
+| Dados em produção (FB2-3) | Como cada dado é coletado, atualizado e integrado, com responsável e regra de qualidade | Claude Code; Victor revisa | 05/11 |
+| Caso de negócio (A4-3) | KPI impactado e ROI em faixa, a partir das entrevistas | Claude Code; Victor revisa | 06/11 |
+| Critérios de sucesso (A4-7) | Metas numéricas e limiar de decisão aos 6 meses | Victor e Claude Code | 06/11 |
+| Entrevistas | Roteiro com os números que calibram o simulador, revisão de recomendações por coordenadores, consentimento e registro anonimizado; 3 a 5 coordenadores e 3 a 5 plantonistas (promessa da Entrega 1) | Claude Code prepara; colegas entrevistam | Roteiro em 04/11; entrevistas até 06/11 |
 | Concentração | Experimento com rodízio e limite de ofertas em `app/flow.py`, medindo o custo em tempo e na chance de sucesso; a política escolhida vai para a API | Claude Code | 05/11 |
 | Gemini real | Executar o [teste manual](teste-manual-gemini.md) com chave | Claude Code, com a chave do Victor | 05/11 |
 | Modelo | Comparar a regressão logística com LightGBM, como o documento da Etapa 2 prometeu | Claude Code | 06/11 |
 | Previsão de vagas | Baseline simples para a meta de recall 0,7, com resultado honesto mesmo se não atingir | Claude Code, se sobrar tempo | 06/11 |
-| Documento | `docs/04-entrega-3-validacao.md` e PDF: validação, resultados, riscos e plano de implementação | Claude Code redige; Victor revisa | 07/11 |
+| Documento | `docs/04-entrega-3-validacao.md` e PDF de 8 a 12 páginas, com as seis áreas | Claude Code redige; Victor revisa | 07/11 |
 
 ## O que depende do Victor
 
@@ -114,7 +128,7 @@ Só dados sintéticos; sem o clique do coordenador não sai oferta; nome, CRM e 
 | Risco | Resposta |
 | --- | --- |
 | Prazo curto para web, API, banco, n8n e documento | Ordem de corte definida; a tela do coordenador vem antes de tudo |
-| Contas chegarem depois de 04/11 | O M1 encurta e o teste de usabilidade da Etapa 3 passa a usar os wireframes |
+| Contas chegarem depois de 04/11 | O M1 encurta; a área Experiência da Etapa 3, que pede protótipo ou interface, e o teste de usabilidade passam a usar os wireframes |
 | Entrevistas não acontecerem até 07/11 | Teste de usabilidade com colegas e conhecidos, com a limitação dita no documento |
 | Serviço externo cair ao vivo | Fallback em regras, respostas pré-carregadas e vídeo |
 | Plateia digitar dado real | Aviso na tela e camada paga do Gemini na demo |
