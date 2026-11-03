@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 300" role="img" aria-labelledby="t d" font-family='system-ui, -apple-system, "Segoe UI", sans-serif'>
+<title id="t">Ganho de tempo conforme o coordenador real</title><desc id="d">Colunas com o tempo economizado pelo modelo contra um coordenador que não confere a agenda, um que chama só quem pode ir e um que escolhe tão bem quanto o baseline.</desc>
+<rect width="440" height="300" fill="#fcfcfb"/>
+<text x="56" y="28" font-size="16" font-weight="600" fill="#0b0b0b">Ganho de tempo conforme o coordenador real</text>
+<text x="56" y="48" font-size="12" fill="#52514e">Tempo que o modelo economiza, em simulação</text>
+<line x1="56" x2="416" y1="236.0" y2="236.0" stroke="#c3c2b7" stroke-width="1"/><text x="48" y="240.0" font-size="11" text-anchor="end" fill="#898781">0%</text>
+<line x1="56" x2="416" y1="201.0" y2="201.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="205.0" font-size="11" text-anchor="end" fill="#898781">20%</text>
+<line x1="56" x2="416" y1="166.0" y2="166.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="170.0" font-size="11" text-anchor="end" fill="#898781">40%</text>
+<line x1="56" x2="416" y1="131.0" y2="131.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="135.0" font-size="11" text-anchor="end" fill="#898781">60%</text>
+<line x1="56" x2="416" y1="96.0" y2="96.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="100.0" font-size="11" text-anchor="end" fill="#898781">80%</text>
+<path d="M104.0,236.0 L104.0,140.7 Q104.0,136.7 108.0,136.7 L124.0,136.7 Q128.0,136.7 128.0,140.7 L128.0,236.0 Z" fill="#2a78d6"/>
+<text x="116.0" y="130.7" font-size="11" text-anchor="middle" fill="#52514e">57%</text>
+<text x="116.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">Não confere a</text>
+<text x="116.0" y="268.0" font-size="11" text-anchor="middle" fill="#52514e">agenda</text>
+<path d="M224.0,236.0 L224.0,192.5 Q224.0,188.5 228.0,188.5 L244.0,188.5 Q248.0,188.5 248.0,192.5 L248.0,236.0 Z" fill="#2a78d6"/>
+<text x="236.0" y="182.5" font-size="11" text-anchor="middle" fill="#52514e">27%</text>
+<text x="236.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">Só chama quem pode</text>
+<text x="236.0" y="268.0" font-size="11" text-anchor="middle" fill="#52514e">ir</text>
+<path d="M344.0,236.0 L344.0,228.2 Q344.0,224.2 348.0,224.2 L364.0,224.2 Q368.0,224.2 368.0,228.2 L368.0,236.0 Z" fill="#2a78d6"/>
+<text x="356.0" y="218.2" font-size="11" text-anchor="middle" fill="#52514e">7%</text>
+<text x="356.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">Igual ao baseline</text>
+</svg>

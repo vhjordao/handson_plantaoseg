@@ -1,4 +1,4 @@
-"""Gráficos de colunas em SVG puro (sem dependências), para os relatórios em Markdown.
+"""Gráficos de colunas e de linhas em SVG puro (sem dependências), para os relatórios em Markdown.
 
 Segue as regras de visualização do projeto: um eixo só, colunas finas (até 24 px) com a ponta
 arredondada e a base reta, 2 px de folga entre colunas coladas, grade em linha fina e apagada,
@@ -144,6 +144,99 @@ def column_chart(
                 f'<text x="{plot_left + band * (index + 0.5):.1f}" '
                 f'y="{plot_base + 18 + 14 * line:.1f}" font-size="11" text-anchor="middle" '
                 f'fill="{INK_2}">{escape(text)}</text>'
+            )
+    parts.append("</svg>")
+    return "\n".join(parts)
+
+
+def line_chart(
+    title: str,
+    subtitle: str,
+    categories: list[str],
+    series: list[tuple[str, list[float]]],
+    fmt: Callable[[float], str],
+    description: str,
+    *,
+    width: int = WIDTH,
+    height: int = HEIGHT,
+) -> str:
+    """Gera o SVG de um gráfico de linhas (até duas séries), para evolução ao longo do tempo.
+
+    Linha compara posições, não áreas, então o eixo pode partir de perto dos dados. Só o primeiro e
+    o último ponto de cada série levam rótulo; os demais números ficam na tabela ao lado da figura.
+    """
+    if not 1 <= len(series) <= len(SERIES):
+        raise ValueError("o gráfico aceita de 1 a 2 séries")
+    values = [value for _, points in series for value in points]
+    span = (max(values) - min(values)) or 1.0
+    ticks = nice_ticks(span * 1.1)
+    step = ticks[1] - ticks[0]
+    low = math.floor(min(values) / step) * step
+    high = max(math.ceil(max(values) / step) * step, low + step)
+    plot_left, plot_right = LEFT, width - RIGHT
+    plot_top, plot_base = TOP, height - BOTTOM
+    scale = (plot_base - plot_top) / (high - low)
+    band = (plot_right - plot_left) / len(categories)
+
+    def position(index: int, value: float) -> tuple[float, float]:
+        return plot_left + band * (index + 0.5), plot_base - (value - low) * scale
+
+    parts = [
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" role="img" '
+        f"aria-labelledby=\"t d\" font-family='{FONT}'>",
+        f'<title id="t">{escape(title)}</title><desc id="d">{escape(description)}</desc>',
+        f'<rect width="{width}" height="{height}" fill="{SURFACE}"/>',
+        f'<text x="{LEFT}" y="28" font-size="16" font-weight="600" fill="{INK}">'
+        f"{escape(title)}</text>",
+        f'<text x="{LEFT}" y="48" font-size="12" fill="{INK_2}">{escape(subtitle)}</text>',
+    ]
+    if len(series) > 1:
+        x = float(LEFT)
+        for index, (name, _) in enumerate(series):
+            parts.append(
+                f'<rect x="{x:.1f}" y="62" width="10" height="10" rx="2" fill="{SERIES[index]}"/>'
+                f'<text x="{x + 16:.1f}" y="71" font-size="12" fill="{INK_2}">{escape(name)}</text>'
+            )
+            x += 16 + 7 * len(name) + 24
+    tick = low
+    while tick <= high + step / 2:
+        y = plot_base - (tick - low) * scale
+        stroke = AXIS if tick == low else GRID
+        parts.append(
+            f'<line x1="{plot_left}" x2="{plot_right}" y1="{y:.1f}" y2="{y:.1f}" '
+            f'stroke="{stroke}" stroke-width="1"/>'
+            f'<text x="{plot_left - 8}" y="{y + 4:.1f}" font-size="11" text-anchor="end" '
+            f'fill="{MUTED}">{escape(fmt(tick))}</text>'
+        )
+        tick += step
+    for index, category in enumerate(categories):
+        parts.append(
+            f'<text x="{position(index, low)[0]:.1f}" y="{plot_base + 18:.1f}" font-size="11" '
+            f'text-anchor="middle" fill="{INK_2}">{escape(category)}</text>'
+        )
+    for s, (_, points) in enumerate(series):
+        path = " ".join(
+            f"{'L' if i else 'M'}{position(i, v)[0]:.1f},{position(i, v)[1]:.1f}"
+            for i, v in enumerate(points)
+        )
+        parts.append(
+            f'<path d="{path}" fill="none" stroke="{SERIES[s]}" stroke-width="2" '
+            'stroke-linejoin="round" stroke-linecap="round"/>'
+        )
+        for i, v in enumerate(points):
+            x, y = position(i, v)
+            parts.append(
+                f'<circle cx="{x:.1f}" cy="{y:.1f}" r="4" fill="{SERIES[s]}" '
+                f'stroke="{SURFACE}" stroke-width="2"/>'
+            )
+    for index in (0, len(categories) - 1):
+        ordered = sorted(series, key=lambda item: item[1][index], reverse=True)
+        for rank, (_, points) in enumerate(ordered):
+            x, y = position(index, points[index])
+            below = rank == 1  # a série de baixo leva o rótulo por baixo, para não colidir
+            parts.append(
+                f'<text x="{x:.1f}" y="{y + (17 if below else -9):.1f}" font-size="11" '
+                f'text-anchor="middle" fill="{INK_2}">{escape(fmt(points[index]))}</text>'
             )
     parts.append("</svg>")
     return "\n".join(parts)

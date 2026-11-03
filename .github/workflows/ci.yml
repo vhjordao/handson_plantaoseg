@@ -93,6 +93,8 @@ jobs:
         run: python -m app.cli evaluate --report-dir /tmp/evidencias/resultados
       - name: Fluxo recomendado contra o processo manual (simulação)
         run: python -m app.cli flow --report-dir /tmp/evidencias/resultados
+      - name: Teste de premissas e simulação de lançamento (simulação)
+        run: python -m app.cli robustness --report-dir /tmp/evidencias/resultados
       - name: Casos da revisão às cegas iguais aos publicados (informativo, não reprova)
         continue-on-error: true
         run: |

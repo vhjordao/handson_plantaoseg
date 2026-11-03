@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 300" role="img" aria-labelledby="t d" font-family='system-ui, -apple-system, "Segoe UI", sans-serif'>
+<title id="t">Modelo contra baseline no lançamento</title><desc id="d">Linhas com a chance de sucesso no top-5 do modelo e do baseline conforme os dias de histórico: o modelo começa abaixo e depois fica acima do baseline.</desc>
+<rect width="440" height="300" fill="#fcfcfb"/>
+<text x="56" y="28" font-size="16" font-weight="600" fill="#0b0b0b">Modelo contra baseline no lançamento</text>
+<text x="56" y="48" font-size="12" fill="#52514e">Chance de sucesso no top-5, por dia de histórico (simulação)</text>
+<rect x="56.0" y="62" width="10" height="10" rx="2" fill="#2a78d6"/><text x="72.0" y="71" font-size="12" fill="#52514e">Modelo</text>
+<rect x="138.0" y="62" width="10" height="10" rx="2" fill="#eb6834"/><text x="154.0" y="71" font-size="12" fill="#52514e">Baseline</text>
+<line x1="56" x2="416" y1="236.0" y2="236.0" stroke="#c3c2b7" stroke-width="1"/><text x="48" y="240.0" font-size="11" text-anchor="end" fill="#898781">64,0%</text>
+<line x1="56" x2="416" y1="201.0" y2="201.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="205.0" font-size="11" text-anchor="end" fill="#898781">66,0%</text>
+<line x1="56" x2="416" y1="166.0" y2="166.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="170.0" font-size="11" text-anchor="end" fill="#898781">68,0%</text>
+<line x1="56" x2="416" y1="131.0" y2="131.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="135.0" font-size="11" text-anchor="end" fill="#898781">70,0%</text>
+<line x1="56" x2="416" y1="96.0" y2="96.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="100.0" font-size="11" text-anchor="end" fill="#898781">72,0%</text>
+<text x="72.4" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">7</text>
+<text x="105.1" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">14</text>
+<text x="137.8" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">21</text>
+<text x="170.5" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">30</text>
+<text x="203.3" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">45</text>
+<text x="236.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">60</text>
+<text x="268.7" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">90</text>
+<text x="301.5" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">120</text>
+<text x="334.2" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">180</text>
+<text x="366.9" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">240</text>
+<text x="399.6" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">300</text>
+<path d="M72.4,215.4 L105.1,148.2 L137.8,105.9 L170.5,138.0 L203.3,141.0 L236.0,119.9 L268.7,105.6 L301.5,98.2 L334.2,108.4 L366.9,115.0 L399.6,110.8" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="72.4" cy="215.4" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="105.1" cy="148.2" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="137.8" cy="105.9" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="170.5" cy="138.0" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="203.3" cy="141.0" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="236.0" cy="119.9" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="268.7" cy="105.6" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="301.5" cy="98.2" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="334.2" cy="108.4" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="366.9" cy="115.0" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="399.6" cy="110.8" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<path d="M72.4,172.2 L105.1,166.6 L137.8,166.8 L170.5,169.3 L203.3,165.2 L236.0,167.4 L268.7,166.3 L301.5,171.1 L334.2,168.3 L366.9,174.6 L399.6,170.5" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="72.4" cy="172.2" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="105.1" cy="166.6" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="137.8" cy="166.8" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="170.5" cy="169.3" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="203.3" cy="165.2" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="236.0" cy="167.4" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="268.7" cy="166.3" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="301.5" cy="171.1" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="334.2" cy="168.3" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="366.9" cy="174.6" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<circle cx="399.6" cy="170.5" r="4" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<text x="72.4" y="163.2" font-size="11" text-anchor="middle" fill="#52514e">67,6%</text>
+<text x="72.4" y="232.4" font-size="11" text-anchor="middle" fill="#52514e">65,2%</text>
+<text x="399.6" y="101.8" font-size="11" text-anchor="middle" fill="#52514e">71,2%</text>
+<text x="399.6" y="187.5" font-size="11" text-anchor="middle" fill="#52514e">67,7%</text>
+</svg>

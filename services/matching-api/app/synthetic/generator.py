@@ -63,6 +63,7 @@ UNIT_SPECS = (
 )
 SPECIALTIES = ("clinica_medica", "pediatria")
 AGE_BANDS = ("25-34", "35-44", "45-54", "55+")
+AGE_WEIGHTS = (0.25, 0.35, 0.25, 0.15)
 PREFERRED = ("night", "day", "weekend", "any")
 CRM_STATUS = ("active", "suspended", "expired")
 RADII_KM = (10.0, 15.0, 20.0, 30.0)
@@ -115,6 +116,13 @@ def _make_units(rng: random.Random, organization_id: str) -> dict[str, Unit]:
     return units
 
 
+def _gender(rng: random.Random, specialty: str, share_female: dict[str, float] | None) -> str:
+    """Sorteio meio a meio, salvo se o cenário trouxer a parcela de mulheres por especialidade."""
+    if share_female is None:
+        return rng.choice(("F", "M"))
+    return "F" if rng.random() < share_female[specialty] else "M"
+
+
 def _make_doctors(
     rng: random.Random, params: dict[str, Any]
 ) -> tuple[dict[str, Doctor], dict[str, list[Window]], dict[str, float]]:
@@ -146,8 +154,8 @@ def _make_doctors(
             max_radius_km=rng.choices(RADII_KM, weights=(0.2, 0.35, 0.3, 0.15))[0],
             preferred_period=preferred,
             home_zone=zone,
-            gender=rng.choice(("F", "M")),
-            age_band=rng.choices(AGE_BANDS, weights=(0.25, 0.35, 0.25, 0.15))[0],
+            gender=_gender(rng, specialty, params.get("share_female")),
+            age_band=rng.choices(AGE_BANDS, weights=params.get("age_weights", AGE_WEIGHTS))[0],
             registered_at=datetime.combine(start, time(0)) - timedelta(days=rng.randint(30, 400)),
         )
         doctors[doctor_id] = doctor

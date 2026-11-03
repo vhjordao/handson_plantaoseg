@@ -52,6 +52,7 @@ Precisa só do Python 3.12 e do `make` (no Windows, `make PYTHON="py -3.12" ...`
 ```
 make poc      # gera os dados, treina e avalia, mede o fluxo recomendado, roda a demonstração, o exemplo trabalhado e a análise
 make test     # testes automatizados
+make robustez # teste de premissas, dados públicos e simulação de lançamento (cerca de 2 min)
 make entrega  # PDF da Entrega 2 (precisa de Edge ou Chrome)
 make kit-entrevistas  # casos da revisão às cegas e PDFs do kit de entrevistas
 ```

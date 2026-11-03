@@ -7,11 +7,13 @@ import unittest
 from datetime import date
 from pathlib import Path
 
+from app import public_data
 from app.cli import build_parser
 from app.docbuild import REPO_URL, render
 from app.llm.extraction import build_system_prompt
 from app.ranking.features import CONTEXT_VARIABLES, RANKING_FEATURES
 from app.ranking.report import num, pct
+from app.robustness import coordinator_chart, launch_chart, render_robustness
 from app.synthetic.texts import ATTACK_TYPES
 from tests.helpers import small_dataset
 
@@ -236,6 +238,52 @@ class KitDeEntrevistasTests(unittest.TestCase):
             html = out.read_text(encoding="utf-8")
         self.assertIn(f"{REPO_URL}docs/entrevistas/revisao-cega-gabarito.md", html)
         self.assertNotIn(f"{REPO_URL}docs/revisao-cega-gabarito.md", html)
+
+class RobustezTests(unittest.TestCase):
+    """O relatório sai do JSON, e a base é a mesma dos resultados já publicados."""
+
+    def setUp(self):
+        self.metrics = json.loads(read("resultados/metricas-robustez.json"))
+
+    def test_relatorio_e_figuras_saem_do_json(self):
+        self.assertEqual(read("resultados/metricas-robustez.md"), render_robustness(self.metrics))
+        self.assertEqual(
+            read("resultados/fig-robustez-coordenador.svg"), coordinator_chart(self.metrics)
+        )
+        self.assertEqual(read("resultados/fig-robustez-curva.svg"), launch_chart(self.metrics))
+
+    def test_a_base_e_a_mesma_dos_resultados_publicados(self):
+        base = self.metrics["scenarios"][0]
+        ranking = metrics()
+        flow = json.loads(read("resultados/metricas-fluxo.json"))
+        self.assertEqual(base["scenario"], "Base")
+        for mine, published in (
+            (base["auc_model"], ranking["auc_model"]),
+            (base["auc_baseline"], ranking["auc_baseline"]),
+            (base["top5_model"], ranking["counterfactual"]["model"]),
+            (base["top5_baseline"], ranking["counterfactual"]["baseline"]),
+            (base["time_manual"], flow["manual"]["test"]["time_mean"]),
+            (base["time_model"], flow["flow"]["model"]["time_mean"]),
+            (base["offers_random"], flow["flow"]["random"]["offers_per_shift"]),
+        ):
+            # Os publicados leem o CSV, com coordenadas arredondadas; aqui os dados vêm da memória.
+            self.assertAlmostEqual(mine, published, places=6)
+
+    def test_o_kit_cita_os_mesmos_niveis_de_coordenador(self):
+        kit = read("entrevistas/kit-do-entrevistador.md")
+        for level in self.metrics["coordinator_levels"]:
+            self.assertIn(f"| {num(level['offers'], 2)} | {pct(level['cut'], 0)} |", kit)
+
+    def test_comparacao_publica_usa_os_totais_do_estudo(self):
+        rows = {row["premise"]: row for row in self.metrics["public_comparison"]}
+        self.assertEqual(
+            rows["Pediatras entre as duas especialidades"]["public"],
+            public_data.share_pediatria(),
+        )
+        self.assertEqual(
+            rows["Mulheres na pediatria"]["public"], public_data.share_female()["pediatria"]
+        )
+        self.assertEqual(rows["Com 55 anos ou mais"]["public"], public_data.age_weights()[3])
 
 
 

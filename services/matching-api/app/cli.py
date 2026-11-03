@@ -7,6 +7,7 @@ Uso, a partir de `services/matching-api`:
     python -m app.cli flow        # fluxo recomendado contra o processo manual (simulação)
     python -m app.cli demo --yes  # vaga em texto livre -> top 5 -> aprovação -> auditoria
     python -m app.cli blind-review  # casos da revisão às cegas para as entrevistas
+    python -m app.cli robustness    # teste de premissas e simulação de lançamento
     python -m app.cli analyze     # análise exploratória (figuras e tabelas)
 
 Tudo é simulação com dados sintéticos; nada tem validade médica ou legal.
@@ -290,6 +291,43 @@ def cmd_walkthrough(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_robustness(args: argparse.Namespace) -> int:
+    from app.robustness import (
+        coordinator_chart,
+        evaluate_robustness,
+        launch_chart,
+        render_robustness,
+    )
+
+    metrics = evaluate_robustness(load_params(Path(args.params)))
+    if args.report_dir:
+        report_dir = Path(args.report_dir)
+        report_dir.mkdir(parents=True, exist_ok=True)
+        (report_dir / "metricas-robustez.md").write_text(
+            render_robustness(metrics), encoding="utf-8"
+        )
+        (report_dir / "metricas-robustez.json").write_text(
+            json.dumps(metrics, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+        (report_dir / "fig-robustez-coordenador.svg").write_text(
+            coordinator_chart(metrics), encoding="utf-8"
+        )
+        (report_dir / "fig-robustez-curva.svg").write_text(
+            launch_chart(metrics), encoding="utf-8"
+        )
+    summary, cut = metrics["summary"], metrics["summary"]["time_cut"]["manual"]
+    print("Teste de premissas (SIMULAÇÃO, dados sintéticos)")
+    print(
+        f"  Modelo melhor que o baseline no top-5: {summary['top5_wins']} de "
+        f"{summary['n_scenarios']} cenários"
+    )
+    print(
+        f"  Redução do tempo contra o manual: {_pt(cut['min'] * 100, 0)}% a "
+        f"{_pt(cut['max'] * 100, 0)}%"
+    )
+    return 0
+
+
 def cmd_blind_review(args: argparse.Namespace) -> int:
     from app.blind_review import build_cases, render_answer_key, render_cases
 
@@ -357,6 +395,11 @@ def build_parser() -> argparse.ArgumentParser:
     walk.add_argument("--audit", default=str(DEFAULT_DATA / "audit_walkthrough.jsonl"))
     walk.add_argument("--out", default=str(REPO_ROOT / "docs" / "exemplo-trabalhado.md"))
     walk.set_defaults(func=cmd_walkthrough)
+
+    robust = sub.add_parser("robustness", help="teste de premissas e lançamento (simulação)")
+    robust.add_argument("--params", default=str(DEFAULT_PARAMS))
+    robust.add_argument("--report-dir", default=None)
+    robust.set_defaults(func=cmd_robustness)
 
     blind = sub.add_parser("blind-review", help="casos e gabarito da revisão às cegas")
     blind.add_argument("--data", default=str(DEFAULT_DATA))
