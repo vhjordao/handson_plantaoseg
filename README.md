@@ -75,6 +75,7 @@ Custo estimado do mês da apresentação: US$ 34 a US$ 41 (VPS e Supabase lidos 
 | [docs/adr/](docs/adr) | Decisões: [segmento inicial](docs/adr/0001-segmento-inicial.md), [escopo da PoC](docs/adr/0002-escopo-da-poc.md), [LLM do produto: Gemini](docs/adr/0003-llm-do-produto-gemini.md), [protótipo adiado](docs/adr/0004-prototipo-adiado.md), [PoC mínima e especificação](docs/adr/0005-gp-poc-minima-e-especificacao.md) e [metas medidas por simulação do fluxo](docs/adr/0006-fluxo-recomendado-medido-por-simulacao.md) |
 | [docs/conformidade/](docs/conformidade/README.md) | O que os textos oficiais das Res. CFM 2.454, 2.460 e 2.462 dizem, lidos em 30/10/2026, e o que depende de jurídico (não é parecer jurídico) |
 | [docs/plano-etapa-2.md](docs/plano-etapa-2.md) | Plano da Etapa 2: escopo, frentes, cronograma com portões de aprovação, contratos e metas com linha de base (proposta) |
+| [docs/plano-etapa-3.md](docs/plano-etapa-3.md) | Plano do protótipo e da Etapa 3: arquitetura, marcos, o que depende do Victor, verificação e riscos (aprovado; a construção aguarda as contas novas) |
 | [docs/CONTRIBUINDO.md](docs/CONTRIBUINDO.md) | Guia de entrada da equipe: ferramentas, primeiro dia, uso do Claude Code, fluxo de Git e documentação obrigatória |
 | [docs/templates/ficha-componente.md](docs/templates/ficha-componente.md) | Modelo da ficha de cada componente (como foi feito, ferramentas, justificativas) |
 | [docs/dados/dicionario-de-dados.md](docs/dados/dicionario-de-dados.md) | Dicionário de dados v0: contrato de dados das frentes A1 a A4 (tabelas, papéis, variáveis do ranking, premissas do simulador e qualidade) |
@@ -90,8 +91,8 @@ Uma branch por tarefa com o prefixo da fase (`f1/dicionario-dados`...), PR para 
 | Período | Marco |
 | --- | --- |
 | 20 a 24/10 | Etapa 1: descoberta, **realizada** (Entrega 1 neste repositório) |
-| 27 a 31/10 | Etapa 2: dados, análise, solução de IA e PoC mínima, **pronta** (entrega em 31/10) |
-| 3 a 7/11 | Etapa 3: validação |
+| 27 a 31/10 | Etapa 2: dados, análise, solução de IA e PoC mínima, **entregue** em 31/10 |
+| 3 a 7/11 | Etapa 3: validação ([plano](docs/plano-etapa-3.md)) |
 | 10/11 | Aula de storytelling |
 | 17/11 | Apresentação final (presencial) |
 
