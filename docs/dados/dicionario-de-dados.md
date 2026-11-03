@@ -1,11 +1,13 @@
 # Dicionário de dados v0
 
-- **Versão:** v0.2, de 30/10/2026 (v0 de 28/10, v0.1 de 30/10). **Status:** em uso na PoC mínima; os padrões recomendados da seção 11 foram adotados no G1 ao autorizar a execução ([ADR 0005](../adr/0005-gp-poc-minima-e-especificacao.md)).
+- **Versão:** v0.3, de 03/11/2026 (v0 de 28/10, v0.1 e v0.2 de 30/10). **Status:** em uso na PoC mínima; os padrões recomendados da seção 11 foram adotados no G1 ao autorizar a execução ([ADR 0005](../adr/0005-gp-poc-minima-e-especificacao.md)).
 - **Natureza:** documento de desenho, sem SQL e sem código. É o **contrato de dados** entre as frentes: A1 gera, A2 analisa, A3 modela o ranking, A4 desenha o uso do Gemini e A5 avalia privacidade e viés.
 - **Segmento:** pronto-socorro de hospitais privados, plantão noturno de 12 h e fim de semana, clínica médica e pediatria ([ADR 0001](../adr/0001-segmento-inicial.md)).
 - **Regra de ouro:** **todos os dados são sintéticos.** Nome, CRM e telefone são fictícios e marcados como simulação; nada tem validade médica ou legal.
 
 ## 1. Como usar este documento
+
+**Quer só um exemplo?** O [exemplo concreto](dicionario-exemplo.md) mostra nome, tipo, descrição e valores possíveis das principais variáveis, com os valores dos dados gerados. Como cada dado seria coletado, atualizado e integrado em um ambiente real está em [dados em produção](dados-em-producao.md).
 
 1. O gerador (`services/matching-api/app/synthetic`) produz exatamente estas tabelas e colunas; qualquer mudança vira uma nova versão deste dicionário (v1, v2...) no mesmo PR.
 2. A2, A3 e A4 escrevem contra estes nomes, antes de os dados existirem; A1 entrega cedo uma **amostra pequena** (até 50 linhas por tabela) para todos testarem.
@@ -329,4 +331,5 @@ Mesmo sendo sintéticos, os dados são tratados como se fossem reais, para ensai
 | --- | --- | --- |
 | v0 | 28/10/2026 | Primeira versão, para aprovação no G1 |
 | v0.1 | 30/10/2026 | Segmento ajustado pelo Victor: pronto-socorro de hospitais privados |
+| v0.3 | 03/11/2026 | Aponta para o exemplo concreto e para o desenho de dados em produção, a pedido do feedback da Etapa 2. Nenhuma coluna mudou |
 | v0.2 | 30/10/2026 | Alinhada à PoC: 7 variáveis no ranking e 2 de contexto; `doctors_latent`; código `schedule_conflict`; premissas com os resultados medidos; amostra como mini conjunto; decisões do G1 |

@@ -4,6 +4,21 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 03/11/2026 (terça): exemplo do dicionário e dados em produção
+
+**Pedido do Victor:** escrever a tabela do dicionário e o documento de dados em produção, respondendo aos dois outros pontos do feedback da Entrega 2.
+
+**O que foi feito**
+
+- [Exemplo concreto do dicionário](dados/dicionario-exemplo.md) (`app/datadict.py`, `make dicionario`): 18 variáveis com nome, tipo, papel, descrição, valores possíveis e o que aparece nos dados. A última coluna é calculada, e um teste regenera tudo a partir do gerador. O dicionário completo passou à v0.3, sem mudança de coluna.
+- [Dados em produção](dados/dados-em-producao.md): de onde vem cada dado, como entra no piloto e depois, com que frequência se atualiza, a regra de qualidade, o responsável e o cuidado com dados pessoais; as integrações com CFM e CNES, lidas na fonte; o caminho do dado até o modelo; e as fases de implantação, com o limite do modo sombra.
+
+**Rastreabilidade:** FB2-2 e FB2-3 viraram "feito", com o arquivo apontado. FB2-1 segue em andamento, porque depende das entrevistas.
+
+**Ponto a validar:** o serviço do CFM só atende o usuário final, sem empresa intermediária. O contrato talvez precise ser do hospital, não da plataforma. Fica para o jurídico.
+
+**Uso de IA:** o trabalho segue em conjunto. O Claude Code (Opus 5.5) gerou a tabela, redigiu o desenho e conferiu as fontes; a revisão do desenho e das fases fica com o Victor e o grupo.
+
 ## 03/11/2026 (terça): teste de premissas e simulação de lançamento
 
 **Pedido do Victor:** colocar no repositório, com testes, o teste de premissas e a simulação de lançamento, que vieram da medição exploratória feita para o feedback da Entrega 2.

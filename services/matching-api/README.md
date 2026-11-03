@@ -31,6 +31,7 @@ O que a IA faz e o que o código faz está em [docs/solucao-ia.md](../../docs/so
 8. Fluxo recomendado contra o processo manual (`app/flow.py`): mede tempo até preencher, ofertas por vaga, antecedência e concentração, com as mesmas premissas de tempo do gerador. É o que dá linha de base às metas da Entrega 1.
 9. Revisão às cegas para as entrevistas (`app/blind_review.py`): coordenadores comparam as listas do modelo e do baseline sem saber qual é qual, sobre vagas simuladas e sem dado pessoal.
 10. Teste de premissas e simulação de lançamento (`app/robustness.py`): refaz o mundo simulado com outras premissas, compara com agregados públicos (`app/public_data.py`) e mede quanto histórico o modelo precisa para superar o baseline.
+11. Exemplo concreto do dicionário (`app/datadict.py`): tabela com nome, tipo, descrição e valores possíveis, com os valores calculados dos dados gerados.
 
 Cada passo foi conferido com `ruff` e `pytest` antes do commit; a decisão sobre tirar carga recente do ranking veio de um experimento (71,2% sem a variável e 71,3% com ela) registrado em `app/ranking/features.py`.
 
@@ -46,6 +47,7 @@ Cada passo foi conferido com `ruff` e `pytest` antes do commit; a decisão sobre
 | `app/flow.py` | Fluxo recomendado contra o processo manual (simulação) | `cascade_expectation`: a oferta `k` só existe se as `k - 1` anteriores falharam |
 | `app/robustness.py` | Teste de premissas, comparação com dados públicos e simulação de lançamento | `launch_curve`: treina só com ofertas de plantão já terminado, porque antes disso o rótulo não existe |
 | `app/public_data.py` | Totais públicos que conferem as premissas, com a fonte | Só agregados nacionais, sem registro individual |
+| `app/datadict.py` | Exemplo concreto do dicionário de dados | `dictionary_rows`: a última coluna sai dos dados, e um teste regenera o arquivo publicado |
 | `app/blind_review.py` | Casos e gabarito da revisão às cegas | `build_cases`: alterna especialidade e hospital, e sorteia qual lista é A ou B |
 | `app/docbuild.py` | Markdown para HTML imprimível (e PDF) dos documentos | Marcadores `<!-- kpis -->`, `<!-- keep -->`, `<!-- bloco -->` e `<!-- grande -->`, todos inofensivos no GitHub |
 | `app/llm/guardrails.py` | Limpeza, detecção de injeção e esquema fechado de saída | `validate_extraction` rejeita qualquer desvio |
@@ -59,7 +61,7 @@ Cada passo foi conferido com `ruff` e `pytest` antes do commit; a decisão sobre
 | Ferramenta | Versão | Para quê | Por que esta e não outra | Custo |
 | --- | --- | --- | --- | --- |
 | Python (biblioteca padrão) | 3.12.10 local; 3.12 na CI | Todo o motor | Roda na CI e em qualquer máquina sem instalar pacote; a máquina do autor não tinha pip até 30/10 | 0 |
-| pytest | 8.3.3 | Testes (224) | Padrão do ecossistema; os testes usam `unittest`, que o pytest também executa | 0 |
+| pytest | 8.3.3 | Testes (235) | Padrão do ecossistema; os testes usam `unittest`, que o pytest também executa | 0 |
 | ruff | 0.7.0 | Lint (E, F, I, UP, B) | Rápido e igual na CI e localmente | 0 |
 | GitHub Actions | checkout@v4, setup-python@v5, upload-artifact@v4 | CI com 5 jobs | Já era a escolha do `docs/02` | 0 |
 | Gemini (`google-genai`) | não instalado nem exercitado | Extração e reescrita, opcional | Decisão do Victor ([ADR 0003](../../docs/adr/0003-llm-do-produto-gemini.md)) | Estimado em menos de US$ 1 para 200 chamadas |
@@ -78,7 +80,8 @@ python -m app.cli flow          # fluxo recomendado contra o processo manual (si
 python -m app.cli demo --yes    # fluxo completo para uma vaga
 python -m app.cli blind-review  # casos e gabarito da revisão às cegas
 python -m app.cli robustness    # teste de premissas e lançamento (cerca de 2 min)
-python -m pytest -q             # 224 testes
+python -m app.cli data-dictionary  # exemplo concreto do dicionário
+python -m pytest -q             # 235 testes
 python -m ruff check .          # lint
 ```
 
@@ -86,7 +89,7 @@ Da raiz do repositório: `make poc` roda tudo na ordem; `make test` e `make lint
 
 ## 7. Testes e resultados
 
-- **224 testes** (`tests/`): regras e jornada, dados sintéticos e reprodutibilidade, variáveis sem vazamento, modelo, AUC e avaliação, fluxo recomendado (matemática da cascata e coerência com o contrafactual), extração, 10 tipos de injeção de prompt, saídas maliciosas do LLM, explicação, auditoria, pipeline, análise, exemplo trabalhado, conversor do documento e sincronia dos números dos documentos com os arquivos gerados.
+- **235 testes** (`tests/`): regras e jornada, dados sintéticos e reprodutibilidade, variáveis sem vazamento, modelo, AUC e avaliação, fluxo recomendado (matemática da cascata e coerência com o contrafactual), extração, 10 tipos de injeção de prompt, saídas maliciosas do LLM, explicação, auditoria, pipeline, análise, exemplo trabalhado, conversor do documento e sincronia dos números dos documentos com os arquivos gerados.
 - **CI:** 5 jobs verdes (segredos, lint e testes, neutralidade econômica, PoC e Compose). O job da PoC confere que a execução em Linux gera os **mesmos checksums** dos CSV da máquina do autor.
 - **Teste de premissas** ([docs/resultados](../../docs/resultados/metricas-robustez.md)): 17 cenários, comparação com dados públicos e simulação de lançamento. Roda na CI.
 - **Resultados em simulação** ([docs/resultados](../../docs/resultados/metricas-ranking.md)): AUC 0,762 (modelo) contra 0,702 (baseline); chance média de sucesso no top-5 de 71,2% contra 67,7% e 75,8% do oráculo, em 392 vagas de teste.

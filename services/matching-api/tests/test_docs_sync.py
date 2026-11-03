@@ -9,11 +9,14 @@ from pathlib import Path
 
 from app import public_data
 from app.cli import build_parser
+from app.datadict import render_dictionary
 from app.docbuild import REPO_URL, render
 from app.llm.extraction import build_system_prompt
 from app.ranking.features import CONTEXT_VARIABLES, RANKING_FEATURES
 from app.ranking.report import num, pct
 from app.robustness import coordinator_chart, launch_chart, render_robustness
+from app.synthetic.generator import generate
+from app.synthetic.params import load_params
 from app.synthetic.texts import ATTACK_TYPES
 from tests.helpers import small_dataset
 
@@ -284,6 +287,52 @@ class RobustezTests(unittest.TestCase):
             rows["Mulheres na pediatria"]["public"], public_data.share_female()["pediatria"]
         )
         self.assertEqual(rows["Com 55 anos ou mais"]["public"], public_data.age_weights()[3])
+
+class DadosEmProducaoTests(unittest.TestCase):
+    """O exemplo do dicionário sai do gerador, e o desenho de produção cita a simulação."""
+
+    def test_exemplo_do_dicionario_bate_com_o_gerador(self):
+        params = load_params(DOCS.parent / "data" / "synthetic" / "params.json")
+        self.assertEqual(read("dados/dicionario-exemplo.md"), render_dictionary(generate(params)))
+
+    def test_o_dicionario_completo_aponta_para_o_exemplo_e_para_a_producao(self):
+        text = read("dados/dicionario-de-dados.md")
+        self.assertIn("(dicionario-exemplo.md)", text)
+        self.assertIn("(dados-em-producao.md)", text)
+
+    def test_producao_cita_os_numeros_da_simulacao_de_lancamento(self):
+        text = read("dados/dados-em-producao.md")
+        launch = json.loads(read("resultados/metricas-robustez.json"))["launch"]
+        by_day = {row["day"]: row for row in launch["curve"]}
+        behind = next(row for row in launch["curve"] if row["lift"] <= 0)
+        self.assertIn(f"perde do baseline com {behind['train_offers']} ofertas", text)
+        winner = launch["first_lasting_win"]
+        self.assertIn(f"a partir de {winner['train_offers']}", text)
+        self.assertIn(f"entre o dia {behind['day']} e o dia {winner['day']}", text)
+        ninety = f"{by_day[90]['train_offers']:,}".replace(",", ".")
+        self.assertIn(f"90 dias dão cerca de {ninety} ofertas", text)
+
+    def test_producao_cobre_todas_as_tabelas_do_dado(self):
+        text = read("dados/dados-em-producao.md")
+        for table in (
+            "organizations",
+            "units",
+            "doctors",
+            "doctor_availability",
+            "shift_requests",
+            "shifts",
+            "offers",
+            "policy_config",
+            "shift_compensation",
+            "audit_log",
+            "model_registry",
+        ):
+            self.assertIn(f"`{table}`", text)
+
+    def test_afirmacao_legal_diz_validar_com_juridico(self):
+        text = read("dados/dados-em-producao.md")
+        self.assertGreaterEqual(text.count("alidar com jurídico"), 3)
+        self.assertIn("lidas em 03/11/2026", text)
 
 
 

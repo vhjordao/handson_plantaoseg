@@ -7,7 +7,7 @@ COMPOSE := docker compose --env-file .env -f infra/docker-compose.yml
 API := services/matching-api
 CLI := cd $(API) && $(PYTHON) -m app.cli
 
-.PHONY: help doctor env up down logs seed evaluate flow demo walkthrough analyze robustez entrega kit-entrevistas poc test lint
+.PHONY: help doctor env up down logs seed evaluate flow demo walkthrough analyze robustez dicionario entrega kit-entrevistas poc test lint
 
 help: ## Lista os comandos
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | sed 's/:.*## /\t/'
@@ -50,6 +50,9 @@ walkthrough: ## Exemplo trabalhado (docs/exemplo-trabalhado.md) com as contas à
 
 robustez: ## Teste de premissas e simulação de lançamento (simulação; leva alguns minutos)
 	$(CLI) robustness --report-dir ../../docs/resultados
+
+dicionario: ## Exemplo concreto do dicionário de dados, com os valores dos dados gerados
+	$(CLI) data-dictionary
 
 entrega: ## Gera o HTML e o PDF do documento da Etapa 2 (precisa de Edge ou Chrome)
 	$(CLI) build-doc
