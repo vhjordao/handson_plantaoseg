@@ -12,7 +12,8 @@
 
 - [ ] `make test` / pytest:
 - [ ] `make lint`:
-- [ ] CI verde (segredos, lint e testes, neutralidade econômica, Compose):
+- [ ] `make web-check`, se mexeu em `apps/web`:
+- [ ] CI verde (segredos, lint e testes, neutralidade econômica, Compose, interface web):
 
 ## Rastreabilidade do professor
 

@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+/* Parede de corredor de hospital: verde-claro em cima, barra escura embaixo. */
+:root {
+  --wall: #dcebe3;
+  --band: #0f5b50;
+  --ink: #0a332d;
+  --chalk: #f3f9f6;
+  --tape-light: #f0b429;
+  --tape-dark: #14201d;
+}
+
+@theme inline {
+  --color-wall: var(--wall);
+  --color-band: var(--band);
+  --color-ink: var(--ink);
+  --color-chalk: var(--chalk);
+  --color-tape: var(--tape-light);
+  --font-sans: var(--font-atkinson), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* O mesmo corredor à noite, para quem usa o tema escuro. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --wall: #16352f;
+    --band: #0a2420;
+    --ink: #e4f1eb;
+    --chalk: #e4f1eb;
+  }
+}
+
+body {
+  background: var(--wall);
+  color: var(--ink);
+}
+
+/* A fita de obra sai quando o protótipo ficar pronto. */
+.caution-tape {
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--tape-light) 0 16px,
+    var(--tape-dark) 16px 32px
+  );
+}
