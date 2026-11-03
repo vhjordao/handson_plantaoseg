@@ -1,5 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="18" fill="#dcebe3"/>
-  <rect y="18" width="32" height="4" fill="#f0b429"/>
-  <rect y="22" width="32" height="10" fill="#0f5b50"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="PlantãoSeguro"><path d="M16 26 A10 10 0 0 1 16 6" fill="none" stroke="#2c4fd6" stroke-width="3" stroke-dasharray="3.4 2.6" stroke-linecap="butt"/><path d="M16 6 A10 10 0 0 1 16 26" fill="none" stroke="#0b6b4d" stroke-width="3" stroke-linecap="butt"/></svg>

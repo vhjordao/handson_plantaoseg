@@ -1,0 +1,61 @@
+"use client";
+
+import Link from "next/link";
+import { ChevronDown, LogOut, Repeat, UserRound } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { sair } from "@/lib/session/acoes";
+
+/** O menu da persona: quem sou, trocar de persona e sair. Fica sempre no canto direito. */
+export function UserMenu({
+  nome,
+  descricao,
+}: {
+  nome: string;
+  /** Papel e hospital, por exemplo "Coordenadora, Hospital Modelo Centro". */
+  descricao: string;
+}) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          className="inline-flex min-h-[var(--alvo-min)] items-center gap-2 rounded-campo border border-campo bg-papel px-3 text-base font-medium hover:bg-tinta/10"
+        >
+          <UserRound aria-hidden="true" className="size-5 shrink-0" />
+          <span className="hidden max-w-[12rem] truncate sm:inline">{nome}</span>
+          <span className="sr-only sm:hidden">Menu de {nome}</span>
+          <ChevronDown aria-hidden="true" className="size-4 shrink-0" />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuLabel>
+          <span className="block font-semibold">{nome}</span>
+          <span className="block text-sm text-tinta-suave">{descricao}</span>
+          <span className="block text-sm text-tinta-suave">Persona fictícia</span>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link href="/entrar">
+            <Repeat aria-hidden="true" />
+            Trocar de persona
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onSelect={() => {
+            void sair();
+          }}
+        >
+          <LogOut aria-hidden="true" />
+          Sair
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
