@@ -20,7 +20,7 @@ Para quem entra no projeto (Roberval, Guilherme, Sergio, Lucas e Plinio) e para 
 | Docker Desktop | https://docs.docker.com/desktop/ | `docker compose version` |
 | Node.js LTS | https://nodejs.org | `node --version` |
 | Python 3.12 **de verdade** | https://www.python.org/downloads/ (marque "Add to PATH"); o atalho da Microsoft Store não serve | `python -m pip --version` |
-| Supabase CLI | https://supabase.com/docs/guides/local-development/cli/getting-started | `supabase --version` |
+| Supabase CLI | Não precisa instalar: `npx supabase@3.0.0` | `npx supabase@3.0.0 --version` |
 | make (Windows) | `choco install make` (PowerShell como administrador) ou `scoop install make` | `make --version` |
 
 Depois de instalar, rode `make doctor`: ele diz o que ainda falta. Se algo não instalar, avise no grupo; o PR roda a mesma verificação na CI do GitHub, então você não fica travado.
@@ -73,7 +73,7 @@ gh pr create                                 # preencha o modelo do PR
 | A4 Solução de IA: LLM com Gemini | `docs/solucao-ia.md` (seção LLM) | Prompts, esquema de saída, guardrails, casos de injeção, fallback |
 | A5 Segurança, ética e conformidade | `docs/seguranca-ameacas.md`, `docs/conformidade/` | STRIDE, textos oficiais das normas, ficha de risco, viés |
 
-`n8n/`, `supabase/` e a API ficam **congelados** até o ok do Victor (ADR 0004). `apps/web/` saiu do adiamento em 03/11 só com a página provisória ([ficha](../apps/web/README.md)); novas telas também pedem o ok dele.
+`n8n/` e a API ficam **congelados** até o ok do Victor (ADR 0004). `apps/web/` saiu do adiamento em 03/11 só com a página provisória ([ficha](../apps/web/README.md)), e `supabase/` tem as migrações do banco ([ficha](../supabase/README.md)); novas telas e mudanças no banco também pedem o ok dele.
 
 Arquivos compartilhados e de alto risco de conflito: `CLAUDE.md`, `docs/rastreabilidade-professor.md`, `docs/diario-de-bordo.md`, `docs/02-arquitetura-e-ferramentas.md`, `README.md`. Mexa neles só em PR pequeno e avise no grupo.
 

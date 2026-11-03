@@ -1,6 +1,6 @@
 # Plano: protótipo e Etapa 3 (02/11 a 17/11)
 
-- **Status:** aprovado pelo Victor em 02/11/2026 e ajustado em 03/11 com a Aula 4 e o feedback da Etapa 2. **A construção começou em 03/11, só pela web** ([ADR 0007](adr/0007-web-sai-do-adiamento.md)): há uma página provisória em `apps/web`. API, banco e n8n continuam parados até o ok do Victor, e para eles segue valendo o [ADR 0004](adr/0004-prototipo-adiado.md).
+- **Status:** aprovado pelo Victor em 02/11/2026 e ajustado em 03/11 com a Aula 4 e o feedback da Etapa 2. **A construção começou em 03/11, só pela web** ([ADR 0007](adr/0007-web-sai-do-adiamento.md)): há uma página provisória em `apps/web`, e o banco tem migrações, RLS e testes ([ADR 0008](adr/0008-banco-no-supabase.md)). API e n8n continuam parados até o ok do Victor, e para eles segue valendo o [ADR 0004](adr/0004-prototipo-adiado.md).
 - **Prazos:** aula e feedback da Etapa 2 em 03/11; **Entrega 3 em 07/11 (até 2,0)**; **apresentação final em 17/11 (até 4,0)**, com a plateia usando o sistema pelo celular.
 
 ## Contexto
@@ -32,12 +32,12 @@ Uma branch e um PR por item, CI verde, e nenhum merge sem o ok do Victor. As dat
 ### M0, assim que as contas chegarem: fundação
 
 - **Clone em `C:\dev\handson_plantaoseg` (feito em 03/11).** O OneDrive atrapalha `node_modules` e `.next`, e o [guia da equipe](CONTRIBUINDO.md) já pede isso. A pasta atual fica intacta; `docs/aulas/` é copiada à mão, pois não está no Git.
-- **`f3/web-base`:** [ADR 0007](adr/0007-web-sai-do-adiamento.md), página provisória, ajuste da Vercel e job de CI da web. Atualiza `CLAUDE.md`, `docs/02`, `docs/CONTRIBUINDO.md` e `.env.example`. A decisão de manter as regras em Python em vez de funções SQL fica para o ADR do banco.
-- **`f3/banco-supabase`:**
+- **`f3/web-base`:** [ADR 0007](adr/0007-web-sai-do-adiamento.md), página provisória, ajuste da Vercel e job de CI da web. Atualiza `CLAUDE.md`, `docs/02`, `docs/CONTRIBUINDO.md` e `.env.example`. A decisão de manter as regras em Python em vez de funções SQL está no [ADR 0008](adr/0008-banco-no-supabase.md).
+- **`f3/banco-supabase`** ([ficha](../supabase/README.md), [ADR 0008](adr/0008-banco-no-supabase.md)):
   - Migrações a partir do [dicionário de dados](dados/dicionario-de-dados.md) v0.2, mais `profiles`.
   - `audit_log` só de inserção, com hash encadeado em gatilho.
   - RLS por organização e papel; `shift_compensation` sem nenhum acesso público.
-  - `seed-db`: carrega os dados sintéticos deslocados em semanas inteiras, para o histórico terminar perto da data da demo. Preserva os dias da semana e não muda nenhuma métrica publicada. `doctors_latent` não vai para o banco.
+  - `seed-db`, no PR seguinte: carrega os dados sintéticos deslocados em semanas inteiras, para o histórico terminar perto da data da demo. Preserva os dias da semana e não muda nenhuma métrica publicada. `doctors_latent` não vai para o banco.
   - Job novo de CI com Supabase CLI e pgTAP: o GitHub tem Docker, a máquina local não precisa.
 
 ### M1, até 05/11: fluxo de ponta a ponta
@@ -99,7 +99,7 @@ Quando as contas existirem, o Victor avisa; o clone novo e um `.env` vazio são 
   - Slides e feedback da aula; convite aos colegas (hoje só o Victor tem acesso ao repositório).
 - **Feito em 03/11:** conta Vercel. O GitHub do projeto se ligou direto a ela, então a publicação sai pela integração da Vercel, sem precisar do GitHub Actions.
 - **Até 04/11, antes da primeira entrevista:** confirmar com o professor que as conversas podem seguir como atividade da disciplina ([kit](entrevistas/kit-do-entrevistador.md), seção 3).
-- **Até 05/11:** Hostinger KVM 2 no **datacenter do Brasil** (fixo depois da compra), com acesso SSH por chave.
+- **Só quando for preciso:** Hostinger KVM 2 no **datacenter do Brasil** (fixo depois da compra), com acesso SSH por chave. O Victor ainda não comprou: o Claude Code avisa antes do `f3/deploy`, e os dois criam juntos o servidor e o n8n.
 
 **Custo estimado em novembro:** Supabase e Vercel gratuitos (o Supabase Free aceita 200 conexões em tempo real e pausa após 1 semana parado), VPS de US$ 9 a 15 por mês e Gemini abaixo de US$ 1 por 200 chamadas. São preços lidos em outubro: reconferir na compra.
 

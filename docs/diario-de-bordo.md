@@ -4,6 +4,25 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 03/11/2026 (terça): banco no Supabase
+
+**Pedido do Victor:** começar o banco. Ele também avisou que a Hostinger ainda não foi comprada: quando for preciso, o Claude Code avisa, e os dois criam juntos o servidor e o n8n.
+
+**O que foi feito**
+
+- [Migrações](../supabase/README.md) com as tabelas do dicionário (v0.4), a trilha só de inserção com hash encadeado e as regras de acesso por organização e papel. O navegador só lê, e as colunas restritas ficam sem permissão.
+- 100 testes em pgTAP, 9 de contrato em Python e um job novo na CI, que também carrega a amostra sintética e roda os alertas do Supabase.
+- [ADR 0008](adr/0008-banco-no-supabase.md), com as decisões: regras em Python e papel e organização vindos do perfil, e não do JWT.
+
+**O que a medição mostrou**
+
+- Os dados gerados couberam em todas as restrições, mas o limite de 500 caracteres no texto da vaga caiu: o ataque `oversize` chega a 3.314.
+- Desde 30/10 o Supabase não expõe tabelas novas automaticamente, então cada permissão é explícita.
+
+**Uso de IA:** o Claude Code propôs as decisões e escreveu o SQL e os testes; a revisão é do Victor, no PR. Como tudo passou de primeira, abrimos 14 buracos de propósito para ver se os testes acusavam. Treze foram acusados, e o outro revelou um teste que faltava.
+
+**Pendências:** aplicar as migrações no projeto real e carregar os dados, cada um com o ok do Victor.
+
 ## 03/11/2026 (terça): contas novas e primeira página na Vercel
 
 **Pedido do Victor:** conectar as contas novas de Supabase e Vercel, arrumar a Vercel "para ele funcionar" e criar a primeira página.
