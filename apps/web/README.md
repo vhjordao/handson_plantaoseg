@@ -61,9 +61,15 @@ A página não precisa de `.env`. O `.env` da raiz guarda só os tokens de acess
 Na máquina local, em 03/11/2026, com instalação limpa (`npm ci`):
 
 - **Lint, tipos e build:** passaram, e a página foi gerada como estática.
-- **Conferência visual no navegador:** tema claro em 320, 375 e 1440 px e tema escuro em 800 px. Sem rolagem horizontal, com foco de teclado visível e sem erro no console.
+- **Conferência visual no navegador:** em desenvolvimento, tema claro em 320, 375 e 1440 px e tema escuro em 800 px. Na build de produção (`next start`), tema claro em 1280 px e tema escuro em 375 px. Sem rolagem horizontal, com foco de teclado visível e a página sem erro no console.
+- **Build de produção:** sem o cabeçalho `X-Powered-By` e com `noindex`.
 - **Rede:** todas as requisições foram para o próprio site, inclusive a fonte.
 - **Contraste calculado (WCAG):** texto de 7,5:1 a 14,1:1; contorno de foco de 4,3:1 a 8,8:1.
+
+Na CI e na Vercel, no primeiro commit desta branch:
+
+- **CI:** o job da web passou em 1m10s, junto com os outros jobs.
+- **Prévia na Vercel:** o build terminou em `READY`, na região `gru1`, com `success` no GitHub. Sem login, o endereço da prévia redireciona (HTTP 302). Por isso o Claude Code não abriu a prévia e conferiu a mesma build localmente.
 
 Não há teste automático de tela, porque a página não tem comportamento. O Playwright entra com a jornada do protótipo, como prevê o [plano](../../docs/plano-etapa-3.md). A CI repete lint, tipos e build a cada PR.
 
