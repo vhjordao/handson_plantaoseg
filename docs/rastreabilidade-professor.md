@@ -1,11 +1,11 @@
 # Rastreabilidade: exigências do professor
 
-Prova de que nenhum pedido do professor foi ignorado. Cada linha tem origem, tipo, status e onde está no repositório. Atualizada a cada feedback ou aula (ver a skill `incorporar-feedback-professor`). Última revisão: 31/10/2026, na versão 2 do documento da Entrega 2 (batimento com o feedback e com os slides).
+Prova de que nenhum pedido do professor foi ignorado. Cada linha tem origem, tipo, status e onde está no repositório. Atualizada a cada feedback ou aula (ver a skill `incorporar-feedback-professor`). Última revisão: 03/11/2026, com o feedback da Entrega 2 e os slides da Etapa 3.
 
 **Tipos:** obrigatório (exigido no roteiro da etapa), sugestão (o professor usa "recomendo" ou "talvez seja legal"; adotamos salvo conflito) e ambíguo (precisa de leitura razoável, registrada na observação).
 **Status:** feito, parcial (feito com uma ressalva dita na observação), em andamento, pendente, mantido (ponto positivo a preservar) e bloqueado.
 
-Fontes: `FB-` = feedback da Entrega 1 ([docs/feedback/2026-10-27-etapa-1.md](feedback/2026-10-27-etapa-1.md)); `A3-` = slides da aula de 27/10 (`HandsOn_IA_Negocios_Aula3.pdf`, fora do Git em `docs/aulas/`); `PI-` = o que o professor valoriza nas aulas de 06/10 e 20/10, segundo o resumo do Victor no prompt inicial.
+Fontes: `FB-` = feedback da Entrega 1 ([docs/feedback/2026-10-27-etapa-1.md](feedback/2026-10-27-etapa-1.md)); `A3-` = slides da aula de 27/10 (`HandsOn_IA_Negocios_Aula3.pdf`, fora do Git em `docs/aulas/`); `PI-` = o que o professor valoriza nas aulas de 06/10 e 20/10, segundo o resumo do Victor no prompt inicial; `FB2-` = feedback da Entrega 2 ([docs/feedback/2026-11-03-etapa-2.md](feedback/2026-11-03-etapa-2.md)); `A4-` = slides da aula de 03/11 (`HandsOn_IA_Negocios_Aula4.pdf`, fora do Git em `docs/aulas/`).
 
 ## Feedback da Entrega 1 (27/10)
 
@@ -44,3 +44,31 @@ Fontes: `FB-` = feedback da Entrega 1 ([docs/feedback/2026-10-27-etapa-1.md](fee
 | PI-3 | As quatro perguntas de Direito e Ética em toda entrega (dados pessoais, discriminação, decisão que afeta pessoas, regulação) | obrigatório | feito | [docs/03, seção 6](03-entrega-2-prova-de-conceito.md) | Tabela com as quatro respostas; a versão 1 do documento só respondia duas de forma explícita |
 | PI-4 | Recrutamento: discutir como evitar que o sistema reproduza vieses dos dados históricos | obrigatório | feito | [docs/03, seções 3 e 6](03-entrega-2-prova-de-conceito.md); [resultados](resultados/metricas-fluxo.md) | Exposição por zona e faixa etária, proxy da distância e concentração das ofertas (que **piora** frente ao processo manual); mitigações a estudar na Etapa 3 |
 | PI-5 | Saúde: "sem transformar isso em diagnóstico" | obrigatório | feito | [docs/03, seção 1](03-entrega-2-prova-de-conceito.md) | Diagnóstico, prontuário e receita com validade legal ficam fora do escopo, dito no documento |
+
+## Feedback da Entrega 2 (03/11)
+
+O professor abriu os pontos a melhorar com "não que sejam pontos negativos, mas pontos a se pensar"; por isso os três entram como sugestão. O texto comenta só a parte de dados.
+
+| ID | Exigência | Tipo | Status | Onde no repositório | Observação |
+| --- | --- | --- | --- | --- | --- |
+| FB2-1 | A ausência de dados reais limita a capacidade de demonstrar que os padrões representam o comportamento de hospitais e médicos | sugestão | pendente | [plano da Etapa 3](plano-etapa-3.md) | Leitura adotada: buscar evidência do mundo real **sem registro individual**, porque a regra "só dados sintéticos" continua valendo. Caminho: agregados públicos, entrevistas com números, revisão de recomendações por coordenadores, análise de sensibilidade e piloto em modo sombra na implantação |
+| FB2-2 | Apresentar um exemplo mais concreto do dicionário de dados: algumas linhas com nome da variável, tipo, descrição e possíveis valores | sugestão | pendente | [plano da Etapa 3](plano-etapa-3.md) | O dicionário completo existe, mas o PDF da Entrega 2 não mostra tipo nem valores possíveis. Os valores devem sair dos dados gerados, com teste de sincronia |
+| FB2-3 | Explorar como os dados seriam coletados, atualizados e integrados em um ambiente real | sugestão | pendente | [plano da Etapa 3](plano-etapa-3.md) | A Entrega 2 só diz de onde cada tabela viria. Falta dizer como entra, com que frequência se atualiza, como se integra e quem responde por ela |
+| FB2-4 | Pontos positivos a preservar: estrutura do GitHub; origem dos dados sem apresentá-los como reais; dataset estruturado; dicionário, variáveis e justificativas; fontes em produção; qualidade, integridade e prevenção de vazamento; limitações, em especial o viés de seleção | mantido | mantido | [docs/dados/](dados/dicionario-de-dados.md); [docs/03](03-entrega-2-prova-de-conceito.md) | Manter na Entrega 3 o mesmo cuidado de declarar o que é simulação |
+
+## Aula de 03/11: Etapa 3 (slides)
+
+| ID | Exigência | Tipo | Status | Onde no repositório | Observação |
+| --- | --- | --- | --- | --- | --- |
+| A4-1 | Sair da "construção de modelos": mostrar se a solução faz sentido para o negócio, em seis áreas (resultado técnico, resultado para o negócio, experiência, segurança e ética, implantação e critérios de sucesso) | obrigatório | pendente | [plano da Etapa 3](plano-etapa-3.md) | |
+| A4-2 | Resultado técnico: o que foi desenvolvido, como funciona, resultados, métricas e limitações | obrigatório | pendente | [plano da Etapa 3](plano-etapa-3.md) | Comparar com baseline, quando aplicável (Data Science) |
+| A4-3 | Resultado para o negócio: problema resolvido, benefício esperado, KPI impactado e como medir o ROI ou outro indicador de valor | obrigatório | pendente | [plano da Etapa 3](plano-etapa-3.md) | Depende de números das entrevistas para não virar achismo |
+| A4-4 | Experiência: como o usuário utilizará, a jornada e o protótipo ou interface | obrigatório | pendente | [plano da Etapa 3](plano-etapa-3.md); [wireframes](wireframes/README.md) | As contas de Supabase e Vercel existem desde 03/11 e há uma [página provisória](../apps/web/README.md) ([ADR 0007](adr/0007-web-sai-do-adiamento.md)). A interface funcional ainda depende do ok do Victor; sem ela, sobram os wireframes |
+| A4-5 | Segurança e ética: riscos, privacidade, segurança, vieses, aspectos legais e responsabilidades | obrigatório | pendente | [docs/seguranca-ameacas.md](seguranca-ameacas.md); [docs/conformidade/](conformidade/README.md) | Inclui a mitigação da concentração das ofertas |
+| A4-6 | Implantação: arquitetura, infraestrutura, integração, roadmap, recursos, custos estimados e próximos passos | obrigatório | pendente | [plano da Etapa 3](plano-etapa-3.md); [docs/02](02-arquitetura-e-ferramentas.md) | Aqui entra a resposta ao FB2-3 |
+| A4-7 | Critérios de sucesso: "como saberemos, depois de 6 meses, se esse projeto deu certo?" | obrigatório | pendente | [plano da Etapa 3](plano-etapa-3.md) | É o elemento central da entrega |
+| A4-8 | Documento de 8 a 12 páginas (ou slides), com os critérios de sucesso no centro | obrigatório | pendente | [plano da Etapa 3](plano-etapa-3.md) | O slide está intitulado "Entrega 2" e fala em "cinco pilares", com os critérios no centro. Leitura adotada: é a Entrega 3, com as seis áreas |
+| A4-9 | Dica 1: sempre que possível, métricas numéricas quantificáveis, sem achismos, "na minha opinião" nem hipóteses "moon shot" | obrigatório | pendente | [plano da Etapa 3](plano-etapa-3.md) | |
+| A4-10 | Dica 2: amarrar todas as pontas, problema e solução | obrigatório | pendente | [plano da Etapa 3](plano-etapa-3.md) | |
+| A4-11 | Aplicar IA para negócios, gestão de projetos, UX, cybersecurity, direito e ética e data science | obrigatório | pendente | [plano da Etapa 3](plano-etapa-3.md) | "Mentoring e Carreiras em IA" ficou de fora, segundo o slide |
+| A4-12 | Prazos: Entrega 3 em 07/11; storytelling e feedback da Etapa 3 em 10/11; apresentação em 17/11 | informativo | mantido | `README.md`, `CLAUDE.md` | |

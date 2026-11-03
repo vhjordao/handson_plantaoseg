@@ -27,6 +27,20 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 **Pendências:** Hostinger, chave do Gemini e o ok para cada novo pedaço do protótipo. As prévias de PR pedem login na Vercel.
 
+## 03/11/2026 (terça): feedback da Entrega 2 e pedido da Etapa 3
+
+**Pedido do Victor:** registrar o feedback da Entrega 2 e a aula de hoje, e responder como resolver os pontos de melhoria.
+
+**O que o professor disse:** gostou da estrutura no GitHub, de os dados sintéticos não serem apresentados como reais, do dicionário, das fontes em produção, do cuidado com qualidade e vazamento e do viés de seleção declarado. Deixou três "pontos a se pensar": a ausência de dados reais limita demonstrar que os padrões representam hospitais e médicos; falta um exemplo concreto do dicionário (nome, tipo, descrição e valores possíveis); e vale explorar como os dados seriam coletados, atualizados e integrados. O texto comenta só a parte de dados.
+
+**O que a Aula 4 pede:** documento de 8 a 12 páginas em seis áreas (resultado técnico, resultado para o negócio, experiência, segurança e ética, implantação e critérios de sucesso no centro), com métricas numéricas e sem achismos. A pergunta central é "como saberemos, depois de 6 meses, se esse projeto deu certo?".
+
+**O que foi feito:** [feedback na íntegra](feedback/2026-11-03-etapa-2.md); rastreabilidade com FB2-1 a FB2-4 e A4-1 a A4-12; [plano](plano-etapa-3.md) ajustado às seis áreas. Até este registro, nada do protótipo tinha sido construído: ele esperava as contas novas.
+
+**Leitura adotada para o FB2-1:** a regra "só dados sintéticos" continua valendo. A evidência do mundo real vem de agregados públicos, entrevistas com números e revisão por coordenadores, sem nenhum registro individual; a análise de sensibilidade mostra o quanto as conclusões dependem das premissas; e o piloto em modo sombra é o caminho para dados reais na implantação. A medição exploratória foi feita fora do repositório e só entra com código e teste.
+
+**Uso de IA:** o trabalho segue em conjunto. O Claude Code (Opus 5.5) registrou o feedback, leu a aula, mediu de forma exploratória e propôs o caminho; a decisão é do Victor.
+
 ## 02/11/2026 (segunda): plano do protótipo e da Etapa 3
 
 **Pedido do Victor:** iniciar a continuação do projeto. Depois de ver a proposta, aprovou o plano e pediu para só publicá-lo, sem construir nada até passar as contas novas.
