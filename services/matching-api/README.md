@@ -61,7 +61,7 @@ Cada passo foi conferido com `ruff` e `pytest` antes do commit; a decisão sobre
 | GitHub Actions | checkout@v4, setup-python@v5, upload-artifact@v4 | CI com 5 jobs | Já era a escolha do `docs/02` | 0 |
 | Gemini (`google-genai`) | não instalado nem exercitado | Extração e reescrita, opcional | Decisão do Victor ([ADR 0003](../../docs/adr/0003-llm-do-produto-gemini.md)) | Estimado em menos de US$ 1 para 200 chamadas |
 | Regressão logística própria | IRLS, até 15 iterações | Ranking | Explicável por peso e sem dependência; scikit-learn e LightGBM não foram testados (comparação prevista para a Etapa 3) | 0 |
-| FastAPI, Next.js, n8n, Supabase | adiados | API, tela, cascata, banco | ADR 0004 (protótipo adiado) | 0 |
+| FastAPI, n8n, Supabase | adiados | API, cascata, banco | ADR 0004 (protótipo adiado); a tela saiu do adiamento no ADR 0007 | 0 |
 
 Desvio declarado em relação ao `docs/02`: a validação da saída do LLM usa um **esquema fechado escrito à mão** (biblioteca padrão), e não Pydantic; o Pydantic entra quando a API for construída.
 

@@ -1,5 +1,5 @@
 # Esteira de CI do PlantãoSeguro. Roda em todo PR para a main e em push na main.
-# Entram nas fases seguintes: web (lint e build, Fase 3), SQL/RLS (Fase 1) e e2e (Fase 4).
+# Entram nas fases seguintes: SQL/RLS (Fase 1) e e2e (Fase 4).
 name: CI
 
 on:
@@ -34,8 +34,9 @@ jobs:
 
       - name: Padrões de chaves conhecidos
         run: |
-          # Google/Gemini (AIza), Anthropic (sk-ant-), JWT (chaves do Supabase) e token de bot do Telegram.
-          if git grep -nIE '(AIza[0-9A-Za-z_-]{35}|sk-ant-[A-Za-z0-9_-]{20,}|eyJ[A-Za-z0-9_-]{30,}\.[A-Za-z0-9_-]{30,}\.[A-Za-z0-9_-]{10,}|[0-9]{8,10}:AA[A-Za-z0-9_-]{30,})' -- . ':!.github/workflows/ci.yml'; then
+          # Google/Gemini (AIza), Anthropic (sk-ant-), JWT (chaves do Supabase), token de bot do Telegram
+          # e tokens de acesso da Vercel (vcp_) e do Supabase (sbp_).
+          if git grep -nIE '(AIza[0-9A-Za-z_-]{35}|sk-ant-[A-Za-z0-9_-]{20,}|eyJ[A-Za-z0-9_-]{30,}\.[A-Za-z0-9_-]{30,}\.[A-Za-z0-9_-]{10,}|[0-9]{8,10}:AA[A-Za-z0-9_-]{30,}|vcp_[A-Za-z0-9]{20,}|sbp_[A-Za-z0-9_]{20,})' -- . ':!.github/workflows/ci.yml'; then
             echo "::error::Possível segredo no repositório."; exit 1
           fi
 
@@ -133,3 +134,26 @@ jobs:
       - uses: actions/checkout@v4
       - name: docker compose config
         run: docker compose --env-file .env.example -f infra/docker-compose.yml config -q
+
+  web:
+    name: Interface web (lint, tipos e build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/web
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "26"
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - run: npm ci
+      - name: Lint (ESLint)
+        run: npm run lint
+      - name: Tipos (TypeScript)
+        run: npm run typecheck
+      - name: Build (Next.js)
+        run: npm run build

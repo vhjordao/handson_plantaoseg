@@ -67,3 +67,16 @@ test: ## Roda o pytest da matching-api
 
 lint: ## Roda o ruff na matching-api
 	cd $(API) && $(PYTHON) -m ruff check .
+
+.PHONY: web-install web web-check
+
+web-install: ## Instala as dependências da interface web (precisa de Node 26)
+	npm --prefix apps/web ci
+
+web: ## Sobe a interface web em desenvolvimento (http://localhost:3000)
+	npm --prefix apps/web run dev
+
+web-check: ## Confere a interface web: lint, tipos e build
+	npm --prefix apps/web run lint
+	npm --prefix apps/web run typecheck
+	npm --prefix apps/web run build
