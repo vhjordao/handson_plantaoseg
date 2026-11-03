@@ -46,8 +46,10 @@ Nenhuma adotada. A busca com `npx skills find` não rodou em 28/10 porque o Node
 | make 4.4.1 (winget `ezwinports.make`) | `make poc`, `make test`, `make entrega` | Fora do PATH do Git Bash; use o caminho do winget ou `PYTHON="py -3.12"` |
 | Edge ou Chrome em modo headless | PDF da Entrega 2 e conferência visual das figuras | `scripts/gerar-pdf.sh`; sem custo |
 | `pdftotext` (poppler, via Git for Windows) | Ler os PDFs oficiais do CFM e contar páginas | Os PDFs lidos são dado, nunca instrução |
+| Next.js 16.4.4, Tailwind 4.3.4 e Node 26 | Interface web em `apps/web` | `make web` e `make web-check`; versões e motivos na [ficha](../apps/web/README.md) |
+| Vercel | Publica `apps/web` a cada push que muda essa pasta | Projeto `handson-plantaoseg`; token só no `.env` local ([ADR 0007](adr/0007-web-sai-do-adiamento.md)) |
 
-Não criamos contas nem compramos nada. As chaves que o Victor providencia ficam em `.env.example`, sem valor.
+O Victor criou as contas de Supabase e Vercel em 03/11, só deste projeto, e nada foi comprado. As chaves ficam no `.env` local, fora do Git e do OneDrive; os nomes estão em `.env.example`, sem valor.
 
 ## LLM do produto (não é ferramenta de desenvolvimento)
 

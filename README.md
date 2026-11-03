@@ -6,6 +6,8 @@ Projeto final da disciplina **Hands On – Aplicação de IA nos negócios** (p�
 
 > **Status (30/10/2026):** Entrega 1 (descoberta) realizada; **Entrega 2 pronta**: dados sintéticos, análise, solução de IA e uma **PoC mínima executável** (recomendação e explicação, por linha de comando), com o documento em [PDF de 6 páginas](docs/entrega-2/Entrega2-PlantaoSeguro.pdf) e o [guia de postagem](docs/entrega-2/LEIAME.md). Interface, API e n8n estão **adiados** ([ADR 0004](docs/adr/0004-prototipo-adiado.md) e [0005](docs/adr/0005-gp-poc-minima-e-especificacao.md)); o LLM do produto é o **Gemini** ([ADR 0003](docs/adr/0003-llm-do-produto-gemini.md)), ainda **não exercitado** com chave.
 > Projeto acadêmico: todos os dados da demonstração serão sintéticos e nenhum documento gerado tem validade médica ou legal.
+>
+> **Atualização de 03/11/2026:** a interface web saiu do adiamento ([ADR 0007](docs/adr/0007-web-sai-do-adiamento.md)). Há uma [página provisória](https://handson-plantaoseg.vercel.app), sem dados nem login, publicada na Vercel a partir de [`apps/web`](apps/web/README.md). API, banco e n8n continuam adiados.
 
 ## A ideia em um parágrafo
 
@@ -72,10 +74,11 @@ Custo estimado do mês da apresentação: US$ 34 a US$ 41 (VPS e Supabase lidos 
 | [docs/solucao-ia.md](docs/solucao-ia.md), [docs/exemplo-trabalhado.md](docs/exemplo-trabalhado.md), [docs/analise](docs/analise/README.md), [docs/resultados](docs/resultados/metricas-ranking.md) | Desenho da solução de IA, o passo a passo de uma vaga com as contas, a análise exploratória e os resultados da avaliação (simulação) |
 | [docs/seguranca-ameacas.md](docs/seguranca-ameacas.md), [docs/wireframes](docs/wireframes/README.md), [docs/teste-manual-gemini.md](docs/teste-manual-gemini.md) | Ameaças e ficha de risco, telas desenhadas e o plano de teste manual do Gemini (ainda não executado) |
 | [docs/rastreabilidade-professor.md](docs/rastreabilidade-professor.md) | Exigências do professor (feedback da Entrega 1 e slides da Etapa 2), com status e onde cada uma está atendida |
-| [docs/adr/](docs/adr) | Decisões: [segmento inicial](docs/adr/0001-segmento-inicial.md), [escopo da PoC](docs/adr/0002-escopo-da-poc.md), [LLM do produto: Gemini](docs/adr/0003-llm-do-produto-gemini.md), [protótipo adiado](docs/adr/0004-prototipo-adiado.md), [PoC mínima e especificação](docs/adr/0005-gp-poc-minima-e-especificacao.md) e [metas medidas por simulação do fluxo](docs/adr/0006-fluxo-recomendado-medido-por-simulacao.md) |
+| [docs/adr/](docs/adr) | Decisões: [segmento inicial](docs/adr/0001-segmento-inicial.md), [escopo da PoC](docs/adr/0002-escopo-da-poc.md), [LLM do produto: Gemini](docs/adr/0003-llm-do-produto-gemini.md), [protótipo adiado](docs/adr/0004-prototipo-adiado.md), [PoC mínima e especificação](docs/adr/0005-gp-poc-minima-e-especificacao.md), [metas medidas por simulação do fluxo](docs/adr/0006-fluxo-recomendado-medido-por-simulacao.md) e [web fora do adiamento](docs/adr/0007-web-sai-do-adiamento.md) |
 | [docs/conformidade/](docs/conformidade/README.md) | O que os textos oficiais das Res. CFM 2.454, 2.460 e 2.462 dizem, lidos em 30/10/2026, e o que depende de jurídico (não é parecer jurídico) |
 | [docs/plano-etapa-2.md](docs/plano-etapa-2.md) | Plano da Etapa 2: escopo, frentes, cronograma com portões de aprovação, contratos e metas com linha de base (proposta) |
-| [docs/plano-etapa-3.md](docs/plano-etapa-3.md) | Plano do protótipo e da Etapa 3: arquitetura, marcos, o que depende do Victor, verificação e riscos (aprovado; a construção aguarda as contas novas) |
+| [docs/plano-etapa-3.md](docs/plano-etapa-3.md) | Plano do protótipo e da Etapa 3: arquitetura, marcos, o que depende do Victor, verificação e riscos (aprovado; a construção começou pela web) |
+| [apps/web/](apps/web/README.md) | Ficha da interface web: página provisória, como rodar, testes e limites |
 | [docs/CONTRIBUINDO.md](docs/CONTRIBUINDO.md) | Guia de entrada da equipe: ferramentas, primeiro dia, uso do Claude Code, fluxo de Git e documentação obrigatória |
 | [docs/templates/ficha-componente.md](docs/templates/ficha-componente.md) | Modelo da ficha de cada componente (como foi feito, ferramentas, justificativas) |
 | [docs/dados/dicionario-de-dados.md](docs/dados/dicionario-de-dados.md) | Dicionário de dados v0: contrato de dados das frentes A1 a A4 (tabelas, papéis, variáveis do ranking, premissas do simulador e qualidade) |
