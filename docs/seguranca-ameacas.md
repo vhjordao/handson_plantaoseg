@@ -6,7 +6,7 @@ Seção de Cybersecurity da Etapa 2, no formato que o professor pede: quais dado
 
 | Dado | Hoje (PoC) | Em produção (desenho) | Pessoal? | Onde fica | Quem acessa |
 | --- | --- | --- | --- | --- | --- |
-| Cadastro de médicos (nome, CRM, telefone) | **Sintético**, marcado `SIM` | Real | Sim | Hoje: CSV local ignorado pelo Git. Depois: banco (Supabase, região São Paulo) | Hoje: a equipe. Depois: o médico vê o próprio; o coordenador só candidatos elegíveis para a própria vaga (RLS, **desenho**) |
+| Cadastro de médicos (nome, CRM, telefone) | **Sintético**, marcado `SIM` | Real | Sim | Hoje: CSV local ignorado pelo Git. Depois: banco (Supabase, região São Paulo) | Hoje: a equipe. Depois: o médico vê o próprio; o coordenador só candidatos elegíveis para a própria vaga (RLS com testes na CI, [ficha do banco](../supabase/README.md)) |
 | Localização, raio e disponibilidade | Sintético | Real, minimizado (distância calculada, endereço não exibido) | Sim | Idem | Idem; **nunca vai ao LLM** |
 | Atributos de auditoria (gênero, faixa etária, zona) | Sintético | Real, só para auditoria de viés | Sim | Idem | Só a auditoria; **fora do ranking e do LLM** |
 | Vaga e pedido em texto livre | Sintético | Real | Pode conter dado pessoal digitado | Idem | Coordenador; vai ao LLM como **texto não confiável**, após limpeza |
@@ -21,7 +21,7 @@ Na PoC **não há dado pessoal real**. Em produção, a LGPD se aplica: base leg
 | Categoria | Ameaça | Defesa | Evidência | Residual |
 | --- | --- | --- | --- | --- |
 | **S**poofing | Alguém se passa por coordenador ou médico | Autenticação por papel (Supabase Auth, desenho); a trilha registra o ator | `app/audit.py` | A PoC não tem login: **construir com a API** |
-| **T**ampering | Alterar ou apagar registros da trilha | Cadeia de hash e arquivo só de acréscimo | `tests/test_audit.py` (alteração e remoção são detectadas) | Hash local não impede quem apaga o arquivo inteiro: em produção, tabela só de inserção e cópia externa |
+| **T**ampering | Alterar ou apagar registros da trilha | Cadeia de hash e arquivo só de acréscimo | `tests/test_audit.py` (alteração e remoção são detectadas) | Hash local não impede quem apaga o arquivo inteiro. O banco já tem a tabela só de inserção, com gatilho; falta a cópia externa |
 | **T**ampering | Resposta do LLM forjada ou corrompida | Esquema fechado: chaves exatas, listas fixas, datas coerentes | `tests/test_llm.py` (12 saídas maliciosas rejeitadas) | Esquema não pega valor plausível e errado: por isso o coordenador confere |
 | **T**ampering | Manipular os dados sintéticos | Manifesto com SHA-256 por arquivo; CI confere contra a máquina do autor | `docs/dados/manifesto-da-geracao.json`, job `poc` | Informativo, não bloqueia |
 | **R**epudiation | Negar que aprovou uma oferta | Aprovação registrada com ator, hora e versão do modelo | `tests/test_pipeline.py` | Sem assinatura digital |
@@ -66,4 +66,4 @@ Na PoC **não há dado pessoal real**. Em produção, a LGPD se aplica: base leg
 
 ## 6. Riscos residuais e próximos passos
 
-Construir autenticação, RLS e limite de requisições com a API; fixar as ações da CI por hash; testar o Gemini com chave contra os 10 tipos de ataque; mitigar o viés geográfico; validar com jurídico a classificação de risco, o enquadramento na 2.460 e a situação da 2.462 ([docs/conformidade](conformidade/README.md)).
+Construir autenticação e limite de requisições com a API, sobre a RLS já testada; fixar as ações da CI por hash; testar o Gemini com chave contra os 10 tipos de ataque; mitigar o viés geográfico; validar com jurídico a classificação de risco, o enquadramento na 2.460 e a situação da 2.462 ([docs/conformidade](conformidade/README.md)).

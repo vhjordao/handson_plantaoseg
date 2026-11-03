@@ -6,6 +6,7 @@ PYTHON ?= python
 COMPOSE := docker compose --env-file .env -f infra/docker-compose.yml
 API := services/matching-api
 CLI := cd $(API) && $(PYTHON) -m app.cli
+SUPABASE := npx --yes supabase@3.0.0
 
 .PHONY: help doctor env up down logs seed evaluate flow demo walkthrough analyze robustez dicionario entrega kit-entrevistas poc test lint
 
@@ -74,7 +75,12 @@ test: ## Roda o pytest da matching-api
 lint: ## Roda o ruff na matching-api
 	cd $(API) && $(PYTHON) -m ruff check .
 
-.PHONY: web-install web web-check
+.PHONY: db-check web-install web web-check
+
+db-check: ## Sobe o Postgres do Supabase e roda os testes pgTAP (precisa de Docker; a CI roda sempre)
+	$(SUPABASE) db start
+	$(SUPABASE) test db
+
 
 web-install: ## Instala as dependências da interface web (precisa de Node 26)
 	npm --prefix apps/web ci

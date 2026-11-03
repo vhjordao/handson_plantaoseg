@@ -61,12 +61,12 @@ Cada passo foi conferido com `ruff` e `pytest` antes do commit; a decisão sobre
 | Ferramenta | Versão | Para quê | Por que esta e não outra | Custo |
 | --- | --- | --- | --- | --- |
 | Python (biblioteca padrão) | 3.12.10 local; 3.12 na CI | Todo o motor | Roda na CI e em qualquer máquina sem instalar pacote; a máquina do autor não tinha pip até 30/10 | 0 |
-| pytest | 8.3.3 | Testes (235) | Padrão do ecossistema; os testes usam `unittest`, que o pytest também executa | 0 |
+| pytest | 8.3.3 | Testes (244) | Padrão do ecossistema; os testes usam `unittest`, que o pytest também executa | 0 |
 | ruff | 0.7.0 | Lint (E, F, I, UP, B) | Rápido e igual na CI e localmente | 0 |
 | GitHub Actions | checkout@v4, setup-python@v5, upload-artifact@v4 | CI com 5 jobs | Já era a escolha do `docs/02` | 0 |
 | Gemini (`google-genai`) | não instalado nem exercitado | Extração e reescrita, opcional | Decisão do Victor ([ADR 0003](../../docs/adr/0003-llm-do-produto-gemini.md)) | Estimado em menos de US$ 1 para 200 chamadas |
 | Regressão logística própria | IRLS, até 15 iterações | Ranking | Explicável por peso e sem dependência; scikit-learn e LightGBM não foram testados (comparação prevista para a Etapa 3) | 0 |
-| FastAPI, n8n, Supabase | adiados | API, cascata, banco | ADR 0004 (protótipo adiado); a tela saiu do adiamento no ADR 0007 | 0 |
+| FastAPI, n8n | adiados | API, cascata | ADR 0004 (protótipo adiado); a tela e o banco saíram do adiamento nos ADRs 0007 e 0008 | 0 |
 
 Desvio declarado em relação ao `docs/02`: a validação da saída do LLM usa um **esquema fechado escrito à mão** (biblioteca padrão), e não Pydantic; o Pydantic entra quando a API for construída.
 
@@ -81,7 +81,7 @@ python -m app.cli demo --yes    # fluxo completo para uma vaga
 python -m app.cli blind-review  # casos e gabarito da revisão às cegas
 python -m app.cli robustness    # teste de premissas e lançamento (cerca de 2 min)
 python -m app.cli data-dictionary  # exemplo concreto do dicionário
-python -m pytest -q             # 235 testes
+python -m pytest -q             # 244 testes
 python -m ruff check .          # lint
 ```
 
@@ -89,8 +89,8 @@ Da raiz do repositório: `make poc` roda tudo na ordem; `make test` e `make lint
 
 ## 7. Testes e resultados
 
-- **235 testes** (`tests/`): regras e jornada, dados sintéticos e reprodutibilidade, variáveis sem vazamento, modelo, AUC e avaliação, fluxo recomendado (matemática da cascata e coerência com o contrafactual), extração, 10 tipos de injeção de prompt, saídas maliciosas do LLM, explicação, auditoria, pipeline, análise, exemplo trabalhado, conversor do documento e sincronia dos números dos documentos com os arquivos gerados.
-- **CI:** 5 jobs verdes (segredos, lint e testes, neutralidade econômica, PoC e Compose). O job da PoC confere que a execução em Linux gera os **mesmos checksums** dos CSV da máquina do autor.
+- **244 testes** (`tests/`): regras e jornada, dados sintéticos e reprodutibilidade, variáveis sem vazamento, modelo, AUC e avaliação, fluxo recomendado (matemática da cascata e coerência com o contrafactual), extração, 10 tipos de injeção de prompt, saídas maliciosas do LLM, explicação, auditoria, pipeline, análise, exemplo trabalhado, conversor do documento e sincronia dos números dos documentos com os arquivos gerados.
+- **CI:** 7 jobs verdes (segredos, lint e testes, neutralidade econômica, PoC, Compose, banco e interface web). O job da PoC confere que a execução em Linux gera os **mesmos checksums** dos CSV da máquina do autor.
 - **Teste de premissas** ([docs/resultados](../../docs/resultados/metricas-robustez.md)): 17 cenários, comparação com dados públicos e simulação de lançamento. Roda na CI.
 - **Resultados em simulação** ([docs/resultados](../../docs/resultados/metricas-ranking.md)): AUC 0,762 (modelo) contra 0,702 (baseline); chance média de sucesso no top-5 de 71,2% contra 67,7% e 75,8% do oráculo, em 392 vagas de teste.
 - **Fluxo recomendado** ([docs/resultados](../../docs/resultados/metricas-fluxo.md)): tempo médio até preencher a vaga de 110 para 47 min (57% a menos) e ofertas por vaga de 3,31 para 1,32, contra o processo manual simulado; a concentração das ofertas piora (31,1% para 50,7% nos lugares do top-5).
