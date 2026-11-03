@@ -1,6 +1,6 @@
 # ADR 0008: Banco no Supabase: o navegador só lê e as regras ficam em Python
 
-- **Status:** proposta no PR `f3/banco-supabase`; passa a valer com o merge do Victor. Substitui, para o banco, o [ADR 0004](0004-prototipo-adiado.md).
+- **Status:** aceita pelo Victor em 03/11/2026, com as migrações aplicadas no projeto `plantaoseguro`. Substitui, para o banco, o [ADR 0004](0004-prototipo-adiado.md).
 - **Origem:** o [plano da Etapa 3](../plano-etapa-3.md), item M0, e o ok do Victor para começar o banco em 03/11/2026.
 
 ## Contexto
@@ -32,6 +32,7 @@ A CLI fica fixada na versão 3.0.0, e o banco é testado na CI com o Postgres do
 - Um novo valor de domínio pede uma migração. É um custo pequeno, e o domínio fica documentado no próprio banco.
 - A trilha aceita uma inserção por vez, com uma trava da transação. Basta para o volume da demonstração.
 - Apagar os últimos registros da trilha não quebra a cadeia, como já acontece no arquivo da PoC. Falta a cópia externa prevista em [`docs/seguranca-ameacas.md`](../seguranca-ameacas.md).
+- O projeto real pode ter objetos que a CI não vê, como a função `rls_auto_enable`, criada pelo painel do Supabase. Por isso, depois de aplicar uma migração, vale rodar os alertas no próprio projeto.
 - O papel `anon` não lê nada. O login anônimo da plateia usa o papel `authenticated`, e o que ele vê depende do perfil criado pela API.
 
 ## Alternativas descartadas

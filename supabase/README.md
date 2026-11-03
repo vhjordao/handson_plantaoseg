@@ -1,7 +1,7 @@
 # Ficha do componente: banco no Supabase
 
 - **Responsável:** Victor Jordão · **Frente:** banco e segurança · **Branch:** `f3/banco-supabase` · **Atualizado em:** 03/11/2026
-- **Estado:** migrações e testes prontos. As tabelas ainda estão vazias: a carga dos dados sintéticos é o próximo passo. **Tudo é simulação.**
+- **Estado:** migrações aplicadas no projeto `plantaoseguro` em 03/11/2026. As tabelas ainda estão vazias: a carga dos dados sintéticos é o próximo passo. **Tudo é simulação.**
 
 ## 1. O que é e qual dor resolve
 
@@ -30,6 +30,7 @@ O navegador só lê, sob RLS. A API escreve, com a chave de serviço. As decisõ
 4. Trilha de auditoria com os mesmos princípios de `app/audit.py`.
 5. Permissões e políticas, depois de ler o aviso do Supabase de que tabelas novas não são mais expostas automaticamente.
 6. Testes em pgTAP, um teste de contrato em Python e um job na CI.
+7. Aplicação no projeto real, seguida de uma conferência de fora. Os alertas do Supabase apontaram uma função criada pelo painel, e a quarta migração fechou a permissão dela.
 
 ## 4. Código-chave
 
@@ -38,6 +39,7 @@ O navegador só lê, sob RLS. A API escreve, com a chave de serviço. As decisõ
 | `migrations/*_tabelas_base.sql` | Tipos, tabelas, restrições e índices | `offers`: `accepted` e `y_success` são derivados da resposta |
 | `migrations/*_trilha_de_auditoria.sql` | `audit_log`, gatilhos e `verify_audit_chain` | `audit_log_chain`: a trava evita que a cadeia bifurque |
 | `migrations/*_acesso_e_rls.sql` | Permissões por coluna, funções de apoio e políticas | `organization_candidate_ids`: define de quem o coordenador abre o cadastro |
+| `migrations/*_fecha_funcao_rls_auto_enable.sql` | Fecha a execução de uma função criada pelo painel | Só existe no projeto real: a CI não a vê, daí a condição |
 | `tests/*.sql` | Testes em pgTAP | `02_rls_test.sql` descreve o cenário com dois hospitais e quatro médicos |
 | `../scripts/carregar-amostra-banco.sql` | Carrega a amostra e desfaz tudo no fim | Prova que os dados gerados cabem nas regras |
 | `../services/matching-api/tests/test_contrato_banco.py` | Compara as listas do SQL com as do código | Roda sem banco, junto com o `pytest` |
@@ -64,7 +66,14 @@ make test
 make db-check
 ```
 
-A CI roda tudo a cada PR. Quando houver dados, a chave de serviço e o `.env` ficam em um clone fora do OneDrive.
+A CI roda tudo a cada PR. Para aplicar uma migração nova no projeto real, com o ok do Victor e os valores do `.env` no ambiente do comando:
+
+```
+npx supabase@3.0.0 db push --remote=<ref do projeto> --dry-run
+npx supabase@3.0.0 db push --remote=<ref do projeto>
+```
+
+O `.env` fica em um clone fora do OneDrive.
 
 **Para quem escreve o código da web:** liste as colunas em cada consulta. `select=*` falha de propósito nas tabelas com coluna restrita.
 
@@ -83,20 +92,27 @@ Essas rodadas locais usaram um Postgres em WebAssembly (PGlite), que imita o Sup
 - **Alertas do Supabase:** só informativos. Índices sem uso, porque as tabelas estão vazias, e `shift_compensation` sem política, que é de propósito.
 - **Lint das funções:** sem erros.
 
+No projeto real, em 03/11/2026, depois de aplicar as quatro migrações:
+
+- **Estrutura:** 15 tabelas, todas com RLS, e 14 políticas. Só `shift_compensation` fica sem política, de propósito.
+- **De fora, com a chave pública:** ler as 15 tabelas, gravar uma organização e chamar as duas funções públicas foi recusado com `42501`.
+- **Alertas do Supabase:** só informativos.
+
 ## 8. Dados e segurança
 
 - **Dados:** só sintéticos. O CRM precisa do prefixo `SIM` e o telefone do DDD fictício `00`, e o banco recusa outro formato.
 - **Ameaças consideradas:** um hospital ler outro, escalada de papel pelo navegador, adulteração da trilha, dado pessoal na trilha, oferta sem aprovação, pagamento no ranking e chamada direta às funções internas.
 - **Segredos:** a chave de serviço e a senha do banco nunca vão para o Git nem para o navegador. Os padrões de token estão na varredura da CI.
 - **Texto da vaga:** `raw_text` é entrada hostil. O banco só o guarda, e a API trata esse texto antes de usá-lo.
+- **Função criada pelo painel:** ao criar o projeto com RLS automática, o Supabase cria `public.rls_auto_enable()` com execução aberta a todos, e o gatilho `ensure_rls`, que liga a RLS em tabelas novas. A chamada de fora já falhava, porque é uma função de gatilho, mas a permissão foi fechada. O gatilho continua funcionando, o que foi conferido em uma simulação local.
 
 ## 9. Limitações e honestidade
 
-- As migrações ainda não foram aplicadas no projeto real: isso vem depois do merge. Uma simulação (`db push --dry-run`) confirmou que o projeto está ao alcance e que as três estão pendentes, sem alterar nada.
+- Os testes em pgTAP rodaram na CI, na mesma versão do projeto, e não no próprio projeto: a CLI pede a confirmação do Victor para isso. No projeto real foram conferidas a estrutura, as permissões e o acesso de fora.
 - As tabelas não têm dados até a carga. Por isso, o desempenho das políticas com volume ainda não foi medido.
 - Apagar os últimos registros da trilha não quebra a cadeia. Falta a cópia externa.
 - A proteção depende de a chave de serviço ficar no servidor: quem a tiver lê tudo.
-- Os testes usam só Postgres. Não exercitam a API do Supabase de ponta a ponta nem o login real.
+- Os testes de usuário logado usam só Postgres, sem passar pela API nem pelo login real. Pela API, só o acesso sem login foi conferido.
 - A conformidade com a LGPD e as resoluções do CFM é um desenho a validar com jurídico.
 
 ## 10. Uso de IA no desenvolvimento
@@ -107,6 +123,5 @@ O Victor aprovou começar o banco com a lista de itens. O Claude Code escreveu a
 
 Com o ok do Victor:
 
-1. Aplicar as migrações no projeto `plantaoseguro`.
-2. Carregar os dados sintéticos, sem `doctors_latent` e com as datas deslocadas em semanas inteiras.
-3. Criar a API sobre este banco.
+1. Carregar os dados sintéticos, sem `doctors_latent` e com as datas deslocadas em semanas inteiras.
+2. Criar a API sobre este banco.

@@ -21,7 +21,9 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 **Uso de IA:** o Claude Code propôs as decisões e escreveu o SQL e os testes; a revisão é do Victor, no PR. Como tudo passou de primeira, abrimos 14 buracos de propósito para ver se os testes acusavam. Treze foram acusados, e o outro revelou um teste que faltava.
 
-**Pendências:** aplicar as migrações no projeto real e carregar os dados, cada um com o ok do Victor.
+**No projeto real:** o Victor aprovou aplicar, e as migrações entraram. Com a chave pública, todas as tentativas de ler, gravar e chamar funções foram recusadas. Os alertas do Supabase apontaram uma função criada pelo painel, `rls_auto_enable`, com execução aberta a todos, que a CI não tinha como ver. A chamada de fora já falhava, mas a permissão foi fechada com uma quarta migração.
+
+**Pendência:** carregar os dados, com o ok do Victor.
 
 ## 03/11/2026 (terça): contas novas e primeira página na Vercel
 
