@@ -57,6 +57,7 @@ make seed     # dados sintéticos, relatório de qualidade e amostra
 make evaluate # treina o modelo e compara com o baseline (simulação)
 make flow     # fluxo recomendado contra o processo manual: tempo, ofertas e concentração (simulação)
 make robustez # teste de premissas, dados públicos e simulação de lançamento (cerca de 2 min)
+make dicionario # exemplo concreto do dicionário, com os valores dos dados gerados
 make demo     # vaga em texto livre -> top 5 -> aprovação -> trilha de auditoria
 make test     # pytest da matching-api
 make lint     # ruff
@@ -79,6 +80,7 @@ No Windows, `make PYTHON="py -3.12" poc` se `python` não estiver no PATH (ver `
 - `docs/entrevistas/`: kit do entrevistador, casos e gabarito da revisão às cegas. Fichas preenchidas nunca entram no Git.
 - `docs/adr/`, `docs/diario-de-bordo.md`, `docs/ferramentas-agentes.md`, `docs/conformidade/`.
 - `docs/dados/dicionario-de-dados.md`: contrato de dados (papéis das colunas, o que pode ir ao ranking e ao LLM). Mudança nele vira nova versão no mesmo PR.
+- `docs/dados/dicionario-exemplo.md` (gerado) e `docs/dados/dados-em-producao.md` (desenho de coleta, atualização e integração).
 - `docs/aulas/`: slides do professor, **fora do Git** (`.gitignore`). Não publicar.
 - `apps/web`, `services/matching-api`, `supabase/migrations`, `data/synthetic`, `n8n/workflows`, `infra`, `.github/workflows`.
 - Subagentes em `.claude/agents/`; skills próprias em `.claude/skills/`.
@@ -119,6 +121,7 @@ Quando Victor colar um feedback ou disser "novo feedback", use a skill `incorpor
 ## Estado atual (atualize ao fechar cada fase)
 
 - Etapas 1 e 2 entregues. **Etapa 2, versão 2 do documento (31/10/2026, 7 páginas, tag `etapa-2-rev1`; a versão 1 está na tag `etapa-2`):** PoC mínima executável, dados, análise, solução de IA, fluxo recomendado contra o processo manual (`make flow`), segurança, conformidade e PDF em `docs/entrega-2/`. O merge continua sendo do Victor. LLM do produto = Gemini (**não exercitado com chave**); API e n8n adiados.
+- **Feedback da Etapa 2 (03/11):** kit de entrevistas, teste de premissas, exemplo do dicionário e dados em produção prontos; faltam as entrevistas (até 06/11) e o documento da Etapa 3 (07/11).
 - **Próximo passo (plano aprovado em 02/11):** protótipo e Etapa 3, conforme `docs/plano-etapa-3.md`. Supabase e Vercel novos existem desde 03/11 (Hostinger ainda não), e a primeira página está em `apps/web` (ADR 0007). **Cada novo pedaço (telas, API, banco, n8n) espera o ok do Victor.**
 - **Acesso às contas:** só por tokens com escopo no `.env` de um clone fora do OneDrive (`C:\dev`). Cada comando carrega o arquivo só para si; nunca imprima esses valores nem os coloque no chat ou no Git.
 - Ambiente local: Python 3.12, pytest, ruff, make e Node 26 instalados; sem Docker, Supabase CLI e ffmpeg. A CI do GitHub roda tudo, inclusive a PoC.

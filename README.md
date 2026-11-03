@@ -84,6 +84,8 @@ Custo estimado do mês da apresentação: US$ 34 a US$ 41 (VPS e Supabase lidos 
 | [docs/CONTRIBUINDO.md](docs/CONTRIBUINDO.md) | Guia de entrada da equipe: ferramentas, primeiro dia, uso do Claude Code, fluxo de Git e documentação obrigatória |
 | [docs/templates/ficha-componente.md](docs/templates/ficha-componente.md) | Modelo da ficha de cada componente (como foi feito, ferramentas, justificativas) |
 | [docs/dados/dicionario-de-dados.md](docs/dados/dicionario-de-dados.md) | Dicionário de dados v0: contrato de dados das frentes A1 a A4 (tabelas, papéis, variáveis do ranking, premissas do simulador e qualidade) |
+| [docs/dados/dicionario-exemplo.md](docs/dados/dicionario-exemplo.md), [docs/dados/dados-em-producao.md](docs/dados/dados-em-producao.md) | Exemplo concreto do dicionário e como os dados seriam coletados, atualizados e integrados em um ambiente real |
+| [docs/entrevistas/](docs/entrevistas/LEIAME.md), [docs/resultados/metricas-robustez.md](docs/resultados/metricas-robustez.md) | Kit de entrevistas, revisão às cegas, teste de premissas, comparação com dados públicos e simulação de lançamento |
 | [docs/diario-de-bordo.md](docs/diario-de-bordo.md) | Decisões do dia e uso de IA no planejamento |
 | [docs/ferramentas-agentes.md](docs/ferramentas-agentes.md) | Subagentes, skills e integrações usados no projeto |
 

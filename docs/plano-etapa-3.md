@@ -77,9 +77,9 @@ Ensaio completo com o roteiro da aula de 10/11. Se o prazo apertar, a ordem de c
 
 | Frente | O que sai | Quem | Meta |
 | --- | --- | --- | --- |
-| Evidência do mundo real (FB2-1) | Agregados públicos comparados às premissas do simulador; tabela "premissa contra entrevistas"; análise de sensibilidade; desenho do piloto em modo sombra | Claude Code prepara; colegas coletam | 06/11 |
-| Dicionário concreto (FB2-2) | Tabela com nome, tipo, descrição e valores possíveis, gerada dos dados e com teste de sincronia | Claude Code | 04/11 |
-| Dados em produção (FB2-3) | Como cada dado é coletado, atualizado e integrado, com responsável e regra de qualidade | Claude Code; Victor revisa | 05/11 |
+| Evidência do mundo real (FB2-1) | Agregados públicos comparados às premissas do simulador; tabela "premissa contra entrevistas"; análise de sensibilidade; desenho do piloto em modo sombra | Claude Code prepara; colegas coletam | Agregados públicos, sensibilidade e piloto prontos em 03/11 ([resultado](resultados/metricas-robustez.md)); a tabela com as entrevistas fica para 06/11 |
+| Dicionário concreto (FB2-2) | Tabela com nome, tipo, descrição e valores possíveis, gerada dos dados e com teste de sincronia | Claude Code | Feito em 03/11 ([exemplo](dados/dicionario-exemplo.md)) |
+| Dados em produção (FB2-3) | Como cada dado é coletado, atualizado e integrado, com responsável e regra de qualidade | Claude Code; Victor revisa | Feito em 03/11 ([documento](dados/dados-em-producao.md)) |
 | Caso de negócio (A4-3) | KPI impactado e ROI em faixa, a partir das entrevistas | Claude Code; Victor revisa | 06/11 |
 | Critérios de sucesso (A4-7) | Metas numéricas e limiar de decisão aos 6 meses | Victor e Claude Code | 06/11 |
 | Entrevistas | Roteiro com os números que calibram o simulador, revisão de recomendações por coordenadores, consentimento e registro anonimizado; 3 a 5 coordenadores e 3 a 5 plantonistas (promessa da Entrega 1) | Claude Code prepara; colegas entrevistam | Roteiro pronto em 03/11 ([kit](entrevistas/LEIAME.md)); entrevistas até 06/11 |
