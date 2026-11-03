@@ -4,6 +4,23 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 03/11/2026 (terça): teste de premissas e simulação de lançamento
+
+**Pedido do Victor:** colocar no repositório, com testes, o teste de premissas e a simulação de lançamento, que vieram da medição exploratória feita para o feedback da Entrega 2.
+
+**O que foi feito:** `app/robustness.py`, `app/public_data.py` e `make robustez`, com resultado em [docs/resultados/metricas-robustez.md](resultados/metricas-robustez.md). A base continua idêntica: os checksums dos dados e as métricas publicadas não mudaram.
+
+**O que os números dizem (simulação, 17 cenários):**
+
+- O modelo supera o baseline nos 17, de +2,1 a +6,4 pontos no top-5. Essa conclusão resiste.
+- A meta de reduzir 50% o tempo se sustenta em 14 dos 17 (de 42% a 63%). Essa depende das premissas.
+- A concentração piora nos 17: precisa de mitigação, com qualquer premissa.
+- O estudo Demografia Médica 2025 confirma a premissa de pediatras (44,7% contra 45%), mas mostra dois erros do simulador: 76,8% de mulheres na pediatria (usamos 50%) e 26,8% de médicos com 55 anos ou mais (usamos 15%). Pesam na auditoria de equidade, não no ranking.
+
+**Correção em relação à medição exploratória:** na exploração, o modelo já parecia vencer no dia 7 (+2,2 pontos). Ela treinava com ofertas cujo resultado ainda não se saberia naquele dia. Com a regra certa, só ofertas de plantão já terminado, o modelo **perde** no dia 7 (114 ofertas, 2,5 pontos atrás) e vence a partir do dia 14 (252 ofertas). Isso reforça começar o lançamento pelo baseline. A avaliação principal tem a mesma folga na fronteira, em 75 de 6.259 ofertas, e o efeito é desprezível (AUC de 0,7623 para 0,7624): está nos limites do relatório, e os números publicados não mudaram.
+
+**Uso de IA:** o trabalho segue em conjunto. O Claude Code (Opus 5.5) transformou a exploração em módulo testado, encontrou e corrigiu o vazamento do rótulo na curva e conferiu os agregados no PDF oficial do estudo.
+
 ## 03/11/2026 (terça): kit de entrevistas e revisão às cegas
 
 **Pedido do Victor:** aplicar a proposta para os pontos do feedback da Entrega 2, sem tocar no protótipo. Esta é a parte mais urgente: os colegas precisam do roteiro para começar a entrevistar.
