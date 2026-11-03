@@ -1,5 +1,5 @@
 # Esteira de CI do PlantãoSeguro. Roda em todo PR para a main e em push na main.
-# Entram nas fases seguintes: SQL/RLS (Fase 1) e e2e (Fase 4).
+# Entra numa fase seguinte: e2e (Fase 4).
 name: CI
 
 on:
@@ -136,6 +136,25 @@ jobs:
       - uses: actions/checkout@v4
       - name: docker compose config
         run: docker compose --env-file .env.example -f infra/docker-compose.yml config -q
+
+  banco:
+    name: Banco (migrações, RLS e auditoria)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: supabase/setup-cli@v3
+        with:
+          version: 3.0.0
+      - name: Sobe o Postgres do Supabase e aplica as migrações
+        run: supabase db start
+      - name: Testes de RLS e auditoria (pgTAP)
+        run: supabase test db
+      - name: Os dados sintéticos cabem nas regras do banco
+        run: psql "postgresql://postgres:postgres@127.0.0.1:54322/postgres" -f scripts/carregar-amostra-banco.sql
+      - name: Alertas de segurança e desempenho do Supabase
+        run: supabase db advisors --level info --fail-on warn
+      - name: Erros de tipo nas funções do banco
+        run: supabase db lint --level warning --fail-on warning
 
   web:
     name: Interface web (lint, tipos e build)
