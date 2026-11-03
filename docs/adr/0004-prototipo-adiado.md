@@ -1,6 +1,6 @@
 # ADR 0004: Protótipo adiado, a Etapa 2 começa por Dados, Análise e Solução de IA
 
-- **Status:** aceita por decisão do Victor em 28/10/2026. **Atualização de 30/10/2026:** o portão G-P foi decidido no [ADR 0005](0005-gp-poc-minima-e-especificacao.md) (PoC mínima executável por linha de comando, mais o material de especificação). **Continua adiado:** interface web, API HTTP, n8n, banco e RLS.
+- **Status:** aceita por decisão do Victor em 28/10/2026. **Atualização de 30/10/2026:** o portão G-P foi decidido no [ADR 0005](0005-gp-poc-minima-e-especificacao.md) (PoC mínima executável por linha de comando, mais o material de especificação). **Continua adiado:** API HTTP, n8n, banco e RLS. **Atualização de 03/11/2026:** a interface web saiu do adiamento com uma página provisória ([ADR 0007](0007-web-sai-do-adiamento.md)).
 - **Origem:** o Victor pediu para **não construir o protótipo ainda**.
 
 ## Contexto

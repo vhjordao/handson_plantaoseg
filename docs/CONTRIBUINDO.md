@@ -6,7 +6,7 @@ Para quem entra no projeto (Roberval, Guilherme, Sergio, Lucas e Plinio) e para 
 >
 > **Atualização de 30/10:** a **PoC mínima já existe e roda**: comece por `make poc` e pela [ficha do componente](../services/matching-api/README.md). O que falta é a Etapa 3 (entrevistas, teste do Gemini com chave, mitigar o viés de distância, previsão de vagas e, com o ok do Victor, interface, API e n8n).
 >
-> **Dois avisos de 28/10:** o **protótipo está adiado** ([ADR 0004](adr/0004-prototipo-adiado.md)): por ora não se constrói interface, API, n8n nem banco; o trabalho é Dados, Análise, Solução de IA e segurança. E o **LLM do produto é o Gemini** ([ADR 0003](adr/0003-llm-do-produto-gemini.md)); o Claude Code é só a ferramenta de desenvolvimento de cada um.
+> **Dois avisos de 28/10:** o **protótipo está adiado** ([ADR 0004](adr/0004-prototipo-adiado.md)): por ora não se constrói API, n8n nem banco, e a interface tem só uma página provisória desde 03/11 ([ADR 0007](adr/0007-web-sai-do-adiamento.md)); o trabalho é Dados, Análise, Solução de IA e segurança. E o **LLM do produto é o Gemini** ([ADR 0003](adr/0003-llm-do-produto-gemini.md)); o Claude Code é só a ferramenta de desenvolvimento de cada um.
 
 ## 1. Antes de começar
 
@@ -71,7 +71,7 @@ gh pr create                                 # preencha o modelo do PR
 | A4 Solução de IA: LLM com Gemini | `docs/solucao-ia.md` (seção LLM) | Prompts, esquema de saída, guardrails, casos de injeção, fallback |
 | A5 Segurança, ética e conformidade | `docs/seguranca-ameacas.md`, `docs/conformidade/` | STRIDE, textos oficiais das normas, ficha de risco, viés |
 
-`apps/web/`, `n8n/`, `supabase/` e a API ficam **congelados** até o portão G-P (ADR 0004).
+`n8n/`, `supabase/` e a API ficam **congelados** até o ok do Victor (ADR 0004). `apps/web/` saiu do adiamento em 03/11 só com a página provisória ([ficha](../apps/web/README.md)); novas telas também pedem o ok dele.
 
 Arquivos compartilhados e de alto risco de conflito: `CLAUDE.md`, `docs/rastreabilidade-professor.md`, `docs/diario-de-bordo.md`, `docs/02-arquitetura-e-ferramentas.md`, `README.md`. Mexa neles só em PR pequeno e avise no grupo.
 

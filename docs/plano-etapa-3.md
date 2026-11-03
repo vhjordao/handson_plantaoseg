@@ -1,11 +1,11 @@
 # Plano: protótipo e Etapa 3 (02/11 a 17/11)
 
-- **Status:** aprovado pelo Victor em 02/11/2026. **Nada foi construído ainda:** a construção só começa quando o Victor passar as contas novas. Até lá, continua valendo o [ADR 0004](adr/0004-prototipo-adiado.md).
+- **Status:** aprovado pelo Victor em 02/11/2026. **A construção começou em 03/11, só pela web** ([ADR 0007](adr/0007-web-sai-do-adiamento.md)): há uma página provisória em `apps/web`. API, banco e n8n continuam parados até o ok do Victor, e para eles segue valendo o [ADR 0004](adr/0004-prototipo-adiado.md).
 - **Prazos:** aula e feedback da Etapa 2 em 03/11; **Entrega 3 em 07/11 (até 2,0)**; **apresentação final em 17/11 (até 4,0)**, com a plateia usando o sistema pelo celular.
 
 ## Contexto
 
-A Etapa 2 foi entregue com uma PoC por linha de comando. Não há interface, API HTTP, banco nem cascata: `apps/web`, `supabase/migrations` e `n8n/workflows` só têm `.gitkeep`. Este plano transforma o motor em um produto navegável. A validação da Etapa 3 corre em paralelo, porque o teste de usabilidade precisa da tela funcionando.
+A Etapa 2 foi entregue com uma PoC por linha de comando. Em 02/11 não havia interface, API HTTP, banco nem cascata: `apps/web`, `supabase/migrations` e `n8n/workflows` só tinham `.gitkeep`. Este plano transforma o motor em um produto navegável. A validação da Etapa 3 corre em paralelo, porque o teste de usabilidade precisa da tela funcionando.
 
 **Contas (decisão do Victor):** Supabase, Vercel e Hostinger novas, só deste projeto. Contas de outros projetos não são usadas nem tocadas.
 
@@ -31,8 +31,8 @@ Uma branch e um PR por item, CI verde, e nenhum merge sem o ok do Victor. As dat
 
 ### M0, assim que as contas chegarem: fundação
 
-- **Clone em `C:\dev\handson_plantaoseg`.** O OneDrive atrapalha `node_modules` e `.next`, e o [guia da equipe](CONTRIBUINDO.md) já pede isso. A pasta atual fica intacta; `docs/aulas/` é copiada à mão, pois não está no Git.
-- **`f3/adr-prototipo`:** ADR 0007 (fim do adiamento, infraestrutura e regras em Python em vez de funções SQL). Atualiza `CLAUDE.md`, `docs/02`, `docs/CONTRIBUINDO.md` e `.env.example`.
+- **Clone em `C:\dev\handson_plantaoseg` (feito em 03/11).** O OneDrive atrapalha `node_modules` e `.next`, e o [guia da equipe](CONTRIBUINDO.md) já pede isso. A pasta atual fica intacta; `docs/aulas/` é copiada à mão, pois não está no Git.
+- **`f3/web-base`:** [ADR 0007](adr/0007-web-sai-do-adiamento.md), página provisória, ajuste da Vercel e job de CI da web. Atualiza `CLAUDE.md`, `docs/02`, `docs/CONTRIBUINDO.md` e `.env.example`. A decisão de manter as regras em Python em vez de funções SQL fica para o ADR do banco.
 - **`f3/banco-supabase`:**
   - Migrações a partir do [dicionário de dados](dados/dicionario-de-dados.md) v0.2, mais `profiles`.
   - `audit_log` só de inserção, com hash encadeado em gatilho.
@@ -49,7 +49,7 @@ Uma branch e um PR por item, CI verde, e nenhum merge sem o ok do Victor. As dat
 
 ### M2, até 07/11: no ar e validado
 
-- **`f3/deploy`:** web na Vercel; API e n8n na VPS, com HTTPS e versão do n8n fixada.
+- **`f3/deploy`:** web na Vercel (projeto já criado em 03/11); API e n8n na VPS, com HTTPS e versão do n8n fixada.
 - Teste de usabilidade com 3 a 5 pessoas no link real, e a Entrega 3 (abaixo).
 
 ### M3, de 08 a 13/11: demo com a plateia
@@ -80,10 +80,10 @@ Ensaio completo com o roteiro da aula de 10/11. Se o prazo apertar, a ordem de c
 Quando as contas existirem, o Victor avisa; o clone novo e um `.env` vazio são criados, e ele cola as chaves lá. **Chaves nunca vão para o chat nem para o Git.**
 
 - **Até 03/11:**
-  - Conta Supabase e projeto `plantaoseguro` em **South America (São Paulo)**, porque a região não muda depois. As chaves incluem a conexão do pooler de sessão (IPv4).
+  - **Feito em 03/11:** conta Supabase e projeto `plantaoseguro` em **South America (São Paulo)**, porque a região não muda depois. As chaves incluem a conexão do pooler de sessão (IPv4).
   - Chave do Gemini no Google AI Studio.
   - Slides e feedback da aula; convite aos colegas (hoje só o Victor tem acesso ao repositório).
-- **Até 04/11:** conta Vercel. Uma conta do GitHub só se liga a uma conta Vercel; se o GitHub do projeto já estiver em outra, o deploy sai pelo GitHub Actions com um token.
+- **Feito em 03/11:** conta Vercel. O GitHub do projeto se ligou direto a ela, então a publicação sai pela integração da Vercel, sem precisar do GitHub Actions.
 - **Até 05/11:** Hostinger KVM 2 no **datacenter do Brasil** (fixo depois da compra), com acesso SSH por chave.
 
 **Custo estimado em novembro:** Supabase e Vercel gratuitos (o Supabase Free aceita 200 conexões em tempo real e pausa após 1 semana parado), VPS de US$ 9 a 15 por mês e Gemini abaixo de US$ 1 por 200 chamadas. São preços lidos em outubro: reconferir na compra.
