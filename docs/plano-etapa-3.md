@@ -82,7 +82,7 @@ Ensaio completo com o roteiro da aula de 10/11. Se o prazo apertar, a ordem de c
 | Dados em produção (FB2-3) | Como cada dado é coletado, atualizado e integrado, com responsável e regra de qualidade | Claude Code; Victor revisa | 05/11 |
 | Caso de negócio (A4-3) | KPI impactado e ROI em faixa, a partir das entrevistas | Claude Code; Victor revisa | 06/11 |
 | Critérios de sucesso (A4-7) | Metas numéricas e limiar de decisão aos 6 meses | Victor e Claude Code | 06/11 |
-| Entrevistas | Roteiro com os números que calibram o simulador, revisão de recomendações por coordenadores, consentimento e registro anonimizado; 3 a 5 coordenadores e 3 a 5 plantonistas (promessa da Entrega 1) | Claude Code prepara; colegas entrevistam | Roteiro em 04/11; entrevistas até 06/11 |
+| Entrevistas | Roteiro com os números que calibram o simulador, revisão de recomendações por coordenadores, consentimento e registro anonimizado; 3 a 5 coordenadores e 3 a 5 plantonistas (promessa da Entrega 1) | Claude Code prepara; colegas entrevistam | Roteiro pronto em 03/11 ([kit](entrevistas/LEIAME.md)); entrevistas até 06/11 |
 | Concentração | Experimento com rodízio e limite de ofertas em `app/flow.py`, medindo o custo em tempo e na chance de sucesso; a política escolhida vai para a API | Claude Code | 05/11 |
 | Gemini real | Executar o [teste manual](teste-manual-gemini.md) com chave | Claude Code, com a chave do Victor | 05/11 |
 | Modelo | Comparar a regressão logística com LightGBM, como o documento da Etapa 2 prometeu | Claude Code | 06/11 |
@@ -97,6 +97,7 @@ Quando as contas existirem, o Victor avisa; o clone novo e um `.env` vazio são 
   - Conta Supabase e projeto `plantaoseguro` em **South America (São Paulo)**, porque a região não muda depois. As chaves incluem a conexão do pooler de sessão (IPv4).
   - Chave do Gemini no Google AI Studio.
   - Slides e feedback da aula; convite aos colegas (hoje só o Victor tem acesso ao repositório).
+- **Até 04/11, antes da primeira entrevista:** confirmar com o professor que as conversas podem seguir como atividade da disciplina ([kit](entrevistas/kit-do-entrevistador.md), seção 3).
 - **Até 04/11:** conta Vercel. Uma conta do GitHub só se liga a uma conta Vercel; se o GitHub do projeto já estiver em outra, o deploy sai pelo GitHub Actions com um token.
 - **Até 05/11:** Hostinger KVM 2 no **datacenter do Brasil** (fixo depois da compra), com acesso SSH por chave.
 
@@ -116,7 +117,7 @@ Só dados sintéticos; sem o clique do coordenador não sai oferta; nome, CRM e 
 
 ## Verificação
 
-- **Motor e API:** `pytest` e `ruff`; os 176 testes atuais continuam passando, com testes novos de rotas, injeção pela API e "sem aprovação não há oferta".
+- **Motor e API:** `pytest` e `ruff`; os testes atuais continuam passando, com testes novos de rotas, injeção pela API e "sem aprovação não há oferta".
 - **Banco:** pgTAP na CI: hospital A não lê hospital B; médico só vê as próprias ofertas; `shift_compensation` inacessível; `audit_log` recusa UPDATE e DELETE; a cadeia de hash acusa adulteração.
 - **Neutralidade:** o teste atual é estendido para provar que o caminho da API não lê valor de plantão.
 - **Web:** `tsc`, lint e `next build` na CI; conferência visual no navegador; Playwright percorrendo a jornada inteira.
@@ -130,6 +131,7 @@ Só dados sintéticos; sem o clique do coordenador não sai oferta; nome, CRM e 
 | Prazo curto para web, API, banco, n8n e documento | Ordem de corte definida; a tela do coordenador vem antes de tudo |
 | Contas chegarem depois de 04/11 | O M1 encurta; a área Experiência da Etapa 3, que pede protótipo ou interface, e o teste de usabilidade passam a usar os wireframes |
 | Entrevistas não acontecerem até 07/11 | Teste de usabilidade com colegas e conhecidos, com a limitação dita no documento |
+| Entrevistas dependerem de comitê de ética | O Victor confirma com o professor antes da primeira; se não puderem seguir no prazo, ficam os agregados públicos e a análise de sensibilidade, com a limitação dita no documento |
 | Serviço externo cair ao vivo | Fallback em regras, respostas pré-carregadas e vídeo |
 | Plateia digitar dado real | Aviso na tela e camada paga do Gemini na demo |
 | Disco apertado na máquina local | Sem Docker local; imagens só na VPS e na CI |

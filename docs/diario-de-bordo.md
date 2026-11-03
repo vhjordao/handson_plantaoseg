@@ -4,6 +4,22 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 03/11/2026 (terça): kit de entrevistas e revisão às cegas
+
+**Pedido do Victor:** aplicar a proposta para os pontos do feedback da Entrega 2, sem tocar no protótipo. Esta é a parte mais urgente: os colegas precisam do roteiro para começar a entrevistar.
+
+**O que foi feito**
+
+- [Kit do entrevistador](entrevistas/LEIAME.md): convite, regras, termo, roteiros de coordenador e de plantonista, ficha de registro e a tabela que liga cada resposta à premissa que ela testa. Os números citados têm teste de sincronia com os resultados.
+- Revisão às cegas (`app/blind_review.py`, `make kit-entrevistas`): 10 vagas simuladas, cada uma com a lista do modelo e a do baseline em ordem sorteada, sem nome nem CRM. É a forma mais barata de medir a meta da Entrega 1 de 60% de recomendações aceitas.
+- O conversor de documentos ganhou dois marcadores: `<!-- bloco -->`, que não deixa um caso se dividir entre páginas, e `<!-- grande -->`, para as telas ficarem legíveis. Agora ele também resolve os links relativos a partir da pasta de cada documento.
+
+**Por que a pergunta central é "quantos médicos você chama até alguém aceitar":** na simulação, o ganho de tempo do modelo é de 57% contra um coordenador que não confere a agenda, 27% contra quem já chama só quem pode ir e 7% contra quem já escolhe tão bem quanto o baseline. É a premissa que mais pesa, e só as entrevistas a resolvem.
+
+**Ponto aberto, para o Victor:** confirmar com o professor, antes da primeira entrevista, que as conversas podem seguir como atividade da disciplina. A Res. CNS 510/2016 dispensa do sistema CEP/Conep a atividade de ensino sem finalidade de pesquisa, mas exclui dessa dispensa TCC, monografias e similares. A classificação não cabe ao grupo (seção 3 do kit; validar com jurídico).
+
+**Uso de IA:** o trabalho segue em conjunto. O Claude Code (Opus 5.5) escreveu roteiros, código e testes a partir da proposta aprovada pelo Victor e conferiu a norma na fonte. A revisão dos roteiros e as conversas ficam com o grupo.
+
 ## 03/11/2026 (terça): feedback da Entrega 2 e pedido da Etapa 3
 
 **Pedido do Victor:** registrar o feedback da Entrega 2 e a aula de hoje, e responder como resolver os pontos de melhoria.

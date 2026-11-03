@@ -51,6 +51,7 @@ Precisa só do Python 3.12 e do `make` (no Windows, `make PYTHON="py -3.12" ...`
 make poc      # gera os dados, treina e avalia, mede o fluxo recomendado, roda a demonstração, o exemplo trabalhado e a análise
 make test     # testes automatizados
 make entrega  # PDF da Entrega 2 (precisa de Edge ou Chrome)
+make kit-entrevistas  # casos da revisão às cegas e PDFs do kit de entrevistas
 ```
 
 A demonstração recebe uma vaga em texto livre, mostra os campos extraídos, o top 5 com o motivo de cada um, os excluídos com a regra que barrou, registra a aprovação e verifica a trilha de auditoria. Tudo é simulação com dados sintéticos. Detalhes na [ficha do componente](services/matching-api/README.md) e no [exemplo trabalhado](docs/exemplo-trabalhado.md).

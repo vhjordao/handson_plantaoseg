@@ -60,6 +60,7 @@ make demo     # vaga em texto livre -> top 5 -> aprovação -> trilha de auditor
 make test     # pytest da matching-api
 make lint     # ruff
 make entrega  # HTML e PDF do documento da Etapa 2 (Edge ou Chrome)
+make kit-entrevistas # casos da revisão às cegas e PDFs do kit de entrevistas
 make up       # (adiado) supabase start + docker compose do n8n
 ```
 
@@ -71,6 +72,7 @@ No Windows, `make PYTHON="py -3.12" poc` se `python` não estiver no PATH (ver `
 - `docs/03-entrega-2-prova-de-conceito.md`: documento da Etapa 2 (PDF em `docs/entrega-2/`).
 - `docs/plano-etapa-3.md`: plano do protótipo e da Etapa 3 (aprovado; a construção aguarda as contas novas).
 - `docs/feedback/`, `docs/rastreabilidade-professor.md`: feedbacks na íntegra e a tabela de exigências.
+- `docs/entrevistas/`: kit do entrevistador, casos e gabarito da revisão às cegas. Fichas preenchidas nunca entram no Git.
 - `docs/adr/`, `docs/diario-de-bordo.md`, `docs/ferramentas-agentes.md`, `docs/conformidade/`.
 - `docs/dados/dicionario-de-dados.md`: contrato de dados (papéis das colunas, o que pode ir ao ranking e ao LLM). Mudança nele vira nova versão no mesmo PR.
 - `docs/aulas/`: slides do professor, **fora do Git** (`.gitignore`). Não publicar.
