@@ -4,6 +4,29 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 03/11/2026 (terça): contas novas e primeira página na Vercel
+
+**Pedido do Victor:** conectar as contas novas de Supabase e Vercel, arrumar a Vercel "para ele funcionar" e criar a primeira página.
+
+**Decisões do Victor**
+
+- Criou as contas de Supabase e Vercel e o projeto `plantaoseguro`, em São Paulo. A Hostinger fica para depois.
+- Preferiu arrumar a Vercel a pausá-la.
+- Aprovou criar a primeira página. Novas telas, API, banco e n8n continuam esperando o ok dele ([ADR 0007](adr/0007-web-sai-do-adiamento.md)).
+
+**O que foi feito**
+
+- Clone fora do OneDrive e `.env` local, ignorado pelo Git, com os valores colados pelo Victor. A conferência das contas só fez leituras e não imprimiu nenhum valor. O token do Supabase enxerga só o projeto `plantaoseguro`, a senha do banco confere e o token da Vercel enxerga só o projeto `handson-plantaoseg`.
+- A importação na Vercel tinha ficado com Python e `services/matching-api`, e cada push marcava falha no GitHub. O projeto passou para Next.js, `apps/web` e um Ignored Build Step. Os commits `6bb61e6` e `d3c8ff6` passaram de falha para `success`.
+- [`apps/web`](../apps/web/README.md): Next.js 16.4.4 e Tailwind 4, com uma página provisória sem dados nem chaves. Entraram também um job de CI da web e os padrões de token da Vercel e do Supabase na varredura de segredos.
+
+**Uso de IA**
+
+- O Claude Code encontrou a causa da falha e primeiro recomendou pausar as implantações. O Victor pediu para fazer funcionar, e a recomendação mudou depois de ler a documentação oficial, porque pausar só esconderia o erro.
+- O texto e o visual da página foram propostos pelo Claude Code e aguardam a revisão do Victor no PR. Uma animação da fita de obra saiu depois da conferência no navegador, porque podia aparecer pela metade.
+
+**Pendências:** Hostinger, chave do Gemini e o ok para cada novo pedaço do protótipo. As prévias de PR pedem login na Vercel.
+
 ## 02/11/2026 (segunda): plano do protótipo e da Etapa 3
 
 **Pedido do Victor:** iniciar a continuação do projeto. Depois de ver a proposta, aprovou o plano e pediu para só publicá-lo, sem construir nada até passar as contas novas.

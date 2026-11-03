@@ -2,7 +2,7 @@
 
 20/10/2026 · Victor
 
-> **Atualizado em 28/10/2026:** o LLM do produto passou de Claude para **Gemini** ([ADR 0003](adr/0003-llm-do-produto-gemini.md)) e a construção do protótipo foi **adiada** ([ADR 0004](adr/0004-prototipo-adiado.md)). O restante deste documento descreve a arquitetura-alvo. A PoC mínima de 30/10/2026 implementa só o núcleo do motor (regras, ranking, explicação e auditoria) por linha de comando, em Python de biblioteca padrão ([ficha](../services/matching-api/README.md)); a classificação de risco proposta passou de baixo para **médio** e a Res. 2.462 tem aviso de suspensão judicial ([conformidade](conformidade/README.md)).
+> **Atualizado em 28/10/2026:** o LLM do produto passou de Claude para **Gemini** ([ADR 0003](adr/0003-llm-do-produto-gemini.md)) e a construção do protótipo foi **adiada** ([ADR 0004](adr/0004-prototipo-adiado.md)). O restante deste documento descreve a arquitetura-alvo. A PoC mínima de 30/10/2026 implementa só o núcleo do motor (regras, ranking, explicação e auditoria) por linha de comando, em Python de biblioteca padrão ([ficha](../services/matching-api/README.md)); a classificação de risco proposta passou de baixo para **médio** e a Res. 2.462 tem aviso de suspensão judicial ([conformidade](conformidade/README.md)). **Em 03/11/2026**, a interface web saiu do adiamento com uma página provisória em `apps/web`, publicada na Vercel ([ADR 0007](adr/0007-web-sai-do-adiamento.md)); API, banco e n8n continuam adiados.
 
 ## Visão geral
 
