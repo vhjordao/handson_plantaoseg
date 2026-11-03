@@ -7,7 +7,7 @@ COMPOSE := docker compose --env-file .env -f infra/docker-compose.yml
 API := services/matching-api
 CLI := cd $(API) && $(PYTHON) -m app.cli
 
-.PHONY: help doctor env up down logs seed evaluate flow demo walkthrough analyze entrega poc test lint
+.PHONY: help doctor env up down logs seed evaluate flow demo walkthrough analyze entrega kit-entrevistas poc test lint
 
 help: ## Lista os comandos
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | sed 's/:.*## /\t/'
@@ -51,6 +51,14 @@ walkthrough: ## Exemplo trabalhado (docs/exemplo-trabalhado.md) com as contas à
 entrega: ## Gera o HTML e o PDF do documento da Etapa 2 (precisa de Edge ou Chrome)
 	$(CLI) build-doc
 	sh scripts/gerar-pdf.sh
+
+kit-entrevistas: ## Gera os casos da revisão às cegas e os PDFs do kit (precisa de Edge ou Chrome)
+	$(CLI) blind-review
+	$(CLI) build-doc --source ../../docs/entrevistas/kit-do-entrevistador.md --out ../../docs/entrevistas/Kit-do-entrevistador.html
+	$(CLI) build-doc --source ../../docs/entrevistas/revisao-cega-casos.md --out ../../docs/entrevistas/Casos-revisao-cega.html
+	sh scripts/gerar-pdf.sh docs/entrevistas/Kit-do-entrevistador.html docs/entrevistas/Kit-do-entrevistador.pdf
+	sh scripts/gerar-pdf.sh docs/entrevistas/Casos-revisao-cega.html docs/entrevistas/Casos-revisao-cega.pdf
+	rm -f docs/entrevistas/Kit-do-entrevistador.html docs/entrevistas/Casos-revisao-cega.html
 
 poc: seed evaluate flow demo walkthrough analyze ## Roda a PoC mínima inteira, na ordem
 

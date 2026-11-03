@@ -64,6 +64,18 @@ class BlocosTests(unittest.TestCase):
         self.assertIn("data:image/svg+xml;base64,", html)
         self.assertIn("<figcaption>Figura</figcaption>", html)
 
+    def test_figura_grande_vale_so_para_a_proxima(self):
+        html = self.doc("<!-- grande -->\n![A](f.svg)\n\n![B](f.svg)", {"f.svg": SVG})
+        self.assertEqual(html.count('<figure class="grande">'), 1)
+        self.assertEqual(html.count("<figure>"), 1)
+        self.assertLess(html.index('<figure class="grande">'), html.index("<figure>"))
+
+    def test_bloco_mantem_o_trecho_inteiro_na_mesma_pagina(self):
+        html = self.doc("<!-- bloco -->\n## Caso\n\nTexto.\n<!-- fim-bloco -->\n\nDepois.")
+        self.assertIn('<div class="bloco"><h2>Caso</h2><p>Texto.</p></div>', html)
+        self.assertIn("<p>Depois.</p>", html)
+        self.assertNotIn("fim-bloco", html)
+
     def test_caixa_de_destaque_com_paragrafos_e_lista(self):
         html = self.doc("> [!NOTE]\n> **Resumo.** Texto.\n>\n> - um\n> - dois")
         self.assertIn('<blockquote class="note">', html)
