@@ -63,7 +63,11 @@ blockquote p { margin: 2pt 0; }
 blockquote ul, blockquote ol { margin: 2pt 0 2pt 14pt; }
 figure { margin: 4pt 0; text-align: center; break-inside: avoid; }
 figure img { max-width: 100%; max-height: 54mm; }
+figure.grande img { width: 100%; max-height: 112mm; }
 figcaption { font-size: 8pt; color: #52514e; }
+.bloco { break-inside: avoid; }
+.bloco table { margin: 2pt 0; }
+.bloco th, .bloco td { padding: 1.5pt 4.5pt; }
 .figs { display: flex; gap: 8pt; margin: 4pt 0; break-inside: avoid; }
 .figs figure { flex: 1 1 0; min-width: 0; margin: 0; }
 .figs figure img { width: 100%; max-height: 56mm; object-fit: contain; }
@@ -153,11 +157,12 @@ def _kpis(lines: list[str], doc_dir: str) -> str:
     return f'<div class="kpis">{"".join(tiles)}</div>'
 
 
-def _figure(line: str, base_dir: Path, doc_dir: str) -> str:
+def _figure(line: str, base_dir: Path, doc_dir: str, big: bool = False) -> str:
     alt, src = _IMAGE.match(line).groups()  # type: ignore[union-attr]
     uri = _data_uri((base_dir / src).resolve())
+    tag = '<figure class="grande">' if big else "<figure>"
     return (
-        f'<figure><img src="{uri}" alt="{escape(alt)}">'
+        f'{tag}<img src="{uri}" alt="{escape(alt)}">'
         f"<figcaption>{inline(alt, doc_dir)}</figcaption></figure>"
     )
 
@@ -175,7 +180,7 @@ def _blocks(lines: list[str], base_dir: Path, doc_dir: str) -> tuple[list[str], 
     """Blocos HTML das linhas dadas e o texto do primeiro título de nível 1 (se houver)."""
     out: list[str] = []
     title = ""
-    kpis = keep = False
+    kpis = keep = big = False
     i = 0
     while i < len(lines):
         line = lines[i]
@@ -185,6 +190,14 @@ def _blocks(lines: list[str], base_dir: Path, doc_dir: str) -> tuple[list[str], 
         elif line.strip() == "<!-- keep -->":
             keep = True
             i += 1
+        elif line.strip() == "<!-- grande -->":
+            big = True
+            i += 1
+        elif line.strip() == "<!-- bloco -->":  # trecho que não se divide entre páginas
+            end = lines.index("<!-- fim-bloco -->", i)
+            inner, _ = _blocks(lines[i + 1 : end], base_dir, doc_dir)
+            out.append(f'<div class="bloco">{"".join(inner)}</div>')
+            i = end + 1
         elif line.startswith("```"):
             block = []
             i += 1
@@ -214,8 +227,9 @@ def _blocks(lines: list[str], base_dir: Path, doc_dir: str) -> tuple[list[str], 
         elif _IMAGE.match(line.strip()):
             figures = []
             while i < len(lines) and _IMAGE.match(lines[i].strip()):
-                figures.append(_figure(lines[i].strip(), base_dir, doc_dir))
+                figures.append(_figure(lines[i].strip(), base_dir, doc_dir, big))
                 i += 1
+            big = False
             row = figures[0] if len(figures) == 1 else f'<div class="figs">{"".join(figures)}</div>'
             out.append(row)
         elif line.startswith(">"):

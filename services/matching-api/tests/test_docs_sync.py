@@ -2,11 +2,13 @@
 
 import json
 import re
+import tempfile
 import unittest
 from datetime import date
 from pathlib import Path
 
-from app.docbuild import render
+from app.cli import build_parser
+from app.docbuild import REPO_URL, render
 from app.llm.extraction import build_system_prompt
 from app.ranking.features import CONTEXT_VARIABLES, RANKING_FEATURES
 from app.ranking.report import num, pct
@@ -154,6 +156,87 @@ class ConformidadeTests(unittest.TestCase):
 
     def test_classificacao_de_risco_recomenda_reavaliar(self):
         self.assertIn("Médio risco", read("seguranca-ameacas.md"))
+
+
+class KitDeEntrevistasTests(unittest.TestCase):
+    """O kit cita o que a simulação diz, e o gabarito fica fora do que o entrevistador lê."""
+
+    def setUp(self):
+        self.text = read("entrevistas/kit-do-entrevistador.md")
+        self.flow = json.loads(read("resultados/metricas-fluxo.json"))
+
+    def test_tabela_do_coordenador_real_bate_com_o_fluxo(self):
+        manual, flow = self.flow["manual"]["test"], self.flow["flow"]
+        model = flow["model"]["time_mean"]
+        for level, row_start in (
+            (manual, "| Chama sem conferir a agenda (premissa atual)"),
+            (flow["random"], "| Já chama só quem pode ir, em qualquer ordem"),
+            (flow["baseline"], "| Já escolhe tão bem quanto nossa regra simples (baseline)"),
+        ):
+            offers = num(level["offers_per_shift"], 2)
+            gain = pct(1 - model / level["time_mean"], 0)
+            self.assertIn(f"{row_start} | {offers} | {gain} |", self.text)
+        self.assertIn(f"nas {self.flow['n_shifts']} vagas do período de teste", self.text)
+
+    def test_premissas_citadas_batem_com_o_ano_simulado(self):
+        year, assumptions = self.flow["manual"]["year"], self.flow["assumptions"]
+        params = json.loads((DOCS.parent / "data/synthetic/params.json").read_text("utf-8"))
+        report = read("dados/relatorio-de-qualidade.md")
+        success = re.search(r"Taxa de sucesso \(aceitou e compareceu\) \| ([\d,]+)%", report)
+        success_rate = float(success.group(1).replace(",", ".")) / 100
+        accept_rate = year["accepted"] / (year["offers_per_shift"] * year["n_shifts"])
+        response = assumptions["response_mean_minutes"]
+        for expected in (
+            f"| 3: vagas por mês | {round(year['n_shifts'] / 12 / 3)} por hospital |",
+            f"| 4: descobertas | {pct(year['uncovered_share'])} |",
+            f"| 5: médicos chamados | {num(year['offers_per_shift'], 2)} ofertas por vaga |",
+            f"| 6: tempo até confirmar | Mediana de {year['time_median']:.0f} min |",
+            f"{assumptions['ttl_minutes']} min para expirar, resposta média de {response} min, "
+            f"até {assumptions['max_offers_per_shift']} ofertas",
+            f"ele responde por {pct(self.flow['reduction']['rules_share_of_gain'], 0)}",
+            f"10% dos médicos recebem {pct(year['top10_offer_share'])} das ofertas",
+            f"Cerca de {pct(success_rate / accept_rate, 0)} comparecem",
+            f"{pct(year['published24_share'])} publicadas com 24 h ou mais",
+            f"| 3: aceite | {pct(accept_rate)} das ofertas |",
+            f"| 4: tempo de resposta | Média de {response} min |",
+            f"{num(params['accept']['distance'], 2)} por km na chance de aceite",
+            f"+{num(params['accept']['preference'], 1)} quando o período coincide",
+        ):
+            self.assertIn(expected, self.text)
+
+    def test_folha_publicada_equilibra_especialidade_hospital_e_origem(self):
+        sheet = read("entrevistas/revisao-cega-casos.md")
+        pattern = r"^### Caso \d+\. (Clínica médica|Pediatria), .*(Hospital Modelo \w+),"
+        titles = re.findall(pattern, sheet, re.M)
+        self.assertEqual(len(titles), 10)
+        self.assertEqual(sum(specialty == "Pediatria" for specialty, _ in titles), 5)
+        self.assertEqual(sum(specialty == "Pediatria" for specialty, _ in titles[:6]), 3)
+        self.assertEqual(len({hospital for _, hospital in titles[:6]}), 3)
+        self.assertNotIn("SIM-SP-", sheet)
+        answer_key = read("entrevistas/revisao-cega-gabarito.md")
+        self.assertEqual(len(re.findall(r"^\| \d+ \| modelo \| baseline \|", answer_key, re.M)), 5)
+        self.assertEqual(len(re.findall(r"^\| \d+ \| baseline \| modelo \|", answer_key, re.M)), 5)
+
+    def test_links_do_kit_apontam_para_arquivos_que_existem(self):
+        for target in re.findall(r"\]\(([^)#:]+\.(?:md|pdf|svg))\)", self.text):
+            self.assertTrue((DOCS / "entrevistas" / target).is_file(), target)
+
+    def test_o_kit_nao_diz_de_onde_vem_cada_lista(self):
+        self.assertIn("Não abra antes", read("entrevistas/revisao-cega-gabarito.md"))
+        self.assertNotRegex(self.text, r"[Ll]ista [AB] (é|vem|veio)")
+
+    def test_links_relativos_do_kit_viram_endereco_do_github_na_pasta_certa(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / "kit.html"
+            source = DOCS / "entrevistas" / "kit-do-entrevistador.md"
+            args = build_parser().parse_args(
+                ["build-doc", "--source", str(source), "--out", str(out)]
+            )
+            args.func(args)
+            html = out.read_text(encoding="utf-8")
+        self.assertIn(f"{REPO_URL}docs/entrevistas/revisao-cega-gabarito.md", html)
+        self.assertNotIn(f"{REPO_URL}docs/revisao-cega-gabarito.md", html)
+
 
 
 if __name__ == "__main__":

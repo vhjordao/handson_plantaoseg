@@ -93,6 +93,12 @@ jobs:
         run: python -m app.cli evaluate --report-dir /tmp/evidencias/resultados
       - name: Fluxo recomendado contra o processo manual (simulação)
         run: python -m app.cli flow --report-dir /tmp/evidencias/resultados
+      - name: Casos da revisão às cegas iguais aos publicados (informativo, não reprova)
+        continue-on-error: true
+        run: |
+          python -m app.cli blind-review --out /tmp/evidencias/entrevistas
+          diff /tmp/evidencias/entrevistas/revisao-cega-casos.md ../../docs/entrevistas/revisao-cega-casos.md
+          diff /tmp/evidencias/entrevistas/revisao-cega-gabarito.md ../../docs/entrevistas/revisao-cega-gabarito.md
       - name: Demonstração com aprovação e trilha de auditoria
         run: |
           mkdir -p /tmp/evidencias

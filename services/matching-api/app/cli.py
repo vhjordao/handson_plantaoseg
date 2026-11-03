@@ -6,6 +6,7 @@ Uso, a partir de `services/matching-api`:
     python -m app.cli evaluate    # treina o modelo e compara com o baseline (simulação)
     python -m app.cli flow        # fluxo recomendado contra o processo manual (simulação)
     python -m app.cli demo --yes  # vaga em texto livre -> top 5 -> aprovação -> auditoria
+    python -m app.cli blind-review  # casos da revisão às cegas para as entrevistas
     python -m app.cli analyze     # análise exploratória (figuras e tabelas)
 
 Tudo é simulação com dados sintéticos; nada tem validade médica ou legal.
@@ -289,11 +290,28 @@ def cmd_walkthrough(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_blind_review(args: argparse.Namespace) -> int:
+    from app.blind_review import build_cases, render_answer_key, render_cases
+
+    data_dir = Path(args.data)
+    dataset, params = _load(data_dir)
+    model = _load_model(data_dir, dataset, params)
+    cases = build_cases(dataset, model, params)
+    out_dir = Path(args.out)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    (out_dir / "revisao-cega-casos.md").write_text(render_cases(cases), encoding="utf-8")
+    (out_dir / "revisao-cega-gabarito.md").write_text(render_answer_key(cases), encoding="utf-8")
+    print(f"{len(cases)} casos da revisão às cegas gravados em {out_dir}")
+    return 0
+
+
 def cmd_build_doc(args: argparse.Namespace) -> int:
     from app.docbuild import render
 
     source = Path(args.source)
-    html = render(source.read_text(encoding="utf-8"), source.parent)
+    # Links relativos viram endereços do GitHub a partir da pasta do documento.
+    doc_dir = source.parent.resolve().relative_to(REPO_ROOT).as_posix()
+    html = render(source.read_text(encoding="utf-8"), source.parent, doc_dir)
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(html, encoding="utf-8")
@@ -339,6 +357,11 @@ def build_parser() -> argparse.ArgumentParser:
     walk.add_argument("--audit", default=str(DEFAULT_DATA / "audit_walkthrough.jsonl"))
     walk.add_argument("--out", default=str(REPO_ROOT / "docs" / "exemplo-trabalhado.md"))
     walk.set_defaults(func=cmd_walkthrough)
+
+    blind = sub.add_parser("blind-review", help="casos e gabarito da revisão às cegas")
+    blind.add_argument("--data", default=str(DEFAULT_DATA))
+    blind.add_argument("--out", default=str(REPO_ROOT / "docs" / "entrevistas"))
+    blind.set_defaults(func=cmd_blind_review)
 
     doc = sub.add_parser("build-doc", help="converte um documento Markdown em HTML imprimível")
     docs_dir = REPO_ROOT / "docs"
