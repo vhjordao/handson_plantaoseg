@@ -4,6 +4,31 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 03/11/2026 (terça, à noite): plataforma web, prompt de frontend v2 e agentes de revisão
+
+**Pedido do Victor:** fazer o frontend como uma **plataforma** (não um app), aberta no computador e no celular, com uma página inicial que apresente o produto e uma área de login para seguir com a plataforma funcional; buscar as skills de frontend e design, pegar referências na internet (nexunio.health), criar um prompt melhor do que o de exemplo e aplicá-lo na sessão, com agentes de revisão e de UX/UI, **sem interromper a sessão do banco de dados**.
+
+**Decisões**
+
+- **Isolamento:** o trabalho correu num worktree próprio (`C:\dev\plantaoseg-web`, branch `f3/web-plataforma`), sem trocar a branch do checkout da outra sessão. Os ADRs de web começam em 0010 para não colidir com os do banco.
+- **Prompt v2** em [`docs/design/prompt-frontend.md`](design/prompt-frontend.md), no lugar do v1: corrige o segmento (pronto-socorro de hospital privado, não UPA), o formato do CRM sintético, a 2.462 suspensa e a ordem de autoridade.
+- **Metáfora de arte:** "rascunho a lápis, decisão a carimbo". A IA é tracejada, a pessoa é contínua com selo, a regra é cinza. A **voz segue a origem real**: como a leitura da vaga é por regras (o Gemini não foi testado), ela aparece em cinza, não como sugestão da IA.
+- **Web responsiva, sem PWA** ([ADR 0010](adr/0010-web-responsiva-sem-pwa.md)) e **estrutura da plataforma** ([ADR 0011](adr/0011-estrutura-da-plataforma-web.md)): rotas por papel, sessão por persona sem senha, `PlantaoApi` com adaptador `demo` (fixtures do pipeline real) e `live` (depois).
+- **Idioma do código:** domínio e tokens em português (glossário fixo), nomes técnicos genéricos em inglês (`Button`, `Dialog`), códigos do backend como estão. É uma exceção consciente à linha "identificadores em inglês" do prompt v1.
+
+**O que ficou pronto:** landing com demonstração viva (saída real da PoC), entrada por persona, cascas do coordenador e do médico, "Minha conta e transparência" do médico, tela de Vagas com indicadores simulados, telão provisório, testes de componente, jornada e `axe` nos temas claro e escuro, e script de contraste dos tokens. Tudo o que depende de fases seguintes diz "esta tela chega na fase UI-n".
+
+**Descobertas**
+
+- A skill do Vercel dizia que o `proxy.ts` exporta `proxyConfig`; a documentação que vem **dentro do pacote** do Next.js diz `config`. Valeu a do pacote.
+- Os cinco primeiros do ranking da demo real têm chances de 66% a 69%: a tela **diz** que a ordem entre eles é uma sugestão fraca, em vez de fingir precisão.
+- A Atkinson Hyperlegible Next tem numerais tabulares (medido no navegador).
+- Quatro subagentes em paralelo estouraram o limite de uso da API; a retomada foi um agente de cada vez.
+
+**Uso de IA:** o Claude Code escreveu o prompt v2, a direção de arte, os componentes e os testes; um subagente gerou as fixtures a partir do pipeline Python; três agentes (`designer-ui`, `revisor-frontend`, `acessibilidade`) revisam de olhos novos. O Victor aprova ou ajusta no PR.
+
+**Pendências para o Victor:** revisar texto e visual no PR; decidir se o prompt v2 substitui de vez o v1; combinar com a sessão do banco os contratos que a interface espera (campo `trecho` e o texto de `evidencia` das exclusões), registrados no ADR 0011.
+
 ## 03/11/2026 (terça): contas novas e primeira página na Vercel
 
 **Pedido do Victor:** conectar as contas novas de Supabase e Vercel, arrumar a Vercel "para ele funcionar" e criar a primeira página.

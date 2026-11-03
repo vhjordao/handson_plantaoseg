@@ -449,6 +449,13 @@ export const IndicadoresSchema = z.object({
   tempoMedioAtePreencherMin: z.number(),
   pctPreenchidasComAntecedencia24h: z.number(),
   pctSugestoesAceitas: z.number().nullable(),
+  /** O processo manual simulado, nas mesmas vagas de teste: é o "contra X" que o painel mostra. */
+  linhaDeBase: z
+    .object({
+      tempoMedioAtePreencherMin: z.number(),
+      pctPreenchidasComAntecedencia24h: z.number(),
+    })
+    .nullish(),
   vagasPublicadas: z.number().int(),
   decisoesHumanas: z.number().int(),
   aceites: z.number().int(),

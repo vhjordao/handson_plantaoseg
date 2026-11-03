@@ -5,8 +5,9 @@ import { MarcaPlantao } from "@/components/dominio/marca-plantao";
 import { NavLink } from "@/components/layout/nav-link";
 import { UserMenu } from "@/components/layout/user-menu";
 import { Button } from "@/components/ui/button";
+import { ApiProvider } from "@/lib/api/provider";
 import { ACOES } from "@/lib/copy/comum";
-import { NAV_MEDICO } from "@/lib/nav";
+import { itensDaArea } from "@/lib/nav";
 import type { Persona } from "@/lib/api/types";
 
 type PersonaMedico = Extract<Persona, { papel: "medico" }>;
@@ -48,9 +49,9 @@ export function CascaMedico({
         <nav aria-label="Principal" className="hidden border-t border-divisor md:block">
           <Suspense fallback={null}>
             <ul className="mx-auto flex w-full max-w-[960px] gap-1 px-4">
-              {NAV_MEDICO.map((item) => (
-                <li key={item.href}>
-                  <NavLink item={item} variante="superior" />
+              {itensDaArea("medico").map((item) => (
+                <li key={item.id}>
+                  <NavLink area="medico" id={item.id} variante="superior" />
                 </li>
               ))}
             </ul>
@@ -63,7 +64,7 @@ export function CascaMedico({
         tabIndex={-1}
         className="mx-auto w-full max-w-[640px] flex-1 p-4 pb-28 outline-none md:pb-10"
       >
-        {children}
+        <ApiProvider>{children}</ApiProvider>
       </main>
 
       <nav
@@ -72,9 +73,9 @@ export function CascaMedico({
       >
         <Suspense fallback={null}>
           <ul className="flex">
-            {NAV_MEDICO.map((item) => (
-              <li key={item.href} className="flex flex-1">
-                <NavLink item={item} variante="inferior" />
+            {itensDaArea("medico").map((item) => (
+              <li key={item.id} className="flex flex-1">
+                <NavLink area="medico" id={item.id} variante="inferior" />
               </li>
             ))}
           </ul>

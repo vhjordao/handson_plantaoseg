@@ -6,10 +6,11 @@ import { MenuMobile } from "@/components/layout/menu-mobile";
 import { NavLink } from "@/components/layout/nav-link";
 import { UserMenu } from "@/components/layout/user-menu";
 import { Button } from "@/components/ui/button";
+import { ApiProvider } from "@/lib/api/provider";
 import { ACOES } from "@/lib/copy/comum";
 import { AGORA_DEMO } from "@/lib/demo-ancora";
 import { formatarAgora } from "@/lib/format/datas";
-import { NAV_COORDENADOR } from "@/lib/nav";
+import { itensDaArea } from "@/lib/nav";
 import type { Persona } from "@/lib/api/types";
 
 type PersonaCoordenador = Extract<Persona, { papel: "coordenador" }>;
@@ -51,9 +52,9 @@ export function CascaCoordenador({
           <nav aria-label="Principal" className="flex-1 overflow-y-auto p-2">
             <Suspense fallback={null}>
               <ul className="grid gap-1">
-                {NAV_COORDENADOR.map((item) => (
-                  <li key={item.href}>
-                    <NavLink item={item} variante="lateral" recolhivel />
+                {itensDaArea("coordenador").map((item) => (
+                  <li key={item.id}>
+                    <NavLink area="coordenador" id={item.id} variante="lateral" recolhivel />
                   </li>
                 ))}
               </ul>
@@ -64,7 +65,7 @@ export function CascaCoordenador({
         <div className="flex min-w-0 flex-1 flex-col">
           <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-divisor bg-gaze px-3 sm:px-4">
             <Suspense fallback={null}>
-              <MenuMobile itens={NAV_COORDENADOR} className="md:hidden" />
+              <MenuMobile area="coordenador" className="md:hidden" />
             </Suspense>
             <Link
               href="/coordenador/vagas"
@@ -88,7 +89,7 @@ export function CascaCoordenador({
             <p className="mb-4 text-sm text-tinta-suave sm:hidden">
               {hospital}. {agora}.
             </p>
-            {children}
+            <ApiProvider coordenadorId={persona.id}>{children}</ApiProvider>
           </main>
         </div>
       </div>

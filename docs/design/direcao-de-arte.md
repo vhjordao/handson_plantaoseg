@@ -226,6 +226,32 @@ Os valores abaixo são o **ponto de partida**, com os contrastes já calculados 
 | Alvo mínimo | 40 px no computador, 44 px com ponteiro grosseiro (`pointer: coarse`) |
 | Movimento | 120 a 200 ms nas reações; 450 ms no fechamento do tracejado; 60 ms de intervalo na revelação |
 
-## 5. Contraste, tipos e capturas (preenchido na construção)
+## 5. Contraste, tipos e o que mudou na construção
 
-Os resultados do script de contraste, a verificação dos numerais tabulares da Atkinson e as capturas em 1440, 768, 390 e 1920 px entram aqui quando a UI-0 fecha, com a pergunta "que acessório saiu?" respondida.
+**Contraste.** A fonte única das cores é `apps/web/app/globals.css`, e `npm run check:contraste` lê esse arquivo e confere 26 pares em cada tema (roda na CI). Todos passam. Faixas medidas em 03/11/2026:
+
+| Grupo de pares | Mínimo exigido | Tema claro | Tema escuro (telão) |
+| --- | --- | --- | --- |
+| Texto principal (tinta sobre gaze e papel) | 7:1 | 15,3 a 16,6:1 | 14,1 a 16,1:1 |
+| Texto secundário (tinta suave) | 4,5:1 | 6,6 a 7,2:1 | 7,3 a 8,3:1 |
+| Texto nas vozes (IA, humano, atenção, erro) | 4,5:1 | 5,7 a 7,5:1 | 6,5 a 10,0:1 |
+| Rótulo de botão (primário, decisão, atenção) | 4,5:1 | 6,5 a 16,6:1 | 8,9 a 16,1:1 |
+| Borda de campo | 3:1 | 3,5 e 3,8:1 | 3,2 e 3,7:1 |
+| Contorno tracejado e contínuo, e anel de foco | 3:1 | 6,0 a 16,6:1 | 7,0 a 16,1:1 |
+
+O divisor (1,28:1 no claro, 1,54:1 no escuro) é decorativo, não carrega informação sozinho e fica fora da conta. O escuro do sistema e o escuro forçado do telão têm os mesmos valores, e o script confere isso.
+
+**Tipos.** Medido no navegador: a Atkinson Hyperlegible Next **tem** numerais tabulares (com `tabular-nums`, todos os dígitos medem 80,91 px a 32 px; sem isso o "1111" mede 52 px e o "0000", 83 px), então `.tnum` vale para tabelas e contadores. A Source Serif 4 já traz dígitos tabulares por padrão.
+
+**O que mudou entre o plano e a construção** (autocrítica com as capturas):
+
+| Mudança | Por quê |
+| --- | --- |
+| A leitura da vaga passou de "sugestão da IA" para **regra do sistema** (cinza, "Leitura por regras") | O backend lê por regras; o Gemini ainda não foi testado. A voz segue a origem real, e só a ordem e os motivos do modelo são tracejados |
+| No celular, a legenda das vozes desceu para **depois** da demonstração | Ela empurrava o hero para baixo; título, ação e demonstração ficam juntos |
+| Etapa 6 como o único bloco **cheio** | Entre cartões tracejados, contínuos e cinzas, o bloco cheio é a "decisão carimbada" e a única exceção de forma |
+| Mensagem "Chances parecidas (66% a 69%)" no hero | Vem da demonstração real e mostra, em vez de dizer, que o sistema não finge precisão |
+
+**Que acessório saiu** (a regra de Chanel): o menu de âncoras no celular (a página é uma rolagem só); a animação de entrada de cada seção (sobrou a revelação do hero e o fechamento do tracejado); o botão "Pular" do hero (só o "Aprovar e oferecer" funciona, e um botão que não faz nada é pior do que nenhum); e a faixa de demonstração fixa no celular (ela some na rolagem e volta a cada página).
+
+**Capturas** em 1440, 768, 390 e 1920 px, nos temas claro e escuro, ficam em [`capturas/`](capturas/).

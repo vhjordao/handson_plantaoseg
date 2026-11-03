@@ -7,14 +7,18 @@
  *   node scripts/capturar.mjs / --largura 390 --altura 844 --escuro --secoes
  *
  * Opções: --largura, --altura, --escuro, --secoes (uma imagem por <section> e <header>),
- * --espera (ms), --porta, --canal (padrão msedge; vazio usa o Chromium do Playwright).
+ * --espera (ms), --porta, --canal (padrão msedge; vazio usa o Chromium do Playwright) e
+ * --sessao coordenador|medico (entra com a primeira persona do papel, para telas protegidas).
  */
-import { mkdirSync } from "node:fs";
+import { mkdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { chromium } from "@playwright/test";
 
 const args = process.argv.slice(2);
-const rota = args.find((a) => a.startsWith("/")) ?? "/";
+// A rota é o primeiro argumento que não é opção. No Git Bash do Windows, "/entrar" chega como
+// "C:/Program Files/Git/entrar" (conversão de caminho do MSYS); aqui isso é desfeito.
+const primeiro = args.find((a) => !a.startsWith("--")) ?? "/";
+const rota = primeiro.replace(/^[A-Za-z]:[\/]Program Files[\/]Git/i, "").replaceAll("\\", "/") || "/";
 const opcao = (nome, padrao) => {
   const i = args.indexOf(`--${nome}`);
   return i >= 0 && args[i + 1] && !args[i + 1].startsWith("--") ? args[i + 1] : padrao;
@@ -43,6 +47,19 @@ const contexto = await navegador.newContext({
   deviceScaleFactor: 1,
   hasTouch: largura < 768,
 });
+const papelDaSessao = opcao("sessao", "");
+if (papelDaSessao) {
+  const mundo = JSON.parse(readFileSync(new URL("../lib/demo/mundo.json", import.meta.url), "utf8"));
+  const persona = mundo.personas.find((p) => p.papel === papelDaSessao);
+  if (!persona) throw new Error(`Sem persona para o papel ${papelDaSessao}`);
+  await contexto.addCookies([
+    {
+      name: "ps_sessao",
+      value: encodeURIComponent(JSON.stringify({ papel: papelDaSessao, personaId: persona.id })),
+      url: `http://localhost:${porta}`,
+    },
+  ]);
+}
 const pagina = await contexto.newPage();
 await pagina.goto(`http://localhost:${porta}${rota}`, { waitUntil: "networkidle" });
 await pagina.waitForTimeout(espera);

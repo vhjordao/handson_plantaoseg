@@ -13,14 +13,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { NavLink } from "@/components/layout/nav-link";
-import type { ItemDeNavegacao } from "@/lib/nav";
+import { itensDaArea, type AreaDeNavegacao } from "@/lib/nav";
 
 /** O menu de navegação do celular e do tablet estreito: abre como gaveta e fecha ao navegar. */
 export function MenuMobile({
-  itens,
+  area,
   className,
 }: {
-  itens: ItemDeNavegacao[];
+  area: AreaDeNavegacao;
   className?: string;
 }) {
   const [aberto, setAberto] = React.useState(false);
@@ -38,9 +38,14 @@ export function MenuMobile({
         <DialogDescription className="sr-only">Navegação principal da plataforma</DialogDescription>
         <nav aria-label="Principal" className="mt-6">
           <ul className="grid gap-1">
-            {itens.map((item) => (
-              <li key={item.href}>
-                <NavLink item={item} variante="lateral" aoNavegar={() => setAberto(false)} />
+            {itensDaArea(area).map((item) => (
+              <li key={item.id}>
+                <NavLink
+                  area={area}
+                  id={item.id}
+                  variante="lateral"
+                  aoNavegar={() => setAberto(false)}
+                />
               </li>
             ))}
             <li className="mt-3 border-t border-divisor pt-3">

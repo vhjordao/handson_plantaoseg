@@ -2,26 +2,33 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { ItemDeNavegacao } from "@/lib/nav";
+import { encontrarItem, type AreaDeNavegacao } from "@/lib/nav";
 import { cn } from "@/lib/utils";
 
 /**
  * Link de navegação com o estado atual dito de três jeitos: `aria-current`, fundo e uma
  * barra no lado. A cor sozinha nunca é o sinal.
+ *
+ * Recebe só texto (`area` e `id`): o item, com a função `ativo` e o ícone, é resolvido aqui no
+ * cliente, porque funções não atravessam a fronteira entre servidor e cliente.
  */
 export function NavLink({
-  item,
+  area,
+  id,
   variante,
   aoNavegar,
   recolhivel = false,
 }: {
-  item: ItemDeNavegacao;
+  area: AreaDeNavegacao;
+  id: string;
   variante: "lateral" | "inferior" | "superior";
   aoNavegar?: () => void;
   /** Na barra lateral estreita (tablet), mostra só o ícone; o nome fica para o leitor de tela. */
   recolhivel?: boolean;
 }) {
   const caminho = usePathname();
+  const item = encontrarItem(area, id);
+  if (!item) return null;
   const ativo = item.ativo(caminho);
   const Icone = item.icone;
 

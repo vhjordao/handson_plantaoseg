@@ -16,7 +16,9 @@ A web precisa servir quatro públicos com trabalhos diferentes (coordenador, mé
 5. **Estados da vaga** na interface: rascunho, aguardando decisão, oferta em andamento, preenchida e sem cobertura, mais o alerta derivado **em risco**. São estados de tela; a tabela `shifts` do banco pode ter outros.
 6. **Componentes** no estilo do shadcn/ui, escritos no repositório sobre o pacote unificado `radix-ui` e com os tokens do projeto (sem sombra, raios por hierarquia). Estado assíncrono com TanStack Query; validação com Zod.
 7. **Fontes:** a Atkinson Hyperlegible Next continua na interface (ficha do PR #11), e a Source Serif 4 entra nos títulos e nos números de destaque, ambas pela `next/font` (o build baixa; o navegador não chama o Google).
-8. **Qualidade na CI:** lint, tipos, build, testes de componente (Vitest), checagem de contraste dos tokens; Playwright com `axe` entra na fase do telão e da auditoria.
+8. **Qualidade na CI:** lint, tipos, build, testes de componente (Vitest), checagem de contraste dos tokens e, em um job à parte, a jornada e o `axe` do Playwright sobre o build de produção.
+9. **Idioma do código:** domínio e tokens em português (o glossário fixo do produto), nomes técnicos genéricos em inglês (os mesmos do shadcn/ui, para `shadcn add` e a documentação continuarem valendo) e códigos do backend como estão. Exceção consciente à linha "identificadores em inglês" do prompt v1, que ele próprio contrariava; a língua única do domínio evita traduzir "vaga", "oferta" e "contestação" de um lado para o outro.
+10. **A voz segue a origem real.** A leitura da vaga nesta demonstração é feita por regras (o Gemini não foi testado), então aparece como regra do sistema (cinza), e só a ordem sugerida e os motivos do modelo aparecem como sugestão da IA (tracejado).
 
 ## Consequências
 

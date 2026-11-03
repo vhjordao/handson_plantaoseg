@@ -76,3 +76,8 @@ export function comUnidade(valor: number, unidade: string, casas = 1): string {
 export function semQuebra(texto: string): string {
   return texto.replace(/ (?=\d+h)/g, " ");
 }
+
+/** "1 aceite", "3 aceites": o número com a palavra no singular ou no plural. */
+export function plural(valor: number, singular: string, pluralDaPalavra: string): string {
+  return `${formatarInteiro(valor)} ${valor === 1 ? singular : pluralDaPalavra}`;
+}
