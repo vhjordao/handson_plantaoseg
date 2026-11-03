@@ -59,7 +59,7 @@ Cada etapa do fluxo tem uma ferramenta principal e uma alternativa; a escolha pr
 
 | Etapa | Recomendação | Alternativa | Observação |
 | --- | --- | --- | --- |
-| Interface (coordenador, médico e telão) | Next.js, Tailwind e shadcn/ui, como PWA | Vite com React | A plateia entra por QR code, sem instalar nada |
+| Interface (coordenador, médico e telão) | Next.js, Tailwind e shadcn/ui, web responsiva e sem PWA ([ADR 0010](adr/0010-web-responsiva-sem-pwa.md)) | Vite com React | A plateia entra por QR code, sem instalar nada |
 | Login e perfis | Supabase Auth, com login anônimo e persona para a plateia | Magic link por e-mail | O JWT carrega hospital e papel, que a RLS usa |
 | Entrada da vaga | Formulário no web app que chama um webhook do n8n | Telegram | Texto livre, com campos opcionais |
 | Extração dos campos | Gemini 3.5 Flash-Lite (SDK `google-genai`) com saída estruturada (JSON Schema) e validação com Pydantic | Gemini 3.8 Flash nos casos ambíguos | Nome, CRM e telefone nunca vão ao modelo; na demo, camada paga (ADR 0003) |
