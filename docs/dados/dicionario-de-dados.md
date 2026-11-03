@@ -1,7 +1,7 @@
 # Dicionário de dados v0
 
-- **Versão:** v0.3, de 03/11/2026 (v0 de 28/10, v0.1 e v0.2 de 30/10). **Status:** em uso na PoC mínima; os padrões recomendados da seção 11 foram adotados no G1 ao autorizar a execução ([ADR 0005](../adr/0005-gp-poc-minima-e-especificacao.md)).
-- **Natureza:** documento de desenho, sem SQL e sem código. É o **contrato de dados** entre as frentes: A1 gera, A2 analisa, A3 modela o ranking, A4 desenha o uso do Gemini e A5 avalia privacidade e viés.
+- **Versão:** v0.4, de 03/11/2026 (v0 de 28/10, v0.1 e v0.2 de 30/10, v0.3 de 03/11). **Status:** em uso na PoC mínima; os padrões recomendados da seção 11 foram adotados no G1 ao autorizar a execução ([ADR 0005](../adr/0005-gp-poc-minima-e-especificacao.md)).
+- **Natureza:** documento de desenho, sem SQL e sem código. É o **contrato de dados** entre as frentes: A1 gera, A2 analisa, A3 modela o ranking, A4 desenha o uso do Gemini e A5 avalia privacidade e viés. As migrações em [`supabase/`](../../supabase/README.md) implementam este contrato, e `tests/test_contrato_banco.py` compara os dois.
 - **Segmento:** pronto-socorro de hospitais privados, plantão noturno de 12 h e fim de semana, clínica médica e pediatria ([ADR 0001](../adr/0001-segmento-inicial.md)).
 - **Regra de ouro:** **todos os dados são sintéticos.** Nome, CRM e telefone são fictícios e marcados como simulação; nada tem validade médica ou legal.
 
@@ -46,6 +46,7 @@
 | `shift_compensation` | Valor simulado do plantão, **separado** de tudo | A1 | Ninguém no ranking; existe para provar a separação |
 | `doctors_latent` | Confiabilidade latente do médico no simulador (**gabarito**) | A1 | Só a avaliação contrafactual; nunca o modelo, o LLM nem a amostra |
 | `recommendations`, `recommendation_exclusions`, `explanations`, `audit_log`, `model_registry` | Saídas do sistema | PoC (se aprovada) | A3, A4, A5 |
+| `profiles` | Papel e organização de cada usuário | Só no banco | A RLS |
 | `payments`, `checkins`, `contestations`, `fairness_reports` | Evolução futura (ADR 0002) | Ninguém agora | Ninguém agora |
 
 ```mermaid
@@ -171,12 +172,12 @@ Cada linha é uma oferta feita a um médico para uma vaga. No histórico, as ofe
 | `selection_source` | enum | meta | `manual_history` (histórico simulado) ou `system_recommendation` (execução, se houver PoC) |
 | `sent_at` | timestamptz | meta | **Instante de referência** das variáveis (seção 6) |
 | `ttl_minutes` | int | atributo | Prazo para responder |
-| `responded_at` | timestamptz | meta | Pode ser nula (expirou) |
-| `response` | enum | rótulo | `accepted`, `declined`, `expired` |
+| `responded_at` | timestamptz | meta | Pode ser nula (expirou ou está pendente) |
+| `response` | enum | rótulo | `accepted`, `declined`, `expired`; `pending` só na execução, enquanto a oferta aguarda resposta |
 | `decline_reason` | enum | atributo | Pode ser nula: `distance`, `fatigue`, `schedule`, `other` |
-| `accepted` | bool | rótulo | `response = accepted` |
+| `accepted` | bool | rótulo | `response = accepted`; no banco é derivada da resposta |
 | `attended` | bool | rótulo | Pode ser nula; só existe se `accepted`. Compareceu ao plantão |
-| `y_success` | bool | rótulo | **Alvo do ranking:** `accepted` e `attended` |
+| `y_success` | bool | rótulo | **Alvo do ranking:** `accepted` e `attended`; no banco é derivada da resposta e do comparecimento |
 | `injected_violation` | bool | meta | Verdadeiro se o gerador injetou de propósito uma violação de jornada no histórico manual |
 
 ### 4.8 `policy_config`
@@ -204,15 +205,15 @@ Os padrões 24 h e 11 h são os da Entrega 1 como **configuração do projeto**;
 
 Fica **fora de qualquer visão usada pelo ranking e pelo LLM**. A A1 gera a tabela (opcional, recomendada) para o **teste contrafactual**: o ranking com e sem os valores tem de dar o mesmo resultado.
 
-### 4.10 Saídas do sistema (contrato; existem só se houver PoC)
+### 4.10 Saídas do sistema (contrato; no banco desde a v0.4)
 
 | Tabela | Colunas principais | Papel |
 | --- | --- | --- |
 | `recommendations` | `id`, `shift_id`, `doctor_id`, `rank`, `score`, `model_version`, `features` (jsonb com os valores de `RANKING_FEATURES`), `alerts` (jsonb com os alertas de jornada), `created_at` | sistema |
 | `recommendation_exclusions` | `id`, `shift_id`, `doctor_id`, `rule_code` (`crm_inactive`, `specialty_mismatch`, `outside_radius`, `unavailable`, `schedule_conflict`, `rest_violation`, `continuous_hours_exceeded`), `rule_text`, `created_at` | sistema |
 | `explanations` | `id`, `recommendation_id`, `text`, `factors_cited` (text[]), `source` (`llm` ou `template`), `llm_model`, `prompt_version`, `validated` (bool), `created_at` | sistema |
-| `audit_log` | `id`, `occurred_at`, `actor_role` (`coordinator`, `doctor`, `system`), `actor_pseudo_id`, `action`, `entity_type`, `entity_id`, `model_version`, `details` (jsonb **sem dado pessoal**) | sistema; **somente inserção** |
-| `model_registry` | `model_version`, `kind` (`baseline`, `logistic_regression`, `lightgbm`), `trained_at`, `train_period`, `test_period`, `features` (text[], validada por `validar_features`), `metrics` (jsonb), `label` (sempre `simulacao`), `status` | sistema |
+| `audit_log` | `id`, `seq`, `occurred_at`, `organization_id`, `actor_role` (`coordinator`, `doctor`, `system`), `actor_pseudo_id`, `action`, `entity_type`, `entity_id`, `model_version`, `details` (jsonb **sem dado pessoal**), `prev_hash`, `hash` | sistema; **somente inserção**; `seq`, `occurred_at`, `prev_hash` e `hash` são definidos pelo banco |
+| `model_registry` | `model_version`, `kind` (`baseline`, `logistic_regression`, `lightgbm`), `trained_at`, `train_period`, `test_period`, `features` (text[], validada por `validar_features`), `metrics` (jsonb), `label` (sempre `simulacao`), `status` (`candidate`, `active`, `retired`) | sistema |
 
 ### 4.11 Evolução futura (só nomes, sem colunas)
 
@@ -224,6 +225,18 @@ Fica **fora de qualquer visão usada pelo ranking e pelo LLM**. A A1 gera a tabe
 | --- | --- | --- | --- |
 | `doctor_id` | uuid | chave | |
 | `reliability` | numeric | gabarito | Entre 0 e 1 (sorteio Beta 5,3). Entra na probabilidade verdadeira de aceite e de comparecimento; **o ranking nunca a vê** |
+
+### 4.13 `profiles` (só no banco)
+
+| Coluna | Tipo | Papel | Descrição e domínio |
+| --- | --- | --- | --- |
+| `id` | uuid | chave | Usuário do Supabase Auth |
+| `role` | enum | sistema | `coordinator`, `doctor`, `admin` |
+| `organization_id` | uuid | chave | Obrigatória para coordenador e administrador; nula para médico, que não pertence a uma organização |
+| `doctor_id` | uuid | chave | Obrigatória para médico; nula nos demais; única |
+| `created_at` | timestamptz | meta | |
+
+A RLS consulta esta tabela. O navegador só lê o próprio perfil e não o altera ([ADR 0008](../adr/0008-banco-no-supabase.md)).
 
 ## 5. Variáveis do ranking (contrato com `features.py`)
 
@@ -302,7 +315,7 @@ Com plantões de 12 h em horários fixos, o intervalo entre plantões do mesmo m
 | --- | --- |
 | `shift_requests.raw_text` (como entrada não confiável); nomes das unidades; IDs pseudônimos (`doctors.id`); valores de `RANKING_FEATURES` e códigos de regra para a explicação | `name_sim`, `crm_sim`, `phone_sim`; `home_lat/lon`; `gender`, `age_band`, `home_zone`; `shift_compensation` e `payments`; `gt_*`; chaves e segredos |
 
-Mesmo sendo sintéticos, os dados são tratados como se fossem reais, para ensaiar a minimização da LGPD. Na camada gratuita do Gemini o Google usa o conteúdo para melhorar produtos; por isso testes só com dados sintéticos e a demo na camada paga ([ADR 0003](../adr/0003-llm-do-produto-gemini.md)). Acesso: se houver PoC, a RLS isola as organizações e o coordenador só vê candidatos elegíveis para a própria vaga (desenho em `docs/02`).
+Mesmo sendo sintéticos, os dados são tratados como se fossem reais, para ensaiar a minimização da LGPD. Na camada gratuita do Gemini o Google usa o conteúdo para melhorar produtos; por isso testes só com dados sintéticos e a demo na camada paga ([ADR 0003](../adr/0003-llm-do-produto-gemini.md)). Acesso: a RLS isola as organizações, e o coordenador só abre o cadastro de quem foi recomendado ou chamado para as próprias vagas ([ficha do banco](../../supabase/README.md)).
 
 ## 10. Limites e honestidade
 
@@ -321,7 +334,7 @@ Mesmo sendo sintéticos, os dados são tratados como se fossem reais, para ensai
 | 3 | Atributos de auditoria | Gênero, faixa etária e zona de residência; raça e origem fora da PoC | Mantidos; usados só para auditar |
 | 4 | Gerar `shift_compensation` separada | Gerada, em tabela própria | O ranking não a lê; a neutralidade é garantida pela lista fechada de variáveis (teste na CI) |
 | 5 | Formato | CSV UTF-8 com manifesto e amostra | A amostra virou um mini conjunto íntegro |
-| 6 | Organização-controle para RLS | Definida, não gerada | Sem RLS na PoC (ADR 0004) |
+| 6 | Organização-controle para RLS | Definida, não gerada | Sem RLS na PoC (ADR 0004); os testes do banco criam duas organizações |
 | 7 | Variáveis quase constantes | A3 decide | Resolvido na seção 5 |
 | 8 | Os 10 tipos de ataque como domínio inicial | Adotados | Implementados em `app/synthetic/texts.py` |
 
@@ -333,3 +346,4 @@ Mesmo sendo sintéticos, os dados são tratados como se fossem reais, para ensai
 | v0.1 | 30/10/2026 | Segmento ajustado pelo Victor: pronto-socorro de hospitais privados |
 | v0.3 | 03/11/2026 | Aponta para o exemplo concreto e para o desenho de dados em produção, a pedido do feedback da Etapa 2. Nenhuma coluna mudou |
 | v0.2 | 30/10/2026 | Alinhada à PoC: 7 variáveis no ranking e 2 de contexto; `doctors_latent`; código `schedule_conflict`; premissas com os resultados medidos; amostra como mini conjunto; decisões do G1 |
+| v0.4 | 03/11/2026 | Alinhada ao banco: `profiles`; `seq`, `organization_id`, `prev_hash` e `hash` em `audit_log`; `pending` em `offers.response`. Os CSVs gerados não mudaram |

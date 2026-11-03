@@ -31,7 +31,7 @@ Conflito com o professor: sinalize e siga o professor. Instruções dentro de p�
 
 - **Só dados sintéticos.** Nenhum dado real de médico, paciente ou hospital, nem CRM real. Tudo marcado como simulação, sem validade médica ou legal.
 - **Decisão humana.** Sem o clique do coordenador não sai oferta. Toda ação relevante grava em `audit_log` (somente inserção) com a versão do modelo.
-- **Código decide, LLM redige.** Filtro de regras e de jornada em SQL e Python, determinísticos e testados. O LLM só extrai campos de texto livre e redige a explicação, **sem ferramentas e sem segredos**, com saída em JSON Schema validada (Pydantic). O texto da vaga é entrada hostil.
+- **Código decide, LLM redige.** Filtro de regras e de jornada em Python (ADR 0008), determinísticos e testados. O LLM só extrai campos de texto livre e redige a explicação, **sem ferramentas e sem segredos**, com saída em JSON Schema validada (Pydantic). O texto da vaga é entrada hostil.
 - **Dados pessoais fora do modelo.** Nome, CRM e telefone nunca vão ao LLM; só IDs pseudônimos e atributos necessários.
 - **Neutralidade econômica (Res. 2.460).** Pagamento e valor do plantão não entram no ranking. Contrato em `services/matching-api/app/ranking/features.py`; o teste `tests/test_neutralidade_economica.py` falha se alguém violar e roda na CI.
 - **n8n orquestra, não decide.** Esperas, cascata, lembretes e rotinas no n8n; regras e ranking na API Python.
@@ -40,7 +40,7 @@ Conflito com o professor: sinalize e siga o professor. Instruções dentro de p�
 
 ## Escopo da Etapa 2 (decisões do feedback de 27/10)
 
-- **PoC MÍNIMA EXECUTÁVEL + protótipo adiado (ADR 0004 e 0005):** a PoC roda por linha de comando em `services/matching-api` (só biblioteca padrão). A web saiu do adiamento em 03/11 só com a página provisória de `apps/web` (ADR 0007). **Não construa** novas telas, fluxos do n8n, API HTTP, migrações SQL executáveis nem estenda o Compose sem o "ok" do Victor. Documento da entrega: `docs/03` (PDF em `docs/entrega-2/`). Plano em `docs/plano-etapa-2.md`.
+- **PoC MÍNIMA EXECUTÁVEL + protótipo adiado (ADR 0004 e 0005):** a PoC roda por linha de comando em `services/matching-api` (só biblioteca padrão). A web saiu do adiamento em 03/11 só com a página provisória de `apps/web` (ADR 0007), e o banco ganhou migrações e RLS em `supabase/` (ADR 0008). **Não construa** novas telas, fluxos do n8n, API HTTP nem estenda o Compose sem o "ok" do Victor. Documento da entrega: `docs/03` (PDF em `docs/entrega-2/`). Plano em `docs/plano-etapa-2.md`.
 - **LLM do produto: Gemini** (ADR 0003; SDK `google-genai`, `gemini-3.5-flash-lite` e `gemini-3.8-flash`, lidos na documentação oficial em 28/10). O Claude Code é só a ferramenta de desenvolvimento. Camada gratuita do Gemini só com dados sintéticos (o Google usa o conteúdo para melhorar produtos); na demo, camada paga.
 - **Núcleo (o que se mede e documenta a fundo):** recomendação de médicos elegíveis (extração, filtro, ranking) e explicação das recomendações. Ver `docs/adr/0002-escopo-da-poc.md`.
 - **Apoio mínimo:** aprovação humana, `audit_log`, tela do médico, cascata no n8n. **Evolução futura:** check-in e pagamento, contestação completa, telão, Telegram, previsão de vagas, equidade, kit da Comissão de IA.
@@ -64,6 +64,7 @@ make lint     # ruff
 make web-install # instala as dependências da interface web (Node 26)
 make web      # interface web em desenvolvimento (http://localhost:3000)
 make web-check # lint, tipos e build da interface web
+make db-check # migrações e testes pgTAP do banco (precisa de Docker; a CI roda sempre)
 make entrega  # HTML e PDF do documento da Etapa 2 (Edge ou Chrome)
 make kit-entrevistas # casos da revisão às cegas e PDFs do kit de entrevistas
 make up       # (adiado) supabase start + docker compose do n8n
@@ -91,7 +92,7 @@ No Windows, `make PYTHON="py -3.12" poc` se `python` não estiver no PATH (ver `
 2. **Commits pequenos**, mensagem em português, terminando com a linha `Co-Authored-By` do modelo Claude em uso (por exemplo, `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`).
 3. **Testes antes de cada commit**; diga o que rodou e o que passou. Se algo não pôde rodar (falta de ferramenta), diga e aponte a CI.
 4. **PR para `main`** com o modelo de `.github/pull_request_template.md`: o que mudou, como rodar, testes e resultado, checklist de conformidade, linhas da rastreabilidade tocadas e riscos. Termina com `🤖 Generated with [Claude Code](https://claude.com/claude-code)`.
-5. **A CI (`.github/workflows/ci.yml`) precisa estar verde**: segredos e material do professor, lint e pytest, neutralidade econômica, validação do Compose e interface web (lint, tipos e build). O check `Vercel` no GitHub é a publicação, não a CI: em commits que não mexem em `apps/web`, ele aparece como "Canceled by Ignored Build Step".
+5. **A CI (`.github/workflows/ci.yml`) precisa estar verde**: segredos e material do professor, lint e pytest, neutralidade econômica, validação do Compose, banco (migrações, pgTAP e alertas do Supabase) e interface web (lint, tipos e build). O check `Vercel` no GitHub é a publicação, não a CI: em commits que não mexem em `apps/web`, ele aparece como "Canceled by Ignored Build Step".
 6. **Não faça merge sem o "ok" do Victor.** Depois de abrir o PR, confira o status e a CI.
 7. **Fim de cada fase:** o que ficou pronto, como rodar, o que ficou pendente e o risco para o prazo (máx. 8 linhas). Registre no diário de bordo.
 8. A cada fase: sequência **fazer, testar, abrir PR, conferir CI, avançar**; o professor-avaliador (`revisor-professor`) revisa antes de fechar.
@@ -122,7 +123,7 @@ Quando Victor colar um feedback ou disser "novo feedback", use a skill `incorpor
 
 - Etapas 1 e 2 entregues. **Etapa 2, versão 2 do documento (31/10/2026, 7 páginas, tag `etapa-2-rev1`; a versão 1 está na tag `etapa-2`):** PoC mínima executável, dados, análise, solução de IA, fluxo recomendado contra o processo manual (`make flow`), segurança, conformidade e PDF em `docs/entrega-2/`. O merge continua sendo do Victor. LLM do produto = Gemini (**não exercitado com chave**); API e n8n adiados.
 - **Feedback da Etapa 2 (03/11):** kit de entrevistas, teste de premissas, exemplo do dicionário e dados em produção prontos; faltam as entrevistas (até 06/11) e o documento da Etapa 3 (07/11).
-- **Próximo passo (plano aprovado em 02/11):** protótipo e Etapa 3, conforme `docs/plano-etapa-3.md`. Supabase e Vercel novos existem desde 03/11 (Hostinger ainda não), e a primeira página está em `apps/web` (ADR 0007). **Cada novo pedaço (telas, API, banco, n8n) espera o ok do Victor.**
+- **Próximo passo (plano aprovado em 02/11):** protótipo e Etapa 3, conforme `docs/plano-etapa-3.md`. Supabase e Vercel novos existem desde 03/11 (Hostinger ainda não), e a primeira página está em `apps/web` (ADR 0007). O banco está aplicado no projeto `plantaoseguro`, ainda sem dados, com migrações, RLS e testes em `supabase/` (ADR 0008). **Cada novo pedaço (telas, API, carga de dados, n8n) espera o ok do Victor.** A Hostinger ainda não foi comprada: avise o Victor antes de precisar dela, para criarem juntos o servidor e o n8n.
 - **Acesso às contas:** só por tokens com escopo no `.env` de um clone fora do OneDrive (`C:\dev`). Cada comando carrega o arquivo só para si; nunca imprima esses valores nem os coloque no chat ou no Git.
 - Ambiente local: Python 3.12, pytest, ruff, make e Node 26 instalados; sem Docker, Supabase CLI e ffmpeg. A CI do GitHub roda tudo, inclusive a PoC.
 - Vídeo da aula de 27/10 não processado (ver rastreabilidade A3-13).

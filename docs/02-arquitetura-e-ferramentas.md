@@ -4,7 +4,7 @@
 
 > **Atualizado em 03/11/2026:** como cada dado seria coletado, atualizado e integrado em um ambiente real está em [dados em produção](dados/dados-em-producao.md).
 >
-> **Atualizado em 28/10/2026:** o LLM do produto passou de Claude para **Gemini** ([ADR 0003](adr/0003-llm-do-produto-gemini.md)) e a construção do protótipo foi **adiada** ([ADR 0004](adr/0004-prototipo-adiado.md)). O restante deste documento descreve a arquitetura-alvo. A PoC mínima de 30/10/2026 implementa só o núcleo do motor (regras, ranking, explicação e auditoria) por linha de comando, em Python de biblioteca padrão ([ficha](../services/matching-api/README.md)); a classificação de risco proposta passou de baixo para **médio** e a Res. 2.462 tem aviso de suspensão judicial ([conformidade](conformidade/README.md)). **Em 03/11/2026**, a interface web saiu do adiamento com uma página provisória em `apps/web`, publicada na Vercel ([ADR 0007](adr/0007-web-sai-do-adiamento.md)); API, banco e n8n continuam adiados.
+> **Atualizado em 28/10/2026:** o LLM do produto passou de Claude para **Gemini** ([ADR 0003](adr/0003-llm-do-produto-gemini.md)) e a construção do protótipo foi **adiada** ([ADR 0004](adr/0004-prototipo-adiado.md)). O restante deste documento descreve a arquitetura-alvo. A PoC mínima de 30/10/2026 implementa só o núcleo do motor (regras, ranking, explicação e auditoria) por linha de comando, em Python de biblioteca padrão ([ficha](../services/matching-api/README.md)); a classificação de risco proposta passou de baixo para **médio** e a Res. 2.462 tem aviso de suspensão judicial ([conformidade](conformidade/README.md)). **Em 03/11/2026**, a interface web saiu do adiamento com uma página provisória em `apps/web`, publicada na Vercel ([ADR 0007](adr/0007-web-sai-do-adiamento.md)), e o banco ganhou migrações, RLS e testes ([ADR 0008](adr/0008-banco-no-supabase.md)); API e n8n continuam adiados.
 
 ## Visão geral
 
@@ -60,10 +60,10 @@ Cada etapa do fluxo tem uma ferramenta principal e uma alternativa; a escolha pr
 | Etapa | Recomendação | Alternativa | Observação |
 | --- | --- | --- | --- |
 | Interface (coordenador, médico e telão) | Next.js, Tailwind e shadcn/ui, como PWA | Vite com React | A plateia entra por QR code, sem instalar nada |
-| Login e perfis | Supabase Auth, com login anônimo e persona para a plateia | Magic link por e-mail | O JWT carrega hospital e papel, que a RLS usa |
+| Login e perfis | Supabase Auth, com login anônimo e persona para a plateia | Magic link por e-mail | O perfil guarda hospital e papel, que a RLS consulta ([ADR 0008](adr/0008-banco-no-supabase.md)) |
 | Entrada da vaga | Formulário no web app que chama um webhook do n8n | Telegram | Texto livre, com campos opcionais |
 | Extração dos campos | Gemini 3.5 Flash-Lite (SDK `google-genai`) com saída estruturada (JSON Schema) e validação com Pydantic | Gemini 3.8 Flash nos casos ambíguos | Nome, CRM e telefone nunca vão ao modelo; na demo, camada paga (ADR 0003) |
-| Filtro de regras | Funções SQL no Postgres e política por hospital em tabela | Regras em Python | Determinístico, testável e auditável |
+| Filtro de regras | Regras em Python, na API, com a política por hospital em tabela ([ADR 0008](adr/0008-banco-no-supabase.md)) | Funções SQL no Postgres | Determinístico, testável e auditável |
 | Ranking | Regressão logística e LightGBM (scikit-learn), mais baseline heurístico | CatBoost | Versione o modelo e guarde as métricas |
 | Explicação | LLM redige a partir dos fatores do modelo | Template fixo se a API falhar | Recebe só os fatores, então não inventa motivos |
 | Decisão humana | Tela de aprovação no web app, com registro em audit_log | Nenhuma | Sem o clique do coordenador não sai oferta |
@@ -85,19 +85,19 @@ O banco guarda cada decisão com sua explicação e sua versão de modelo, e a R
 
 | Tabela | O que guarda | Quem lê (RLS) |
 | --- | --- | --- |
-| organizations, units | Hospitais e unidades | Usuários da própria organização |
+| organizations, units | Hospitais e unidades | Usuários da própria organização; o médico vê os hospitais em que foi chamado |
 | profiles | Usuário, papel (coordenador, médico, admin) e organização | Cada pessoa lê o próprio perfil |
-| doctors, doctor_availability | Especialidades, raio, preferências, CRM simulado e janelas de disponibilidade | O médico edita o próprio; o coordenador vê só candidatos elegíveis para a própria vaga |
-| shifts | Vaga: unidade, especialidade, início, fim, valor, urgência e status | Coordenadores da organização dona |
+| doctors, doctor_availability | Especialidades, raio, preferências, CRM simulado e janelas de disponibilidade | O médico lê o próprio e altera pela API; o coordenador só abre o cadastro de quem foi recomendado ou chamado para as próprias vagas |
+| shifts | Vaga: unidade, especialidade, início, fim, urgência e status; o valor fica à parte, em `shift_compensation`, sem acesso pelo navegador | Coordenadores da organização dona e médicos chamados |
 | policy_config | Limites por hospital: horas contínuas e descanso mínimo | Administradores da organização |
-| recommendations, explanations | Posição, pontuação, versão do modelo, fatores e texto da explicação | O coordenador da vaga e o médico recomendado |
+| recommendations, explanations | Posição, pontuação, versão do modelo, fatores e texto da explicação | O coordenador da vaga e o médico recomendado, depois de receber a oferta |
 | offers, assignments | Oferta (enviada, expira, status) e confirmação pelo coordenador | As partes envolvidas |
 | checkins, payments | Presença; prazo combinado, data de pagamento e status | O médico e o hospital envolvidos |
 | contestations | Contestação do médico e resposta | O médico autor e o coordenador |
 | audit_log | Quem fez o quê, quando e com qual versão de modelo | Só inserção; sem UPDATE nem DELETE |
 | model_registry, fairness_reports | Versões, métricas, classe de risco e relatórios de equidade | Administradores |
 
-A API de matching e o n8n usam a chave de serviço, só no servidor; o navegador usa apenas a chave pública, sempre sob RLS. Os campos de pagamento ficam fora da lista de variáveis do ranking, e um teste automatizado barra qualquer inclusão.
+A API de matching e o n8n usam a chave de serviço, só no servidor; o navegador usa apenas a chave pública, sempre sob RLS. Os campos de pagamento ficam fora da lista de variáveis do ranking, e um teste automatizado barra qualquer inclusão. O que já existe no banco está na [ficha](../supabase/README.md); `assignments`, `checkins`, `payments`, `contestations` e `fairness_reports` ainda não existem.
 
 ## Segurança e conformidade na arquitetura
 
@@ -105,7 +105,7 @@ Cada resolução e cada risco de segurança vira um controle técnico que pode s
 
 | Controle | Como aparece na arquitetura | Ligado a |
 | --- | --- | --- |
-| Isolamento entre hospitais | RLS por organização com dados no JWT; chave de serviço só no servidor | LGPD e Cybersecurity |
+| Isolamento entre hospitais | RLS por organização, a partir do perfil do usuário; chave de serviço só no servidor | LGPD e Cybersecurity |
 | Entrada hostil | Texto da vaga e relato do médico passam por validação de esquema; o LLM não recebe ferramentas nem segredos | Cybersecurity (injeção de prompt) |
 | Dados pessoais fora do modelo | Só IDs pseudônimos e atributos necessários vão ao LLM; nome, CRM e telefone ficam no banco | LGPD e Res. CFM 2.454 |
 | Decisão humana | Sem o clique do coordenador não há oferta; tudo vai para o audit_log | Res. CFM 2.454 |
