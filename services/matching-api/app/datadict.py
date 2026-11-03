@@ -30,7 +30,8 @@ def _spread(values: list[float], decimals: int = 2) -> str:
     def show(value: float) -> str:
         return num(value, decimals) if decimals else _count(round(value))
 
-    return f"De {show(min(values))} a {show(max(values))}; mediana {show(statistics.median(values))}"
+    median = statistics.median(values)
+    return f"De {show(min(values))} a {show(max(values))}; mediana {show(median)}"
 
 
 def _yes_no(values: Iterable[bool]) -> str:
