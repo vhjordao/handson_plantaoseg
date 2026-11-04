@@ -13,6 +13,7 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 - **Texto sem jargão:** "ordem sugerida", "cinco primeiros", "Teste da aprovação"; a origem dos campos passou de "achei/deduzi" para "Está no texto", "Calculado do texto" e "Não está no texto".
 - **Entrada em casca própria:** `/entrar` saiu do site público (route group `(entrada)`), com cabeçalho só de marca e Ajuda; as três portas sem ícone, na mesma altura.
 - **Vagas começa pela lista**, com o resumo "Exigem a sua ação"; os indicadores levam "simulado" e a fonte dos tempos.
+- **Acessibilidade (auditoria do agente, 17 achados, nenhum bloqueando o uso):** o foco voltando com Shift+Tab não fica mais sob o cabeçalho fixo (cabeçalho de uma linha no celular e `scroll-padding`); sem rolagem horizontal a 320 px e com a letra a 200%; a porta em destaque de `/entrar?papel=` vem primeiro no HTML; o filtro das vagas e a decisão do hero são anunciados em regiões de status; o item atual aparece em alto contraste; abas, alvos de toque, 404 com título e `h1`. Tudo virou teste (`e2e/acessibilidade.spec.ts`).
 - **Hero** com 2 sugestões em vez de 5 (cabia na tela do celular) e "Como funciona" com trilho tracejado, contínuo e fino. Telão provisório em corpo de 28 px.
 
 **Mudanças na camada de dados e na segurança**
@@ -22,14 +23,14 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 - `erros.ts` subiu para `lib/api` (os erros são do contrato). Cookie `secure` pelo protocolo real, `destinoSeguro` só com o papel exato e cabeçalhos de segurança (`nosniff`, `Referrer-Policy`, `Permissions-Policy`, `frame-ancestors 'none'`).
 - ADR 0011 ganhou as **divergências conhecidas com o backend**; o README da demo passou a dizer que o hash encadeado detecta alteração mas não impede forja.
 
-**Medidas:** Vitest 124 passando; Playwright 37 passando e 1 ignorado de propósito, no build de produção; contraste, fixtures (`--check`) e `ruff` limpos.
+**Medidas:** Vitest 135 passando; Playwright 64 passando e 8 ignorados de propósito, no build de produção; contraste (com os pares do telão em 7:1), fixtures (`--check`) e `ruff` limpos. O Lighthouse não foi repetido depois da revisão (a medida de 03/11 continua na ficha).
 
 **Descobertas**
 
 - Rodar a jornada contra o servidor de desenvolvimento derrubou 5 testes do computador por tempo (30 s); no build de produção, como na CI, passam todos. A medida que vale é a do build.
 - Uma medição de Lighthouse dá resultado inválido se algum servidor velho ficar na porta: a primeira saiu com acessibilidade 93 e `/entrar` com erro por isso.
 
-**Uso de IA:** o Claude Code aplicou os achados dos dois revisores e escreveu os testes novos; o agente `acessibilidade` audita o código final (o resultado entra no PR). O Victor aprova ou ajusta no PR; nada foi mesclado.
+**Uso de IA:** o Claude Code aplicou os achados dos dois revisores e escreveu os testes novos; o agente `acessibilidade` auditou o código final, e o Claude Code aplicou os achados e os cobriu com testes. O Victor aprova ou ajusta no PR; nada foi mesclado.
 
 ## 04/11/2026 (quarta): carga dos dados sintéticos no banco
 
