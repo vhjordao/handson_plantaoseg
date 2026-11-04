@@ -4,6 +4,22 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 04/11/2026 (quarta): servidor na Hostinger
+
+**Pedido do Victor:** "já quero usar a hostinger e tirar tudo da local", e depois: "vou usar só para apresentar o protótipo. Depois vou parar tudo". Ele escolheu a KVM 1 e criou o servidor com o modelo de n8n em modo fila.
+
+**O que foi feito**
+
+- Inspecionamos o servidor sem mudar nada. O [ADR 0009](adr/0009-servidor-so-para-a-apresentacao.md) registra as decisões, e a [ficha](../infra/README.md) tem como entrar, testes e limites.
+- O modelo trazia 3 workers, fuso de Berlim, firewall desligado, editor aberto na internet e segredos escritos no arquivo do Compose. Agora são 1 worker, fuso de São Paulo, versões fixas, editor só por túnel SSH e segredos no `.env` do servidor.
+- O Compose foi para `infra/`, sem segredos e sem IP, e o `make up` local saiu. Um teste de contrato barra porta nova, versão solta e segredo no arquivo.
+- O n8n avisou que não suporta o Postgres 15 do modelo. Levamos o banco para o 17 enquanto só havia a conta de administrador, e as contagens bateram.
+- A proteção do sistema (login só por chave, firewall e swap) está em um script, que o próprio Victor rodou.
+
+**No servidor real:** um webhook temporário passou pela fila e foi executado pelo worker, em 0,14 s, e foi apagado depois. De fora, das 10 portas testadas, só 22, 80 e 443 respondem, por IPv4 e IPv6, o login sem chave é recusado e o endereço público do n8n devolve 404. A carga com 1 vCPU e um reinício do servidor ainda não foram testados.
+
+**Uso de IA:** o Claude Code inspecionou, escreveu os arquivos e aplicou o Compose com o ok do Victor. A recomendação dele mudou no caminho: KVM 2, depois aceitar a KVM 1, depois o n8n simples, e de volta ao modo fila ao ver o que o servidor já tinha. A migração do Postgres não estava no plano aprovado e saiu do aviso do n8n.
+
 ## 04/11/2026 (quarta): carga dos dados sintéticos no banco
 
 **Pedido do Victor:** carregar os dados sintéticos no projeto.

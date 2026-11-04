@@ -4,7 +4,7 @@
 
 ## Como rodar
 
-<!-- Comandos para reproduzir (make up, make seed, make test...). -->
+<!-- Comandos para reproduzir (make seed, make test...). -->
 
 ## Testes e resultado
 

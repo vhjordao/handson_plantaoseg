@@ -1,14 +1,17 @@
-# PlantãoSeguro: Compose local (Fase 0).
-# Sobe a orquestração: n8n em modo fila (n8n + worker), Redis e o Postgres PRÓPRIO do n8n.
-# O banco da aplicação é o Supabase local (`supabase start`), separado deste Compose.
-# Entram nas fases seguintes: matching-api (Fase 2), web (Fase 3) e Traefik/VPS (Etapa 3, deploy).
-# Uso: make up   (equivale a: docker compose --env-file .env -f infra/docker-compose.yml up -d)
+# PlantãoSeguro: Compose do servidor (Hostinger KVM 1), só para a apresentação (ADR 0009).
+# Sobe a orquestração: n8n em modo fila (n8n + 1 worker), Redis, o Postgres PRÓPRIO do n8n e o Traefik.
+# O banco da aplicação é o Supabase, separado deste Compose. A matching-api entra no PR dela.
+# Publicar uma porta passa por cima do firewall: só 80 e 443 ficam abertas, o resto em 127.0.0.1.
+# Uso: infra/README.md. Os segredos ficam no .env do servidor, nunca aqui.
 
-name: plantaoseguro
+# O nome vem do modelo da Hostinger: é ele que liga este arquivo aos volumes com os dados.
+name: n8n
+
+x-n8n-image: &n8n-image docker.n8n.io/n8nio/n8n:2.46.5
 
 x-n8n-env: &n8n-env
   DB_TYPE: postgresdb
-  DB_POSTGRESDB_HOST: postgres-n8n
+  DB_POSTGRESDB_HOST: postgres
   DB_POSTGRESDB_PORT: "5432"
   DB_POSTGRESDB_DATABASE: ${N8N_DB_NAME:-n8n}
   DB_POSTGRESDB_USER: ${N8N_DB_USER:-n8n}
@@ -17,22 +20,49 @@ x-n8n-env: &n8n-env
   QUEUE_BULL_REDIS_HOST: redis
   QUEUE_BULL_REDIS_PORT: "6379"
   N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY:?defina N8N_ENCRYPTION_KEY no .env}
-  WEBHOOK_URL: ${N8N_WEBHOOK_URL:-http://localhost:5678/}
+  N8N_HOST: localhost
+  N8N_PROTOCOL: http
+  N8N_EDITOR_BASE_URL: http://localhost:5678/
+  # A API chama o n8n por dentro do servidor, sem passar pela internet.
+  WEBHOOK_URL: http://n8n:5678/
+  N8N_RUNNERS_ENABLED: "true"
   GENERIC_TIMEZONE: America/Sao_Paulo
   TZ: America/Sao_Paulo
   N8N_DIAGNOSTICS_ENABLED: "false"
   N8N_PERSONALIZATION_ENABLED: "false"
+  NODE_ENV: production
 
 services:
-  postgres-n8n:
-    image: postgres:16-alpine
+  traefik:
+    image: traefik:v3.7.17
+    restart: unless-stopped
+    command:
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      - --entrypoints.websecure.address=:443
+      - --certificatesresolvers.mytlschallenge.acme.tlschallenge=true
+      - --certificatesresolvers.mytlschallenge.acme.email=${SSL_EMAIL:?defina SSL_EMAIL no .env}
+      - --certificatesresolvers.mytlschallenge.acme.storage=/letsencrypt/acme.json
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - traefik_data:/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  postgres:
+    # O modelo da Hostinger traz a 15, que o n8n não suporta mais: ele pede a 17 ou mais nova.
+    image: postgres:17.11
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${N8N_DB_NAME:-n8n}
       POSTGRES_USER: ${N8N_DB_USER:-n8n}
       POSTGRES_PASSWORD: ${N8N_DB_PASSWORD:?defina N8N_DB_PASSWORD no .env}
     volumes:
-      - postgres-n8n-data:/var/lib/postgresql/data
+      - pgdata17:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 5s
@@ -40,8 +70,10 @@ services:
       retries: 10
 
   redis:
-    image: redis:7-alpine
+    image: redis:6.2.24
     restart: unless-stopped
+    volumes:
+      - redis_data:/data
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
@@ -49,36 +81,40 @@ services:
       retries: 10
 
   n8n:
-    image: docker.n8n.io/n8nio/n8n:${N8N_VERSION:-latest}
+    image: *n8n-image
     restart: unless-stopped
     environment:
       <<: *n8n-env
       N8N_PORT: "5678"
-      # Local em HTTP; em produção o Traefik termina o TLS e isto volta a ser true.
+      # O editor só abre pelo túnel SSH, em http://localhost: o túnel já cifra o caminho.
       N8N_SECURE_COOKIE: "false"
+      N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: "true"
+      OFFLOAD_MANUAL_EXECUTIONS_TO_WORKERS: "true"
     ports:
-      # Somente na máquina local: o editor do n8n nunca fica na internet pública.
-      - "127.0.0.1:${N8N_PORT:-5678}:5678"
+      # Só no próprio servidor: o editor do n8n nunca fica na internet pública.
+      - "127.0.0.1:5678:5678"
     volumes:
-      - n8n-data:/home/node/.n8n
-      - ../n8n/workflows:/workflows:ro
+      - n8n_data:/home/node/.n8n
     depends_on:
-      postgres-n8n:
+      postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
 
   n8n-worker:
-    image: docker.n8n.io/n8nio/n8n:${N8N_VERSION:-latest}
+    image: *n8n-image
     restart: unless-stopped
     command: worker
     environment:
       <<: *n8n-env
-    volumes:
-      - n8n-data:/home/node/.n8n
     depends_on:
       - n8n
 
 volumes:
-  postgres-n8n-data:
-  n8n-data:
+  # Criados pelo modelo da Hostinger, fora do Compose. A conta do n8n e o certificado estão neles.
+  traefik_data:
+    external: true
+  n8n_data:
+    external: true
+  pgdata17:
+  redis_data:
