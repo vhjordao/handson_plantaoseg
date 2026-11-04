@@ -2,6 +2,8 @@
 
 20/10/2026 · Victor
 
+> **Atualizado em 04/11/2026:** a [API de matching](../services/matching-api/app/api/README.md) está no servidor, com as decisões no [ADR 0010](adr/0010-api-de-matching.md). Os pesos do modelo ficam em arquivo versionado, e a API acessa o banco pela API REST do Supabase, com a chave de serviço, sem carregar dado pessoal nem o valor do plantão.
+>
 > **Atualizado em 03/11/2026:** como cada dado seria coletado, atualizado e integrado em um ambiente real está em [dados em produção](dados/dados-em-producao.md).
 >
 > **Atualizado em 28/10/2026:** o LLM do produto passou de Claude para **Gemini** ([ADR 0003](adr/0003-llm-do-produto-gemini.md)) e a construção do protótipo foi **adiada** ([ADR 0004](adr/0004-prototipo-adiado.md)). O restante deste documento descreve a arquitetura-alvo. A PoC mínima de 30/10/2026 implementa só o núcleo do motor (regras, ranking, explicação e auditoria) por linha de comando, em Python de biblioteca padrão ([ficha](../services/matching-api/README.md)); a classificação de risco proposta passou de baixo para **médio** e a Res. 2.462 tem aviso de suspensão judicial ([conformidade](conformidade/README.md)). **Em 03/11/2026**, a interface web saiu do adiamento com uma página provisória em `apps/web`, publicada na Vercel ([ADR 0007](adr/0007-web-sai-do-adiamento.md)), e o banco ganhou migrações, RLS e testes ([ADR 0008](adr/0008-banco-no-supabase.md)); API e n8n continuam adiados.
@@ -61,7 +63,7 @@ Cada etapa do fluxo tem uma ferramenta principal e uma alternativa; a escolha pr
 | --- | --- | --- | --- |
 | Interface (coordenador, médico e telão) | Next.js, Tailwind e shadcn/ui, como PWA | Vite com React | A plateia entra por QR code, sem instalar nada |
 | Login e perfis | Supabase Auth, com login anônimo e persona para a plateia | Magic link por e-mail | O perfil guarda hospital e papel, que a RLS consulta ([ADR 0008](adr/0008-banco-no-supabase.md)) |
-| Entrada da vaga | Formulário no web app que chama um webhook do n8n | Telegram | Texto livre, com campos opcionais |
+| Entrada da vaga | Formulário no web app que chama a API ([ADR 0010](adr/0010-api-de-matching.md)) | Telegram | Texto livre, com campos opcionais |
 | Extração dos campos | Gemini 3.5 Flash-Lite (SDK `google-genai`) com saída estruturada (JSON Schema) e validação com Pydantic | Gemini 3.8 Flash nos casos ambíguos | Nome, CRM e telefone nunca vão ao modelo; na demo, camada paga (ADR 0003) |
 | Filtro de regras | Regras em Python, na API, com a política por hospital em tabela ([ADR 0008](adr/0008-banco-no-supabase.md)) | Funções SQL no Postgres | Determinístico, testável e auditável |
 | Ranking | Regressão logística e LightGBM (scikit-learn), mais baseline heurístico | CatBoost | Versione o modelo e guarde as métricas |
@@ -97,7 +99,7 @@ O banco guarda cada decisão com sua explicação e sua versão de modelo, e a R
 | audit_log | Quem fez o quê, quando e com qual versão de modelo | Só inserção; sem UPDATE nem DELETE |
 | model_registry, fairness_reports | Versões, métricas, classe de risco e relatórios de equidade | Administradores |
 
-A API de matching e o n8n usam a chave de serviço, só no servidor; o navegador usa apenas a chave pública, sempre sob RLS. Os campos de pagamento ficam fora da lista de variáveis do ranking, e um teste automatizado barra qualquer inclusão. O que já existe no banco está na [ficha](../supabase/README.md); `assignments`, `checkins`, `payments`, `contestations` e `fairness_reports` ainda não existem.
+A API de matching usa a chave de serviço, só no servidor, e o n8n chama a API, sem receber essa chave; o navegador usa apenas a chave pública, sempre sob RLS. Os campos de pagamento ficam fora da lista de variáveis do ranking, e um teste automatizado barra qualquer inclusão. O que já existe no banco está na [ficha](../supabase/README.md); `assignments`, `checkins`, `payments`, `contestations` e `fairness_reports` ainda não existem.
 
 ## Segurança e conformidade na arquitetura
 

@@ -3,8 +3,10 @@
 
     python scripts/conferir-api.py verificar --url <url> --env-teste <.env.teste> [--ssh "..."]
     python scripts/conferir-api.py medir --url <url> --env-teste <.env.teste> --saida <x.json>
+    python scripts/conferir-api.py limite --url <url>
 
 `verificar` percorre o fluxo inteiro na organização de teste e testa o que não pode acontecer.
+`limite` confere, sem login, o limite de requisições e o de tamanho do corpo no Traefik.
 `medir` chama a API sem pausa, em níveis crescentes de chamadas simultâneas: é o pior caso, e não o
 uso normal de uma plateia. Sem `--com-escrita`, nada é gravado no banco.
 
@@ -68,7 +70,7 @@ def login_all(path: Path, env: dict[str, str]) -> dict[str, dict[str, str]]:
     return headers
 
 
-def shift_times(days_ahead: int = 2) -> tuple[str, str]:
+def shift_times(days_ahead: int) -> tuple[str, str]:
     now = datetime.now(SAO_PAULO).replace(tzinfo=None, microsecond=0)
     start = (now + timedelta(days=days_ahead)).replace(hour=19, minute=0, second=0)
     return start.isoformat(), (start + timedelta(hours=12)).isoformat()
@@ -77,6 +79,7 @@ def shift_times(days_ahead: int = 2) -> tuple[str, str]:
 def publish_body(
     env: dict[str, str], *, unit_id: str | None = None, days_ahead: int = 2
 ) -> dict[str, Any]:
+    """Vaga de teste. Uma rodada de `verificar` que termina em aceite ocupa o médico no dia."""
     starts_at, ends_at = shift_times(days_ahead)
     return {
         "text": "Vaga de teste da conferência da API (simulação)",
@@ -131,6 +134,7 @@ def verify(args: argparse.Namespace) -> int:
     coordinator, doctor_1, doctor_2 = (logins[name] for name in LOGINS)
     client = httpx.Client(base_url=args.url, timeout=60, verify=TLS)
     check = Checks()
+    day = args.dias
 
     response = client.get("/health")
     check.expect("/health responde por HTTPS", response.status_code == 200, response.status_code)
@@ -152,7 +156,9 @@ def verify(args: argparse.Namespace) -> int:
     check.expect("injeção é sinalizada", bool(body.get("flags")), body)
     check.expect("injeção não passa pelo LLM", body.get("source") == "regras", body)
     extra = client.post(
-        "/shifts", json={**publish_body(env), "approved": True}, headers=coordinator
+        "/shifts",
+        json={**publish_body(env, days_ahead=day), "approved": True},
+        headers=coordinator,
     )
     check.expect("campo a mais: 422", extra.status_code == 422, extra.status_code)
     check.expect("o 422 não devolve o valor enviado", "True" not in extra.text)
@@ -164,10 +170,11 @@ def verify(args: argparse.Namespace) -> int:
         f"/shifts/{env['TESTE_OUTRA_VAGA']}/recommendations", headers=coordinator
     )
     check.expect("vaga de outra organização: 404", other_shift.status_code == 404)
-    as_doctor = client.post("/shifts", json=publish_body(env), headers=doctor_1)
+    as_doctor = client.post("/shifts", json=publish_body(env, days_ahead=day), headers=doctor_1)
     check.expect("médico não publica vaga: 403", as_doctor.status_code == 403)
 
-    published = client.post("/shifts", json=publish_body(env), headers=coordinator)
+    body = publish_body(env, days_ahead=day)
+    published = client.post("/shifts", json=body, headers=coordinator)
     check.expect("publica a vaga: 201", published.status_code == 201, published.text[:200])
     shift_id = published.json()["id"]
     recommended = client.post(f"/shifts/{shift_id}/recommendations", headers=coordinator)
@@ -244,9 +251,11 @@ def verify(args: argparse.Namespace) -> int:
     )
     rows = rest.get(
         "/audit_log",
-        params={"select": "action,entity_id,details,model_version", "order": "seq.asc"},
+        # O mais recente primeiro: o Supabase devolve no máximo 1.000 linhas por chamada.
+        params={"select": "action,entity_id,details", "order": "seq.desc", "limit": "100"},
         headers=coordinator,
     ).json()
+    rows.reverse()
     trail = [
         row["action"]
         for row in rows
@@ -441,6 +450,22 @@ def measure(args: argparse.Namespace) -> int:
             rows.append(row)
             print(" ", json.dumps(row, ensure_ascii=False))
         results["cenarios"][name] = rows
+    # O caminho do navegador: a web lê direto do Supabase, sob RLS, sem passar pela API.
+    name = "navegador (Supabase direto, token do usuário e RLS)"
+    print(name)
+    browser = single(
+        "navegador",
+        "GET",
+        "/rest/v1/shifts",
+        params={"select": "id,status,starts_at", "limit": "20", "order": "starts_at"},
+        headers={**coordinator, "apikey": env["TESTE_ANON_KEY"]},
+    )
+    rows = []
+    for users in levels:
+        row = run_level(env["TESTE_SUPABASE_URL"], browser, users, args.duracao)
+        rows.append(row)
+        print(" ", json.dumps(row, ensure_ascii=False))
+    results["cenarios"][name] = rows
     if args.com_escrita:
         name = "fluxo completo (grava na organização de teste)"
         print(name)
@@ -459,6 +484,23 @@ def measure(args: argparse.Namespace) -> int:
     return 0
 
 
+def rate_limit(args: argparse.Namespace) -> int:
+    """Passa do limite de propósito, a partir de um único IP, e conta o que o Traefik recusa."""
+
+    def operation(client: httpx.Client):
+        return [timed(client, "health", "GET", "/health")[0]]
+
+    row = run_level(args.url, operation, args.simultaneas, args.duracao)
+    ok = row["status"].get("200", 0)
+    print(json.dumps(row, ensure_ascii=False))
+    refused = row["status"].get("429", 0)
+    print(f"aceitas por segundo: {ok / row['segundos']:.1f}; recusadas (429): {refused}")
+    with httpx.Client(base_url=args.url, timeout=30, verify=TLS) as client:
+        big = client.post("/shifts/extract", content=b"x" * 70_000)
+    print(f"corpo de 70 KB: {big.status_code}")
+    return 0 if row["status"].get("429") and big.status_code == 413 else 1
+
+
 def main() -> int:
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
@@ -471,6 +513,7 @@ def main() -> int:
         command.set_defaults(func=handler)
         if name == "verificar":
             command.add_argument("--ssh", default="", help="comando ssh para chegar no servidor")
+            command.add_argument("--dias", type=int, default=2, help="dias até a vaga de teste")
         else:
             command.add_argument("--saida", default="")
             command.add_argument("--duracao", type=float, default=20.0)
@@ -478,6 +521,11 @@ def main() -> int:
             command.add_argument("--com-escrita", action="store_true")
             command.add_argument("--duracao-escrita", type=float, default=30.0)
             command.add_argument("--niveis-escrita", default="1,3,5")
+    limit = sub.add_parser("limite")
+    limit.add_argument("--url", required=True)
+    limit.add_argument("--simultaneas", type=int, default=20)
+    limit.add_argument("--duracao", type=float, default=15.0)
+    limit.set_defaults(func=rate_limit)
     args = parser.parse_args()
     return args.func(args)
 

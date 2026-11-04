@@ -36,6 +36,7 @@ Na resposta, a API só usa IDs pseudônimos: a web lê nome e CRM sob RLS, e só
 6. Abrimos 22 falhas de propósito (ver a seção 7).
 7. Antes de escrever no banco real, comparamos a leitura real com os CSVs, só lendo.
 8. Compose, imagem e implantação. Depois, o fluxo inteiro no servidor e a medição de carga.
+9. A primeira medição travou em 50 chamadas por segundo com a CPU folgada. Testamos o Supabase direto, achamos o teto na chave `sb_secret`, trocamos pela `service_role` e medimos de novo: cerca de 270 por segundo, agora limitadas pela CPU.
 
 ## 4. Código-chave
 
@@ -86,7 +87,28 @@ python scripts/conferir-api.py medir --url <url da api> --env-teste <.env.teste>
 
 ## 7. Testes e resultados
 
-@@TESTES@@
+**Na máquina local e na CI:**
+
+- **421 testes** no total, contra 267 antes da API. Cobrem rotas e papéis, JWT forjado, cliente REST, paridade com os CSVs, cascata, injeção de prompt pela API (os 10 tipos de ataque), neutralidade econômica no caminho da API e o contrato do Compose e da imagem.
+- **Sem aprovação não há oferta:** a cascata recusa vaga publicada, recomendada e rejeitada. O segredo do n8n, o médico e o coordenador de outro hospital não aprovam, e não se aprova quem não foi recomendado.
+- **Os testes acusam mesmo?** Abrimos 22 falhas de propósito, como oferta sem aprovação, leitura da tabela do valor do plantão, `select=*` liberado e rota interna na internet. Os testes acusaram 21 de primeira. A outra era aceitar HS256, que não abria falha real, porque a biblioteca já recusa esse token com chave EC. Criamos um teste que fixa a lista de algoritmos, e agora as 22 são acusadas.
+- **O limite dos testes:** eles usam um banco falso. O PostgREST real e o login real só foram exercitados no projeto, com os passos abaixo.
+
+**No projeto real, em 04/11/2026 (simulação):**
+
+- **Paridade:** montando o `Dataset` pelo repositório, a partir do banco real, comparamos 60 vagas com os CSVs de datas deslocadas. Top 5, scores e exclusões iguais nas 60.
+- **De fora, sem login:** 401 em `/me` e 404 em `/docs`, `/openapi.json` e nas rotas internas. HTTP vira HTTPS, o certificado é da Let's Encrypt e a porta 8000 está fechada.
+- **Fluxo inteiro, com login (`conferir-api.py verificar`):** 33 de 33 conferências, inclusive a cascata recusando sem aprovação, o isolamento entre organizações, a trilha contando a história na ordem e, pela RLS, o médico vendo só a própria oferta.
+- **Carga com 1 vCPU ([resultado completo](../../../../docs/resultados/metricas-carga-api.md)):**
+
+| Cenário | Vazão | 95% em até | CPU do servidor |
+| --- | --- | --- | --- |
+| Login e perfil, 10 simultâneas | 290 por segundo | 50 ms | 54% |
+| Login e perfil, 40 simultâneas | 275 por segundo | 206 ms | 99% |
+| Fluxo completo gravando, 10 simultâneas | 31,9 por segundo (cerca de 6,4 ciclos) | 518 ms | 54% |
+| Leitura direta do navegador, 40 simultâneas | 431,5 por segundo | 139 ms | 4% (nem passa pelo servidor) |
+
+Nenhuma chamada falhou na medição, e a memória da API chegou a 79 MB de 512 MB.
 
 ## 8. Dados e segurança
 
@@ -98,11 +120,21 @@ python scripts/conferir-api.py medir --url <url da api> --env-teste <.env.teste>
 
 ## 9. Limitações e honestidade
 
-@@LIMITES@@
+- **Sem transação entre as escritas:** se a rede cair no meio de uma aprovação, parte do registro fica gravada, e a vaga pode ficar parada até alguém olhar. A API REST do Supabase não agrupa chamadas ([ADR 0010](../../../../docs/adr/0010-api-de-matching.md)).
+- **Um processo só:** as travas por vaga e a cópia dos dados em memória não servem para mais de um processo. Basta para a apresentação, e não para uma operação real.
+- **O banco dos testes é falso:** a CI não exercita o PostgREST real nem o login real. Isso foi conferido no projeto, à mão, com `conferir-api.py`.
+- **A chave `service_role` é marcada como `legacy`** pelo Supabase. Se ela for desligada antes de 17/11, a saída é trocar pela `sb_secret`, com o teto de cerca de 50 chamadas por segundo que medimos. Não sabemos a causa desse teto.
+- **Sem a cascata no n8n, oferta vencida fica pendente** até alguém chamar `advance`, e o médico recebe `oferta_expirada` ao responder.
+- **Gemini não exercitado:** sem chave e sem o SDK na imagem, tudo sai pela reserva em regras. Nem a qualidade nem a demora do LLM foram medidas.
+- **O limite de requisições é por IP:** a plateia no mesmo Wi-Fi divide as 30 chamadas por segundo. As telas precisam tentar de novo depois de um `429`.
+- **A carga é uma primeira medição,** de uma máquina só e com poucas conexões. Os limites estão no [resultado](../../../../docs/resultados/metricas-carga-api.md).
+- **A organização de teste:** os registros dela ficam para sempre na trilha, que é só de inserção, e ela fica no banco por causa disso. Até o `remover`, os 2 médicos de teste aparecem como excluídos por raio nas recomendações da rede simulada.
+- **Aviso de biblioteca:** o `TestClient` do Starlette avisa que o uso do `httpx` será substituído. Só afeta os testes, e a versão está fixa.
+- A conformidade com a LGPD e as resoluções do CFM é um desenho a validar com jurídico.
 
 ## 10. Uso de IA no desenvolvimento
 
-O Victor aprovou o plano, com as decisões e os riscos, antes de começar, e criou os logins de teste com um comando preparado, porque o Claude Code não cria contas. O Claude Code escreveu o código, os testes e os documentos e fez a implantação. Correções que o próprio processo encontrou: o log do `httpx` registrava cada chamada ao banco com a URL inteira; o antivírus da máquina intercepta o HTTPS e quebrava o `httpx` local; uma vaga sem elegíveis duplicaria as exclusões ao repetir o clique; a organização sem política virava erro 500; e o teste que abria um buraco para o HS256 mostrou que a biblioteca já recusava, então o teste passou a fixar a lista de algoritmos.
+O Victor aprovou o plano, com as decisões e os riscos, antes de começar, e criou os logins de teste com um comando preparado, porque o Claude Code não cria contas. O Claude Code escreveu o código, os testes e os documentos e fez a implantação. Correções que o próprio processo encontrou: o log do `httpx` registrava cada chamada ao banco com a URL inteira; o antivírus da máquina intercepta o HTTPS e quebrava o `httpx` local; uma vaga sem elegíveis duplicaria as exclusões ao repetir o clique; a organização sem política virava erro 500; e o teste que abria um buraco para o HS256 mostrou que a biblioteca já recusava, então o teste passou a fixar a lista de algoritmos. A hipótese do Claude Code para o teto de 50 por segundo, de que a culpa era do ES256, estava errada: a medição mostrou o token de usuário, também em ES256, sem esse teto.
 
 ## 11. Próximos passos
 

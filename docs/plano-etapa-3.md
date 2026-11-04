@@ -1,6 +1,6 @@
 # Plano: protótipo e Etapa 3 (02/11 a 17/11)
 
-- **Status:** aprovado pelo Victor em 02/11/2026 e ajustado em 03/11 com a Aula 4 e o feedback da Etapa 2. **A construção começou em 03/11, só pela web** ([ADR 0007](adr/0007-web-sai-do-adiamento.md)): há uma página provisória em `apps/web`, e o banco está no projeto, com os dados sintéticos carregados, migrações, RLS e testes ([ADR 0008](adr/0008-banco-no-supabase.md)). O [servidor](../infra/README.md) está no ar desde 04/11, só para a apresentação, com o n8n ainda sem workflows ([ADR 0009](adr/0009-servidor-so-para-a-apresentacao.md)). API e cascata continuam parados até o ok do Victor, e para elas segue valendo o [ADR 0004](adr/0004-prototipo-adiado.md).
+- **Status:** aprovado pelo Victor em 02/11/2026 e ajustado em 03/11 com a Aula 4 e o feedback da Etapa 2. **A construção começou em 03/11, só pela web** ([ADR 0007](adr/0007-web-sai-do-adiamento.md)): há uma página provisória em `apps/web`, e o banco está no projeto, com os dados sintéticos carregados, migrações, RLS e testes ([ADR 0008](adr/0008-banco-no-supabase.md)). O [servidor](../infra/README.md) está no ar desde 04/11, só para a apresentação, com o n8n ainda sem workflows ([ADR 0009](adr/0009-servidor-so-para-a-apresentacao.md)). A [API](../services/matching-api/app/api/README.md) entrou nele em 04/11, com o ok do Victor ([ADR 0010](adr/0010-api-de-matching.md)). A cascata continua parada até o ok dele, e para ela segue valendo o [ADR 0004](adr/0004-prototipo-adiado.md).
 - **Prazos:** aula e feedback da Etapa 2 em 03/11; **Entrega 3 em 07/11 (até 2,0)**; **apresentação final em 17/11 (até 4,0)**, com a plateia usando o sistema pelo celular.
 
 ## Contexto
@@ -42,7 +42,7 @@ Uma branch e um PR por item, CI verde, e nenhum merge sem o ok do Victor. As dat
 
 ### M1, até 05/11: fluxo de ponta a ponta
 
-- **`f3/api-matching`:** FastAPI em `services/matching-api/app/api/`, com Pydantic, validação do JWT do Supabase e rotas internas protegidas por segredo. Uma camada de repositório monta o `Dataset` a partir do Postgres. A CLI e o núcleo continuam funcionando só com biblioteca padrão.
+- **`f3/api-matching`, no servidor desde 04/11** ([ficha](../services/matching-api/app/api/README.md), [ADR 0010](adr/0010-api-de-matching.md)): FastAPI em `services/matching-api/app/api/`, com Pydantic, validação do JWT do Supabase e rotas internas protegidas por segredo. Uma camada de repositório monta o `Dataset` a partir do Postgres. A CLI e o núcleo continuam funcionando só com biblioteca padrão.
 - **`f3/web-coordenador`:** telas 1 a 3 dos [wireframes](wireframes/README.md) (vaga em texto livre e conferência; top 5 com motivo e alertas; excluídos com a regra), com os estados de erro já listados lá.
 - **`f3/web-medico`:** tela 4 (oferta com motivo, aceitar ou recusar) e a trilha de auditoria.
 - **`f3/cascata-n8n`:** workflow em JSON que só espera e chama `POST /internal/cascade/{id}/advance`. Roda no n8n do servidor.
