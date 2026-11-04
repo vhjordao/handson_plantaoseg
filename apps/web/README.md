@@ -81,7 +81,7 @@ Na máquina local, em 03/11/2026:
 - **Testes de componente (Vitest):** 22 passando (vozes, selo, botão, campos, resumo de erros, datas e números em português).
 - **Jornada e acessibilidade (Playwright, Edge):** 15 passando em computador (1440 px) e celular (390 px): a demonstração do hero chega ao selo, o primeiro Tab leva a "Pular para o conteúdo", **Ajuda** fica à esquerda de **Entrar**, sem rolagem horizontal em 320 px, estado final com movimento reduzido e `axe` sem violação grave nos temas claro e escuro.
 - **Contraste:** todos os pares passam nos dois temas (texto principal de 14,1:1 a 16,6:1; contorno e campos de 3,2:1 a 10,0:1).
-- **Lighthouse (build de produção, Edge):** acessibilidade 100, desempenho 100, boas práticas 96 (a nota é o `404` do `/entrar`, que ainda não existia na medição) e SEO 60 (**esperado**: a página é `noindex` de propósito, ADR 0007). LCP de 0,9 s no celular simulado e de 0,3 s no computador; CLS de 0,009.
+- **Lighthouse (build de produção, Edge, 03/11/2026), em `/` e em `/entrar`:** acessibilidade **100**, boas práticas **100**, desempenho 99 a 100 e SEO 60 (**esperado**: a página é `noindex` de propósito, ADR 0007). LCP de 0,9 s no celular simulado e de 0,3 s no computador; CLS de 0,009 na landing e 0 na entrada. Uma primeira medição saiu pior (acessibilidade 93, e `/entrar` com erro) por ter sido feita contra um servidor de produção velho que ficou na porta: o resultado acima é de um servidor novo.
 - **Build de produção:** `/`, `/telao` e `/_not-found` estáticas; `/ajuda` dinâmica (lê a sessão).
 
 Na CI, o job `web` roda lint, tipos, contraste, testes e build, e o job `web-e2e` roda a jornada e o `axe` sobre o build de produção.
