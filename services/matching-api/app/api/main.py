@@ -108,6 +108,8 @@ def _llm_from_env() -> LLMClient | None:
 def create_app_from_env() -> FastAPI:
     """A aplicação real: a API só sobe com os dados carregados e o modelo certo."""
     logging.basicConfig(level=logging.INFO)
+    # O httpx registraria cada chamada ao banco, com a URL e os filtros: fica só o que importa.
+    logging.getLogger("httpx").setLevel(logging.WARNING)
     settings = Settings.from_env()
     repository = Repository(SupabaseRest(f"{settings.supabase_url}/rest/v1", settings.service_key))
     world = WorldCache(repository)
