@@ -21,6 +21,7 @@ Na PoC **não há dado pessoal real**. Em produção, a LGPD se aplica: base leg
 | Categoria | Ameaça | Defesa | Evidência | Residual |
 | --- | --- | --- | --- | --- |
 | **S**poofing | Alguém se passa por coordenador ou médico | Autenticação por papel (Supabase Auth, desenho); a trilha registra o ator | `app/audit.py` | A PoC não tem login: **construir com a API** |
+| **S**poofing | Entrar no servidor adivinhando a senha do root | Login só por chave e firewall com 22, 80 e 443 | [`infra/preparar-servidor.sh`](../infra/preparar-servidor.sh), `tests/test_contrato_infra.py` | Quem tiver a chave privada entra como root |
 | **T**ampering | Alterar ou apagar registros da trilha | Cadeia de hash e arquivo só de acréscimo | `tests/test_audit.py` (alteração e remoção são detectadas) | Hash local não impede quem apaga o arquivo inteiro. O banco já tem a tabela só de inserção, com gatilho; falta a cópia externa |
 | **T**ampering | Resposta do LLM forjada ou corrompida | Esquema fechado: chaves exatas, listas fixas, datas coerentes | `tests/test_llm.py` (12 saídas maliciosas rejeitadas) | Esquema não pega valor plausível e errado: por isso o coordenador confere |
 | **T**ampering | Manipular os dados sintéticos | Manifesto com SHA-256 por arquivo; CI confere contra a máquina do autor | `docs/dados/manifesto-da-geracao.json`, job `poc` | Informativo, não bloqueia |
@@ -30,6 +31,7 @@ Na PoC **não há dado pessoal real**. Em produção, a LGPD se aplica: base leg
 | **I**nformation disclosure | Trilha vazar dado pessoal | A trilha recusa campos de nome, CRM, telefone, e-mail e CPF | `tests/test_audit.py` | Depende de nomes de campo |
 | **D**enial of service | Texto gigante, LLM fora do ar, abuso da plateia | Limite de 500 caracteres, fallback sem LLM; limite de requisições no Traefik (desenho) | `tests/test_llm.py` | Sem limite de taxa na PoC |
 | **E**levation of privilege | Injeção de prompt para ganhar ação ou segredo | LLM sem ferramentas e sem segredos; texto suspeito nunca chega ao LLM; decisão humana obrigatória | `tests/test_llm.py` (10 tipos de ataque) | O comportamento do Gemini a ataques novos não foi testado |
+| **E**levation of privilege | Invadir pelo editor do n8n e alcançar o resto do servidor | Editor sem rota pública, só por túnel SSH; versões fixas; segredos fora do Compose | [`infra/docker-compose.yml`](../infra/docker-compose.yml), `tests/test_contrato_infra.py` | O Traefik lê o socket do Docker, então uma falha nele alcança o servidor; aceito para um servidor de poucos dias |
 | **IA** Viés | Excluir grupos por proxy (zona via distância) | Atributos protegidos fora do ranking; relatório de participação e concentração | `docs/resultados/metricas-ranking.md` | **Existe:** zonas distantes quase não são recomendadas; mitigar e monitorar |
 | **IA** Influência econômica | Pagamento influenciar o ranking | Lista fechada de variáveis e teste na CI | `tests/test_neutralidade_economica.py` | Depende de a lista continuar sob revisão |
 | **IA** Excesso de confiança | Coordenador aprovar sem olhar | Motivos e alertas visíveis; aprovação explícita; auditoria | `app/pipeline.py` | Treinamento e cultura |

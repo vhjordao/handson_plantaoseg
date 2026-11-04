@@ -13,7 +13,7 @@ echo "PlantãoSeguro: verificação do ambiente"
 if docker compose version >/dev/null 2>&1; then
   ok "Docker Compose ($(docker compose version --short 2>/dev/null))"
 else
-  erro "Docker Compose" "instale o Docker Desktop (https://docs.docker.com/desktop/)"
+  aviso "Docker Compose" "só para make db-check; a CI roda sempre (https://docs.docker.com/desktop/)"
 fi
 
 if command -v node >/dev/null 2>&1 && command -v npm >/dev/null 2>&1; then
@@ -59,7 +59,7 @@ command -v ffmpeg >/dev/null 2>&1 && ok "ffmpeg" \
   || aviso "ffmpeg" "só para transcrever o vídeo da aula (opcional)"
 
 [ -f .env ] && ok ".env presente" \
-  || aviso ".env" "rode make up (ou cp .env.example .env) e preencha as chaves"
+  || aviso ".env" "rode make env e preencha as chaves"
 
 echo
 if [ "$faltando" -eq 0 ]; then
