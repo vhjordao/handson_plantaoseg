@@ -1,7 +1,7 @@
 # Ficha do componente: banco no Supabase
 
 - **Responsável:** Victor Jordão · **Frente:** banco e segurança · **Branch:** `f3/banco-supabase` · **Atualizado em:** 03/11/2026
-- **Estado:** migrações aplicadas no projeto `plantaoseguro` em 03/11/2026. As tabelas ainda estão vazias: a carga dos dados sintéticos é o próximo passo. **Tudo é simulação.**
+- **Estado:** migrações aplicadas em 03/11/2026 e dados sintéticos carregados em 04/11/2026 no projeto `plantaoseguro`. **Tudo é simulação.**
 
 ## 1. O que é e qual dor resolve
 
@@ -111,6 +111,13 @@ No projeto real, em 03/11/2026, depois de aplicar as quatro migrações:
 - **De fora, com a chave pública:** ler as 15 tabelas, gravar uma organização e chamar as duas funções públicas foi recusado com `42501`.
 - **Alertas do Supabase:** só informativos.
 
+Com os 12 meses carregados, em 04/11/2026:
+
+- **Na CI, antes de tocar no projeto:** a carga entrou pelo mesmo comando do projeto real, os 100 testes em pgTAP passaram também com os dados e a segunda carga foi recusada.
+- **Tempo de resposta na CI, sob RLS:** o coordenador contou 2.448 vagas em 1 ms, 7.555 ofertas em 4 ms e 285 médicos em 8 ms, e a consulta típica da tela levou 9 ms. O médico mais chamado viu só as próprias 143 ofertas, em 1 ms. Foi medido em um computador da CI, não no projeto real.
+- **No projeto real, pela API com a chave de serviço:** todas as contagens bateram (16.547 linhas), com 2.330 ofertas aceitas, nenhum CRM fora do padrão e a tabela do gabarito inexistente. As métricas guardadas são as publicadas.
+- **No projeto real, de fora, com a chave pública:** ler, gravar e chamar funções continuou recusado.
+
 ## 8. Dados e segurança
 
 - **Dados:** só sintéticos. O CRM precisa do prefixo `SIM` e o telefone do DDD fictício `00`, e o banco recusa outro formato.
@@ -137,5 +144,5 @@ O Victor aprovou começar o banco com a lista de itens. O Claude Code escreveu a
 
 Com o ok do Victor:
 
-1. Carregar os dados sintéticos, sem `doctors_latent` e com as datas deslocadas em semanas inteiras.
-2. Criar a API sobre este banco.
+1. Criar a API sobre este banco.
+2. Criar os perfis de coordenador e médico quando o login entrar: até lá, nenhum usuário enxerga dado nenhum.

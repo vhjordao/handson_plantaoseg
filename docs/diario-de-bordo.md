@@ -15,6 +15,8 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 - A avaliação refeita com as datas deslocadas bateu com as métricas publicadas: nenhuma mudou.
 - A CI carrega os 12 meses pelo mesmo caminho do projeto real e repete os testes de RLS com os dados.
 
+**No projeto real:** o Victor aprovou, e a carga entrou depois de a CI ficar verde. Pela API, todas as contagens bateram (16.547 linhas), e a tabela do gabarito não existe. De fora, com a chave pública, ler, gravar e chamar funções continuou recusado. O histórico vai até 12/11, então parte dos registros tem data no futuro até esse dia.
+
 **Uso de IA:** o Claude Code escreveu o gerador, os testes e a conferência; a revisão é do Victor, no PR.
 
 ## 03/11/2026 (terça): banco no Supabase
