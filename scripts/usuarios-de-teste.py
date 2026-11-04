@@ -42,10 +42,13 @@ DOCTOR_IDS = (
 # Longe dos hospitais simulados (perto de -10, -50): os outros médicos ficam fora do raio.
 UNIT_LAT, UNIT_LON = -20.0, -60.0
 LOGINS = {
-    "COORDENADOR": "coordenador.teste@plantaoseguro.invalid",
-    "MEDICO_1": "medico1.teste@plantaoseguro.invalid",
-    "MEDICO_2": "medico2.teste@plantaoseguro.invalid",
+    "COORDENADOR": "coordenador.teste",
+    "MEDICO_1": "medico1.teste",
+    "MEDICO_2": "medico2.teste",
 }
+# Nenhum e-mail é enviado. Domínios reservados, para o endereço não ser de ninguém: o segundo só
+# entra se o Supabase recusar o primeiro.
+EMAIL_DOMAINS = ("plantaoseguro.invalid", "example.org")
 
 ORGANIZATION = {
     "id": ORGANIZATION_ID,
@@ -200,23 +203,30 @@ class Project:
         )
         return {user["email"]: user["id"] for user in result.get("users", [])}
 
-    def set_user(self, user_id: str | None, email: str, password: str) -> str:
-        """Cria o login ou troca a senha. A senha só existe durante este comando."""
-        if user_id:
-            call(
-                "PUT",
-                f"{self.url}/auth/v1/admin/users/{user_id}",
+    def set_user(self, name: str, password: str, existing: dict[str, str]) -> tuple[str, str]:
+        """Cria o login ou troca a senha. Devolve o ID e o e-mail. A senha só vive neste comando."""
+        for domain in EMAIL_DOMAINS:
+            email = f"{name}@{domain}"
+            if email in existing:
+                call(
+                    "PUT",
+                    f"{self.url}/auth/v1/admin/users/{existing[email]}",
+                    headers=self._service_headers,
+                    body={"password": password},
+                )
+                return existing[email], email
+        for domain in EMAIL_DOMAINS:
+            email = f"{name}@{domain}"
+            created = call(
+                "POST",
+                f"{self.url}/auth/v1/admin/users",
                 headers=self._service_headers,
-                body={"password": password},
+                body={"email": email, "password": password, "email_confirm": True},
+                tolerate=(400, 422),
             )
-            return user_id
-        created = call(
-            "POST",
-            f"{self.url}/auth/v1/admin/users",
-            headers=self._service_headers,
-            body={"email": email, "password": password, "email_confirm": True},
-        )
-        return created["id"]
+            if created:
+                return created["id"], email
+        raise SystemExit("O Supabase recusou os e-mails de teste.")
 
     def refresh_token(self, email: str, password: str) -> str:
         session = call(
@@ -246,9 +256,9 @@ def create(project: Project, env_path: Path) -> None:
         f"TESTE_DOCTOR_2_ID={DOCTOR_IDS[1]}",
     ]
     profiles = []
-    for name, email in LOGINS.items():
+    for name, login in LOGINS.items():
         password = secrets.token_urlsafe(32)
-        user_id = project.set_user(existing.get(email), email, password)
+        user_id, email = project.set_user(login, password, existing)
         lines.append(f"TESTE_{name}_REFRESH={project.refresh_token(email, password)}")
         if name == "COORDENADOR":
             profiles.append(
@@ -294,14 +304,15 @@ def remove(project: Project) -> None:
     clean(project)
     project.delete_in("recommendation_exclusions", "doctor_id", list(DOCTOR_IDS))
     users = project.users_by_email()
-    for email in LOGINS.values():
-        user_id = users.get(email)
-        if user_id:
-            call(
-                "DELETE",
-                f"{project.url}/auth/v1/admin/users/{user_id}",
-                headers=project._service_headers,
-            )
+    for login in LOGINS.values():
+        for domain in EMAIL_DOMAINS:
+            user_id = users.get(f"{login}@{domain}")
+            if user_id:
+                call(
+                    "DELETE",
+                    f"{project.url}/auth/v1/admin/users/{user_id}",
+                    headers=project._service_headers,
+                )
     project.delete_in("doctor_availability", "doctor_id", list(DOCTOR_IDS))
     project.delete_in("doctors", "id", list(DOCTOR_IDS))
     project.rest(
