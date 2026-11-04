@@ -65,6 +65,7 @@ make web-install # instala as dependências da interface web (Node 26)
 make web      # interface web em desenvolvimento (http://localhost:3000)
 make web-check # lint, tipos e build da interface web
 make db-check # migrações e testes pgTAP do banco (precisa de Docker; a CI roda sempre)
+make db-seed  # gera a carga do banco e confere que as métricas publicadas não mudam
 make entrega  # HTML e PDF do documento da Etapa 2 (Edge ou Chrome)
 make kit-entrevistas # casos da revisão às cegas e PDFs do kit de entrevistas
 make up       # (adiado) supabase start + docker compose do n8n

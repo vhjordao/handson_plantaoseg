@@ -37,7 +37,7 @@ Uma branch e um PR por item, CI verde, e nenhum merge sem o ok do Victor. As dat
   - Migrações a partir do [dicionário de dados](dados/dicionario-de-dados.md) v0.2, mais `profiles`.
   - `audit_log` só de inserção, com hash encadeado em gatilho.
   - RLS por organização e papel; `shift_compensation` sem nenhum acesso público.
-  - `seed-db`, no PR seguinte: carrega os dados sintéticos deslocados em semanas inteiras, para o histórico terminar perto da data da demo. Preserva os dias da semana e não muda nenhuma métrica publicada. `doctors_latent` não vai para o banco.
+  - `seed-db`, em `f3/seed-banco`: carrega os dados sintéticos deslocados em semanas inteiras, para o histórico terminar perto da data da demo. Preserva os dias da semana e não muda nenhuma métrica publicada. `doctors_latent` não vai para o banco.
   - Job novo de CI com Supabase CLI e pgTAP: o GitHub tem Docker, a máquina local não precisa.
 
 ### M1, até 05/11: fluxo de ponta a ponta

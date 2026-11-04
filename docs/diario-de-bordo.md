@@ -4,6 +4,19 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 04/11/2026 (quarta): carga dos dados sintéticos no banco
+
+**Pedido do Victor:** carregar os dados sintéticos no projeto.
+
+**O que foi feito**
+
+- `python -m app.cli seed-db` gera um arquivo SQL com os 12 meses simulados, fora do Git. As datas andam 6 semanas, e o histórico termina em 12/11, cinco dias antes da apresentação, com os mesmos dias da semana.
+- O gabarito do simulador fica de fora. O arquivo recusa um banco que já tenha dados e confere as contagens no fim.
+- A avaliação refeita com as datas deslocadas bateu com as métricas publicadas: nenhuma mudou.
+- A CI carrega os 12 meses pelo mesmo caminho do projeto real e repete os testes de RLS com os dados.
+
+**Uso de IA:** o Claude Code escreveu o gerador, os testes e a conferência; a revisão é do Victor, no PR.
+
 ## 03/11/2026 (terça): banco no Supabase
 
 **Pedido do Victor:** começar o banco. Ele também avisou que a Hostinger ainda não foi comprada: quando for preciso, o Claude Code avisa, e os dois criam juntos o servidor e o n8n.

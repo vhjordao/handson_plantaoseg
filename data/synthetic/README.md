@@ -66,4 +66,4 @@ Gerador, testes e relatório escritos pelo Claude Code e revisados pelo Victor. 
 
 ## 11. Próximos passos
 
-Calibrar os parâmetros com as entrevistas (Etapa 3), gerar mais de um segmento e comparar contra dados reais anonimizados, se houver base legal.
+No banco, estes dados entram com `make db-seed` ([ficha do banco](../../supabase/README.md)). Calibrar os parâmetros com as entrevistas (Etapa 3), gerar mais de um segmento e comparar contra dados reais anonimizados, se houver base legal.
