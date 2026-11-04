@@ -75,11 +75,16 @@ test: ## Roda o pytest da matching-api
 lint: ## Roda o ruff na matching-api
 	cd $(API) && $(PYTHON) -m ruff check .
 
-.PHONY: db-check web-install web web-check
+.PHONY: db-check db-seed web-install web web-check
 
 db-check: ## Sobe o Postgres do Supabase e roda os testes pgTAP (precisa de Docker; a CI roda sempre)
 	$(SUPABASE) db start
 	$(SUPABASE) test db
+
+db-seed: ## Gera a carga do banco em supabase/seed e confere que as métricas publicadas não mudam
+	$(CLI) seed
+	$(CLI) evaluate
+	$(CLI) seed-db --check-metrics
 
 
 web-install: ## Instala as dependências da interface web (precisa de Node 26)

@@ -1,6 +1,6 @@
 # Plano: protótipo e Etapa 3 (02/11 a 17/11)
 
-- **Status:** aprovado pelo Victor em 02/11/2026 e ajustado em 03/11 com a Aula 4 e o feedback da Etapa 2. **A construção começou em 03/11, só pela web** ([ADR 0007](adr/0007-web-sai-do-adiamento.md)): há uma página provisória em `apps/web`, e o banco está no projeto, ainda sem dados, com migrações, RLS e testes ([ADR 0008](adr/0008-banco-no-supabase.md)). API e n8n continuam parados até o ok do Victor, e para eles segue valendo o [ADR 0004](adr/0004-prototipo-adiado.md).
+- **Status:** aprovado pelo Victor em 02/11/2026 e ajustado em 03/11 com a Aula 4 e o feedback da Etapa 2. **A construção começou em 03/11, só pela web** ([ADR 0007](adr/0007-web-sai-do-adiamento.md)): há uma página provisória em `apps/web`, e o banco está no projeto, com os dados sintéticos carregados, migrações, RLS e testes ([ADR 0008](adr/0008-banco-no-supabase.md)). API e n8n continuam parados até o ok do Victor, e para eles segue valendo o [ADR 0004](adr/0004-prototipo-adiado.md).
 - **Prazos:** aula e feedback da Etapa 2 em 03/11; **Entrega 3 em 07/11 (até 2,0)**; **apresentação final em 17/11 (até 4,0)**, com a plateia usando o sistema pelo celular.
 
 ## Contexto
@@ -37,7 +37,7 @@ Uma branch e um PR por item, CI verde, e nenhum merge sem o ok do Victor. As dat
   - Migrações a partir do [dicionário de dados](dados/dicionario-de-dados.md) v0.2, mais `profiles`.
   - `audit_log` só de inserção, com hash encadeado em gatilho.
   - RLS por organização e papel; `shift_compensation` sem nenhum acesso público.
-  - `seed-db`, no PR seguinte: carrega os dados sintéticos deslocados em semanas inteiras, para o histórico terminar perto da data da demo. Preserva os dias da semana e não muda nenhuma métrica publicada. `doctors_latent` não vai para o banco.
+  - `seed-db`, em `f3/seed-banco`, carregado em 04/11: carrega os dados sintéticos deslocados em semanas inteiras, para o histórico terminar perto da data da demo. Preserva os dias da semana e não muda nenhuma métrica publicada. `doctors_latent` não vai para o banco.
   - Job novo de CI com Supabase CLI e pgTAP: o GitHub tem Docker, a máquina local não precisa.
 
 ### M1, até 05/11: fluxo de ponta a ponta

@@ -6,7 +6,7 @@ Seção de Cybersecurity da Etapa 2, no formato que o professor pede: quais dado
 
 | Dado | Hoje (PoC) | Em produção (desenho) | Pessoal? | Onde fica | Quem acessa |
 | --- | --- | --- | --- | --- | --- |
-| Cadastro de médicos (nome, CRM, telefone) | **Sintético**, marcado `SIM` | Real | Sim | Hoje: CSV local ignorado pelo Git. Depois: banco (Supabase, região São Paulo) | Hoje: a equipe. Depois: o médico vê o próprio; o coordenador só candidatos elegíveis para a própria vaga (RLS com testes na CI, [ficha do banco](../supabase/README.md)) |
+| Cadastro de médicos (nome, CRM, telefone) | **Sintético**, marcado `SIM` | Real | Sim | CSVs locais, ignorados pelo Git, e banco do Supabase, em São Paulo, com os dados sintéticos desde 04/11 | No banco: o médico vê o próprio; o coordenador só candidatos elegíveis para a própria vaga (RLS com testes na CI, [ficha do banco](../supabase/README.md)) |
 | Localização, raio e disponibilidade | Sintético | Real, minimizado (distância calculada, endereço não exibido) | Sim | Idem | Idem; **nunca vai ao LLM** |
 | Atributos de auditoria (gênero, faixa etária, zona) | Sintético | Real, só para auditoria de viés | Sim | Idem | Só a auditoria; **fora do ranking e do LLM** |
 | Vaga e pedido em texto livre | Sintético | Real | Pode conter dado pessoal digitado | Idem | Coordenador; vai ao LLM como **texto não confiável**, após limpeza |

@@ -9,6 +9,7 @@ Uso, a partir de `services/matching-api`:
     python -m app.cli blind-review  # casos da revisão às cegas para as entrevistas
     python -m app.cli robustness    # teste de premissas e simulação de lançamento
     python -m app.cli data-dictionary  # exemplo concreto do dicionário de dados
+    python -m app.cli seed-db     # arquivo SQL da carga no banco, com as datas deslocadas
     python -m app.cli analyze     # análise exploratória (figuras e tabelas)
 
 Tudo é simulação com dados sintéticos; nada tem validade médica ou legal.
@@ -354,6 +355,40 @@ def cmd_blind_review(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_seed_db(args: argparse.Namespace) -> int:
+    from app.seed_db import (
+        metric_differences,
+        render_seed,
+        shift_dataset,
+        shift_params,
+        weeks_until,
+    )
+
+    data_dir = Path(args.data)
+    dataset, params = _load(data_dir)
+    registry_path = data_dir / "model_registry.json"
+    if not registry_path.exists():
+        raise SystemExit(f"Sem o modelo em {data_dir}. Rode antes: python -m app.cli evaluate")
+    registry = json.loads(registry_path.read_text(encoding="utf-8"))
+    weeks = weeks_until(dataset)
+    if args.check_metrics:
+        _, measured = evaluate(shift_dataset(dataset, weeks), shift_params(params, weeks))
+        published = json.loads(Path(args.published).read_text(encoding="utf-8"))
+        differences = metric_differences(published, measured)
+        if differences:
+            print(f"As datas deslocadas mudaram {len(differences)} métricas publicadas:")
+            for path in differences[:20]:
+                print(f"  {path}")
+            return 1
+        print("Métricas publicadas: nenhuma mudou com as datas deslocadas (simulação).")
+    out = Path(args.out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    sql = render_seed(dataset, params, registry, weeks)
+    out.write_text(sql, encoding="utf-8", newline="\n")
+    print(f"Carga gravada em {out} ({len(sql) // 1024} KB), com as datas {weeks} semanas à frente.")
+    return 0
+
+
 def cmd_build_doc(args: argparse.Namespace) -> int:
     from app.docbuild import render
 
@@ -423,6 +458,19 @@ def build_parser() -> argparse.ArgumentParser:
     blind.add_argument("--data", default=str(DEFAULT_DATA))
     blind.add_argument("--out", default=str(REPO_ROOT / "docs" / "entrevistas"))
     blind.set_defaults(func=cmd_blind_review)
+
+    db = sub.add_parser("seed-db", help="gera o arquivo SQL da carga no banco (simulação)")
+    db.add_argument("--data", default=str(DEFAULT_DATA))
+    db.add_argument("--out", default=str(REPO_ROOT / "supabase" / "seed" / "dados_sinteticos.sql"))
+    db.add_argument(
+        "--check-metrics",
+        action="store_true",
+        help="confere antes que as datas deslocadas não mudam as métricas publicadas",
+    )
+    db.add_argument(
+        "--published", default=str(REPO_ROOT / "docs" / "resultados" / "metricas-ranking.json")
+    )
+    db.set_defaults(func=cmd_seed_db)
 
     doc = sub.add_parser("build-doc", help="converte um documento Markdown em HTML imprimível")
     docs_dir = REPO_ROOT / "docs"

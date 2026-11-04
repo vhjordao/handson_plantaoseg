@@ -55,7 +55,7 @@ select throws_ok(
 );
 select throws_ok(
   $$ insert into public.audit_log (actor_role, actor_pseudo_id, action, entity_type, entity_id, details)
-     values ('system', 'api', 'shift_published', 'shift', 's-3', '{"CRM": "SIM-SP-000001"}') $$,
+     values ('system', 'api', 'shift_published', 'shift', 's-3', '{"CRM": "SIM-TT-000001"}') $$,
   '23514', null, 'a trilha recusa CRM, em maiúsculas ou não'
 );
 select throws_ok(
