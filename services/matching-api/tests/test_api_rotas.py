@@ -265,6 +265,57 @@ class RecomendacaoTests(unittest.TestCase):
         )
 
 
+class SemElegiveisTests(unittest.TestCase):
+    def setUp(self):
+        self.h = Harness()
+        for row in self.h.rest.tables["doctors"]:
+            row["crm_status"] = "suspended"
+        self.h.world.load()
+        self.shift_id = self.h.publish()
+
+    def post(self):
+        return self.h.client.post(
+            f"/shifts/{self.shift_id}/recommendations", headers=self.h.coordinator
+        )
+
+    def test_nenhum_elegivel_responde_lista_vazia_com_a_regra(self):
+        body = self.post().json()
+        self.assertEqual(body["candidates"], [])
+        self.assertEqual(body["eligible_count"], 0)
+        self.assertEqual(set(body["excluded_by_rule"]), {"crm_inactive"})
+
+    def test_repetir_nao_duplica_as_exclusoes(self):
+        first = self.post().json()
+        again = self.post()
+        self.assertEqual(again.status_code, 409)
+        self.assertEqual(again.json()["erro"], "ja_recomendada")
+        self.assertEqual(
+            len(self.h.rest.tables["recommendation_exclusions"]), len(first["exclusions"])
+        )
+
+    def test_sem_recomendados_nao_ha_o_que_aprovar(self):
+        self.post()
+        response = self.h.client.post(
+            f"/shifts/{self.shift_id}/approve",
+            json={"doctor_ids": [self.h.rest.tables["doctors"][0]["id"]]},
+            headers=self.h.coordinator,
+        )
+        self.assertEqual(response.status_code, 409)
+        self.assertEqual(response.json()["erro"], "sem_recomendacao")
+        self.assertEqual(self.h.offers_of(self.shift_id), [])
+
+
+class SemPoliticaTests(unittest.TestCase):
+    def test_organizacao_sem_politica_recebe_409_e_nao_500(self):
+        h = Harness()
+        shift_id = h.publish()
+        organization = h.rest.tables["policy_config"][0]["organization_id"]
+        h.world._current().policies.pop(organization)
+        response = h.client.post(f"/shifts/{shift_id}/recommendations", headers=h.coordinator)
+        self.assertEqual(response.status_code, 409)
+        self.assertEqual(response.json()["erro"], "sem_politica")
+
+
 class RejeicaoTests(unittest.TestCase):
     def test_rejeitar_cancela_a_vaga_e_nao_chama_ninguem(self):
         h = Harness()

@@ -81,6 +81,7 @@ OFFER_COLUMNS = (
 PROFILE_COLUMNS = ("id", "role", "organization_id", "doctor_id")
 MODEL_REGISTRY_COLUMNS = ("model_version", "features", "status")
 SHORTLIST_COLUMNS = ("doctor_id", "rank")
+EXCLUSION_COLUMNS = ("id",)
 APPROVAL_COLUMNS = ("seq", "details")
 
 # Tudo o que a API pode ler. Um teste confere com as migrações e com a neutralidade econômica.
@@ -95,6 +96,7 @@ READ_COLUMNS: dict[str, tuple[str, ...]] = {
     "profiles": PROFILE_COLUMNS,
     "model_registry": MODEL_REGISTRY_COLUMNS,
     "recommendations": SHORTLIST_COLUMNS,
+    "recommendation_exclusions": EXCLUSION_COLUMNS,
     "audit_log": APPROVAL_COLUMNS,
 }
 
@@ -305,6 +307,15 @@ class Repository:
             order="rank",
         )
         return [row["doctor_id"] for row in rows]
+
+    def has_exclusions(self, shift_id: str) -> bool:
+        rows = self._rest.select(
+            "recommendation_exclusions",
+            EXCLUSION_COLUMNS,
+            filters={"shift_id": f"eq.{shift_id}"},
+            limit=1,
+        )
+        return bool(rows)
 
     def approved_ids(self, shift_id: str) -> list[str] | None:
         """A decisão do coordenador, lida da trilha. `None`: nunca houve aprovação."""

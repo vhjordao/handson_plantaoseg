@@ -219,7 +219,8 @@ class MatchingService:
             shift, unit = self._shift_of_organization(shift_id, profile)
             if shift.status != "open":
                 raise ApiError(409, "vaga_nao_aberta", "Esta vaga não está mais aberta.")
-            if self._repository.shortlist(shift_id):
+            # As exclusões contam: uma vaga sem elegíveis também já foi avaliada.
+            if self._repository.shortlist(shift_id) or self._repository.has_exclusions(shift_id):
                 raise ApiError(409, "ja_recomendada", "Esta vaga já tem recomendação.")
             dataset, store = self._world.engine(unit.organization_id)
             audit = RestAudit(self._repository, unit.organization_id, buffered=True)

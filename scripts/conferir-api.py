@@ -74,8 +74,10 @@ def shift_times(days_ahead: int = 2) -> tuple[str, str]:
     return start.isoformat(), (start + timedelta(hours=12)).isoformat()
 
 
-def publish_body(env: dict[str, str], *, unit_id: str | None = None) -> dict[str, Any]:
-    starts_at, ends_at = shift_times()
+def publish_body(
+    env: dict[str, str], *, unit_id: str | None = None, days_ahead: int = 2
+) -> dict[str, Any]:
+    starts_at, ends_at = shift_times(days_ahead)
     return {
         "text": "Vaga de teste da conferência da API (simulação)",
         "unit_id": unit_id or env["TESTE_UNIT_ID"],
@@ -303,6 +305,7 @@ def run_level(
                     samples.extend(results)
 
     started = time.perf_counter()
+    started_at = time.time()
     threads = [threading.Thread(target=worker) for _ in range(users)]
     for thread in threads:
         thread.start()
@@ -310,7 +313,13 @@ def run_level(
         thread.join()
     elapsed = time.perf_counter() - started
     latencies = [sample[2] for sample in samples if 200 <= sample[1] < 300]
+    by_step: dict[str, list[float]] = {}
+    for label, status, latency in samples:
+        if 200 <= status < 300:
+            by_step.setdefault(label, []).append(latency)
     summary: dict[str, Any] = {
+        "inicio": round(started_at),
+        "fim": round(time.time()),
         "simultaneas": users,
         "segundos": round(elapsed, 1),
         "chamadas": len(samples),
@@ -323,6 +332,15 @@ def run_level(
             "p95_ms": round(percentile(latencies, 0.95) * 1000),
             "p99_ms": round(percentile(latencies, 0.99) * 1000),
             "max_ms": round(max(latencies) * 1000),
+        }
+    if len(by_step) > 1:
+        summary["etapas"] = {
+            label: {
+                "chamadas": len(values),
+                "p50_ms": round(statistics.median(values) * 1000),
+                "p95_ms": round(percentile(values, 0.95) * 1000),
+            }
+            for label, values in by_step.items()
         }
     return summary
 
@@ -340,7 +358,13 @@ def flow_operation(env: dict[str, str], logins: dict[str, dict[str, str]]):
         coordinator = logins["COORDENADOR"]
         results = []
         sample, response = timed(
-            client, "publicar", "POST", "/shifts", json=publish_body(env), headers=coordinator
+            client,
+            "publicar",
+            "POST",
+            "/shifts",
+            # Longe da vaga aceita em `verificar`: a agenda do médico de teste não pode estar cheia.
+            json=publish_body(env, days_ahead=10),
+            headers=coordinator,
         )
         results.append(sample)
         if response.status_code != 201:

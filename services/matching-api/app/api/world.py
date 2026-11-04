@@ -7,6 +7,7 @@ mudar o banco por fora, `POST /internal/reload` ou reiniciar o serviço relê tu
 from dataclasses import replace
 from threading import RLock
 
+from app.api.errors import ApiError
 from app.api.repository import Repository, World
 from app.models import Dataset, Doctor, Offer, Shift, Unit
 from app.ranking.compute import FeatureStore
@@ -49,7 +50,7 @@ class WorldCache:
             world = self._current()
             policy = world.policies.get(organization_id)
             if policy is None:
-                raise LookupError(f"organização sem política de jornada: {organization_id}")
+                raise ApiError(409, "sem_politica", "A organização não tem política de jornada.")
             if self._store is None:
                 world.dataset.offers = list(self._offers.values())
                 self._store = FeatureStore(world.dataset)
