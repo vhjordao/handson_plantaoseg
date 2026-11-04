@@ -65,6 +65,7 @@ make web-install # instala as dependências da interface web (Node 26)
 make web      # interface web em desenvolvimento (http://localhost:3000)
 make web-check # lint, tipos e build da interface web
 make db-check # migrações e testes pgTAP do banco (precisa de Docker; a CI roda sempre)
+make db-seed  # gera a carga do banco e confere que as métricas publicadas não mudam
 make entrega  # HTML e PDF do documento da Etapa 2 (Edge ou Chrome)
 make kit-entrevistas # casos da revisão às cegas e PDFs do kit de entrevistas
 make up       # (adiado) supabase start + docker compose do n8n
@@ -123,7 +124,7 @@ Quando Victor colar um feedback ou disser "novo feedback", use a skill `incorpor
 
 - Etapas 1 e 2 entregues. **Etapa 2, versão 2 do documento (31/10/2026, 7 páginas, tag `etapa-2-rev1`; a versão 1 está na tag `etapa-2`):** PoC mínima executável, dados, análise, solução de IA, fluxo recomendado contra o processo manual (`make flow`), segurança, conformidade e PDF em `docs/entrega-2/`. O merge continua sendo do Victor. LLM do produto = Gemini (**não exercitado com chave**); API e n8n adiados.
 - **Feedback da Etapa 2 (03/11):** kit de entrevistas, teste de premissas, exemplo do dicionário e dados em produção prontos; faltam as entrevistas (até 06/11) e o documento da Etapa 3 (07/11).
-- **Próximo passo (plano aprovado em 02/11):** protótipo e Etapa 3, conforme `docs/plano-etapa-3.md`. Supabase e Vercel novos existem desde 03/11 (Hostinger ainda não), e a plataforma web (landing, entrada por persona, cascas dos papéis e camada `demo`) está em `apps/web`, fase UI-0 (ADR 0010 e 0011); as telas seguem as fases do `docs/design/prompt-frontend.md`. O banco está aplicado no projeto `plantaoseguro`, ainda sem dados, com migrações, RLS e testes em `supabase/` (ADR 0008). **Cada novo pedaço de API, carga de dados e n8n espera o ok do Victor.** A Hostinger ainda não foi comprada: avise o Victor antes de precisar dela, para criarem juntos o servidor e o n8n.
+- **Próximo passo (plano aprovado em 02/11):** protótipo e Etapa 3, conforme `docs/plano-etapa-3.md`. Supabase e Vercel novos existem desde 03/11 (Hostinger ainda não), e a plataforma web (landing, entrada por persona, cascas dos papéis e camada `demo`) está em `apps/web`, fase UI-0 (ADR 0010 e 0011); as telas seguem as fases do `docs/design/prompt-frontend.md`. O banco está no projeto `plantaoseguro`, com os dados sintéticos carregados, e tem migrações, RLS e testes em `supabase/` (ADR 0008). **Cada novo pedaço (telas, API, n8n) espera o ok do Victor.** A Hostinger ainda não foi comprada: avise o Victor antes de precisar dela, para criarem juntos o servidor e o n8n.
 - **Acesso às contas:** só por tokens com escopo no `.env` de um clone fora do OneDrive (`C:\dev`). Cada comando carrega o arquivo só para si; nunca imprima esses valores nem os coloque no chat ou no Git.
 - Ambiente local: Python 3.12, pytest, ruff, make e Node 26 instalados; sem Docker, Supabase CLI e ffmpeg. A CI do GitHub roda tudo, inclusive a PoC.
 - Vídeo da aula de 27/10 não processado (ver rastreabilidade A3-13).

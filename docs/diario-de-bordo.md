@@ -31,6 +31,21 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 **Uso de IA:** o Claude Code aplicou os achados dos dois revisores e escreveu os testes novos; o agente `acessibilidade` audita o código final (o resultado entra no PR). O Victor aprova ou ajusta no PR; nada foi mesclado.
 
+## 04/11/2026 (quarta): carga dos dados sintéticos no banco
+
+**Pedido do Victor:** carregar os dados sintéticos no projeto.
+
+**O que foi feito**
+
+- `python -m app.cli seed-db` gera um arquivo SQL com os 12 meses simulados, fora do Git. As datas andam 6 semanas, e o histórico termina em 12/11, cinco dias antes da apresentação, com os mesmos dias da semana.
+- O gabarito do simulador fica de fora. O arquivo recusa um banco que já tenha dados e confere as contagens no fim.
+- A avaliação refeita com as datas deslocadas bateu com as métricas publicadas: nenhuma mudou.
+- A CI carrega os 12 meses pelo mesmo caminho do projeto real e repete os testes de RLS com os dados.
+
+**No projeto real:** o Victor aprovou, e a carga entrou depois de a CI ficar verde. Pela API, todas as contagens bateram (16.547 linhas), e a tabela do gabarito não existe. De fora, com a chave pública, ler, gravar e chamar funções continuou recusado. O histórico vai até 12/11, então parte dos registros tem data no futuro até esse dia.
+
+**Uso de IA:** o Claude Code escreveu o gerador, os testes e a conferência; a revisão é do Victor, no PR.
+
 ## 03/11/2026 (terça, à noite): plataforma web, prompt de frontend v2 e agentes de revisão
 
 **Pedido do Victor:** fazer o frontend como uma **plataforma** (não um app), aberta no computador e no celular, com uma página inicial que apresente o produto e uma área de login para seguir com a plataforma funcional; buscar as skills de frontend e design, pegar referências na internet (nexunio.health), criar um prompt melhor do que o de exemplo e aplicá-lo na sessão, com agentes de revisão e de UX/UI, **sem interromper a sessão do banco de dados**.

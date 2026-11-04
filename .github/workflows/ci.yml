@@ -142,6 +142,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
       - uses: supabase/setup-cli@v3
         with:
           version: 3.0.0
@@ -155,6 +158,23 @@ jobs:
         run: supabase db advisors --level info --fail-on warn
       - name: Erros de tipo nas funções do banco
         run: supabase db lint --level warning --fail-on warning
+      - name: Gera a carga e confere que as métricas publicadas não mudam
+        working-directory: services/matching-api
+        run: |
+          python -m app.cli seed
+          python -m app.cli evaluate
+          python -m app.cli seed-db --check-metrics
+      - name: Carrega os 12 meses, pelo mesmo caminho do projeto real
+        run: supabase db push --include-seed --yes
+      - name: Testes de RLS e auditoria com os dados carregados (pgTAP)
+        run: supabase test db
+      - name: Isolamento e tempo de resposta com os dados carregados
+        run: psql "postgresql://postgres:postgres@127.0.0.1:54322/postgres" -f scripts/conferir-carga-banco.sql
+      - name: Uma segunda carga é recusada
+        run: |
+          if psql "postgresql://postgres:postgres@127.0.0.1:54322/postgres" -v ON_ERROR_STOP=1 -f supabase/seed/dados_sinteticos.sql; then
+            echo "::error::A segunda carga deveria ter sido recusada."; exit 1
+          fi
 
   web:
     name: Interface web (lint, tipos, testes e build)

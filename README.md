@@ -7,7 +7,7 @@ Projeto final da disciplina **Hands On – Aplicação de IA nos negócios** (p�
 > **Status (30/10/2026):** Entrega 1 (descoberta) realizada; **Entrega 2 pronta**: dados sintéticos, análise, solução de IA e uma **PoC mínima executável** (recomendação e explicação, por linha de comando), com o documento em [PDF de 6 páginas](docs/entrega-2/Entrega2-PlantaoSeguro.pdf) e o [guia de postagem](docs/entrega-2/LEIAME.md). Interface, API e n8n estão **adiados** ([ADR 0004](docs/adr/0004-prototipo-adiado.md) e [0005](docs/adr/0005-gp-poc-minima-e-especificacao.md)); o LLM do produto é o **Gemini** ([ADR 0003](docs/adr/0003-llm-do-produto-gemini.md)), ainda **não exercitado** com chave.
 > Projeto acadêmico: todos os dados da demonstração serão sintéticos e nenhum documento gerado tem validade médica ou legal.
 >
-> **Atualização de 03/11/2026:** a interface web saiu do adiamento ([ADR 0007](docs/adr/0007-web-sai-do-adiamento.md)). Há uma [página provisória](https://handson-plantaoseg.vercel.app), sem dados nem login, publicada na Vercel a partir de [`apps/web`](apps/web/README.md). O banco está no ar, com migrações, RLS e testes ([ficha](supabase/README.md)), ainda sem dados. API e n8n continuam adiados.
+> **Atualização de 03/11/2026:** a interface web saiu do adiamento ([ADR 0007](docs/adr/0007-web-sai-do-adiamento.md)). Há uma [página provisória](https://handson-plantaoseg.vercel.app), sem dados nem login, publicada na Vercel a partir de [`apps/web`](apps/web/README.md). O banco está no ar, com os dados sintéticos, migrações, RLS e testes ([ficha](supabase/README.md)). API e n8n continuam adiados.
 
 ## A ideia em um parágrafo
 

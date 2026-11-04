@@ -306,6 +306,7 @@ Com plantões de 12 h em horários fixos, o intervalo entre plantões do mesmo m
 
 - Parâmetros e semente em `data/synthetic/params.json`.
 - Saída em CSV UTF-8, com LF, em `data/synthetic/out/` (ignorada pelo Git; qualquer um regenera com `make seed`).
+- No banco, a carga (`make db-seed`) usa estes mesmos dados, com as datas 6 semanas à frente e sem `doctors_latent` ([ficha do banco](../../supabase/README.md)).
 - `data/synthetic/sample/` é um **conjunto pequeno e íntegro** (40 médicos, duas semanas, sem a tabela de gabarito), versionado, para as demais frentes testarem sem gerar tudo. Não é um recorte das primeiras linhas: é um mundo completo em miniatura.
 - `dataset_manifest.json` guarda a versão deste dicionário, a semente, os parâmetros, a contagem de linhas e o SHA-256 de cada tabela. Uma cópia fica em `docs/dados/manifesto-da-geracao.json` e a CI confere, de forma informativa, que a execução em Linux gera os mesmos checksums da máquina do autor.
 

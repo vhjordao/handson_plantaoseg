@@ -22,6 +22,8 @@ Desde 30/10/2026 o Supabase não expõe mais tabelas novas automaticamente ([avi
 9. **O gabarito fica de fora.** `doctors_latent` não vai para o banco.
 10. **Medidas em `double precision`.** O motor lê do banco os mesmos números que lê do CSV. Só o valor do plantão usa `numeric`.
 
+11. **A carga é um arquivo gerado, fora do Git.** Ele parte dos mesmos dados da PoC e anda as datas em semanas inteiras, para o histórico terminar perto da apresentação sem mudar dia da semana nem métrica. Recusa um banco que já tenha dados e confere as contagens no fim.
+
 A CLI fica fixada na versão 3.0.0, e o banco é testado na CI com o Postgres do Supabase. A máquina local não precisa de Docker.
 
 ## Consequências
