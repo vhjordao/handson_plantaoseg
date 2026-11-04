@@ -1,6 +1,6 @@
 # Ficha do componente: interface web (plataforma)
 
-- **Responsável:** Victor Jordão, com o Claude Code · **Frente:** interface · **Branch:** `f3/web-plataforma` · **Atualizado em:** 03/11/2026
+- **Responsável:** Victor Jordão, com o Claude Code · **Frente:** interface · **Branch:** `f3/web-plataforma` · **Atualizado em:** 04/11/2026
 - **Estado:** fase **UI-0 (fundação)**: site público (landing, entrada, ajuda), cascas dos três papéis, telão provisório e a camada de dados no modo `demo`. As telas do coordenador (UI-1), do médico (UI-2), o telão ao vivo e a auditoria (UI-3) seguem o [prompt de frontend](../../docs/design/prompt-frontend.md), seção 16. Decisões: [ADR 0010](../../docs/adr/0010-web-responsiva-sem-pwa.md) (web responsiva, sem PWA) e [ADR 0011](../../docs/adr/0011-estrutura-da-plataforma-web.md) (estrutura, sessão e camada de dados).
 
 ## 1. O que é e qual dor resolve
@@ -32,6 +32,8 @@
 | `components/dominio/superficie-voz.tsx` | As três vozes como superfície | A prop `voz` troca o contorno; o SVG é decorativo (`aria-hidden`) |
 | `components/landing/hero-demo.tsx` | A demonstração viva do hero | O espaço de cada etapa fica reservado (`visibility`), então nada pula |
 | `lib/api/types.ts` e `plantao-api.ts` | O contrato com o backend, em Zod, e a interface `PlantaoApi` | Espelha `models.py`, `pipeline.py`, `rules.py`, `explain.py` e `audit.py` |
+| `lib/api/demo/adaptador.ts` | O adaptador `demo` de `PlantaoApi` | `operacao` e `aplicar`: uma escrita por vez, gravada de uma vez e descartada se a demonstração foi reiniciada no meio; aprovar a mesma lista de novo devolve a decisão já tomada |
+| `lib/api/demo/privacidade.ts` | Tira nome, CRM, telefone, e-mail e número de documento dos textos livres | É de melhor esforço: reduz o risco, não o elimina |
 | `proxy.ts` e `lib/session/` | Sessão por persona e proteção das rotas | `destinoSeguro`: o parâmetro `de` só aceita rota do mesmo papel |
 | `lib/copy/` | Todos os textos, em português | Rótulos dos códigos do backend e as afirmações permitidas |
 | `scripts/check-contraste.mjs` | Confere os contrastes direto do CSS | Falha com código 1 se algum par ficar abaixo do mínimo |
@@ -76,13 +78,13 @@ A página não precisa de `.env`. O `.env` da raiz guarda só os tokens de acess
 
 ## 7. Testes e resultados
 
-Na máquina local, em 03/11/2026:
+Na máquina local, em 04/11/2026:
 
-- **Testes de componente (Vitest):** 22 passando (vozes, selo, botão, campos, resumo de erros, datas e números em português).
-- **Jornada e acessibilidade (Playwright, Edge):** 15 passando em computador (1440 px) e celular (390 px): a demonstração do hero chega ao selo, o primeiro Tab leva a "Pular para o conteúdo", **Ajuda** fica à esquerda de **Entrar**, sem rolagem horizontal em 320 px, estado final com movimento reduzido e `axe` sem violação grave nos temas claro e escuro.
+- **Testes unitários e de componente (Vitest):** 124 passando em 8 arquivos: vozes, selo, botão, campos e resumo de erros; datas e números em português; contratos e fixtures; extração por regras; trilha com hash; limpeza de dados pessoais; aprovação repetida, reinício no meio de uma operação e limites de texto; sessão e `destinoSeguro`.
+- **Jornada e acessibilidade (Playwright, Edge, sobre o build de produção como na CI):** 37 passando e 1 ignorado de propósito (o teste do primeiro Tab, que não faz sentido no celular), em computador (1440 px) e celular (390 px). Cobre a demonstração do hero até o selo, "Pular para o conteúdo", **Ajuda** à direita no cabeçalho, sem rolagem horizontal em 320 px, estado final com movimento reduzido, as três portas de `/entrar` (inclusive `?papel=` pela posição visual), a sessão por persona, a tela de Vagas, Minha conta, Sair e o `axe` sem violação grave nos temas claro e escuro. Contra o servidor de desenvolvimento, com os testes em paralelo, 5 testes do computador estouraram os 30 s (ele é bem mais lento que o build); por isso a medida vale só no build de produção.
 - **Contraste:** todos os pares passam nos dois temas (texto principal de 14,1:1 a 16,6:1; contorno e campos de 3,2:1 a 10,0:1).
 - **Lighthouse (build de produção, Edge, 03/11/2026), em `/` e em `/entrar`:** acessibilidade **100**, boas práticas **100**, desempenho 99 a 100 e SEO 60 (**esperado**: a página é `noindex` de propósito, ADR 0007). LCP de 0,9 s no celular simulado e de 0,3 s no computador; CLS de 0,009 na landing e 0 na entrada. Uma primeira medição saiu pior (acessibilidade 93, e `/entrar` com erro) por ter sido feita contra um servidor de produção velho que ficou na porta: o resultado acima é de um servidor novo.
-- **Build de produção:** `/`, `/telao` e `/_not-found` estáticas; `/ajuda` dinâmica (lê a sessão).
+- **Build de produção:** `/`, `/telao` e `/_not-found` estáticas; `/ajuda`, `/entrar` e as áreas por papel dinâmicas (leem a sessão ou os parâmetros).
 
 Na CI, o job `web` roda lint, tipos, contraste, testes e build, e o job `web-e2e` roda a jornada e o `axe` sobre o build de produção.
 
@@ -93,7 +95,9 @@ Na CI, o job `web` roda lint, tipos, contraste, testes e build, e o job `web-e2e
 - **Sessão:** cookie `httpOnly`, `sameSite=lax`, sem dado pessoal e **sem assinatura** (decisão consciente da demonstração). O parâmetro `de` só aceita rota do mesmo papel, para não virar redirecionamento aberto.
 - **Texto da vaga:** é entrada hostil e nunca vira HTML; os trechos destacados saem de componentes, não de strings.
 - **Dependências:** `npm audit --omit=dev` (03/11/2026) não aponta vulnerabilidades no que vai para produção. Continuam os 16 alertas moderados de ferramentas de desenvolvimento, todos na cadeia do ESLint (os mesmos da ficha anterior); o conserto automático rebaixaria o ESLint para versões antigas, então não foi aplicado.
-- **Ainda não feito:** cabeçalhos próprios de segurança, como CSP (entram antes de haver login real).
+- **Cabeçalhos:** `nosniff`, `Referrer-Policy`, `Permissions-Policy` e `frame-ancestors 'none'` (a página não abre dentro de outro site). O cookie só ganha `secure` quando a conexão é HTTPS, para a demonstração continuar funcionando em `localhost`.
+- **Textos digitados:** têm limite (2.000 caracteres para o pedido da vaga, 1.000 para justificativa, motivo e comentário) e passam por uma limpeza de dados pessoais de melhor esforço antes de ir para a trilha ou para a sessão.
+- **Ainda não feito:** uma CSP completa, com `script-src` por nonce (entra antes de haver login real).
 
 ## 9. Limitações e honestidade
 
@@ -101,12 +105,14 @@ Na CI, o job `web` roda lint, tipos, contraste, testes e build, e o job `web-e2e
 - Cascata, aceite e contestação são **simulados**; o rastro de pagamentos e o check-in não existem (evolução futura, ADR 0002).
 - As recomendações da demonstração vêm de uma **grade pré-calculada** (12 h, próximos 8 dias), não de um cálculo em tempo real; fora dela, a tela explica o limite.
 - Os números de tempo e de concentração vêm de uma simulação com dados sintéticos e não são evidência real.
-- Conferido em navegador com tamanho de tela emulado, não em celular real.
+- A trilha de auditoria da demonstração vive no navegador. O hash encadeado **detecta** uma linha alterada, mas **não impede forja**: quem controla o navegador pode refazer a cadeia. A verificação é local, e a imutabilidade de verdade fica para o modo `live`.
+- A limpeza de dados pessoais nos textos livres é de melhor esforço; o aviso "Não digite dados reais" continua valendo.
+- Conferido em navegador com tamanho de tela emulado, não em celular real, e sem leitor de tela real.
 - Os limites de jornada (24 h e 11 h) são configuração do projeto, não norma verificada; qualquer afirmação sobre o CFM leva "validar com jurídico".
 
 ## 10. Uso de IA no desenvolvimento
 
-O Victor pediu a plataforma web, a landing e a área de entrada, a busca de skills e de referências e agentes de revisão. O Claude Code escreveu o prompt v2, a direção de arte, os componentes e os testes; um subagente gerou as fixtures a partir do pipeline Python; três agentes (`designer-ui`, `revisor-frontend` e `acessibilidade`) revisam de olhos novos. O texto e o visual aguardam a revisão do Victor no PR. **Corrigido no caminho:** a skill do Vercel dizia que o `proxy.ts` exporta `proxyConfig`, mas a documentação do pacote do Next.js diz `config`; valeu a documentação do pacote.
+O Victor pediu a plataforma web, a landing e a área de entrada, a busca de skills e de referências e agentes de revisão. O Claude Code escreveu o prompt v2, a direção de arte, os componentes e os testes; um subagente gerou as fixtures a partir do pipeline Python; três agentes (`designer-ui`, `revisor-frontend` e `acessibilidade`) revisam de olhos novos. A revisão do `designer-ui` e a do `revisor-frontend` já foram aplicadas (copy sem jargão, entrada em casca própria, Vagas com a lista primeiro, aprovação idempotente, fila de operações, limpeza de dados pessoais mais larga, limites de texto, cabeçalhos de segurança); a do `acessibilidade` roda sobre o código final. O texto e o visual aguardam a revisão do Victor no PR. **Corrigido no caminho:** a skill do Vercel dizia que o `proxy.ts` exporta `proxyConfig`, mas a documentação do pacote do Next.js diz `config`; valeu a documentação do pacote.
 
 ## 11. Próximos passos
 

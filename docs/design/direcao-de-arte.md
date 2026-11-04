@@ -1,6 +1,6 @@
 # Direção de arte da plataforma PlantãoSeguro
 
-- **Responsável:** Victor Jordão com o Claude Code · **Branch:** `f3/web-plataforma` · **Data:** 03/11/2026
+- **Responsável:** Victor Jordão com o Claude Code · **Branch:** `f3/web-plataforma` · **Data:** 03/11/2026, revisada em 04/11/2026
 - **Status:** plano de 03/11, com revisão contra o padrão genérico (seção 3). Valores de cor e de tipo são os **finais** quando constam em `apps/web/lib/tokens/cores.ts`; o script `npm run check:contraste` confere os contrastes.
 - **Fontes:** [prompt v2](prompt-frontend.md) (regras), [referências](referencias.md) (o que foi visto e por quê) e a skill `frontend-design` (processo de duas passagens).
 
@@ -251,6 +251,12 @@ O divisor (1,28:1 no claro, 1,54:1 no escuro) é decorativo, não carrega inform
 | No celular, a legenda das vozes desceu para **depois** da demonstração | Ela empurrava o hero para baixo; título, ação e demonstração ficam juntos |
 | Etapa 6 como o único bloco **cheio** | Entre cartões tracejados, contínuos e cinzas, o bloco cheio é a "decisão carimbada" e a única exceção de forma |
 | Mensagem "Chances parecidas (66% a 69%)" no hero | Vem da demonstração real e mostra, em vez de dizer, que o sistema não finge precisão |
+| A demonstração do hero mostra **2** sugestões ("2 dos 5 primeiros"), e a linha de campos diz de onde veio cada um ("Está no texto", "Calculado do texto") | Cinco sugestões empurravam o selo para fora da tela no celular; "achei" e "deduzi" eram códigos nossos, e a tela fala como a pessoa pensa |
+| "Como funciona" ganhou um trilho à esquerda (tracejado, contínuo, fino) e perdeu a legenda | A legenda já está no hero; o trilho mostra a voz de cada etapa sem repetir a explicação |
+| `/entrar` ganhou casca própria: cabeçalho só com a marca e a Ajuda, e as três portas sem ícone, na mesma altura, com a ação no pé | Quem chegou ali já decidiu entrar, então "Entrar" e as âncoras da landing atrapalhavam; o título e a frase de cada porta já dizem quem é quem. A Ajuda continua no mesmo canto (WCAG 3.2.6) |
+| A tela de Vagas começa pela **lista**, com o resumo "Exigem a sua ação"; os indicadores vêm depois | A tarefa do coordenador é decidir; os números respondiam a uma pergunta que ele não fez ao abrir a tela. As vagas "aguardando" usam o contorno tracejado da IA |
+| Os indicadores levam "simulado" ao lado de cada valor e um link para a fonte dos tempos | Número de simulação nunca aparece sem o rótulo |
+| Telão provisório com corpo de 28 px e a legenda das vozes em escala de sala | É lido a 15 m, com a sala escura |
 
 **Que acessório saiu** (a regra de Chanel): o menu de âncoras no celular (a página é uma rolagem só); a animação de entrada de cada seção (sobrou a revelação do hero e o fechamento do tracejado); o botão "Pular" do hero (só o "Aprovar e oferecer" funciona, e um botão que não faz nada é pior do que nenhum); e a faixa de demonstração fixa no celular (ela some na rolagem e volta a cada página).
 

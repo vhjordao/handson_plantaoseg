@@ -4,6 +4,33 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 04/11/2026 (quarta): revisão de olhos novos da plataforma web
+
+**O que aconteceu:** os agentes `designer-ui` e `revisor-frontend` leram a plataforma sem ter visto o processo e devolveram achados; este dia aplicou os que valiam, no mesmo PR (`f3/web-plataforma`), e corrigiu o que os testes mostraram.
+
+**Mudanças na interface**
+
+- **Texto sem jargão:** "ordem sugerida", "cinco primeiros", "Teste da aprovação"; a origem dos campos passou de "achei/deduzi" para "Está no texto", "Calculado do texto" e "Não está no texto".
+- **Entrada em casca própria:** `/entrar` saiu do site público (route group `(entrada)`), com cabeçalho só de marca e Ajuda; as três portas sem ícone, na mesma altura.
+- **Vagas começa pela lista**, com o resumo "Exigem a sua ação"; os indicadores levam "simulado" e a fonte dos tempos.
+- **Hero** com 2 sugestões em vez de 5 (cabia na tela do celular) e "Como funciona" com trilho tracejado, contínuo e fino. Telão provisório em corpo de 28 px.
+
+**Mudanças na camada de dados e na segurança**
+
+- Aprovar a mesma lista de novo devolve a decisão já tomada (duplo clique não duplica a trilha); a geração é lida antes da espera, então reiniciar a demonstração no meio descarta a operação; o feedback da explicação passa pela mesma fila.
+- Limpeza de dados pessoais mais larga (CRM com UF e "nº", telefone sem DDD, e-mail, CPF/CNPJ, números longos) sem tocar em datas, horários nem intervalos de anos; limite de 2.000 caracteres para o pedido e 1.000 para textos livres.
+- `erros.ts` subiu para `lib/api` (os erros são do contrato). Cookie `secure` pelo protocolo real, `destinoSeguro` só com o papel exato e cabeçalhos de segurança (`nosniff`, `Referrer-Policy`, `Permissions-Policy`, `frame-ancestors 'none'`).
+- ADR 0011 ganhou as **divergências conhecidas com o backend**; o README da demo passou a dizer que o hash encadeado detecta alteração mas não impede forja.
+
+**Medidas:** Vitest 124 passando; Playwright 37 passando e 1 ignorado de propósito, no build de produção; contraste, fixtures (`--check`) e `ruff` limpos.
+
+**Descobertas**
+
+- Rodar a jornada contra o servidor de desenvolvimento derrubou 5 testes do computador por tempo (30 s); no build de produção, como na CI, passam todos. A medida que vale é a do build.
+- Uma medição de Lighthouse dá resultado inválido se algum servidor velho ficar na porta: a primeira saiu com acessibilidade 93 e `/entrar` com erro por isso.
+
+**Uso de IA:** o Claude Code aplicou os achados dos dois revisores e escreveu os testes novos; o agente `acessibilidade` audita o código final (o resultado entra no PR). O Victor aprova ou ajusta no PR; nada foi mesclado.
+
 ## 03/11/2026 (terça, à noite): plataforma web, prompt de frontend v2 e agentes de revisão
 
 **Pedido do Victor:** fazer o frontend como uma **plataforma** (não um app), aberta no computador e no celular, com uma página inicial que apresente o produto e uma área de login para seguir com a plataforma funcional; buscar as skills de frontend e design, pegar referências na internet (nexunio.health), criar um prompt melhor do que o de exemplo e aplicá-lo na sessão, com agentes de revisão e de UX/UI, **sem interromper a sessão do banco de dados**.
