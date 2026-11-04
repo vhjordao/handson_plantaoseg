@@ -260,4 +260,4 @@ O divisor (1,28:1 no claro, 1,54:1 no escuro) é decorativo, não carrega inform
 
 **Que acessório saiu** (a regra de Chanel): o menu de âncoras no celular (a página é uma rolagem só); a animação de entrada de cada seção (sobrou a revelação do hero e o fechamento do tracejado); o botão "Pular" do hero (só o "Aprovar e oferecer" funciona, e um botão que não faz nada é pior do que nenhum); e a faixa de demonstração fixa no celular (ela some na rolagem e volta a cada página).
 
-**Capturas** em 1440, 768, 390 e 1920 px, nos temas claro e escuro, ficam em [`capturas/`](capturas/).
+**Capturas** de 04/11/2026, tiradas do build de produção no Edge com `node scripts/capturar.mjs`, ficam em [`capturas/`](capturas/): a landing em 1440 px (tema claro, escuro e página inteira), 768 px (topo) e 390 px (topo e página inteira); `/entrar` em 1440 e 390 px; Vagas em 1440 px (claro e escuro), 768 e 390 px; Minha conta e Ofertas do médico em 390 px; o telão em 1920 por 1080 px no tema escuro; e a Ajuda em 1440 px. O que **não** foi capturado: telas de erro e de carregamento, e o celular real (só o tamanho emulado).

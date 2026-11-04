@@ -7,7 +7,8 @@
  *   node scripts/capturar.mjs / --largura 390 --altura 844 --escuro --secoes
  *
  * Opções: --largura, --altura, --escuro, --secoes (uma imagem por <section> e <header>),
- * --espera (ms), --porta, --canal (padrão msedge; vazio usa o Chromium do Playwright) e
+ * --pagina (uma imagem da página inteira, além da do topo), --espera (ms), --porta,
+ * --canal (padrão msedge; vazio usa o Chromium do Playwright) e
  * --sessao coordenador|medico (entra com a primeira persona do papel, para telas protegidas).
  */
 import { mkdirSync, readFileSync } from "node:fs";
@@ -68,6 +69,11 @@ await pagina.waitForTimeout(espera);
 
 await pagina.screenshot({ path: join(saida, `${nome}-topo.png`) });
 console.log(`${nome}-topo.png`);
+
+if (bandeira("pagina")) {
+  await pagina.screenshot({ path: join(saida, `${nome}-pagina.png`), fullPage: true });
+  console.log(`${nome}-pagina.png`);
+}
 
 if (bandeira("secoes")) {
   const secoes = await pagina.locator("main > section, main > div > section, footer").all();
