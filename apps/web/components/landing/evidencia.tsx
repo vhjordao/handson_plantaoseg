@@ -63,7 +63,7 @@ export function Evidencia() {
             href={linkNoRepositorio(EVIDENCIA.fonte)}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 font-semibold underline underline-offset-4 hover:no-underline"
+            className="inline-flex min-h-[var(--alvo-min)] items-center gap-1.5 font-semibold underline underline-offset-4 hover:no-underline"
           >
             Ler o relatório completo
             <span className="sr-only"> (abre o GitHub em outra aba)</span>

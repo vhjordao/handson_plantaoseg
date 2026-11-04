@@ -89,7 +89,7 @@ function ResumoDeAcao({ vagas }: { vagas: Vaga[] }) {
             <li key={item.id}>
               <Link
                 href={`?status=${item.id}`}
-                className="inline-block py-1 text-base font-semibold underline underline-offset-4 hover:no-underline"
+                className="inline-flex min-h-[var(--alvo-min)] items-center text-base font-semibold underline underline-offset-4 hover:no-underline"
               >
                 {plural(item.n, item.um, item.varios)}
               </Link>
@@ -110,7 +110,7 @@ function LinhaDeVaga({ vaga }: { vaga: Vaga }) {
     <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:gap-6">
       <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-          <h3 className="font-serif text-xl font-semibold">
+          <h3 id={`vaga-${vaga.id}-titulo`} className="font-serif text-xl font-semibold">
             {vaga.especialidade ? ROTULO_ESPECIALIDADE[vaga.especialidade] : "Vaga sem especialidade"}
           </h3>
           <Badge tone={tone}>
@@ -124,7 +124,9 @@ function LinhaDeVaga({ vaga }: { vaga: Vaga }) {
             </Badge>
           ) : null}
         </div>
-        <p className="mt-0.5 text-tinta-suave">{descrever(vaga)}</p>
+        <p id={`vaga-${vaga.id}-descricao`} className="mt-0.5 text-tinta-suave">
+          {descrever(vaga)}
+        </p>
         {rascunho ? (
           <p className="mt-1 line-clamp-2 text-sm text-tinta-suave">Pedido: “{vaga.textoOriginal}”</p>
         ) : null}
@@ -139,7 +141,11 @@ function LinhaDeVaga({ vaga }: { vaga: Vaga }) {
         ) : null}
       </div>
       <Button asChild variant={aguardando ? "primary" : "secondary"} className="w-full md:w-auto">
-        <Link href={rascunho ? "/coordenador/vagas/nova" : `/coordenador/vagas/${vaga.id}`}>
+        <Link
+          href={rascunho ? "/coordenador/vagas/nova" : `/coordenador/vagas/${vaga.id}`}
+          // Vários links iguais ("Abrir a vaga") só se distinguem pela vaga que está ao lado.
+          aria-describedby={`vaga-${vaga.id}-titulo vaga-${vaga.id}-descricao`}
+        >
           {rascunho ? "Continuar a vaga" : aguardando ? "Ver as sugestões" : "Abrir a vaga"}
         </Link>
       </Button>
@@ -191,6 +197,13 @@ export function ListaDeVagas() {
   if (isPending || !vagas) return <Carregando />;
 
   const visiveis = vagas.filter(escolhido.serve).sort(porPrioridade);
+  // O filtro é um link: o foco fica nele e a lista muda. Esta frase, numa região de status que já
+  // estava na página, é o que avisa o leitor de tela (WCAG 4.1.3) e confirma o resultado a todos.
+  const palavraVagas = vagas.length === 1 ? "vaga" : "vagas";
+  const quantasVagas =
+    escolhido.id === "todas"
+      ? `Mostrando ${vagas.length} ${palavraVagas}.`
+      : `Mostrando ${visiveis.length} de ${vagas.length} ${palavraVagas} (${escolhido.rotulo}).`;
 
   return (
     <div className="grid gap-4">
@@ -225,6 +238,9 @@ export function ListaDeVagas() {
             })}
           </ul>
         </nav>
+        <p role="status" className="-mt-2 text-sm text-tinta-suave">
+          {quantasVagas}
+        </p>
 
         {visiveis.length === 0 ? (
           <EmptyState

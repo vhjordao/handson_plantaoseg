@@ -1,21 +1,5 @@
-import AxeBuilder from "@axe-core/playwright";
-import { expect, test, type Page } from "@playwright/test";
-
-const REGRAS_WCAG = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
-
-async function entrarComoCoordenador(page: Page) {
-  await page.goto("/entrar");
-  await page.getByRole("button", { name: "Entrar como coordenador" }).click();
-  await page.waitForURL("**/coordenador/vagas");
-}
-
-async function entrarComoMedico(page: Page) {
-  await page.goto("/entrar");
-  const botao = page.getByRole("button", { name: "Entrar como médico" });
-  await expect(botao).toBeEnabled({ timeout: 10_000 });
-  await botao.click();
-  await page.waitForURL("**/medico/ofertas");
-}
+import { expect, test } from "@playwright/test";
+import { entrarComoCoordenador, entrarComoMedico, semViolacoesGraves } from "./ajudantes";
 
 test.describe("entrada por persona", () => {
   test("as três portas aparecem, sem senha, com aviso de dados reais", async ({ page }) => {
@@ -37,7 +21,7 @@ test.describe("entrada por persona", () => {
 
   test("entrar como coordenador abre a plataforma com hospital, relógio simulado e Ajuda à direita", async ({ page, isMobile }) => {
     await entrarComoCoordenador(page);
-    await expect(page.getByRole("note", { name: "Aviso de demonstração" })).toBeVisible();
+    await expect(page.getByRole("region", { name: "Aviso de demonstração" })).toBeVisible();
     // No celular o hospital e o relógio ficam no alto da página; no computador, no cabeçalho.
     await expect(page.getByText("Hospital Modelo Centro (fictício)").filter({ visible: true }).first()).toBeVisible();
     await expect(page.getByText(/Hoje \(simulado\): quinta, 01\/10, 9h/).filter({ visible: true }).first()).toBeVisible();
@@ -117,22 +101,23 @@ test.describe("entrada por persona", () => {
       await page.emulateMedia({ colorScheme: esquema });
       await page.goto("/entrar");
       await expect(page.getByRole("button", { name: "Entrar como médico" })).toBeEnabled({ timeout: 10_000 });
-      const rotas: Array<() => Promise<void>> = [
-        async () => {},
-        async () => entrarComoCoordenador(page),
-        async () => {
-          await page.goto("/entrar");
-          await expect(page.getByRole("button", { name: "Entrar como médico" })).toBeEnabled({ timeout: 10_000 });
-          await page.getByRole("button", { name: "Entrar como médico" }).click();
-          await page.waitForURL("**/medico/ofertas");
-          await page.goto("/medico/conta");
+      const rotas: Array<{ ir: () => Promise<void>; titulo: RegExp }> = [
+        { ir: async () => {}, titulo: /^Entrar na demonstração \| PlantãoSeguro$/ },
+        { ir: () => entrarComoCoordenador(page), titulo: /^Vagas \| PlantãoSeguro$/ },
+        {
+          ir: async () => {
+            await entrarComoMedico(page);
+            await page.goto("/medico/conta");
+          },
+          titulo: /^Minha conta \| PlantãoSeguro$/,
         },
       ];
-      for (const ir of rotas) {
+      for (const { ir, titulo } of rotas) {
         await ir();
-        const resultado = await new AxeBuilder({ page }).withTags(REGRAS_WCAG).analyze();
-        const graves = resultado.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
-        expect(graves, `${page.url()}: ${JSON.stringify(graves.map((v) => ({ id: v.id, nos: v.nodes.map((n) => n.target) })), null, 2)}`).toEqual([]);
+        // O Next aplica o título logo depois de trocar o endereço: sem esperar por ele, o axe
+        // às vezes pega a página sem título (uma vez em 24 entradas) e acusa `document-title`.
+        await expect(page).toHaveTitle(titulo);
+        await semViolacoesGraves(page);
       }
     });
   }

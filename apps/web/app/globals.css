@@ -149,10 +149,20 @@
 
 @layer base {
   html {
-    /* O cabeçalho fixo não pode esconder o elemento focado (WCAG 2.4.11). */
-    scroll-padding-top: 5rem;
+    /*
+     * O cabeçalho fixo não pode esconder o elemento focado (WCAG 2.4.11). O mais alto é o do
+     * site público quando quebra em duas linhas (104 px) e o do médico com as abas (101 px).
+     */
+    scroll-padding-top: 7rem;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
+  }
+
+  /* A barra inferior do médico (celular) cobre o pé da tela: o foco também não pode ficar sob ela. */
+  @media (max-width: 47.99rem) {
+    html:has([data-barra-inferior]) {
+      scroll-padding-bottom: 5rem;
+    }
   }
 
   body {
@@ -177,6 +187,12 @@
     font-family: var(--font-serif);
     font-weight: 600;
     text-wrap: balance;
+    /*
+     * Com a letra muito ampliada, uma palavra longa de título ("transparência") quebra em vez de
+     * alargar a página inteira (WCAG 1.4.4 e 1.4.10). `anywhere`, e não `break-word`, porque só
+     * ele conta na largura mínima de grades e de flexbox.
+     */
+    overflow-wrap: anywhere;
   }
 
   p,
@@ -279,10 +295,22 @@
   animation: assentar 220ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 
-/* Modo de alto contraste do sistema: o traço usa as cores do sistema, não as nossas. */
+/*
+ * Modo de alto contraste do sistema: o traço usa as cores do sistema, não as nossas. E o item
+ * atual (menu, filtro, aba) ganha um sublinhado grosso, porque nesse modo o fundo e a borda de
+ * cor somem e o negrito sozinho quase não se vê (WCAG 1.4.1).
+ */
 @media (forced-colors: active) {
   .contorno-rect {
     stroke: CanvasText;
+  }
+
+  [aria-current="page"],
+  [aria-current="true"],
+  [role="tab"][aria-selected="true"] {
+    text-decoration: underline;
+    text-decoration-thickness: 0.2em;
+    text-underline-offset: 0.3em;
   }
 }
 

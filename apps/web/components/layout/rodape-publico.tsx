@@ -9,18 +9,19 @@ export function RodapePublico() {
     <footer className="border-t border-divisor bg-gaze">
       <div className="mx-auto grid w-full max-w-[1200px] gap-6 px-4 py-10 sm:px-6 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <div className="grid gap-3">
-          <MarcaPlantao />
+          {/* Com a letra muito ampliada, o nome desce para a linha de baixo em vez de passar da tela. */}
+          <MarcaPlantao className="flex-wrap" />
           <p className="max-w-[60ch] text-sm text-tinta-suave">{RODAPE.projeto}</p>
         </div>
         <nav aria-label="Links do rodapé">
           <ul className="grid gap-1 text-base">
             <li>
-              <Link href="/entrar" className="inline-block rounded-campo py-1.5 underline underline-offset-4 hover:no-underline">
+              <Link href="/entrar" className="inline-flex min-h-[var(--alvo-min)] items-center rounded-campo underline underline-offset-4 hover:no-underline">
                 {ACOES.entrarNaDemonstracao}
               </Link>
             </li>
             <li>
-              <Link href="/ajuda" className="inline-block rounded-campo py-1.5 underline underline-offset-4 hover:no-underline">
+              <Link href="/ajuda" className="inline-flex min-h-[var(--alvo-min)] items-center rounded-campo underline underline-offset-4 hover:no-underline">
                 {ACOES.ajuda}
               </Link>
             </li>
@@ -29,7 +30,7 @@ export function RodapePublico() {
                 href={REPOSITORIO}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-campo py-1.5 underline underline-offset-4 hover:no-underline"
+                className="inline-flex min-h-[var(--alvo-min)] items-center gap-1.5 rounded-campo underline underline-offset-4 hover:no-underline"
               >
                 Código no GitHub
                 <span className="sr-only"> (abre em outra aba)</span>

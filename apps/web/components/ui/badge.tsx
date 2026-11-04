@@ -12,7 +12,8 @@ const badgeVariants = cva(
     variants: {
       tone: {
         neutro: "border-divisor bg-papel text-tinta-suave",
-        ia: "border-dashed border-ia bg-ia-tom text-ia",
+        // O texto usa o tom forte: no telão escuro o texto precisa de 7:1, e o tom comum só tem 6,5:1.
+        ia: "border-dashed border-ia bg-ia-tom text-ia-forte",
         humano: "border-humano bg-humano-tom text-humano",
         regra: "border-campo bg-papel text-tinta-suave",
         atencao: "border-atencao bg-atencao-tom text-atencao",

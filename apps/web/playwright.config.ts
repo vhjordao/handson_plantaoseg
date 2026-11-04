@@ -14,6 +14,9 @@ const emCI = Boolean(process.env.CI);
 export default defineConfig({
   testDir: "./e2e",
   fullyParallel: true,
+  // Poucos trabalhadores: o servidor de produção e os navegadores dividem a mesma máquina, e com
+  // oito em paralelo alguns testes estouravam os 30 s só de esperar a página carregar.
+  workers: emCI ? 2 : 4,
   forbidOnly: emCI,
   retries: emCI ? 1 : 0,
   reporter: emCI ? [["list"], ["html", { open: "never" }]] : "list",

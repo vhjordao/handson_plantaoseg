@@ -19,9 +19,13 @@ const ANCORAS = [
 export function CabecalhoPublico({ enxuto = false }: { enxuto?: boolean }) {
   return (
     <header className="sticky top-0 z-40 border-b border-divisor bg-gaze">
-      <div className="mx-auto flex min-h-16 w-full max-w-[1200px] flex-wrap items-center justify-between gap-x-2 gap-y-2 px-4 py-2 sm:gap-x-4 sm:px-6">
-        <Link href="/" aria-label="PlantãoSeguro, página inicial" className="rounded-campo">
-          <MarcaPlantao />
+      <div className="@container mx-auto flex min-h-16 w-full max-w-[1200px] flex-wrap items-center justify-between gap-x-2 gap-y-2 px-4 py-2 sm:gap-x-4 sm:px-6">
+        <Link
+          href="/"
+          aria-label="PlantãoSeguro, página inicial"
+          className="inline-flex min-h-[var(--alvo-min)] items-center rounded-campo"
+        >
+          <MarcaPlantao compacta />
         </Link>
 
         {enxuto ? null : (
@@ -31,7 +35,7 @@ export function CabecalhoPublico({ enxuto = false }: { enxuto?: boolean }) {
                 <li key={ancora.href}>
                   <Link
                     href={ancora.href}
-                    className="rounded-campo px-1 py-2 text-base font-medium underline-offset-4 hover:underline"
+                    className="inline-flex min-h-[var(--alvo-min)] items-center rounded-campo px-1 text-base font-medium underline-offset-4 hover:underline"
                   >
                     {ancora.rotulo}
                   </Link>

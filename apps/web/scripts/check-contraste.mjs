@@ -65,7 +65,7 @@ const pares = [
   ["ia", "papel", TEXTO, "Voz da IA: texto sobre papel"],
   ["ia", "gaze", TEXTO, "Voz da IA: texto sobre a página"],
   ["ia", "ia-tom", TEXTO, "Voz da IA: texto sobre o tom da IA"],
-  ["ia-forte", "ia-tom", TEXTO, "Voz da IA: texto forte sobre o tom da IA"],
+  ["ia-forte", "ia-tom", TEXTO_PRINCIPAL, "Voz da IA: texto forte sobre o tom da IA (etiqueta)"],
   ["humano", "papel", TEXTO, "Decisão humana: texto sobre papel"],
   ["humano", "gaze", TEXTO, "Decisão humana: texto sobre a página"],
   ["humano", "humano-tom", TEXTO, "Decisão humana: texto sobre o tom humano"],
@@ -84,6 +84,14 @@ const pares = [
   ["humano", "gaze", COMPONENTE, "Contorno contínuo humano sobre a página"],
   ["foco", "papel", COMPONENTE, "Anel de foco sobre papel"],
   ["foco", "gaze", COMPONENTE, "Anel de foco sobre a página"],
+];
+
+// No telão (sala escura, leitura a 15 m) o texto das etiquetas e o secundário também precisam de 7:1.
+const paresDoTelao = [
+  ["ia-forte", "ia-tom", TEXTO_PRINCIPAL, "Telão: etiqueta da sugestão da IA"],
+  ["humano", "humano-tom", TEXTO_PRINCIPAL, "Telão: etiqueta da decisão humana"],
+  ["tinta-suave", "gaze", TEXTO_PRINCIPAL, "Telão: texto secundário sobre a página"],
+  ["tinta-suave", "papel", TEXTO_PRINCIPAL, "Telão: texto secundário sobre cartões"],
 ];
 
 let falhas = 0;
@@ -107,6 +115,7 @@ function conferir(nome, paleta) {
 
 conferir("Tema claro", claro);
 conferir("Tema escuro (telão e prefers-color-scheme)", escuroForcado);
+conferir("Telão (tema escuro, texto de 7:1)", escuroForcado, paresDoTelao);
 
 console.log("\nEscuro do sistema igual ao escuro forçado?");
 for (const [nome, valor] of Object.entries(escuroForcado)) {

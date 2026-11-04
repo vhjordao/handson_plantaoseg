@@ -35,7 +35,7 @@ export function Hero() {
           </Button>
           <Link
             href="#como-funciona"
-            className="rounded-campo py-2 text-base font-semibold underline underline-offset-4 hover:no-underline"
+            className="inline-flex min-h-[var(--alvo-min)] items-center rounded-campo text-base font-semibold underline underline-offset-4 hover:no-underline"
           >
             {ACOES.comoFunciona}
           </Link>

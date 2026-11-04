@@ -1,11 +1,30 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { FileQuestion } from "lucide-react";
 import { describe, expect, it, vi } from "vitest";
 import { Button } from "./button";
+import { EmptyState } from "./empty-state";
 import { ErrorSummary } from "./error-summary";
 import { Field, Input } from "./field";
 
+describe("EmptyState", () => {
+  it("o título é h2 por padrão e h1 quando a página inteira é o estado (404, erro)", () => {
+    const { rerender } = render(<EmptyState icon={FileQuestion} title="Nada por aqui" />);
+    expect(screen.getByRole("heading", { level: 2, name: "Nada por aqui" })).toBeInTheDocument();
+    rerender(<EmptyState icon={FileQuestion} title="Nada por aqui" headingLevel="h1" />);
+    expect(screen.getByRole("heading", { level: 1, name: "Nada por aqui" })).toBeInTheDocument();
+  });
+});
+
 describe("Button", () => {
+  it("o rótulo pode quebrar em duas linhas, em vez de passar da largura da tela", () => {
+    render(<Button>Entrar como coordenador</Button>);
+    const botao = screen.getByRole("button", { name: "Entrar como coordenador" });
+    expect(botao).not.toHaveClass("whitespace-nowrap");
+    expect(botao).not.toHaveClass("shrink-0");
+    expect(botao).toHaveClass("min-h-[var(--alvo-min)]");
+  });
+
   it("o botão de decisão é verde e o primário é tinta", () => {
     render(
       <>

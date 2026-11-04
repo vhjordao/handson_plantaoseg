@@ -39,7 +39,7 @@ export function CascaCoordenador({
             <Link
               href="/coordenador/vagas"
               aria-label="PlantãoSeguro, início da plataforma"
-              className="rounded-campo"
+              className="inline-flex min-h-[var(--alvo-min)] items-center rounded-campo"
             >
               <span className="lg:hidden">
                 <SimboloPlantao />
@@ -63,14 +63,14 @@ export function CascaCoordenador({
         </aside>
 
         <div className="flex min-w-0 flex-1 flex-col">
-          <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-divisor bg-gaze px-3 sm:px-4">
+          <header className="sticky top-0 z-30 flex min-h-14 flex-wrap items-center gap-2 border-b border-divisor bg-gaze px-3 py-1 sm:px-4">
             <Suspense fallback={null}>
               <MenuMobile area="coordenador" className="md:hidden" />
             </Suspense>
             <Link
               href="/coordenador/vagas"
               aria-label="PlantãoSeguro, início da plataforma"
-              className="rounded-campo md:hidden"
+              className="inline-flex min-h-[var(--alvo-min)] items-center rounded-campo md:hidden"
             >
               <SimboloPlantao />
             </Link>

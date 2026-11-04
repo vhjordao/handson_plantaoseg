@@ -23,7 +23,12 @@ function Indicador({
       <dd className="tnum font-serif text-3xl leading-none font-semibold">
         {valor}
         {simulado ? (
-          <span className="ml-2 font-sans text-sm font-normal text-tinta-suave">simulado</span>
+          // O espaço de verdade (e não uma margem) deixa "simulado" descer para a linha de baixo
+          // quando o número, ampliado, ocupa a largura toda.
+          <>
+            {" "}
+            <span className="font-sans text-sm font-normal text-tinta-suave">simulado</span>
+          </>
         ) : null}
       </dd>
       <dd className="text-sm text-tinta-suave">{complemento}</dd>

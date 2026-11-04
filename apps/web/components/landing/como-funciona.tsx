@@ -3,11 +3,14 @@ import { ETAPAS } from "@/lib/copy/landing";
 import type { ChaveVoz } from "@/lib/copy/comum";
 import { cn } from "@/lib/utils";
 
-/** O trilho à esquerda de cada etapa tem a forma da voz: tracejado, contínuo ou fino e cinza. */
+/**
+ * O trilho à esquerda de cada etapa tem a forma da voz: tracejado (2 px), contínuo (2 px) ou
+ * fino e cinza (1 px). A espessura distingue a regra da decisão sem depender da cor (WCAG 1.4.1).
+ */
 const TRILHO: Record<ChaveVoz, string> = {
   ia: "border-l-2 border-dashed border-ia",
   humano: "border-l-2 border-humano",
-  regra: "border-l-2 border-campo",
+  regra: "border-l border-campo",
 };
 
 /**

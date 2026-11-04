@@ -38,12 +38,30 @@ export function SimboloPlantao({
   );
 }
 
-/** Símbolo e nome. O nome fica em uma só fonte e um só peso: é uma marca, não um título. */
-export function MarcaPlantao({ className }: { className?: string }) {
+/**
+ * Símbolo e nome. O nome fica em uma só fonte e um só peso: é uma marca, não um título.
+ *
+ * Com `compacta`, num contêiner (`@container`) mais estreito que 22 rem sobra só o símbolo, para
+ * o cabeçalho caber numa linha; o nome continua para o leitor de tela. A conta é em `rem` de
+ * propósito: com a letra ampliada, 22 rem ficam mais largos, e a marca encolhe antes.
+ */
+export function MarcaPlantao({
+  className,
+  compacta = false,
+}: {
+  className?: string;
+  compacta?: boolean;
+}) {
   return (
     <span className={cn("inline-flex items-center gap-2", className)}>
       <SimboloPlantao />
-      <span className="font-serif text-xl font-semibold tracking-tight text-tinta" translate="no">
+      <span
+        className={cn(
+          "font-serif text-xl font-semibold tracking-tight text-tinta",
+          compacta && "@max-[22rem]:sr-only",
+        )}
+        translate="no"
+      >
         PlantãoSeguro
       </span>
     </span>

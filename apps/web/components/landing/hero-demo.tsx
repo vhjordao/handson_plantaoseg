@@ -177,7 +177,7 @@ export function HeroDemo() {
                 {indice === 0 ? (
                   decidido ? (
                     <div className="mt-3 grid gap-2">
-                      <SeloDecisaoHumana nome="você" cargo="coordenação" hora="9h12" />
+                      <SeloDecisaoHumana nome="você" cargo="coordenação" hora="9h12" anunciar={false} />
                       <p className="text-sm text-tinta-suave">{HERO_DEMO.depoisDeAprovar}</p>
                     </div>
                   ) : (
@@ -192,6 +192,11 @@ export function HeroDemo() {
             );
           })}
         </ol>
+      </div>
+
+      {/* Sempre montada e vazia até a decisão: é o que garante que o leitor de tela a anuncie. */}
+      <div role="status" className="sr-only">
+        {aprovado ? `Decidido por você, coordenação, 9h12. ${HERO_DEMO.depoisDeAprovar}` : ""}
       </div>
 
       <div className="mt-3 flex justify-end">

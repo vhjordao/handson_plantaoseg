@@ -9,7 +9,7 @@ test.describe("landing", () => {
     await expect(page).toHaveTitle(/PlantãoSeguro/);
     await expect(page.getByRole("heading", { level: 1 })).toContainText("A IA sugere.");
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Você decide.");
-    await expect(page.getByRole("note", { name: "Aviso de demonstração" })).toContainText(
+    await expect(page.getByRole("region", { name: "Aviso de demonstração" })).toContainText(
       "dados sintéticos",
     );
     const entrar = page.getByRole("link", { name: "Entrar na demonstração" }).first();
@@ -38,9 +38,14 @@ test.describe("landing", () => {
     await expect(aprovar).toBeEnabled({ timeout: 10_000 });
     const primeira = page.locator("[data-voz]", { has: aprovar });
     await expect(primeira).toHaveAttribute("data-voz", "ia");
+    // A região de status que anuncia a decisão já está na página, vazia, antes de alguém decidir.
+    const anuncio = page.locator('section[aria-label^="Exemplo da simulação"] [role="status"]');
+    await expect(anuncio).toBeEmpty();
     await aprovar.click();
-    await expect(page.getByText("Decidido por")).toBeVisible();
-    await expect(page.locator('[data-voz="humano"]', { hasText: "Felipe Ferraz Siqueira" })).toBeVisible();
+    const decidida = page.locator('[data-voz="humano"]', { hasText: "Felipe Ferraz Siqueira" });
+    await expect(decidida).toBeVisible();
+    await expect(decidida.getByText("Decidido por")).toBeVisible();
+    await expect(anuncio).toContainText("Decidido por você, coordenação, 9h12");
     // O foco segue para o próximo controle, e o botão de aprovar sai de cena.
     await expect(page.getByRole("button", { name: "Ver de novo" })).toBeFocused();
     await expect(page.getByRole("button", { name: "Aprovar e oferecer" })).toHaveCount(0);

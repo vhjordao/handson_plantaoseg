@@ -9,8 +9,10 @@ import { EmptyState } from "@/components/ui/empty-state";
 export default function Erro({ reset }: { error: Error & { digest?: string }; reset: () => void }) {
   return (
     <main id="conteudo" tabIndex={-1} className="mx-auto w-full max-w-[640px] flex-1 px-4 py-16 outline-none">
+      <title>Algo deu errado | PlantãoSeguro</title>
       <EmptyState
         icon={TriangleAlert}
+        headingLevel="h1"
         title="Algo deu errado nesta tela"
         action={
           <div className="flex flex-wrap gap-3">

@@ -7,16 +7,20 @@ export interface EmptyStateProps extends Omit<React.ComponentProps<"div">, "titl
   title: React.ReactNode;
   /** A ação que a pessoa pode tomar agora. Estado vazio convida a agir. */
   action?: React.ReactNode;
+  /** O nível do título. Uma página inteira que é só o estado (404, erro) usa `h1`. */
+  headingLevel?: "h1" | "h2" | "h3";
 }
 
 export function EmptyState({
   icon: Icone,
   title,
   action,
+  headingLevel = "h2",
   className,
   children,
   ...props
 }: EmptyStateProps) {
+  const Titulo = headingLevel;
   return (
     <div
       data-slot="empty-state"
@@ -27,7 +31,11 @@ export function EmptyState({
       {...props}
     >
       <Icone aria-hidden="true" className="size-7 text-tinta-suave" />
-      <h2 className="font-serif text-xl font-semibold">{title}</h2>
+      <Titulo
+        className={cn("font-serif font-semibold", headingLevel === "h1" ? "text-3xl" : "text-xl")}
+      >
+        {title}
+      </Titulo>
       {children ? <div className="max-w-[60ch] text-tinta-suave">{children}</div> : null}
       {action}
     </div>

@@ -9,6 +9,15 @@ const CONFIG = {
   regra: { Icone: Ruler, tone: "regra" },
 } as const;
 
+/**
+ * Só o ícone da voz, para quando não há espaço para o rótulo inteiro (as etapas do telão): a
+ * forma do ícone distingue as vozes sem depender de cor nem de espessura de traço.
+ */
+export function IconeDaVoz({ voz, className }: { voz: ChaveVoz; className?: string }) {
+  const { Icone } = CONFIG[voz];
+  return <Icone aria-hidden="true" className={className} />;
+}
+
 /** O rótulo de quem falou: "Sugestão da IA", "Decisão humana" ou "Regra do sistema". */
 export function VozTag({
   voz,

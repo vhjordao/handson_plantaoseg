@@ -28,13 +28,13 @@ export function CascaMedico({
     <>
       <FaixaDemonstracao />
       <header className="sticky top-0 z-30 border-b border-divisor bg-gaze">
-        <div className="mx-auto flex h-14 w-full max-w-[960px] items-center justify-between gap-2 px-3 sm:px-4">
+        <div className="@container mx-auto flex min-h-14 w-full max-w-[960px] flex-wrap items-center justify-between gap-2 px-3 py-1 sm:px-4">
           <Link
             href="/medico/ofertas"
             aria-label="PlantãoSeguro, início da plataforma"
-            className="rounded-campo"
+            className="inline-flex min-h-[var(--alvo-min)] items-center rounded-campo"
           >
-            <MarcaPlantao />
+            <MarcaPlantao compacta />
           </Link>
           <div className="flex items-center gap-2">
             <Button asChild variant="ghost">
@@ -69,12 +69,13 @@ export function CascaMedico({
 
       <nav
         aria-label="Principal"
+        data-barra-inferior
         className="fixed inset-x-0 bottom-0 z-30 border-t border-divisor bg-papel pb-[env(safe-area-inset-bottom)] md:hidden"
       >
         <Suspense fallback={null}>
           <ul className="flex">
             {itensDaArea("medico").map((item) => (
-              <li key={item.id} className="flex flex-1">
+              <li key={item.id} className="flex min-w-0 flex-1">
                 <NavLink area="medico" id={item.id} variante="inferior" />
               </li>
             ))}

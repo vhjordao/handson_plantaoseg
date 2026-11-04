@@ -1,9 +1,11 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import { FaixaDemonstracao } from "./faixa-demonstracao";
 import { LegendaVozes } from "./legenda-vozes";
+import { MarcaPlantao } from "./marca-plantao";
 import { SeloDecisaoHumana } from "./selo-decisao-humana";
 import { SuperficieVoz } from "./superficie-voz";
-import { VozTag } from "./voz-tag";
+import { IconeDaVoz, VozTag } from "./voz-tag";
 
 describe("SuperficieVoz", () => {
   it("a voz da IA tem contorno tracejado (SVG) e a decisão humana também, mas contínua", () => {
@@ -70,6 +72,41 @@ describe("SeloDecisaoHumana", () => {
   it("sem animação, não leva a classe que assenta o selo", () => {
     render(<SeloDecisaoHumana nome="A" cargo="b" hora="1h" animar={false} />);
     expect(screen.getByRole("status")).not.toHaveClass("assentar");
+  });
+
+  it("quem tem a própria região de status desliga o anúncio do selo, para não falar duas vezes", () => {
+    render(<SeloDecisaoHumana nome="Marina Alves" cargo="coordenadora" hora="9h12" anunciar={false} />);
+    expect(screen.queryByRole("status")).toBeNull();
+    expect(screen.getByText(/Decidido por/)).toBeInTheDocument();
+  });
+});
+
+describe("MarcaPlantao", () => {
+  it("compacta: o nome continua no HTML (para o leitor de tela) e só some da tela em telas estreitas", () => {
+    render(<MarcaPlantao compacta />);
+    const nome = screen.getByText("PlantãoSeguro");
+    expect(nome).toBeInTheDocument();
+    expect(nome).toHaveClass("@max-[22rem]:sr-only");
+  });
+
+  it("sem compacta, o nome aparece sempre", () => {
+    render(<MarcaPlantao />);
+    expect(screen.getByText("PlantãoSeguro")).not.toHaveClass("@max-[22rem]:sr-only");
+  });
+});
+
+describe("FaixaDemonstracao", () => {
+  it("é uma região com nome, para ficar dentro de um marco e aparecer na lista de regiões", () => {
+    render(<FaixaDemonstracao />);
+    const faixa = screen.getByRole("region", { name: "Aviso de demonstração" });
+    expect(faixa).toHaveTextContent("dados sintéticos");
+  });
+});
+
+describe("IconeDaVoz", () => {
+  it("é decorativo: a forma do ícone ajuda, mas o texto da etapa é quem informa", () => {
+    const { container } = render(<IconeDaVoz voz="ia" className="size-7" />);
+    expect(container.querySelector("svg")).toHaveAttribute("aria-hidden", "true");
   });
 });
 

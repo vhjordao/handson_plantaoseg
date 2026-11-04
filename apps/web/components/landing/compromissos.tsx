@@ -29,7 +29,7 @@ export function Compromissos() {
                   href={linkNoRepositorio(compromisso.evidencia)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-0.5 inline-flex items-center gap-1.5 text-base font-semibold underline underline-offset-4 hover:no-underline"
+                  className="mt-0.5 inline-flex min-h-[var(--alvo-min)] items-center gap-1.5 text-base font-semibold underline underline-offset-4 hover:no-underline"
                 >
                   {compromisso.rotuloEvidencia}
                   <span className="sr-only"> (abre o GitHub em outra aba)</span>

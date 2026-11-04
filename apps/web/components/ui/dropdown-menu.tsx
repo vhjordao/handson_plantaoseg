@@ -44,7 +44,7 @@ export function DropdownMenuItem({
   return (
     <DropdownMenuPrimitive.Item
       className={cn(
-        "flex min-h-[var(--alvo-min)] w-full cursor-default items-center gap-2 rounded-campo px-3 py-2 text-left font-medium outline-none select-none data-[highlighted]:bg-tinta/10 [&_svg]:size-5 [&_svg]:shrink-0",
+        "flex min-h-[var(--alvo-min)] w-full cursor-default items-center gap-2 rounded-campo px-3 py-2 text-left font-medium select-none data-[highlighted]:bg-tinta/10 [&_svg]:size-5 [&_svg]:shrink-0",
         className,
       )}
       {...props}

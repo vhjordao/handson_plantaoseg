@@ -9,7 +9,9 @@ import { cn } from "@/lib/utils";
  * (`decision`): a cor do botão já diz quem decide.
  */
 const buttonVariants = cva(
-  "inline-flex shrink-0 items-center justify-center gap-2 rounded-campo border font-semibold whitespace-nowrap select-none transition-colors duration-150 min-h-[var(--alvo-min)] disabled:pointer-events-none disabled:opacity-60 aria-disabled:pointer-events-none aria-disabled:opacity-60 [&_svg]:size-5 [&_svg]:shrink-0",
+  // O rótulo pode quebrar em duas linhas (texto ampliado, espaçamento de texto: WCAG 1.4.4 e
+  // 1.4.12); nunca passa da largura da tela. A altura mínima é a do alvo de toque.
+  "inline-flex items-center justify-center gap-2 rounded-campo border py-2 text-center font-semibold select-none transition-colors duration-150 min-h-[var(--alvo-min)] disabled:pointer-events-none disabled:opacity-60 aria-disabled:pointer-events-none aria-disabled:opacity-60 [&_svg]:size-5 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
