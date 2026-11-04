@@ -17,6 +17,14 @@ import { z } from "zod";
 export const DataHoraSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2})?$/);
 export type DataHora = z.infer<typeof DataHoraSchema>;
 
+/**
+ * Tamanho máximo dos textos digitados: o pedido de plantão que a IA lê e os textos livres
+ * (justificativa, motivo, comentário). Entrada hostil não deixa a sessão nem a trilha incharem;
+ * a tela usa os mesmos números em `maxLength` e no contador de caracteres.
+ */
+export const LIMITE_TEXTO_VAGA = 2000;
+export const LIMITE_TEXTO_LIVRE = 1000;
+
 export const ESPECIALIDADES = ["clinica_medica", "pediatria"] as const; // guardrails.SPECIALTIES
 export const EspecialidadeSchema = z.enum(ESPECIALIDADES);
 export type Especialidade = z.infer<typeof EspecialidadeSchema>;
@@ -212,7 +220,7 @@ export const LeituraSchema = z.object({
 export type Leitura = z.infer<typeof LeituraSchema>;
 
 export const ConfirmarVagaInputSchema = z.object({
-  texto: z.string(),
+  texto: z.string().max(LIMITE_TEXTO_VAGA),
   unidadeId: z.string(),
   especialidade: EspecialidadeSchema,
   inicio: DataHoraSchema,
@@ -297,7 +305,7 @@ export const AprovarInputSchema = z.object({
   /** Quem receberá a oferta, na ordem em que o coordenador confirmou. Só recomendados. */
   medicoIds: z.array(z.string()).min(1),
   /** Obrigatória quando algum aprovado tem alerta de jornada (exceção humana). */
-  justificativa: z.string().optional(),
+  justificativa: z.string().max(LIMITE_TEXTO_LIVRE).optional(),
 });
 export type AprovarInput = z.infer<typeof AprovarInputSchema>;
 
@@ -314,7 +322,7 @@ export type Decisao = z.infer<typeof DecisaoSchema>;
 export const PularInputSchema = z.object({
   vagaId: z.string(),
   medicoId: z.string(),
-  motivo: z.string().optional(),
+  motivo: z.string().max(LIMITE_TEXTO_LIVRE).optional(),
 });
 export type PularInput = z.infer<typeof PularInputSchema>;
 
@@ -322,7 +330,7 @@ export const FeedbackExplicacaoInputSchema = z.object({
   vagaId: z.string(),
   medicoId: z.string(),
   ajudou: z.boolean(),
-  comentario: z.string().optional(),
+  comentario: z.string().max(LIMITE_TEXTO_LIVRE).optional(),
 });
 export type FeedbackExplicacaoInput = z.infer<typeof FeedbackExplicacaoInputSchema>;
 
@@ -378,7 +386,7 @@ export type Cascata = z.infer<typeof CascataSchema>;
 export const RespostaOfertaInputSchema = z.object({
   ofertaId: z.string(),
   resposta: z.enum(["aceitar", "recusar"]),
-  motivo: z.string().optional(),
+  motivo: z.string().max(LIMITE_TEXTO_LIVRE).optional(),
 });
 export type RespostaOfertaInput = z.infer<typeof RespostaOfertaInputSchema>;
 
@@ -394,7 +402,7 @@ export type MotivoContestacao = z.infer<typeof MotivoContestacaoSchema>;
 export const ContestarInputSchema = z.object({
   ofertaId: z.string(),
   motivo: MotivoContestacaoSchema,
-  texto: z.string().min(1),
+  texto: z.string().min(1).max(LIMITE_TEXTO_LIVRE),
 });
 export type ContestarInput = z.infer<typeof ContestarInputSchema>;
 

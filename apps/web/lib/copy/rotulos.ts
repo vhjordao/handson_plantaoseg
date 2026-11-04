@@ -69,7 +69,7 @@ export const ROTULO_CAMPO: Record<ChaveCampo, string> = {
 };
 
 export const ROTULO_ORIGEM_CAMPO = {
-  achei: "Achei no texto",
-  deduzi: "Deduzi",
-  nao_achei: "Não achei",
+  achei: "Está no texto",
+  deduzi: "Calculado do texto",
+  nao_achei: "Não está no texto",
 } as const;

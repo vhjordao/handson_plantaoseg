@@ -24,8 +24,8 @@ const NAO_USADOS = [
     "Ficam fora da ordem, por desenho e por um teste automático. A Res. CFM 2.460/2026 veda influenciar a escala por vantagem econômica (leitura de engenharia: validar com jurídico).",
   ],
   [
-    "Gênero, idade, raça, origem e outros atributos protegidos",
-    "Existem no conjunto sintético só para medir se o sistema trata grupos de forma desigual. Nunca ordenam ninguém.",
+    "Gênero, idade e outros atributos protegidos",
+    "O conjunto sintético guarda gênero, faixa etária e zona só para medir se o sistema trata grupos de forma desigual. Nunca ordenam ninguém.",
   ],
   [
     "Seu nome, CRM e telefone",
@@ -47,7 +47,7 @@ export default async function MinhaConta() {
       <div>
         <h1 className="font-serif text-3xl font-semibold">Minha conta e transparência</h1>
         <p className="mt-2 text-tinta-suave">
-          O que o sistema sabe sobre você, o que usa e o que nunca usa para sugerir o seu nome.
+          O que o sistema sabe sobre você, o que usa e o que nunca usa.
         </p>
       </div>
 
@@ -71,7 +71,7 @@ export default async function MinhaConta() {
         <h2 id="conta-usa" className="font-serif text-xl font-semibold">
           O que o sistema usa para sugerir você
         </h2>
-        <ul className="mt-3 divide-y divide-divisor border-y border-divisor">
+        <ul role="list" className="mt-3 divide-y divide-divisor border-y border-divisor">
           {USADOS.map(([titulo, texto]) => (
             <li key={titulo} className="py-3">
               <p className="font-semibold">{titulo}</p>
@@ -85,7 +85,7 @@ export default async function MinhaConta() {
         <h2 id="conta-nao-usa" className="font-serif text-xl font-semibold">
           O que o sistema não usa
         </h2>
-        <ul className="mt-3 divide-y divide-divisor border-y border-divisor">
+        <ul role="list" className="mt-3 divide-y divide-divisor border-y border-divisor">
           {NAO_USADOS.map(([titulo, texto]) => (
             <li key={titulo} className="py-3">
               <p className="font-semibold">{titulo}</p>
@@ -101,8 +101,8 @@ export default async function MinhaConta() {
         </h2>
         <p className="mt-2 max-w-[62ch]">
           Em cada oferta você poderá contestar a recomendação. O coordenador responde por escrito, e
-          a resposta fica na trilha de auditoria. Na demonstração, a contestação chega na fase
-          UI-2, e será simulada.
+          a resposta fica na trilha de auditoria. Na demonstração, a contestação chega na próxima
+          entrega e será simulada.
         </p>
         <p className="mt-3">
           <Link href="/ajuda" className="font-semibold underline underline-offset-4 hover:no-underline">

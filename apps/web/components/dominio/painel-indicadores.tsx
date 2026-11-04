@@ -1,21 +1,31 @@
+import { ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Indicadores } from "@/lib/api/types";
-import { formatarNumero, plural } from "@/lib/format/datas";
+import { linkNoRepositorio } from "@/lib/copy/comum";
+import { comUnidade, formatarNumero, plural } from "@/lib/format/datas";
 
 function Indicador({
   titulo,
   valor,
   complemento,
+  simulado = true,
 }: {
   titulo: string;
   valor: string;
   complemento: string;
+  /** O rótulo "simulado" fica colado ao número, não só no cabeçalho do painel. */
+  simulado?: boolean;
 }) {
   return (
     <div className="grid gap-1 px-4 py-3">
       <dt className="text-sm text-tinta-suave">{titulo}</dt>
-      <dd className="tnum font-serif text-3xl leading-none font-semibold">{valor}</dd>
+      <dd className="tnum font-serif text-3xl leading-none font-semibold">
+        {valor}
+        {simulado ? (
+          <span className="ml-2 font-sans text-sm font-normal text-tinta-suave">simulado</span>
+        ) : null}
+      </dd>
       <dd className="text-sm text-tinta-suave">{complemento}</dd>
     </div>
   );
@@ -26,6 +36,7 @@ function Indicador({
  * aceitas só existe com usuários: antes disso aparece o travessão e o motivo, nunca um número.
  */
 export function PainelIndicadores({ indicadores }: { indicadores: Indicadores }) {
+  const base = indicadores.linhaDeBase;
   return (
     <section
       aria-labelledby="indicadores-titulo"
@@ -40,10 +51,10 @@ export function PainelIndicadores({ indicadores }: { indicadores: Indicadores })
       <dl className="grid divide-y divide-divisor sm:grid-cols-3 sm:divide-x sm:divide-y-0">
         <Indicador
           titulo="Tempo médio até preencher a vaga"
-          valor={`${formatarNumero(indicadores.tempoMedioAtePreencherMin, 0)} min`}
+          valor={comUnidade(indicadores.tempoMedioAtePreencherMin, "min", 0)}
           complemento={
-            indicadores.linhaDeBase
-              ? `Regras e modelo, contra ${formatarNumero(indicadores.linhaDeBase.tempoMedioAtePreencherMin, 0)} min no processo manual simulado.`
+            base
+              ? `Regras e modelo, contra ${comUnidade(base.tempoMedioAtePreencherMin, "min", 0)} no processo manual simulado.`
               : "Regras e modelo, em simulação."
           }
         />
@@ -51,13 +62,14 @@ export function PainelIndicadores({ indicadores }: { indicadores: Indicadores })
           titulo="Preenchidas com 24 h ou mais de antecedência"
           valor={`${formatarNumero(indicadores.pctPreenchidasComAntecedencia24h, 1)}%`}
           complemento={
-            indicadores.linhaDeBase
-              ? `Contra ${formatarNumero(indicadores.linhaDeBase.pctPreenchidasComAntecedencia24h, 1)}% no processo manual simulado.`
+            base
+              ? `Contra ${formatarNumero(base.pctPreenchidasComAntecedencia24h, 1)}% no processo manual simulado.`
               : "Em simulação."
           }
         />
         <Indicador
           titulo="Sugestões aceitas pelo coordenador"
+          simulado={indicadores.pctSugestoesAceitas !== null}
           valor={
             indicadores.pctSugestoesAceitas === null
               ? "—"
@@ -73,7 +85,17 @@ export function PainelIndicadores({ indicadores }: { indicadores: Indicadores })
       <p className="border-t border-divisor px-4 py-3 text-sm text-tinta-suave">
         Na demonstração: {plural(indicadores.vagasPublicadas, "vaga publicada", "vagas publicadas")},{" "}
         {plural(indicadores.decisoesHumanas, "decisão humana", "decisões humanas")} e{" "}
-        {plural(indicadores.aceites, "aceite", "aceites")}. Fonte dos tempos: {indicadores.fonte}.
+        {plural(indicadores.aceites, "aceite", "aceites")}.{" "}
+        <a
+          href={linkNoRepositorio("docs/resultados/metricas-fluxo.md")}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 font-semibold text-tinta underline underline-offset-4 hover:no-underline"
+        >
+          Ver a fonte dos tempos
+          <span className="sr-only"> (abre o GitHub em outra aba)</span>
+          <ExternalLink aria-hidden="true" className="size-4" />
+        </a>
       </p>
     </section>
   );

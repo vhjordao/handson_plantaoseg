@@ -198,9 +198,53 @@ describe("textos livres na trilha", () => {
     expect(removerDadosPessoais(`Quem é ${semAcento}?`, nomes)).toBe("Quem é [nome removido]?");
   });
 
-  it("deixa passar texto comum, datas e horários", () => {
+  it("pega CRM em vários formatos, com UF, número e pontos", () => {
+    const casos = [
+      "CRM 123456",
+      "crm-sp 123456",
+      "CRM/SP: 123.456",
+      "CRM nº 123456",
+      "CRM n. 123456",
+      "CRM n° 123456",
+      "CRM 123456/SP",
+      "CRM-SP 123456-SP",
+      "SIM-SP-014",
+    ];
+    for (const caso of casos) {
+      expect(removerDadosPessoais(`Chamar ${caso} hoje`)).toBe("Chamar [CRM removido] hoje");
+    }
+    // A UF só entra quando vem colada ao número; uma palavra depois dele fica.
+    expect(removerDadosPessoais("CRM 123456 de plantão")).toBe("[CRM removido] de plantão");
+    expect(removerDadosPessoais("o CRM do médico confere")).toBe("o CRM do médico confere");
+  });
+
+  it("pega telefone com e sem DDD, e-mail e número de documento", () => {
+    const telefones = [
+      "+55 11 99999-8888",
+      "(11) 99999-8888",
+      "11 3333-4444",
+      "11999998888",
+      "99999-8888",
+      "3333 4444",
+    ];
+    for (const telefone of telefones) {
+      expect(removerDadosPessoais(`ligar ${telefone}.`)).toBe("ligar [telefone removido].");
+    }
+    expect(removerDadosPessoais("escreva para ana.souza@hospital.com.br já")).toBe(
+      "escreva para [e-mail removido] já",
+    );
+    expect(removerDadosPessoais("CPF 123.456.789-09 e CNPJ 12.345.678/0001-95")).toBe(
+      "CPF [número removido] e CNPJ [número removido]",
+    );
+    expect(removerDadosPessoais("protocolo 123456789012")).toBe("protocolo [número removido]");
+  });
+
+  it("deixa passar texto comum, datas, horários e intervalos de anos", () => {
     const comum = "Cobertura de última hora para 02/10, das 19h às 7h, plantão de 12 h.";
     expect(removerDadosPessoais(comum, nomes)).toBe(comum);
     expect(removerDadosPessoais("início 2026-10-02T19:00:00", nomes)).toBe("início 2026-10-02T19:00:00");
+    expect(removerDadosPessoais("escala de 2025-2026 e 3 plantões em 48 h")).toBe(
+      "escala de 2025-2026 e 3 plantões em 48 h",
+    );
   });
 });

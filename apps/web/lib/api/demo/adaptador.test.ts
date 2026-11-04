@@ -1,8 +1,6 @@
 // @vitest-environment node
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { carregarGrade, chaveDaGrade, obterMundo } from "../../demo/mundo";
-import { NaoImplementadoError } from "../plantao-api";
-import type { ConfirmarVagaInput, EventoPlantao, RegistroAuditoria } from "../types";
 import {
   CandidatoInvalidoError,
   EstadoInvalidoError,
@@ -11,8 +9,11 @@ import {
   MENSAGEM_FORA_DA_GRADE,
   NaoEncontradoError,
   SemRecomendacaoError,
-  criarApiDemo,
-} from "./index";
+} from "../erros";
+import { NaoImplementadoError } from "../plantao-api";
+import { LIMITE_TEXTO_LIVRE, LIMITE_TEXTO_VAGA } from "../types";
+import type { ConfirmarVagaInput, EventoPlantao, RegistroAuditoria } from "../types";
+import { criarApiDemo } from "./index";
 import { somarMinutos } from "./datas";
 import { CHAVE_DE_ARMAZENAMENTO } from "./estado";
 import { sha256Hex } from "./sha256";
@@ -306,13 +307,49 @@ describe("fluxo completo: ler, confirmar, sugerir e decidir", () => {
     );
     const decisao = await api.aprovar({ vagaId: "vaga-demo-2", medicoIds: [primeiro, primeiro] });
     expect(decisao.medicoIds).toEqual([primeiro]); // repetido não vale duas vezes
-    await expect(api.aprovar({ vagaId: "vaga-demo-2", medicoIds: [primeiro] })).rejects.toBeInstanceOf(
-      EstadoInvalidoError,
-    );
     // Quem já tem oferta em andamento, está preenchida ou é rascunho não aguarda decisão.
     for (const vagaId of ["vaga-demo-3", "vaga-demo-4", "vaga-demo-5"]) {
       await expect(api.aprovar({ vagaId, medicoIds: [primeiro] })).rejects.toBeInstanceOf(EstadoInvalidoError);
     }
+  });
+
+  it("repetir a mesma aprovação devolve a decisão já tomada e não duplica a trilha", async () => {
+    const api = criarApiDemo();
+    const eventos: EventoPlantao[] = [];
+    api.assinar((e) => eventos.push(e));
+    const ids = (await api.obterSugestoes("vaga-demo-2")).candidatos.slice(0, 2).map((c) => c.medico.id);
+    const primeira = await api.aprovar({ vagaId: "vaga-demo-2", medicoIds: ids });
+    const total = (await api.listarAuditoria()).length;
+
+    // Duplo clique ou nova tentativa: a mesma decisão, sem outro registro e sem outro evento.
+    expect(await api.aprovar({ vagaId: "vaga-demo-2", medicoIds: ids })).toEqual(primeira);
+    expect((await api.listarAuditoria()).length).toBe(total);
+    expect(eventos).toHaveLength(1);
+
+    // Outra escolha (outra lista ou outra ordem) é outra decisão, e essa já foi tomada.
+    const outras = [[ids[0]!], [...ids].reverse()];
+    for (const medicoIds of outras) {
+      await expect(api.aprovar({ vagaId: "vaga-demo-2", medicoIds })).rejects.toBeInstanceOf(
+        EstadoInvalidoError,
+      );
+    }
+    expect((await api.listarAuditoria()).length).toBe(total);
+  });
+
+  it("recusa texto acima do limite, sem gravar nada", async () => {
+    const api = criarApiDemo();
+    const total = (await api.listarAuditoria()).length;
+    const longoDemais = "x".repeat(LIMITE_TEXTO_VAGA + 1);
+    await expect(api.lerVaga(longoDemais)).rejects.toThrow();
+    await expect(
+      api.confirmarVaga(entradaDe("centro", "pediatria", NOITE_DE_SEXTA, { texto: longoDemais })),
+    ).rejects.toThrow();
+    const primeiro = (await api.obterSugestoes("vaga-demo-2")).candidatos[0]!.medico.id;
+    await expect(
+      api.pular({ vagaId: "vaga-demo-2", medicoId: primeiro, motivo: "x".repeat(LIMITE_TEXTO_LIVRE + 1) }),
+    ).rejects.toThrow();
+    expect((await api.listarAuditoria()).length).toBe(total);
+    expect(await api.listarVagas()).toHaveLength(6);
   });
 
   it("pular grava recommendation_rejected, uma vez por nome, e não aprova nada", async () => {
@@ -354,6 +391,25 @@ describe("fluxo completo: ler, confirmar, sugerir e decidir", () => {
     await expect(
       api.enviarFeedbackExplicacao({ vagaId: "nao-existe", medicoId: alvo, ajudou: true }),
     ).rejects.toBeInstanceOf(NaoEncontradoError);
+    await expect(
+      api.enviarFeedbackExplicacao({ vagaId: "vaga-demo-1", medicoId: "estranho", ajudou: true }),
+    ).rejects.toBeInstanceOf(CandidatoInvalidoError);
+  });
+
+  it("o comentário do feedback passa pela mesma limpeza de dados pessoais", async () => {
+    const armazenamento = new ArmazenamentoFalso();
+    const api = criarApiDemo({ storage: armazenamento });
+    const alvo = (await api.obterSugestoes("vaga-demo-1")).candidatos[0]!;
+    await api.enviarFeedbackExplicacao({
+      vagaId: "vaga-demo-1",
+      medicoId: alvo.medico.id,
+      ajudou: false,
+      comentario: `  ${alvo.medico.nome} me ligou: (11) 99999-8888, ana@exemplo.com  `,
+    });
+    const [feedback] = JSON.parse(armazenamento.getItem(CHAVE_DE_ARMAZENAMENTO)!).feedbacks;
+    expect(feedback.comentario).toBe(
+      "[nome removido] me ligou: [telefone removido], [e-mail removido]",
+    );
   });
 });
 
@@ -639,6 +695,22 @@ describe("eventos, latência e o que ficou para a próxima etapa", () => {
     await vi.advanceTimersByTimeAsync(1);
     expect(await pendente).toHaveLength(6);
     expect(api.agora()).toBe("2026-10-01T09:00:00"); // a latência não mexe no relógio simulado
+  });
+
+  it("reiniciar no meio da espera descarta a operação que ainda não tinha começado", async () => {
+    vi.useFakeTimers();
+    const api = criarApiDemo({ latenciaMs: 300 });
+    const pendente = api
+      .confirmarVaga(entradaDe("sul", "pediatria", "2026-10-04T19:00:00"))
+      .catch((erro: unknown) => erro);
+    await vi.advanceTimersByTimeAsync(100);
+    api.reiniciar();
+    await vi.advanceTimersByTimeAsync(200);
+    expect(await pendente).toBeInstanceOf(EstadoInvalidoError);
+
+    const vagas = api.listarVagas();
+    await vi.advanceTimersByTimeAsync(300);
+    expect(await vagas).toHaveLength(6); // a vaga descartada não apareceu na demonstração nova
   });
 
   it("responde na hora quando a latência é zero (o padrão)", async () => {

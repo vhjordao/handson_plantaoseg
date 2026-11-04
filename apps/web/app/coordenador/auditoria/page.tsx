@@ -7,7 +7,6 @@ export default function Auditoria() {
   return (
     <TelaEmConstrucao
       titulo="Auditoria"
-      fase="UI-3"
       descricao="A trilha somente de leitura (quem, o quê, quando e a versão do modelo), com filtro por vaga, exportação em CSV e a verificação da cadeia de hash feita no próprio navegador."
     />
   );

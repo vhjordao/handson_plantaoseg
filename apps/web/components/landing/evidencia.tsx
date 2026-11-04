@@ -18,7 +18,7 @@ export function Evidencia() {
 
         <figure className="mt-8 max-w-[52rem]">
           <figcaption className="text-base font-semibold">{EVIDENCIA.grafico.titulo}</figcaption>
-          <ul className="mt-4 grid gap-3">
+          <ul role="list" className="mt-4 grid gap-3">
             {EVIDENCIA.grafico.barras.map((barra) => (
               <li
                 key={barra.rotulo}
@@ -41,7 +41,7 @@ export function Evidencia() {
           </ul>
         </figure>
 
-        <ul className="mt-10 grid gap-4 md:grid-cols-3">
+        <ul role="list" className="mt-10 grid gap-4 md:grid-cols-3">
           {EVIDENCIA.achados.map((achado) =>
             "atencao" in achado && achado.atencao ? (
               <li key={achado.titulo}>

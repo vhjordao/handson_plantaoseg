@@ -61,11 +61,10 @@ if (papelDaSessao) {
   ]);
 }
 const pagina = await contexto.newPage();
-await pagina.goto(`http://localhost:${porta}${rota}`, { waitUntil: "networkidle" });
-await pagina.waitForTimeout(espera);
-
 const erros = [];
 pagina.on("console", (m) => m.type() === "error" && erros.push(m.text()));
+await pagina.goto(`http://localhost:${porta}${rota}`, { waitUntil: "networkidle" });
+await pagina.waitForTimeout(espera);
 
 await pagina.screenshot({ path: join(saida, `${nome}-topo.png`) });
 console.log(`${nome}-topo.png`);

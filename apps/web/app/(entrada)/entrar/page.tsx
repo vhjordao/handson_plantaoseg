@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ClipboardList, MonitorPlay, Stethoscope } from "lucide-react";
 import { CartaoPersona, Porta } from "@/components/entrar/porta";
 import { EscolherMedico } from "@/components/entrar/escolher-medico";
 import { Alert } from "@/components/ui/alert";
@@ -41,7 +40,6 @@ export default async function Entrar({ searchParams }: PageProps<"/entrar">) {
       <div className="mt-10 grid gap-4 lg:grid-cols-3">
         <Porta
           id="coordenador"
-          icone={ClipboardList}
           titulo="Coordenador"
           descricao="Publique uma vaga, confira o que o sistema leu e decida quem recebe a oferta."
           destaque={destaque === "coordenador"}
@@ -62,7 +60,6 @@ export default async function Entrar({ searchParams }: PageProps<"/entrar">) {
 
         <Porta
           id="medico"
-          icone={Stethoscope}
           titulo="Médico"
           descricao="Receba ofertas com o motivo, aceite, recuse ou conteste a recomendação."
           destaque={destaque === "medico"}
@@ -77,7 +74,6 @@ export default async function Entrar({ searchParams }: PageProps<"/entrar">) {
 
         <Porta
           id="telao"
-          icone={MonitorPlay}
           titulo="Telão"
           descricao="Para projetar numa sala: acompanha as vagas ao vivo, só com pseudônimos."
         >

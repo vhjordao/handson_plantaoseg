@@ -27,6 +27,17 @@ A web precisa servir quatro públicos com trabalhos diferentes (coordenador, mé
 - Um `docs/02` mais enxuto: a linha da interface passa a "web responsiva, sem PWA" ([ADR 0010](0010-web-responsiva-sem-pwa.md)).
 - O que o backend ainda não tem (`POST` de vaga, aprovação, contestação) fica atrás de `PlantaoApi`; o adaptador `live` é escrito na UI-2.
 
+## Divergências conhecidas com o backend
+
+Onde o contrato da interface (`lib/api/types.ts`) e o `services/matching-api` não coincidem. Nenhuma muda o backend; todas ficam para combinar antes do adaptador `live` (UI-2), e as que a tela pode dispensar são opcionais no contrato.
+
+1. **Variáveis do candidato.** O backend calcula nove por candidato: as sete de `RANKING_FEATURES` e as duas de `CONTEXT_VARIABLES` (`shifts_last_30d`, `offers_received_30d`), que ficam fora do ranking e servem aos alertas e à análise. O contrato leva só as sete do ranking em `fatores` e `contribuicoes`.
+2. **Política.** `Policy` tem nove campos; `Politica` leva seis. Ficam de fora `organization_id`, `min_overlap_ratio` e `effective_from`.
+3. **Aprovação com exceção.** `AprovarInput.justificativa` e `Decisao.excecao` (a justificativa escrita para aprovar quem tem alerta de jornada) não existem em `pipeline.approve`, que grava só `approved_doctor_ids` e `mode`. O adaptador `demo` guarda a exceção em `detalhes.excecao` do registro `recommendation_approved`. O campo precisa ser combinado com o backend, e a regra "sem justificativa, sem exceção" continuar valendo lá.
+4. **Id da vaga e rascunho.** Na interface a vaga tem `id` próprio e "rascunho" é um estado de tela (item 5 da decisão). No backend, a vaga ainda não publicada é identificada por `shift_key` (`Recomendacao.chave`). Nas fixtures, o `entity_id` da trilha é o id da interface, e a cadeia de hash é calculada com ele.
+5. **`trecho` de cada campo lido.** O backend não devolve a posição do texto de onde saiu cada campo. O `demo` calcula o trecho no seu porte da extração por regras; no `live` o campo vem vazio até o backend entregar.
+6. **`evidencia` da exclusão.** O backend devolve o código da regra e o texto genérico (`RULE_TEXTS`). A evidência numérica ("Mora a 18,2 km; o raio declarado é 15 km.") é recalculada pelo exportador com `rules.py::evaluate_candidate`; no `live` ela só aparece se o backend a entregar.
+
 ## Alternativas descartadas
 
 - **SPA em Vite só para a demonstração:** mais rápida de montar, mas descarta o servidor, o `proxy` e a estrutura que o `live` vai exigir.

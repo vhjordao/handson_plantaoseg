@@ -13,8 +13,8 @@ export const metadata: Metadata = { title: "Ajuda" };
 
 const REAL = [
   "O filtro de regras e de jornada (código, com testes).",
-  "O ranking: um modelo de regressão logística com sete variáveis.",
-  "O texto dos motivos e dos alertas, como o backend o produz.",
+  "A ordem sugerida: um modelo de regressão logística com sete variáveis.",
+  "O texto dos motivos e dos alertas, como o sistema os produz.",
   "A trilha de auditoria encadeada por hash.",
 ];
 

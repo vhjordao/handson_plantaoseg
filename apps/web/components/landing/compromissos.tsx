@@ -13,7 +13,7 @@ export function Compromissos() {
         <p className="mt-3 max-w-[60ch] text-lg text-tinta-suave">
           Cada compromisso aponta para o código ou o teste que o sustenta. O repositório é público.
         </p>
-        <ul className="mt-8 divide-y divide-divisor border-y border-divisor">
+        <ul role="list" className="mt-8 divide-y divide-divisor border-y border-divisor">
           {COMPROMISSOS.map((compromisso) => (
             <li
               key={compromisso.titulo}

@@ -8,6 +8,7 @@ import { VozTag } from "@/components/dominio/voz-tag";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { HERO_DEMO } from "@/lib/copy/landing";
+import { cn } from "@/lib/utils";
 
 type Etapa = "digitando" | "campos" | "sugestoes";
 
@@ -32,7 +33,8 @@ function usePrefereMenosMovimento(): boolean {
  * "Aprovar e oferecer", o tracejado fecha e o selo assenta. Os nomes, os motivos e o texto são
  * a saída real da PoC, com dados sintéticos.
  *
- * O espaço de cada etapa fica reservado desde o início, para a página não pular.
+ * É compacta de propósito: o botão de decisão precisa aparecer sem rolar a página. O espaço de
+ * cada etapa fica reservado desde o início, para a página não pular.
  */
 export function HeroDemo() {
   const reduzido = usePrefereMenosMovimento();
@@ -83,16 +85,16 @@ export function HeroDemo() {
   return (
     <section
       aria-label="Exemplo da simulação: a leitura de uma vaga e a ordem sugerida"
-      className="rounded-dialogo border border-divisor bg-papel p-4 sm:p-6"
+      className="rounded-dialogo border border-divisor bg-papel p-4 sm:p-5"
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="font-serif text-xl font-semibold">Nova vaga</h2>
         <Badge tone="neutro">Exemplo da simulação</Badge>
       </div>
 
-      <div className="mt-4">
+      <div className="mt-3">
         <p className="text-sm font-semibold text-tinta-suave">Pedido em texto livre</p>
-        <div className="mt-1 min-h-[6.5rem] rounded-campo border border-campo bg-gaze p-3 text-base sm:min-h-[5rem]">
+        <div className="mt-1 min-h-[6.25rem] rounded-campo border border-campo bg-gaze p-3 text-base sm:min-h-[4.75rem]">
           <span className="sr-only">{HERO_DEMO.texto}</span>
           <span aria-hidden="true">
             {textoVisivel}
@@ -104,17 +106,18 @@ export function HeroDemo() {
       </div>
 
       <div
-        className="mt-5 min-h-[22rem] sm:min-h-[14rem]"
+        className="mt-4 min-h-[19.5rem] sm:min-h-[10rem]"
         aria-hidden={!mostraCampos}
         data-testid="hero-campos"
       >
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
           <p className="text-sm font-semibold text-tinta-suave">
             Campos lidos. Você confere antes de seguir.
           </p>
           <VozTag voz="regra">Leitura por regras</VozTag>
         </div>
-        <ul className="mt-2 grid gap-2 sm:grid-cols-2">
+        <p className="mt-1 text-sm text-tinta-suave">{HERO_DEMO.razaoLeitura}</p>
+        <ul role="list" className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-5">
           {HERO_DEMO.campos.map((campo, indice) => (
             <SuperficieVoz
               as="li"
@@ -122,22 +125,25 @@ export function HeroDemo() {
               voz="regra"
               data-visivel={mostraCampos}
               style={{ "--i": indice } as React.CSSProperties}
-              className="etapa-demo px-3 py-2"
+              className={cn(
+                "etapa-demo px-2.5 py-2",
+                indice === HERO_DEMO.campos.length - 1 && "col-span-2 sm:col-span-1",
+              )}
             >
-              <span className="block text-sm text-tinta-suave">{campo.rotulo}</span>
-              <span className="block font-semibold">{campo.valor}</span>
-              <span className="block text-sm text-tinta-suave">{campo.origem}</span>
+              <span className="block text-xs text-tinta-suave">{campo.rotulo}</span>
+              <span className="block text-sm font-semibold">{campo.valor}</span>
+              <span className="block text-xs text-tinta-suave">{campo.origem}</span>
             </SuperficieVoz>
           ))}
         </ul>
       </div>
 
-      <div className="mt-5" aria-hidden={!mostraSugestoes} data-testid="hero-sugestoes">
-        <div className="min-h-[7rem] sm:min-h-[5.5rem]">
+      <div className="mt-3" aria-hidden={!mostraSugestoes} data-testid="hero-sugestoes">
+        <div className="min-h-[6.5rem] sm:min-h-[4.5rem]">
           <p className="text-base font-semibold">{HERO_DEMO.resumo}</p>
           <p className="mt-1 text-sm text-tinta-suave">{HERO_DEMO.notaChances}</p>
         </div>
-        <ol className="mt-3 grid gap-3">
+        <ol role="list" className="mt-2 grid gap-3">
           {HERO_DEMO.sugestoes.map((sugestao, indice) => {
             const decidido = aprovado && indice === 0;
             return (
@@ -147,11 +153,14 @@ export function HeroDemo() {
                 voz={decidido ? "humano" : "ia"}
                 data-visivel={mostraSugestoes}
                 style={{ "--i": indice } as React.CSSProperties}
-                className="etapa-demo p-4"
+                className="etapa-demo p-3 sm:p-4"
               >
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div className="flex items-baseline gap-3">
-                    <span className="tnum font-serif text-2xl leading-none font-semibold" aria-hidden="true">
+                    <span
+                      className="tnum font-serif text-2xl leading-none font-semibold"
+                      aria-hidden="true"
+                    >
                       {sugestao.posicao}
                     </span>
                     <div>
@@ -185,7 +194,7 @@ export function HeroDemo() {
         </ol>
       </div>
 
-      <div className="mt-4 flex justify-end">
+      <div className="mt-3 flex justify-end">
         <Button ref={repetirRef} variant="ghost" size="sm" onClick={repetir}>
           <RotateCcw aria-hidden="true" className="size-4" />
           Ver de novo

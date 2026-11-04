@@ -7,8 +7,7 @@ export default function Contestacoes() {
   return (
     <TelaEmConstrucao
       titulo="Contestações"
-      fase="UI-2"
-      descricao="Suas contestações, com o protocolo e a resposta do coordenador. A contestação completa ainda não está construída no backend e, na demonstração, será simulada."
+      descricao="Suas contestações, com o protocolo e a resposta do coordenador. O fluxo completo de contestação ainda não existe no sistema; na demonstração, ele será simulado."
     />
   );
 }

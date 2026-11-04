@@ -7,8 +7,7 @@ export default function Contestacoes() {
   return (
     <TelaEmConstrucao
       titulo="Contestações"
-      fase="UI-3"
-      descricao="A caixa de entrada com o relato do médico, a recomendação contestada e os fatores, e a sua resposta registrada. A contestação completa ainda não está construída no backend."
+      descricao="A caixa de entrada com o relato do médico, a recomendação contestada e os fatores, e a sua resposta registrada. O fluxo completo de contestação ainda não existe no sistema; na demonstração, ele será simulado."
     />
   );
 }

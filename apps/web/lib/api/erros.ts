@@ -1,6 +1,7 @@
 /**
- * Erros de domínio do adaptador `demo`. A tela decide o texto final; estas mensagens são o
- * padrão, em português, e dizem o que houve e o que fazer.
+ * Erros de domínio de `PlantaoApi`: qualquer adaptador (`demo` agora, `live` depois) os lança, e
+ * a tela os reconhece pela classe, sem saber qual adaptador respondeu. A tela decide o texto
+ * final; estas mensagens são o padrão, em português, e dizem o que houve e o que fazer.
  */
 
 export const MENSAGEM_FORA_DA_GRADE =

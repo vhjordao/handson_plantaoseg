@@ -17,7 +17,7 @@ export function Dores() {
         <p className="mt-3 max-w-[60ch] text-lg text-tinta-suave">
           Quatro dores levantadas na Entrega 1, e a situação de cada uma hoje.
         </p>
-        <ul className="mt-8 divide-y divide-divisor border-y border-divisor">
+        <ul role="list" className="mt-8 divide-y divide-divisor border-y border-divisor">
           {DORES.map((dor) => (
             <li
               key={dor.dor}
@@ -31,7 +31,7 @@ export function Dores() {
                 ) : null}
               </p>
               <div>
-                <Badge tone={dor.situacao === "construido" ? "neutro" : "atencao"}>
+                <Badge tone="neutro">
                   {dor.situacao === "construido" ? (
                     <Check aria-hidden="true" />
                   ) : (

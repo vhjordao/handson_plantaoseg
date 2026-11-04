@@ -28,6 +28,8 @@ export function lerSessaoDoValor(valor: string | undefined): Sessao | null {
 
 /** Só aceita voltar para uma rota do mesmo papel, para o parâmetro `de` não virar redirecionamento aberto. */
 export function destinoSeguro(de: string | null | undefined, papel: Papel): string {
-  if (de && de.startsWith(`/${papel}`) && !de.startsWith("//")) return de;
+  const raiz = `/${papel}`;
+  const dentro = de === raiz || de?.startsWith(`${raiz}/`) || de?.startsWith(`${raiz}?`);
+  if (de && dentro) return de;
   return ROTA_INICIAL[papel];
 }

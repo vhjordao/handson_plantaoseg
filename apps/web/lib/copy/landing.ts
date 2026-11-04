@@ -20,13 +20,14 @@ export const HERO_DEMO = {
   texto:
     "Preciso de um pediatra para o plantão noturno de sexta, 19h às 7h, Hospital Modelo Centro, urgência alta",
   campos: [
-    { rotulo: "Hospital", valor: "Hospital Modelo Centro", origem: "achei no texto" },
-    { rotulo: "Especialidade", valor: "Pediatria", origem: "achei no texto" },
-    { rotulo: "Início", valor: "sexta, 02/10, 19h", origem: "deduzi de “sexta”" },
-    { rotulo: "Fim", valor: "sábado, 03/10, 7h", origem: "deduzi de “19h às 7h”" },
-    { rotulo: "Urgência", valor: "alta", origem: "achei no texto" },
+    { rotulo: "Hospital", valor: "Hospital Modelo Centro", origem: "no texto" },
+    { rotulo: "Especialidade", valor: "Pediatria", origem: "no texto" },
+    { rotulo: "Início", valor: "sexta, 02/10, 19h", origem: "calculado de “sexta”" },
+    { rotulo: "Fim", valor: "sábado, 03/10, 7h", origem: "calculado de “19h às 7h”" },
+    { rotulo: "Urgência", valor: "alta", origem: "no texto" },
   ],
-  resumo: "65 elegíveis entre 300 médicos. Aqui estão 3 dos 5 primeiros.",
+  razaoLeitura: "Nesta demonstração a leitura é por regras, não pela IA.",
+  resumo: "65 elegíveis entre 300 médicos. Aqui estão 2 dos 5 primeiros.",
   notaChances:
     "Os cinco primeiros têm chances parecidas (66% a 69%): a ordem entre eles é uma sugestão fraca. Confira os motivos.",
   sugestoes: [
@@ -43,13 +44,6 @@ export const HERO_DEMO = {
       crm: "SIM-SP-000289",
       motivo:
         "Recomendado porque mora a 3,0 km do hospital, tem taxa de aceite estimada de 56% nos últimos 90 dias e prefere o período desta vaga.",
-    },
-    {
-      posicao: 3,
-      nome: "Olívia Ibarra Nogueira",
-      crm: "SIM-SP-000145",
-      motivo:
-        "Recomendado porque mora a 3,2 km do hospital, tem taxa de aceite estimada de 50% nos últimos 90 dias e prefere o período desta vaga.",
     },
   ],
   depoisDeAprovar:
@@ -170,7 +164,7 @@ export const DORES: DorDaEntrega1[] = [
     resposta: "Fora do núcleo desta versão.",
     situacao: "nao-construido",
     rotuloSituacao: "Não construído",
-    detalhe: "A Res. CFM 2.462, que o motivava, está suspensa por decisão judicial.",
+    detalhe: "O PDF da Res. CFM 2.462, que o motivava, a dá como suspensa; situação atual a validar com jurídico.",
   },
 ];
 
@@ -194,20 +188,20 @@ export const COMPROMISSOS: Compromisso[] = [
     titulo: "Sem o seu clique, nenhuma oferta sai.",
     texto: "A aprovação do coordenador é um passo obrigatório e fica registrada.",
     evidencia: "services/matching-api/tests/test_pipeline.py",
-    rotuloEvidencia: "Teste do pipeline",
+    rotuloEvidencia: "Teste da aprovação",
   },
   {
     titulo: "O valor do plantão não entra na ordem.",
     texto:
-      "O ranking usa uma lista fechada de sete variáveis. Um teste automático falha se alguém acrescentar pagamento ou valor.",
+      "A ordem sugerida usa uma lista fechada de sete variáveis. Um teste automático falha se alguém acrescentar pagamento ou valor.",
     evidencia: "services/matching-api/tests/test_neutralidade_economica.py",
     rotuloEvidencia: "Teste de neutralidade econômica",
   },
   {
     titulo: "Gênero, idade e outros atributos protegidos ficam de fora.",
-    texto: "A mesma lista fechada de variáveis impede que eles cheguem ao ranking.",
+    texto: "A mesma lista fechada de variáveis impede que eles cheguem à ordem sugerida.",
     evidencia: "services/matching-api/app/ranking/features.py",
-    rotuloEvidencia: "Lista de variáveis do ranking",
+    rotuloEvidencia: "Lista de variáveis da ordem sugerida",
   },
   {
     titulo: "Nome, CRM e telefone não vão para a IA.",
@@ -233,20 +227,20 @@ export const EVIDENCIA = {
     barras: [
       { rotulo: "Processo manual simulado", minutos: 110, destaque: false },
       { rotulo: "Regras e sorteio entre elegíveis", minutos: 65, destaque: false },
-      { rotulo: "Regras e baseline heurístico", minutos: 51, destaque: false },
+      { rotulo: "Regras e ordem simples", minutos: 51, destaque: false },
       { rotulo: "Regras e modelo", minutos: 47, destaque: true },
     ],
   },
   achados: [
     {
-      titulo: "O tempo cai 57%.",
+      titulo: "O tempo cai 57%, em simulação.",
       texto:
         "De 110 para 47 minutos nas mesmas 392 vagas de teste. Cerca de 72% desse ganho vem do filtro de regras, isto é, de não chamar quem não poderia aceitar.",
     },
     {
       titulo: "A concentração piora.",
       texto:
-        "Os 10% de médicos mais recomendados ocupam 50,7% dos lugares do top 5, contra 31,1% das ofertas do processo manual simulado. Rodízio e limite de ofertas são as mitigações a estudar.",
+        "Os 10% de médicos mais recomendados ocupam 50,7% dos lugares entre os cinco primeiros, contra 31,1% das ofertas do processo manual simulado. Rodízio e limite de ofertas são as mitigações a estudar.",
       atencao: true,
     },
     {
@@ -310,7 +304,7 @@ export const PERGUNTAS: TemaDePerguntas[] = [
       {
         pergunta: "A IA pode usar o valor do plantão para escolher?",
         resposta:
-          "Não. O valor do plantão e o pagamento ficam fora do ranking, por desenho e por um teste automático que roda a cada mudança.",
+          "Não. O valor do plantão e o pagamento ficam fora da ordem sugerida, por desenho e por um teste automático que roda a cada mudança.",
         link: {
           texto: "Ver o teste",
           caminho: "services/matching-api/tests/test_neutralidade_economica.py",

@@ -10,12 +10,22 @@
  */
 import { carregarGrade, chaveDaGrade, obterMundo } from "../../demo/mundo";
 import type { Mundo } from "../../demo/schema";
+import {
+  CandidatoInvalidoError,
+  EstadoInvalidoError,
+  ForaDaGradeError,
+  JustificativaObrigatoriaError,
+  MIN_CARACTERES_JUSTIFICATIVA,
+  NaoEncontradoError,
+  SemRecomendacaoError,
+} from "../erros";
 import { NaoImplementadoError, type PlantaoApi } from "../plantao-api";
 import {
+  AprovarInputSchema,
   ConfirmarVagaInputSchema,
   FeedbackExplicacaoInputSchema,
+  LIMITE_TEXTO_VAGA,
   PularInputSchema,
-  AprovarInputSchema,
   type Cascata,
   type Candidato,
   type ConfirmarVagaInput,
@@ -38,15 +48,6 @@ import { z } from "zod";
 import { criarRegistro, verificarRegistros, type EntradaDeRegistro } from "./auditoria";
 import { Barramento } from "./barramento";
 import { minutosEntre, normalizarDataHora } from "./datas";
-import {
-  CandidatoInvalidoError,
-  EstadoInvalidoError,
-  ForaDaGradeError,
-  JustificativaObrigatoriaError,
-  MIN_CARACTERES_JUSTIFICATIVA,
-  NaoEncontradoError,
-  SemRecomendacaoError,
-} from "./erros";
 import {
   esquecerEstado,
   estadoInicial,
@@ -81,8 +82,6 @@ export interface PlantaoApiDemo extends PlantaoApi {
 
 type PersonaCoordenador = Extract<Persona, { papel: "coordenador" }>;
 
-/** Tamanho máximo guardado do texto original (entrada hostil; não deixa a sessão inchar). */
-const MAX_TEXTO_GUARDADO = 2000;
 const DOZE_HORAS_EM_MINUTOS = 12 * 60;
 const AGENTE_DO_SISTEMA = "matching-api";
 
@@ -90,6 +89,10 @@ const AGENTE_DO_SISTEMA = "matching-api";
 const AprovarEntradaSchema = AprovarInputSchema.extend({ medicoIds: z.array(z.string()) });
 
 const copia = <T>(valor: T): T => structuredClone(valor);
+
+/** As mesmas pessoas, na mesma ordem (a ordem é a da cascata de ofertas). */
+const mesmaLista = (a: readonly string[], b: readonly string[]): boolean =>
+  a.length === b.length && a.every((item, indice) => item === b[indice]);
 
 /**
  * "Em risco": começa em menos de 24 h e nenhuma oferta foi aceita (prompt de frontend, 9.3).
@@ -180,7 +183,7 @@ class ApiDemo implements PlantaoApiDemo {
 
   async lerVaga(texto: string): Promise<Leitura> {
     await this.esperar();
-    return lerTexto(z.string().parse(texto), this.relogio.hoje(), this.mundo.unidades);
+    return lerTexto(z.string().max(LIMITE_TEXTO_VAGA).parse(texto), this.relogio.hoje(), this.mundo.unidades);
   }
 
   confirmarVaga(entrada: ConfirmarVagaInput): Promise<Vaga> {
@@ -212,7 +215,7 @@ class ApiDemo implements PlantaoApiDemo {
         status: daGrade.totalElegiveis === 0 ? "sem_cobertura" : "aguardando_decisao",
         emRisco: false,
         motivoRisco: null,
-        textoOriginal: input.texto.slice(0, MAX_TEXTO_GUARDADO),
+        textoOriginal: input.texto,
         criadaEm: agora,
         preenchidaPor: null,
         tempoAtePreencherMin: null,
@@ -296,12 +299,15 @@ class ApiDemo implements PlantaoApiDemo {
     return this.operacao(async (geracao) => {
       const input = AprovarEntradaSchema.parse(entrada);
       const vaga = this.vagaOuErro(input.vagaId);
+      const ids = [...new Set(input.medicoIds)];
       if (vaga.status !== "aguardando_decisao") {
+        // Repetir a mesma aprovação (duplo clique, nova tentativa) devolve a decisão já tomada.
+        const anterior = this.dados.decisoes[vaga.id];
+        if (anterior && mesmaLista(anterior.medicoIds, ids)) return copia(anterior);
         throw new EstadoInvalidoError("Esta vaga não está aguardando decisão.");
       }
       const recomendacao = await this.recomendacaoDe(vaga);
       const recomendados = new Map(recomendacao.candidatos.map((c) => [c.medico.id, c]));
-      const ids = [...new Set(input.medicoIds)];
       if (ids.length === 0 || !ids.every((id) => recomendados.has(id))) {
         throw new CandidatoInvalidoError();
       }
@@ -394,12 +400,22 @@ class ApiDemo implements PlantaoApiDemo {
   }
 
   /** Só registra: fica no estado da sessão, fora da trilha de hash, e não treina nada. */
-  async enviarFeedbackExplicacao(entrada: z.input<typeof FeedbackExplicacaoInputSchema>): Promise<void> {
-    await this.esperar();
-    const input = FeedbackExplicacaoInputSchema.parse(entrada);
-    this.vagaOuErro(input.vagaId);
-    this.dados.feedbacks.push({ ...input, em: this.relogio.agora() });
-    this.guardar();
+  enviarFeedbackExplicacao(entrada: z.input<typeof FeedbackExplicacaoInputSchema>): Promise<void> {
+    return this.operacao(async (geracao) => {
+      const input = FeedbackExplicacaoInputSchema.parse(entrada);
+      const vaga = this.vagaOuErro(input.vagaId);
+      const recomendacao = await this.recomendacaoDe(vaga);
+      if (!recomendacao.candidatos.some((c) => c.medico.id === input.medicoId)) {
+        throw new CandidatoInvalidoError();
+      }
+      const comentario = input.comentario?.trim()
+        ? removerDadosPessoais(input.comentario.trim(), this.nomesConhecidos(recomendacao))
+        : undefined;
+      const em = this.relogio.agora();
+      this.aplicar(geracao, () => {
+        this.dados.feedbacks.push({ ...input, comentario, em });
+      });
+    });
   }
 
   async obterFichaModelo(): Promise<FichaModelo> {
@@ -498,10 +514,13 @@ class ApiDemo implements PlantaoApiDemo {
     }
   }
 
-  /** Roda uma operação que muda o estado: depois do atraso, uma de cada vez, em ordem. */
+  /**
+   * Roda uma operação que muda o estado: depois do atraso, uma de cada vez, em ordem. A geração
+   * é lida antes de esperar: uma demonstração reiniciada durante o atraso descarta a operação.
+   */
   private async operacao<T>(passo: (geracao: number) => Promise<T>): Promise<T> {
-    await this.esperar();
     const geracao = this.geracao;
+    await this.esperar();
     const execucao = this.fila.then(() => passo(geracao));
     this.fila = execucao.catch(() => undefined);
     return execucao;

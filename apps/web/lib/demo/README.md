@@ -11,7 +11,7 @@ Tudo aqui é **simulação com dados sintéticos**: nada tem validade médica ou
 | `mundo.json` | cerca de 107 KB, entra no pacote | unidades e política; ficha do modelo (pesos reais, o que não é usado, métricas e limites); 2 coordenadores e 12 médicos fictícios; 5 textos de exemplo; as 6 vagas de demonstração (todos os estados) com recomendação, decisões e `reservas` da cascata; a trilha de auditoria real (43 registros, hashes do Python); casos de paridade da extração |
 | `grade.json` | cerca de 311 KB, baixado só quando alguém publica uma vaga | a recomendação de cada unidade x especialidade x janela de 12 h (90 entradas) |
 
-Os esquemas (Zod) estão em `schema.ts`; `mundo.ts` valida e carrega os dois arquivos. O adaptador está em [`lib/api/demo`](../api/demo/index.ts).
+Os esquemas (Zod) estão em `schema.ts`; `mundo.ts` valida e carrega os dois arquivos. O adaptador está em [`lib/api/demo`](../api/demo/index.ts); os erros de domínio que ele lança (`ForaDaGradeError` e companhia) são do contrato e ficam em [`lib/api/erros.ts`](../api/erros.ts).
 
 ## Como regenerar e conferir
 
@@ -32,10 +32,10 @@ Regenere sempre que mudar `services/matching-api`, os dados sintéticos, `docs/r
 
 ## O que a demonstração faz e não faz
 
-- Faz: ler a vaga (porte fiel da extração por regras e dos guardrails do backend, com origem "achei", "deduzi" ou "não achei" por campo), publicar, sugerir, decidir (com justificativa obrigatória para quem tem alerta de jornada), pular e registrar tudo numa trilha encadeada por hash (SHA-256) que se verifica no navegador.
+- Faz: ler a vaga (porte fiel da extração por regras e dos guardrails do backend, com `origem` `achei`, `deduzi` ou `nao_achei` por campo), publicar, sugerir, decidir (com justificativa obrigatória para quem tem alerta de jornada; repetir a mesma aprovação devolve a decisão já tomada, sem novo registro), pular e registrar tudo numa trilha encadeada por hash (SHA-256) que se verifica no navegador.
 - Não faz: usar Gemini (não foi exercitado com chave); cascata, ofertas e contestações (`NaoImplementadoError`, etapa UI-2); sugestões fora da grade; treinar com o feedback (só registra, fora da trilha); calcular a aceitação das sugestões (`pctSugestoesAceitas` é nulo: não se mede sem usuários).
-- A trilha da sessão vive na memória e no `sessionStorage` (`plantao-demo-v1`); não é um registro imutável de verdade. O hash prova que nenhuma linha foi alterada depois, não que a sessão é autêntica.
-- Nome, CRM e telefone nunca entram na trilha. Textos livres (justificativa, motivo de pular) passam por um filtro de melhor esforço antes de serem gravados.
+- A trilha da sessão vive na memória e no `sessionStorage` (`plantao-demo-v1`); não é um registro imutável de verdade. O hash **detecta** uma linha alterada sem que o resto da cadeia seja refeito, mas **não impede forja**: o SHA-256 não tem chave, e quem controla o navegador pode refazer a cadeia inteira. A verificação é local, feita no próprio navegador; imutabilidade de verdade exigiria guardar a cadeia fora dele (o plano do modo `live`).
+- Os campos estruturados da trilha só levam pseudônimos: uma chave de dado pessoal (nome, CRM, telefone, e-mail) em `detalhes` é recusada. Os textos livres (justificativa, motivo de pular, comentário do feedback) passam, antes de serem gravados, por um filtro de melhor esforço que tira os nomes da demonstração, CRM, telefone, e-mail e números longos. Ele reduz o risco, não o elimina: o aviso "Não digite dados reais" continua valendo na tela. Esses textos têm no máximo 1.000 caracteres, e o pedido de plantão, 2.000.
 
 ## Decisões que valem saber
 

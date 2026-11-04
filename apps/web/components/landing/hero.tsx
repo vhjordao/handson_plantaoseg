@@ -7,16 +7,17 @@ import { HeroDemo } from "./hero-demo";
 
 /**
  * O hero abre com a demonstração viva, não com uma foto. No celular a ordem é título, ação,
- * demonstração e legenda; no computador a legenda desce para baixo do texto, na coluna da
- * esquerda, e a demonstração ocupa a coluna da direita.
+ * demonstração e legenda; no computador a legenda fica na coluna do texto, logo abaixo, e a
+ * demonstração ocupa a coluna da direita. A legenda aparece duas vezes no HTML, mas só uma
+ * está visível em cada largura (a outra sai da árvore de acessibilidade).
  */
 export function Hero() {
   return (
     <section
       aria-labelledby="titulo-hero"
-      className="mx-auto grid w-full max-w-[1200px] content-start items-start gap-10 px-4 py-10 sm:px-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-x-12 lg:gap-y-8 lg:py-16"
+      className="mx-auto grid w-full max-w-[1200px] items-start gap-10 px-4 py-10 sm:px-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-12 lg:py-14"
     >
-      <div className="flex flex-col gap-6 lg:col-start-1 lg:row-start-1 lg:pt-6">
+      <div className="flex flex-col gap-6 lg:pt-6">
         <h1
           id="titulo-hero"
           className="font-serif text-[clamp(2.75rem,8vw,4.5rem)] leading-[1.04] font-semibold tracking-tight"
@@ -40,13 +41,12 @@ export function Hero() {
           </Link>
         </div>
         <p className="text-sm text-tinta-suave">{HERO.nota}</p>
+        <LegendaVozes className="hidden border-t border-divisor pt-5 lg:grid" />
       </div>
 
-      <div className="lg:col-start-2 lg:row-span-2 lg:row-start-1">
-        <HeroDemo />
-      </div>
+      <HeroDemo />
 
-      <LegendaVozes className="border-t border-divisor pt-5 lg:col-start-1 lg:row-start-2" />
+      <LegendaVozes className="border-t border-divisor pt-5 lg:hidden" />
     </section>
   );
 }

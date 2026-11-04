@@ -56,6 +56,8 @@ export function Button({
       className={cn(buttonVariants({ variant, size }), className)}
       disabled={disabled || loading}
       aria-busy={loading || undefined}
+      // Sem isto, todo <button> dentro de um formulário seria "submit" sem querer.
+      {...(asChild ? {} : { type: props.type ?? "button" })}
       {...props}
     >
       {asChild ? (

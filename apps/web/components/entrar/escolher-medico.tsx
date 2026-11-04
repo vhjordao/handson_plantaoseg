@@ -45,38 +45,36 @@ export function EscolherMedico({
 
   return (
     <form action={acao} className="grid gap-4">
-      <div aria-live="polite" className="min-h-[7.5rem]">
+      <div aria-live="polite" className="min-h-[8.75rem]">
         {persona ? (
           <CartaoPersona
             nome={persona.medico.nome}
-            linhas={[
-              ROTULO_ESPECIALIDADE[persona.medico.especialidade],
-              persona.medico.crm,
-            ]}
+            linhas={[ROTULO_ESPECIALIDADE[persona.medico.especialidade], persona.medico.crm]}
+            acao={
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="-mt-1 -mr-2 shrink-0"
+                onClick={() => setIndice((atual) => sortearOutro(total, atual))}
+              >
+                <Shuffle aria-hidden="true" className="size-4" />
+                Sortear outra
+              </Button>
+            }
           />
         ) : (
-          <div role="status" className="grid gap-2">
+          <div role="status">
             <span className="sr-only">Sorteando uma persona…</span>
-            <Skeleton className="h-[7.5rem] w-full" />
+            <Skeleton className="h-[8.75rem] w-full" />
           </div>
         )}
       </div>
       {persona ? <input type="hidden" name="personaId" value={persona.id} /> : null}
       {de ? <input type="hidden" name="de" value={de} /> : null}
-      <div className="flex flex-wrap gap-3">
-        <Button type="submit" disabled={!persona} className="flex-1">
-          Entrar como médico
-        </Button>
-        <Button
-          type="button"
-          variant="secondary"
-          disabled={!persona}
-          onClick={() => setIndice((atual) => sortearOutro(total, atual))}
-        >
-          <Shuffle aria-hidden="true" className="size-4" />
-          Sortear outra
-        </Button>
-      </div>
+      <Button type="submit" disabled={!persona}>
+        Entrar como médico
+      </Button>
     </form>
   );
 }
