@@ -27,6 +27,7 @@ supabase/.temp/
 supabase/.branches/
 infra/volumes/
 data/synthetic/out/
+supabase/seed/
 
 # SO e editores
 .DS_Store

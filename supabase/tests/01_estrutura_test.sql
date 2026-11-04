@@ -92,7 +92,7 @@ insert into public.units (id, organization_id, name, zone, lat, lon) values
 insert into public.doctors
   (id, name_sim, crm_sim, phone_sim, crm_status, specialty, home_lat, home_lon, max_radius_km,
    preferred_period, home_zone, gender, age_band) values
-  ('d0000000-0000-4000-8000-000000000001', 'Médico de teste', 'SIM-SP-000001', '+55 00 00000-0001',
+  ('d0000000-0000-4000-8000-000000000001', 'Médico de teste', 'SIM-TT-000001', '+55 00 00000-0001',
    'active', 'pediatria', -10, -50, 15, 'night', 'sul', 'F', '35-44');
 insert into public.shifts (id, unit_id, specialty, starts_at, ends_at, period, is_weekend, urgency) values
   ('e0000000-0000-4000-8000-000000000001', 'b0000000-0000-4000-8000-000000000001', 'pediatria',
@@ -113,7 +113,7 @@ select throws_ok(
   $$ insert into public.doctors
        (name_sim, crm_sim, phone_sim, crm_status, specialty, home_lat, home_lon, max_radius_km,
         preferred_period, home_zone, gender, age_band)
-     values ('Telefone real', 'SIM-SP-000002', '+55 11 91234-5678', 'active', 'pediatria', -10, -50, 15,
+     values ('Telefone real', 'SIM-TT-000002', '+55 11 91234-5678', 'active', 'pediatria', -10, -50, 15,
         'night', 'sul', 'F', '35-44') $$,
   '23514', null, 'telefone fora do DDD fictício 00 é recusado'
 );
@@ -122,7 +122,7 @@ select throws_ok(
   $$ insert into public.doctors
        (name_sim, crm_sim, phone_sim, crm_status, specialty, home_lat, home_lon, max_radius_km,
         preferred_period, home_zone, gender, age_band)
-     values ('Repetido', 'SIM-SP-000001', '+55 00 00000-0003', 'active', 'pediatria', -10, -50, 15,
+     values ('Repetido', 'SIM-TT-000001', '+55 00 00000-0003', 'active', 'pediatria', -10, -50, 15,
         'night', 'sul', 'F', '35-44') $$,
   '23505', null, 'CRM simulado repetido é recusado'
 );
