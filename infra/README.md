@@ -26,7 +26,7 @@ Valores medidos em 04/11/2026, sem carga. O n8n só orquestra e não decide: o f
 3. O arquivo do modelo virou [`docker-compose.yml`](docker-compose.yml): segredos para o `.env`, versões fixas, fuso de São Paulo, 1 worker, nenhuma rota pública para o editor e sem a API insegura do Traefik.
 4. Depois da troca, o n8n avisou que não suporta o Postgres 15. Levamos o banco para o 17, com as contagens conferidas antes e depois.
 5. Testamos a fila com um workflow temporário, apagado em seguida.
-6. O Victor roda [`preparar-servidor.sh`](preparar-servidor.sh), que fecha o login por senha, liga o firewall e cria a swap.
+6. O Victor rodou [`preparar-servidor.sh`](preparar-servidor.sh), que fecha o login por senha, liga o firewall e cria a swap, e conferimos o resultado de fora.
 
 ## 4. Código-chave
 
@@ -78,10 +78,15 @@ Em 04/11/2026, no servidor real:
 - **Migração:** as contagens de usuários, workflows, execuções, credenciais, projetos, migrações e configurações ficaram iguais, e o aviso de Postgres sumiu.
 - **De fora:** das portas 22, 80, 443, 5432, 5678, 6379 e 8080, só 22, 80 e 443 respondem. O endereço público do n8n devolve 404.
 - **Túnel:** a tela de login do n8n abriu em `http://localhost:5678`. O login em si é do Victor e não foi testado.
-- **Memória:** 2,3 GB disponíveis de 3,8 GB, parado. Com 3 workers eram 2,0 GB.
+- **Memória:** de 2,3 a 2,6 GB disponíveis de 3,8 GB, parado, conforme a medição. Com 3 workers eram 2,0 GB.
 - **Contrato:** 7 testes em `test_contrato_infra.py`, e a CI valida o Compose a cada PR.
 
-**A conferir depois que o Victor rodar o script:** login por senha recusado de fora, firewall ligado e os serviços ainda respondendo.
+Depois de o Victor rodar o script de proteção, no mesmo dia:
+
+- **Login:** sem a chave, o servidor responde `Permission denied (publickey)`, e a senha nem é oferecida. Com a chave, entra.
+- **Firewall:** ligado, por IPv4 e IPv6. De 10 portas testadas de fora, só 22, 80 e 443 respondem nos dois.
+- **Serviços:** continuam no ar, o worker alcança a internet e HTTP vira HTTPS. Uma chamada na porta 80 falhou, mas as 6 seguintes passaram, e o firewall não registrou bloqueio nessa porta.
+- **Swap:** 2 GB, sem uso até agora.
 
 ## 8. Dados e segurança
 
@@ -93,6 +98,7 @@ Em 04/11/2026, no servidor real:
 ## 9. Limitações e honestidade
 
 - **Carga não medida.** Com 1 vCPU, o gargalo provável é a plateia chamando a API ao mesmo tempo, e a API ainda nem existe. O teste de carga antes de 13/11 decide se a KVM 1 basta.
+- O servidor ainda não foi reiniciado com esta configuração. O teste fica para antes de 13/11, junto com o de carga.
 - O Traefik lê o socket do Docker, como no modelo. Uma falha nele alcançaria o servidor inteiro. Aceito para um servidor de poucos dias.
 - Entramos como root. Quem tiver a chave privada controla tudo.
 - O Redis segue na versão 6, a que veio com o modelo, porque não fica exposto.
@@ -110,4 +116,4 @@ Com o ok do Victor:
 
 1. Colocar a API no servidor, atrás do Traefik, com limite de requisições.
 2. Criar o workflow da cascata e versioná-lo em `n8n/workflows`.
-3. Fazer o teste de carga antes de 13/11.
+3. Fazer o teste de carga e reiniciar o servidor antes de 13/11.

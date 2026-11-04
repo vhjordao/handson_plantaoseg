@@ -12,7 +12,7 @@ O Victor criou o servidor com o modelo "n8n (queue mode)" da Hostinger. Antes de
 ## Decisão
 
 1. **KVM 1 no Brasil, por 1 mês.** Escolha do Victor: 1 vCPU, 3,8 GB de memória e 48 GB de disco úteis, por R$ 52,99 no carrinho de 04/11/2026. A KVM 2 sairia R$ 70,99. Com a renovação desligada, a Hostinger cancela e apaga o servidor no fim do ciclo, por volta de 04/12.
-2. **Modo fila com 1 worker.** O modelo já veio em modo fila, como o `docs/02` pede, e reinstalar não traz ganho: parado, cada worker gasta cerca de 0,1% de CPU. Com 1 worker, sobram 2,3 GB de memória.
+2. **Modo fila com 1 worker.** O modelo já veio em modo fila, como o `docs/02` pede, e reinstalar não traz ganho: parado, cada worker gasta cerca de 0,1% de CPU. Com 1 worker, sobram de 2,3 a 2,6 GB de memória.
 3. **Postgres 17, não o 15 do modelo.** O próprio n8n avisa que o 15 não é suportado e pede o 17 ou mais novo ([tabela oficial](https://docs.n8n.io/hosting/configuration/supported-databases-settings/)). Migramos enquanto o banco só tinha a conta de administrador.
 4. **Editor só por túnel SSH.** Nenhuma rota pública leva ao n8n. A plateia não usa o editor, e a API o alcança por dentro do servidor. O túnel dispensa VPN e não depende do IP de quem acessa, o que uma lista de IPs não resolveria em dia de apresentação.
 5. **O Compose vai para o repositório, sem segredos e sem IP.** Senha e chaves ficam no `.env` do servidor, só legível pelo root, e as imagens têm versão fixa. Um [teste de contrato](../../services/matching-api/tests/test_contrato_infra.py) barra porta nova, versão solta e segredo escrito no arquivo.

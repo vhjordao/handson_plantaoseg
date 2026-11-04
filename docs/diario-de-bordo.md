@@ -14,9 +14,9 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 - O modelo trazia 3 workers, fuso de Berlim, firewall desligado, editor aberto na internet e segredos escritos no arquivo do Compose. Agora são 1 worker, fuso de São Paulo, versões fixas, editor só por túnel SSH e segredos no `.env` do servidor.
 - O Compose foi para `infra/`, sem segredos e sem IP, e o `make up` local saiu. Um teste de contrato barra porta nova, versão solta e segredo no arquivo.
 - O n8n avisou que não suporta o Postgres 15 do modelo. Levamos o banco para o 17 enquanto só havia a conta de administrador, e as contagens bateram.
-- A proteção do sistema (login só por chave, firewall e swap) está em um script que o próprio Victor roda.
+- A proteção do sistema (login só por chave, firewall e swap) está em um script, que o próprio Victor rodou.
 
-**No servidor real:** um webhook temporário passou pela fila e foi executado pelo worker, em 0,14 s, e foi apagado depois. De fora, das 7 portas testadas, só 22, 80 e 443 respondem, e o endereço público do n8n devolve 404. A carga com 1 vCPU ainda não foi medida.
+**No servidor real:** um webhook temporário passou pela fila e foi executado pelo worker, em 0,14 s, e foi apagado depois. De fora, das 10 portas testadas, só 22, 80 e 443 respondem, por IPv4 e IPv6, o login sem chave é recusado e o endereço público do n8n devolve 404. A carga com 1 vCPU e um reinício do servidor ainda não foram testados.
 
 **Uso de IA:** o Claude Code inspecionou, escreveu os arquivos e aplicou o Compose com o ok do Victor. A recomendação dele mudou no caminho: KVM 2, depois aceitar a KVM 1, depois o n8n simples, e de volta ao modo fila ao ver o que o servidor já tinha. A migração do Postgres não estava no plano aprovado e saiu do aviso do n8n.
 

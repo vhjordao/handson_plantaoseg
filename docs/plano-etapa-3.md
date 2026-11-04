@@ -99,7 +99,7 @@ Quando as contas existirem, o Victor avisa; o clone novo e um `.env` vazio são 
   - Slides e feedback da aula; convite aos colegas (hoje só o Victor tem acesso ao repositório).
 - **Feito em 03/11:** conta Vercel. O GitHub do projeto se ligou direto a ela, então a publicação sai pela integração da Vercel, sem precisar do GitHub Actions.
 - **Até 04/11, antes da primeira entrevista:** confirmar com o professor que as conversas podem seguir como atividade da disciplina ([kit](entrevistas/kit-do-entrevistador.md), seção 3).
-- **Feito em 04/11:** Hostinger KVM 1, por 1 mês, com acesso SSH por chave ([ADR 0009](adr/0009-servidor-so-para-a-apresentacao.md)). Falta o Victor rodar o script de proteção e desligar a renovação.
+- **Feito em 04/11:** Hostinger KVM 1, por 1 mês, com acesso SSH por chave ([ADR 0009](adr/0009-servidor-so-para-a-apresentacao.md)). O script de proteção já rodou. Falta o Victor conferir no painel que a renovação ficou desligada.
 
 **Custo estimado em novembro:** Supabase e Vercel gratuitos (o Supabase Free aceita 200 conexões em tempo real e pausa após 1 semana parado), KVM 1 por R$ 52,99 no mês (carrinho de 04/11; sem desligar a renovação, passa a R$ 87,99 por mês) e Gemini abaixo de US$ 1 por 200 chamadas, preço lido em outubro.
 
