@@ -1,6 +1,6 @@
 # PlantãoSeguro: Compose do servidor (Hostinger KVM 1), só para a apresentação (ADR 0009).
-# Sobe a orquestração: n8n em modo fila (n8n + 1 worker), Redis, o Postgres PRÓPRIO do n8n e o Traefik.
-# O banco da aplicação é o Supabase, separado deste Compose. A matching-api entra no PR dela.
+# Sobe a orquestração: n8n em modo fila (n8n + 1 worker), Redis, o Postgres PRÓPRIO do n8n e o Traefik,
+# além da API de matching. O banco da aplicação é o Supabase, separado deste Compose.
 # Publicar uma porta passa por cima do firewall: só 80 e 443 ficam abertas, o resto em 127.0.0.1.
 # Uso: infra/README.md. Os segredos ficam no .env do servidor, nunca aqui.
 
@@ -109,6 +109,45 @@ services:
       <<: *n8n-env
     depends_on:
       - n8n
+
+  matching-api:
+    # A imagem é construída no próprio servidor, a partir da cópia da pasta (infra/README.md).
+    image: plantaoseguro-matching-api:0.1.0
+    build:
+      context: ../services/matching-api
+    restart: unless-stopped
+    environment:
+      SUPABASE_URL: ${SUPABASE_URL:?defina SUPABASE_URL no .env}
+      # Ignora a RLS: existe só aqui, no .env do servidor, e nenhum outro serviço a recebe.
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?defina SUPABASE_SERVICE_ROLE_KEY no .env}
+      N8N_WEBHOOK_SECRET: ${N8N_WEBHOOK_SECRET:?defina N8N_WEBHOOK_SECRET no .env}
+      API_CORS_ORIGINS: ${API_CORS_ORIGINS:-}
+    mem_limit: 512m
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://127.0.0.1:8000/health', timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    labels:
+      - traefik.enable=true
+      # /internal fica fora da rota pública: o n8n chama a API por dentro do servidor.
+      - traefik.http.routers.matching-api.rule=Host(`${API_HOST:?defina API_HOST no .env}`) && !PathPrefix(`/internal`)
+      - traefik.http.routers.matching-api.entrypoints=websecure
+      - traefik.http.routers.matching-api.tls.certresolver=mytlschallenge
+      - traefik.http.routers.matching-api.middlewares=matching-api-limite,matching-api-corpo
+      # Por IP de origem. A plateia pode sair toda pelo mesmo IP: o valor vem da medição (infra/README.md).
+      - traefik.http.middlewares.matching-api-limite.ratelimit.average=${API_RATE_AVERAGE:-30}
+      - traefik.http.middlewares.matching-api-limite.ratelimit.burst=${API_RATE_BURST:-60}
+      - traefik.http.middlewares.matching-api-corpo.buffering.maxRequestBodyBytes=65536
+      - traefik.http.services.matching-api.loadbalancer.server.port=8000
 
 volumes:
   # Criados pelo modelo da Hostinger, fora do Compose. A conta do n8n e o certificado estão neles.

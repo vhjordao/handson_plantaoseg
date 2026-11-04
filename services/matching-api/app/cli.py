@@ -39,6 +39,7 @@ from app.synthetic.quality import null_report, render_report, run_checks, summar
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_DATA = REPO_ROOT / "data" / "synthetic" / "out"
+ACTIVE_MODEL_PATH = Path(__file__).resolve().parent / "ranking" / "modelo_ativo.json"
 DEFAULT_PARAMS = REPO_ROOT / "data" / "synthetic" / "params.json"
 DEFAULT_SAMPLE = REPO_ROOT / "data" / "synthetic" / "sample"
 DEFAULT_TEXT = (
@@ -389,6 +390,27 @@ def cmd_seed_db(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_freeze_model(args: argparse.Namespace) -> int:
+    """Copia os pesos treinados para o arquivo que a API lê, ou confere que são os mesmos."""
+    from app.seed_db import metric_differences
+
+    trained = json.loads((Path(args.data) / "model_registry.json").read_text(encoding="utf-8"))
+    target = ACTIVE_MODEL_PATH
+    if args.check:
+        differences = metric_differences(
+            json.loads(target.read_text(encoding="utf-8")), trained["model"]
+        )
+        if differences:
+            print(f"O modelo versionado difere do treinado em: {', '.join(differences[:10])}")
+            return 1
+        print(f"Modelo versionado igual ao treinado ({trained['model']['version']}).")
+        return 0
+    text = json.dumps(trained["model"], ensure_ascii=False, indent=2) + "\n"
+    target.write_text(text, encoding="utf-8", newline="\n")
+    print(f"Pesos gravados em {target} ({trained['model']['version']}).")
+    return 0
+
+
 def cmd_build_doc(args: argparse.Namespace) -> int:
     from app.docbuild import render
 
@@ -471,6 +493,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--published", default=str(REPO_ROOT / "docs" / "resultados" / "metricas-ranking.json")
     )
     db.set_defaults(func=cmd_seed_db)
+
+    freeze = sub.add_parser("freeze-model", help="grava ou confere os pesos que a API lê")
+    freeze.add_argument("--data", default=str(DEFAULT_DATA))
+    freeze.add_argument("--check", action="store_true", help="só confere, sem gravar")
+    freeze.set_defaults(func=cmd_freeze_model)
 
     doc = sub.add_parser("build-doc", help="converte um documento Markdown em HTML imprimível")
     docs_dir = REPO_ROOT / "docs"
