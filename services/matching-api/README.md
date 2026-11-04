@@ -1,7 +1,7 @@
 # Ficha do componente: matching-api (motor de recomendação da PoC)
 
 - **Frentes:** A3 (regras e ranking) e A4 (LLM com Gemini), mais a auditoria e a linha de comando.
-- **Estado:** PoC mínima **executável por linha de comando**, sem tela, banco, n8n nem API HTTP (ADR 0004 e 0005). Atualizado em 30/10/2026.
+- **Estado:** PoC mínima **executável por linha de comando** (ADR 0004 e 0005) e, desde 04/11/2026, também por HTTP. Esta ficha descreve o motor; a porta HTTP tem a [ficha da API](app/api/README.md) e o [ADR 0010](../../docs/adr/0010-api-de-matching.md).
 
 ## 1. O que é e qual dor resolve
 
@@ -62,14 +62,15 @@ Cada passo foi conferido com `ruff` e `pytest` antes do commit; a decisão sobre
 | Ferramenta | Versão | Para quê | Por que esta e não outra | Custo |
 | --- | --- | --- | --- | --- |
 | Python (biblioteca padrão) | 3.12.10 local; 3.12 na CI | Todo o motor | Roda na CI e em qualquer máquina sem instalar pacote; a máquina do autor não tinha pip até 30/10 | 0 |
-| pytest | 8.3.3 | Testes (260) | Padrão do ecossistema; os testes usam `unittest`, que o pytest também executa | 0 |
+| pytest | 8.3.3 | Testes (421, inclusive os da API) | Padrão do ecossistema; os testes usam `unittest`, que o pytest também executa | 0 |
 | ruff | 0.7.0 | Lint (E, F, I, UP, B) | Rápido e igual na CI e localmente | 0 |
 | GitHub Actions | checkout@v4, setup-python@v5, upload-artifact@v4 | CI com 5 jobs | Já era a escolha do `docs/02` | 0 |
 | Gemini (`google-genai`) | não instalado nem exercitado | Extração e reescrita, opcional | Decisão do Victor ([ADR 0003](../../docs/adr/0003-llm-do-produto-gemini.md)) | Estimado em menos de US$ 1 para 200 chamadas |
 | Regressão logística própria | IRLS, até 15 iterações | Ranking | Explicável por peso e sem dependência; scikit-learn e LightGBM não foram testados (comparação prevista para a Etapa 3) | 0 |
-| FastAPI, n8n | adiados | API, cascata | ADR 0004 (protótipo adiado); a tela e o banco saíram do adiamento nos ADRs 0007 e 0008 | 0 |
+| FastAPI | ver a [ficha da API](app/api/README.md) | Porta HTTP do motor | Só `app/api/` usa pacotes de fora; o núcleo e a CLI continuam só com a biblioteca padrão | 0 |
+| n8n | adiado | Cascata | ADR 0004; a tela, o banco e a API saíram do adiamento nos ADRs 0007, 0008 e 0010 | 0 |
 
-Desvio declarado em relação ao `docs/02`: a validação da saída do LLM usa um **esquema fechado escrito à mão** (biblioteca padrão), e não Pydantic; o Pydantic entra quando a API for construída.
+Desvio declarado em relação ao `docs/02`: a validação da saída do LLM usa um **esquema fechado escrito à mão** (biblioteca padrão), e não Pydantic, para o núcleo seguir sem pacotes de fora. O Pydantic valida o que entra e o que sai na API.
 
 ## 6. Como rodar e testar
 
@@ -83,7 +84,7 @@ python -m app.cli demo --yes    # fluxo completo para uma vaga
 python -m app.cli blind-review  # casos e gabarito da revisão às cegas
 python -m app.cli robustness    # teste de premissas e lançamento (cerca de 2 min)
 python -m app.cli data-dictionary  # exemplo concreto do dicionário
-python -m pytest -q             # 260 testes
+python -m pytest -q             # 421 testes (pede `pip install -r requirements-dev.txt`)
 python -m ruff check .          # lint
 ```
 
@@ -91,7 +92,7 @@ Da raiz do repositório: `make poc` roda tudo na ordem; `make test` e `make lint
 
 ## 7. Testes e resultados
 
-- **260 testes** (`tests/`): regras e jornada, dados sintéticos e reprodutibilidade, variáveis sem vazamento, modelo, AUC e avaliação, fluxo recomendado (matemática da cascata e coerência com o contrafactual), extração, 10 tipos de injeção de prompt, saídas maliciosas do LLM, explicação, auditoria, pipeline, análise, exemplo trabalhado, conversor do documento e sincronia dos números dos documentos com os arquivos gerados.
+- **421 testes** (`tests/`), contando os da API, que têm a [ficha própria](app/api/README.md): regras e jornada, dados sintéticos e reprodutibilidade, variáveis sem vazamento, modelo, AUC e avaliação, fluxo recomendado (matemática da cascata e coerência com o contrafactual), extração, 10 tipos de injeção de prompt, saídas maliciosas do LLM, explicação, auditoria, pipeline, análise, exemplo trabalhado, conversor do documento e sincronia dos números dos documentos com os arquivos gerados.
 - **CI:** 7 jobs verdes (segredos, lint e testes, neutralidade econômica, PoC, Compose, banco e interface web). O job da PoC confere que a execução em Linux gera os **mesmos checksums** dos CSV da máquina do autor.
 - **Teste de premissas** ([docs/resultados](../../docs/resultados/metricas-robustez.md)): 17 cenários, comparação com dados públicos e simulação de lançamento. Roda na CI.
 - **Resultados em simulação** ([docs/resultados](../../docs/resultados/metricas-ranking.md)): AUC 0,762 (modelo) contra 0,702 (baseline); chance média de sucesso no top-5 de 71,2% contra 67,7% e 75,8% do oráculo, em 392 vagas de teste.
@@ -116,4 +117,4 @@ O trabalho foi feito **em conjunto** pelo Victor Jordão e pelo Claude Code (Son
 
 ## 11. Próximos passos
 
-API HTTP e tela do coordenador, cascata no n8n, contestação, previsão de vagas descobertas, mitigação do viés de distância (por exemplo, rodízio) e teste do Gemini com chave (ver [docs/teste-manual-gemini.md](../../docs/teste-manual-gemini.md)).
+Tela do coordenador, cascata no n8n, contestação, previsão de vagas descobertas, mitigação do viés de distância (por exemplo, rodízio) e teste do Gemini com chave (ver [docs/teste-manual-gemini.md](../../docs/teste-manual-gemini.md)).

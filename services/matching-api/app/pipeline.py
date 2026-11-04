@@ -76,15 +76,20 @@ def recommend(
     top_k: int | None = None,
     client: LLMClient | None = None,
     audit: AuditLog | None = None,
+    key: str | None = None,
 ) -> Recommendation:
-    """Filtra os elegíveis, ranqueia, explica e registra. Não envia nenhuma oferta."""
+    """Filtra os elegíveis, ranqueia, explica e registra. Não envia nenhuma oferta.
+
+    `key` identifica a vaga na trilha. A API passa o ID da vaga já publicada; sem ele, vale o
+    identificador derivado dos campos, como na PoC.
+    """
     unit_id, specialty = fields.unit_id, fields.specialty
     starts_at, ends_at = fields.starts_at, fields.ends_at
     if unit_id is None or specialty is None or starts_at is None or ends_at is None:
         raise ValueError("faltam campos obrigatórios: " + ", ".join(fields.missing_required()))
     unit = dataset.units[unit_id]
     limit = top_k or dataset.policy.top_k
-    key = shift_key(fields)
+    key = key or shift_key(fields)
     exclusions: list[Exclusion] = []
     scored: list[tuple[float, str, dict[str, float], tuple[str, ...]]] = []
     for doctor in dataset.doctors.values():

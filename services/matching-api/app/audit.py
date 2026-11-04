@@ -22,6 +22,11 @@ ACTIONS = frozenset(
         "explanation_generated",
         "recommendation_approved",
         "recommendation_rejected",
+        "offer_sent",
+        "offer_accepted",
+        "offer_declined",
+        "offer_expired",
+        "shift_uncovered",
     }
 )
 GENESIS = "0" * 64

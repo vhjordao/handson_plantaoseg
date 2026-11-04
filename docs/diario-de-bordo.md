@@ -4,6 +4,26 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 04/11/2026 (quarta): API de matching no servidor
+
+**Pedido do Victor:** aprovou o plano da API com as decisões e os riscos ("Pode começar") e rodou o comando que cria os logins de teste.
+
+**O que foi feito**
+
+- A [API](../services/matching-api/app/api/README.md) em FastAPI, sobre o motor que já existia. A CLI e o núcleo continuam só com a biblioteca padrão, e um teste barra pacote de fora. As decisões estão no [ADR 0010](adr/0010-api-de-matching.md).
+- A API nem carrega nome, CRM, telefone, atributo protegido, valor do plantão nem gabarito. Os pesos do modelo ficam em arquivo versionado, conferido com `model_registry` na subida.
+- Uma migração pôs as ofertas na trilha. A cascata só chama quem está na aprovação gravada e refaz as regras antes de cada chamada.
+- A API entrou no Compose, atrás do Traefik, com limite de requisições, sem porta publicada e com as rotas internas fora da internet.
+- Os testes foram de 267 para 421. Abrimos 22 falhas de propósito, e hoje todas são acusadas.
+
+**No servidor real (simulação):** 60 de 60 vagas iguais aos CSVs, lendo do banco real. 33 de 33 conferências no fluxo inteiro com login. Nenhuma chamada falhou na [medição de carga](resultados/metricas-carga-api.md).
+
+**A descoberta do dia:** a primeira medição travou em 50 chamadas por segundo, com a CPU em menos de 30%. O que parecia limite do servidor era a chave do Supabase: a `sb_secret` tem esse teto, e a `service_role` passou de 900 por segundo no mesmo teste. Com a troca, a API chegou a cerca de 270 por segundo, e só então a CPU virou o limite. A causa do teto segue desconhecida.
+
+**Pendências:** o workflow da cascata, as telas, o teste do Gemini com chave e a repetição da carga antes de 13/11, com as telas e os celulares.
+
+**Uso de IA:** o Victor decidiu o escopo e aprovou o plano. O Claude Code escreveu o código, os testes e os documentos e fez a implantação. Os logins de teste e a limpeza do banco ficam com o Victor, porque o Claude Code não cria contas nem apaga dados no projeto real. A hipótese inicial do Claude Code para o teto, a de que a culpa era do ES256, estava errada, e a medição mostrou isso. Ele também corrigiu o que apareceu no caminho: o log do `httpx` registrava cada chamada ao banco com a URL inteira, e uma vaga sem elegíveis duplicaria as exclusões.
+
 ## 04/11/2026 (quarta): servidor na Hostinger
 
 **Pedido do Victor:** "já quero usar a hostinger e tirar tudo da local", e depois: "vou usar só para apresentar o protótipo. Depois vou parar tudo". Ele escolheu a KVM 1 e criou o servidor com o modelo de n8n em modo fila.

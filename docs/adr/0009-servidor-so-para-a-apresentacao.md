@@ -25,6 +25,6 @@ O `make up` local saiu: a máquina não tem Docker, e o Compose agora descreve o
 
 - O desenho do `docs/02` (KVM 2, mais workers, VPN ou lista de IPs) continua valendo como roteiro para uma operação real, e não descreve o protótipo.
 - Tudo o que está no servidor precisa estar também no Git, porque ele se apaga sozinho.
-- O limite real é 1 vCPU com a plateia chamando a API ao mesmo tempo, o que ainda não foi medido. O teste de carga antes de 13/11 decide. Se faltar, a [Hostinger permite subir de plano](https://www.hostinger.com/support/1583229-how-to-upgrade-a-vps-server-at-hostinger/) mantendo arquivos e configurações.
+- O limite real é 1 vCPU com a plateia chamando a API ao mesmo tempo. A [primeira medição](../resultados/metricas-carga-api.md), de 04/11/2026, chegou a cerca de 270 chamadas por segundo nas rotas com login. Ela se repete antes de 13/11, com as telas e os celulares, e decide. Se faltar, a [Hostinger permite subir de plano](https://www.hostinger.com/support/1583229-how-to-upgrade-a-vps-server-at-hostinger/) mantendo arquivos e configurações.
 - Abrir o editor exige a chave SSH. Se ela se perder, dá para cadastrar outra no painel da Hostinger.
 - Depois de 17/11, quem desliga tudo precisa também revogar os tokens e as chaves. A lista está na [ficha](../../infra/README.md).
