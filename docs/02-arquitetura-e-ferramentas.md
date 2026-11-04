@@ -47,7 +47,7 @@ Uma vaga entra pelo web app ou pelo Telegram, o n8n chama a API de matching, que
 O que precisa ser exato e testável fica em código, o n8n só orquestra e o Supabase guarda e isola os dados.
 
 1. **O n8n orquestra, não decide.** Esperas, cascata de ofertas, lembretes e rotinas agendadas são o forte do n8n. O filtro de jornada e o ranking ficam numa API em Python, com testes automatizados e versão, chamada por HTTP.
-2. **n8n em modo fila desde o início.** O processo principal recebe gatilhos e webhooks e passa as execuções ao Redis, e os workers as executam; o modo fila exige Redis e um banco de dados, e [o SQLite não é suportado nesse modo](https://docs.n8n.io/deploy/host-n8n/configure-n8n/scaling/enable-queue-mode/). Use um Postgres próprio do n8n na VPS, separado do Supabase.
+2. **n8n em modo fila desde o início.** O processo principal recebe gatilhos e webhooks e passa as execuções ao Redis, e os workers as executam; o modo fila exige Redis e um banco de dados, e [o SQLite não é suportado nesse modo](https://docs.n8n.io/deploy/host-n8n/configure-n8n/scaling/enable-queue-mode/). Use um Postgres próprio do n8n na VPS, separado do Supabase. No protótipo, 1 worker basta ([ADR 0009](adr/0009-servidor-so-para-a-apresentacao.md)).
 3. **Supabase como fonte da verdade.** A RLS isola os hospitais, o Realtime alimenta o telão e a Auth cria as sessões da plateia, inclusive com [login anônimo, que o plano gratuito inclui](https://supabase.com/pricing). A chave de serviço só existe no servidor.
 4. **LLM só onde há texto livre e sem ferramentas.** Extração da vaga e redação da explicação, com saída em JSON Schema validada em código. O texto da vaga é tratado como dado hostil.
 5. **Ranking com baseline e modelo.** Com dados sintéticos, o modelo aprende as regras do próprio simulador; por isso compare sempre com um baseline heurístico e não apresente a acurácia como evidência real.
@@ -74,7 +74,7 @@ Cada etapa do fluxo tem uma ferramenta principal e uma alternativa; a escolha pr
 | Observabilidade da IA | Langfuse Cloud, só com dados sintéticos | Phoenix; Langfuse self-host depois | [Self-host exige Postgres, ClickHouse, Redis e S3](https://langfuse.com/self-hosting.md) |
 | Erros e disponibilidade | Sentry e Uptime Kuma | Grafana | A Hostinger tem template do Uptime Kuma |
 | Dados sintéticos | Python com Faker e simulador próprio | SDV | Parâmetros calibrados nas entrevistas |
-| Infra e deploy | Docker Compose e Traefik na Hostinger KVM 2, GitHub Actions por SSH e Supabase CLI para migrações | Railway ou Render | A Hostinger tem template Docker com Traefik |
+| Infra e deploy | Docker Compose e Traefik na Hostinger KVM 2 (no protótipo, KVM 1 só para a apresentação, [ADR 0009](adr/0009-servidor-so-para-a-apresentacao.md)), GitHub Actions por SSH e Supabase CLI para migrações | Railway ou Render | A Hostinger tem template Docker com Traefik |
 | Testes | pytest, Playwright, k6 e testes de injeção de prompt | Nenhuma | Carga: 100 vagas simultâneas |
 
 Ferramentas sem link são escolhas de engenharia minhas, não afirmações verificadas em fonte; confirmem versões e licenças na hora da instalação.
@@ -113,7 +113,7 @@ Cada resolução e cada risco de segurança vira um controle técnico que pode s
 | Neutralidade econômica | Lista fixa de variáveis do ranking, sem campos de pagamento, com teste automático na integração contínua | Res. CFM 2.460 |
 | Rastro de pagamentos | Prazos combinados e confirmações na tabela payments, com alertas de atraso | Res. CFM 2.462. **Nota de 30/10/2026:** o PDF oficial traz aviso de suspensão judicial integral; tratar como boa prática e evolução futura até confirmar a situação ([conformidade](conformidade/README.md)) |
 | Política de jornada | policy_config e função SQL que bloqueia ofertas fora do limite, com exceção justificada por humano | Segurança do paciente |
-| Segredos e acesso ao n8n | Segredos em variáveis do Docker; editor do n8n fora da internet pública (VPN ou lista de IPs); segredo nos webhooks; limite de requisições no Traefik | Cybersecurity |
+| Segredos e acesso ao n8n | Segredos em variáveis do Docker; editor do n8n fora da internet pública (no protótipo, túnel SSH, [ADR 0009](adr/0009-servidor-so-para-a-apresentacao.md); em produção, VPN ou lista de IPs); segredo nos webhooks; limite de requisições no Traefik | Cybersecurity |
 | Backups | [Backup semanal gratuito da Hostinger](https://www.hostinger.com/vps-hosting), cópia do Postgres do n8n fora da VPS e [backups diários de 7 dias no Supabase Pro](https://supabase.com/pricing) | Continuidade |
 
 ## Infraestrutura e custo
@@ -122,7 +122,7 @@ O mês da apresentação custa entre US$ 34 e US$ 41 (VPS, Supabase Pro e LLM), 
 
 | Item | Escolha | Custo | O que observar |
 | --- | --- | --- | --- |
-| VPS | [Hostinger KVM 2](https://www.hostinger.com/vps-hosting): 2 vCPU, 8 GB de RAM, 100 GB NVMe | US$ 8,79 por mês no preço promocional, pago adiantado; renova a US$ 14,99 por mês | A própria página indica o KVM 2 para apps de médio porte como o n8n. Há [datacenter no Brasil](https://www.hostinger.com/support/1583267-where-are-hostinger-servers-located/), e a localização fica fixa após a configuração, então escolha o Brasil na compra |
+| VPS | [Hostinger KVM 2](https://www.hostinger.com/vps-hosting): 2 vCPU, 8 GB de RAM, 100 GB NVMe | US$ 8,79 por mês no preço promocional, pago adiantado; renova a US$ 14,99 por mês | A própria página indica o KVM 2 para apps de médio porte como o n8n. Há [datacenter no Brasil](https://www.hostinger.com/support/1583267-where-are-hostinger-servers-located/), e a localização fica fixa após a configuração, então escolha o Brasil na compra. O protótipo usa a KVM 1 por 1 mês, R$ 52,99 no carrinho de 04/11/2026 ([ADR 0009](adr/0009-servidor-so-para-a-apresentacao.md)) |
 | n8n | Community, auto-hospedado | US$ 0 | A [licença](https://docs.n8n.io/n8n-community-license/community-license/license-faq.md) cobre uso interno do negócio; se virar produto vendido a hospitais, falar antes com a n8n |
 | Supabase | Free para desenvolver; Pro no mês da apresentação | US$ 0 e US$ 25 por mês | No [plano Free](https://supabase.com/pricing) o projeto pausa após 1 semana sem atividade e o Realtime aceita 200 conexões simultâneas; o Pro aceita 500 e inclui US$ 10 de crédito, que cobrem uma instância Micro |
 | LLM | [Gemini 3.5 Flash-Lite](https://ai.google.dev/gemini-api/docs/models) para extração e explicação; [Gemini 3.8 Flash](https://ai.google.dev/gemini-api/docs/pricing) nos casos ambíguos (ADR 0003) | Flash-Lite a US$ 0,30 de entrada e US$ 2,50 de saída por milhão de tokens; 3.8 Flash a US$ 0,75 e US$ 3,75 até 31/12/2026 (depois US$ 1,50 e US$ 7,50) | Estimativa: 200 chamadas de 2.000 tokens de entrada e 500 de saída custam cerca de US$ 0,37 com o Flash-Lite e US$ 0,68 com o 3.8 Flash (premissa minha; a saída inclui tokens de raciocínio e pode ser maior). A camada gratuita existe, mas o Google usa o conteúdo para melhorar produtos: usar a paga na demo |

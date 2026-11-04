@@ -17,7 +17,7 @@ Para quem entra no projeto (Roberval, Guilherme, Sergio, Lucas e Plinio) e para 
 | Conta no GitHub e convite | Aceite o convite do Victor (e-mail ou github.com/vhjordao/handson_plantaoseg) | Você consegue abrir o repositório e ver o botão "New pull request" |
 | Claude Code com acesso próprio | Instale e entre com a sua conta (plano ou API; confirme o que o grupo vai usar) | `claude` abre na pasta do projeto |
 | Git e GitHub CLI | https://git-scm.com e https://cli.github.com; depois `gh auth login` | `gh auth status` |
-| Docker Desktop | https://docs.docker.com/desktop/ | `docker compose version` |
+| Docker Desktop (opcional) | Só para `make db-check`; a CI roda sempre. https://docs.docker.com/desktop/ | `docker compose version` |
 | Node.js LTS | https://nodejs.org | `node --version` |
 | Python 3.12 **de verdade** | https://www.python.org/downloads/ (marque "Add to PATH"); o atalho da Microsoft Store não serve | `python -m pip --version` |
 | Supabase CLI | Não precisa instalar: `npx supabase@3.0.0` | `npx supabase@3.0.0 --version` |
@@ -73,7 +73,7 @@ gh pr create                                 # preencha o modelo do PR
 | A4 Solução de IA: LLM com Gemini | `docs/solucao-ia.md` (seção LLM) | Prompts, esquema de saída, guardrails, casos de injeção, fallback |
 | A5 Segurança, ética e conformidade | `docs/seguranca-ameacas.md`, `docs/conformidade/` | STRIDE, textos oficiais das normas, ficha de risco, viés |
 
-`n8n/` e a API ficam **congelados** até o ok do Victor (ADR 0004). `apps/web/` saiu do adiamento em 03/11 só com a página provisória ([ficha](../apps/web/README.md)), e `supabase/` tem as migrações do banco ([ficha](../supabase/README.md)); novas telas e mudanças no banco também pedem o ok dele.
+Os workflows em `n8n/` e a API ficam **congelados** até o ok do Victor (ADR 0004). `infra/` descreve o servidor, que serve só para a apresentação ([ficha](../infra/README.md)). `apps/web/` saiu do adiamento em 03/11 só com a página provisória ([ficha](../apps/web/README.md)), e `supabase/` tem as migrações do banco ([ficha](../supabase/README.md)); novas telas e mudanças no banco também pedem o ok dele.
 
 Arquivos compartilhados e de alto risco de conflito: `CLAUDE.md`, `docs/rastreabilidade-professor.md`, `docs/diario-de-bordo.md`, `docs/02-arquitetura-e-ferramentas.md`, `README.md`. Mexa neles só em PR pequeno e avise no grupo.
 
@@ -103,7 +103,7 @@ Todo PR leva a documentação junto; sem ela, não há merge.
 | `python` abre a Microsoft Store | Instale o Python 3.12 do python.org e desative o atalho em Configurações, Aplicativos, Aliases de execução |
 | `make: command not found` | Instale com `choco install make` ou `scoop install make` e reabra o terminal |
 | Script `.sh` falha com `\r` | O Git converteu para CRLF; o `.gitattributes` do projeto força LF, então rode `git add --renormalize .` e refaça o checkout do arquivo |
-| Docker não sobe | Ative a virtualização na BIOS e o WSL 2; abra o Docker Desktop antes de `make up` |
+| Docker não sobe | Ative a virtualização na BIOS e o WSL 2; abra o Docker Desktop antes de `make db-check` |
 | CI vermelha | Abra o log do job no PR; se for o teste de neutralidade, alguém colocou campo de pagamento ou atributo protegido no ranking |
 
 Dúvida de escopo ou de regra: pergunte no grupo antes de construir. Dúvida de código: peça ao Claude para explicar o trecho e registre a resposta na ficha do componente.

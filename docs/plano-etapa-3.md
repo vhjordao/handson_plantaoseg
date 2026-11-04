@@ -1,6 +1,6 @@
 # Plano: protótipo e Etapa 3 (02/11 a 17/11)
 
-- **Status:** aprovado pelo Victor em 02/11/2026 e ajustado em 03/11 com a Aula 4 e o feedback da Etapa 2. **A construção começou em 03/11, só pela web** ([ADR 0007](adr/0007-web-sai-do-adiamento.md)): há uma página provisória em `apps/web`, e o banco está no projeto, com os dados sintéticos carregados, migrações, RLS e testes ([ADR 0008](adr/0008-banco-no-supabase.md)). API e n8n continuam parados até o ok do Victor, e para eles segue valendo o [ADR 0004](adr/0004-prototipo-adiado.md).
+- **Status:** aprovado pelo Victor em 02/11/2026 e ajustado em 03/11 com a Aula 4 e o feedback da Etapa 2. **A construção começou em 03/11, só pela web** ([ADR 0007](adr/0007-web-sai-do-adiamento.md)): há uma página provisória em `apps/web`, e o banco está no projeto, com os dados sintéticos carregados, migrações, RLS e testes ([ADR 0008](adr/0008-banco-no-supabase.md)). O [servidor](../infra/README.md) está no ar desde 04/11, só para a apresentação, com o n8n ainda sem workflows ([ADR 0009](adr/0009-servidor-so-para-a-apresentacao.md)). API e cascata continuam parados até o ok do Victor, e para elas segue valendo o [ADR 0004](adr/0004-prototipo-adiado.md).
 - **Prazos:** aula e feedback da Etapa 2 em 03/11; **Entrega 3 em 07/11 (até 2,0)**; **apresentação final em 17/11 (até 4,0)**, com a plateia usando o sistema pelo celular.
 
 ## Contexto
@@ -9,7 +9,7 @@ A Etapa 2 foi entregue com uma PoC por linha de comando. Em 02/11 não havia int
 
 **Contas (decisão do Victor):** Supabase, Vercel e Hostinger novas, só deste projeto. Contas de outros projetos não são usadas nem tocadas.
 
-**A Hostinger é necessária?** Sim. O n8n e a API precisam de um servidor ligado o tempo todo, e a Vercel não atende bem nenhum dos dois. Ela só precisa existir a partir do fim do M1; até lá, o desenvolvimento é local.
+**A Hostinger é necessária?** Sim. O n8n e a API precisam de um servidor ligado o tempo todo, e a Vercel não atende bem nenhum dos dois. Em 04/11 o Victor pediu para tirar tudo da máquina local, então o servidor já existe, e a API e o n8n nascem nele. Ele vale só para a apresentação; depois, o Victor para tudo ([ADR 0009](adr/0009-servidor-so-para-a-apresentacao.md)).
 
 **Divisão de trabalho (proposta; o Victor pode ajustar):** Victor e Claude Code constroem; os colegas ficam com entrevistas, teste de usabilidade e pitch.
 
@@ -45,11 +45,11 @@ Uma branch e um PR por item, CI verde, e nenhum merge sem o ok do Victor. As dat
 - **`f3/api-matching`:** FastAPI em `services/matching-api/app/api/`, com Pydantic, validação do JWT do Supabase e rotas internas protegidas por segredo. Uma camada de repositório monta o `Dataset` a partir do Postgres. A CLI e o núcleo continuam funcionando só com biblioteca padrão.
 - **`f3/web-coordenador`:** telas 1 a 3 dos [wireframes](wireframes/README.md) (vaga em texto livre e conferência; top 5 com motivo e alertas; excluídos com a regra), com os estados de erro já listados lá.
 - **`f3/web-medico`:** tela 4 (oferta com motivo, aceitar ou recusar) e a trilha de auditoria.
-- **`f3/cascata-n8n`:** workflow em JSON que só espera e chama `POST /internal/cascade/{id}/advance`. Roda com `npx n8n` até a VPS existir.
+- **`f3/cascata-n8n`:** workflow em JSON que só espera e chama `POST /internal/cascade/{id}/advance`. Roda no n8n do servidor.
 
 ### M2, até 07/11: no ar e validado
 
-- **`f3/deploy`:** web na Vercel (projeto já criado em 03/11); API e n8n na VPS, com HTTPS e versão do n8n fixada.
+- **`f3/deploy`:** web na Vercel (projeto já criado em 03/11). O n8n já está no servidor, com versão fixada (`f3/servidor-hostinger`). A API entra com HTTPS pelo Traefik, no PR dela.
 - Teste de usabilidade com 3 a 5 pessoas no link real, e a Entrega 3 (abaixo).
 
 ### M3, de 08 a 13/11: demo com a plateia
@@ -99,9 +99,9 @@ Quando as contas existirem, o Victor avisa; o clone novo e um `.env` vazio são 
   - Slides e feedback da aula; convite aos colegas (hoje só o Victor tem acesso ao repositório).
 - **Feito em 03/11:** conta Vercel. O GitHub do projeto se ligou direto a ela, então a publicação sai pela integração da Vercel, sem precisar do GitHub Actions.
 - **Até 04/11, antes da primeira entrevista:** confirmar com o professor que as conversas podem seguir como atividade da disciplina ([kit](entrevistas/kit-do-entrevistador.md), seção 3).
-- **Só quando for preciso:** Hostinger KVM 2 no **datacenter do Brasil** (fixo depois da compra), com acesso SSH por chave. O Victor ainda não comprou: o Claude Code avisa antes do `f3/deploy`, e os dois criam juntos o servidor e o n8n.
+- **Feito em 04/11:** Hostinger KVM 1, por 1 mês, com acesso SSH por chave ([ADR 0009](adr/0009-servidor-so-para-a-apresentacao.md)). Falta o Victor rodar o script de proteção e desligar a renovação.
 
-**Custo estimado em novembro:** Supabase e Vercel gratuitos (o Supabase Free aceita 200 conexões em tempo real e pausa após 1 semana parado), VPS de US$ 9 a 15 por mês e Gemini abaixo de US$ 1 por 200 chamadas. São preços lidos em outubro: reconferir na compra.
+**Custo estimado em novembro:** Supabase e Vercel gratuitos (o Supabase Free aceita 200 conexões em tempo real e pausa após 1 semana parado), KVM 1 por R$ 52,99 no mês (carrinho de 04/11; sem desligar a renovação, passa a R$ 87,99 por mês) e Gemini abaixo de US$ 1 por 200 chamadas, preço lido em outubro.
 
 ## O que se reaproveita
 

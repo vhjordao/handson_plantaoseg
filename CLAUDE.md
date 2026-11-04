@@ -68,7 +68,6 @@ make db-check # migrações e testes pgTAP do banco (precisa de Docker; a CI rod
 make db-seed  # gera a carga do banco e confere que as métricas publicadas não mudam
 make entrega  # HTML e PDF do documento da Etapa 2 (Edge ou Chrome)
 make kit-entrevistas # casos da revisão às cegas e PDFs do kit de entrevistas
-make up       # (adiado) supabase start + docker compose do n8n
 ```
 
 No Windows, `make PYTHON="py -3.12" poc` se `python` não estiver no PATH (ver `make doctor`).
@@ -124,7 +123,7 @@ Quando Victor colar um feedback ou disser "novo feedback", use a skill `incorpor
 
 - Etapas 1 e 2 entregues. **Etapa 2, versão 2 do documento (31/10/2026, 7 páginas, tag `etapa-2-rev1`; a versão 1 está na tag `etapa-2`):** PoC mínima executável, dados, análise, solução de IA, fluxo recomendado contra o processo manual (`make flow`), segurança, conformidade e PDF em `docs/entrega-2/`. O merge continua sendo do Victor. LLM do produto = Gemini (**não exercitado com chave**); API e n8n adiados.
 - **Feedback da Etapa 2 (03/11):** kit de entrevistas, teste de premissas, exemplo do dicionário e dados em produção prontos; faltam as entrevistas (até 06/11) e o documento da Etapa 3 (07/11).
-- **Próximo passo (plano aprovado em 02/11):** protótipo e Etapa 3, conforme `docs/plano-etapa-3.md`. Supabase e Vercel novos existem desde 03/11 (Hostinger ainda não), e a primeira página está em `apps/web` (ADR 0007). O banco está no projeto `plantaoseguro`, com os dados sintéticos carregados, e tem migrações, RLS e testes em `supabase/` (ADR 0008). **Cada novo pedaço (telas, API, n8n) espera o ok do Victor.** A Hostinger ainda não foi comprada: avise o Victor antes de precisar dela, para criarem juntos o servidor e o n8n.
+- **Próximo passo (plano aprovado em 02/11):** protótipo e Etapa 3, conforme `docs/plano-etapa-3.md`. Supabase e Vercel novos existem desde 03/11, e a primeira página está em `apps/web` (ADR 0007). O banco está no projeto `plantaoseguro`, com os dados sintéticos carregados, e tem migrações, RLS e testes em `supabase/` (ADR 0008). O servidor na Hostinger está no ar desde 04/11, **só para a apresentação; depois o Victor para tudo** (ADR 0009, ficha em `infra/README.md`): n8n em modo fila com 1 worker, ainda sem workflows, e editor só por túnel SSH. Tudo o que estiver nele precisa estar no Git; IP e nome do servidor ficam fora do repositório. **Cada novo pedaço (telas, API, workflows) espera o ok do Victor.** Mudanças de segurança do sistema no servidor (login e firewall) quem executa é o Victor, com um comando preparado para ele.
 - **Acesso às contas:** só por tokens com escopo no `.env` de um clone fora do OneDrive (`C:\dev`). Cada comando carrega o arquivo só para si; nunca imprima esses valores nem os coloque no chat ou no Git.
 - Ambiente local: Python 3.12, pytest, ruff, make e Node 26 instalados; sem Docker, Supabase CLI e ffmpeg. A CI do GitHub roda tudo, inclusive a PoC.
 - Vídeo da aula de 27/10 não processado (ver rastreabilidade A3-13).
