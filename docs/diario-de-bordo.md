@@ -34,6 +34,16 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 **Uso de IA:** o Claude Code aplicou os achados dos dois revisores e escreveu os testes novos; o agente `acessibilidade` auditou o código final, e o Claude Code aplicou os achados e os cobriu com testes. O Victor aprova ou ajusta no PR; nada foi mesclado.
 
+## 04/11/2026 (quarta): API pública do n8n fechada
+
+**Pedido do Victor:** depois de ver o que implicava, "pode fechar" a rota `/api/v1` do n8n para a internet.
+
+**O que foi feito:** a rota do editor passou a excluir `/api`, e o teste de contrato barra a volta dela. Antes de fechar, lemos o código da interface: lá, a rota só serve ao link da documentação e às telas de promoção entre ambientes, que esta instalação não usa.
+
+**No servidor real:** só o n8n foi recriado. De fora, `/api`, `/api/v1/workflows` e `/api/v1/docs/` devolvem o `404` do Traefik, inclusive com chave. O editor, o login, a API de matching e o webhook interno da cascata seguem respondendo, e a execução que dormia continuou dormindo. O uso do editor já logado não foi testado pelo Claude Code, que não entra na conta do Victor.
+
+**Uso de IA:** o Victor decidiu fechar. O Claude Code explicou as consequências, fez a mudança e conferiu no servidor.
+
 ## 04/11/2026 (quarta): workflow da cascata no n8n
 
 **Pedido do Victor:** passar ao workflow da cascata. Ele perguntou se o Claude Code precisava da chave da API do n8n e, entre as duas opções para o n8n saber que uma oferta saiu, escolheu "API avisa o n8n".

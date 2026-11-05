@@ -115,7 +115,7 @@ Cada resolução e cada risco de segurança vira um controle técnico que pode s
 | Neutralidade econômica | Lista fixa de variáveis do ranking, sem campos de pagamento, com teste automático na integração contínua | Res. CFM 2.460 |
 | Rastro de pagamentos | Prazos combinados e confirmações na tabela payments, com alertas de atraso | Res. CFM 2.462. **Nota de 30/10/2026:** o PDF oficial traz aviso de suspensão judicial integral; tratar como boa prática e evolução futura até confirmar a situação ([conformidade](conformidade/README.md)) |
 | Política de jornada | policy_config e função SQL que bloqueia ofertas fora do limite, com exceção justificada por humano | Segurança do paciente |
-| Segredos e acesso ao n8n | Segredos em variáveis do Docker; editor do n8n com login, limite de tentativas e sem webhook na rota pública (no protótipo, aberto na web em HTTPS, [ADR 0012](adr/0012-editor-do-n8n-na-web.md), que revê o túnel SSH do [ADR 0009](adr/0009-servidor-so-para-a-apresentacao.md); em produção, VPN ou lista de IPs); segredo nos webhooks; limite de requisições no Traefik | Cybersecurity |
+| Segredos e acesso ao n8n | Segredos em variáveis do Docker; editor do n8n com login, limite de tentativas e sem webhook nem API pública na rota (no protótipo, aberto na web em HTTPS, [ADR 0012](adr/0012-editor-do-n8n-na-web.md), que revê o túnel SSH do [ADR 0009](adr/0009-servidor-so-para-a-apresentacao.md); em produção, VPN ou lista de IPs); segredo nos webhooks; limite de requisições no Traefik | Cybersecurity |
 | Backups | [Backup semanal gratuito da Hostinger](https://www.hostinger.com/vps-hosting), cópia do Postgres do n8n fora da VPS e [backups diários de 7 dias no Supabase Pro](https://supabase.com/pricing) | Continuidade |
 
 ## Infraestrutura e custo

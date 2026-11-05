@@ -1,6 +1,6 @@
 # ADR 0013: A API avisa o n8n uma vez por vaga, e o n8n pergunta à API quanto esperar
 
-- **Status:** escolhida pelo Victor em 04/11/2026 ("API avisa o n8n"). Já aplicada no servidor, a partir da branch, e vale no repositório quando ele fizer o merge.
+- **Status:** escolhida pelo Victor em 04/11/2026 ("API avisa o n8n"). Na `main` e no servidor desde o PR #18.
 - **Origem:** item `f3/cascata-n8n` do [plano da Etapa 3](../plano-etapa-3.md). A [ficha da API](../../services/matching-api/app/api/README.md) deixou em aberto como o n8n fica sabendo que uma oferta saiu.
 
 ## Contexto
