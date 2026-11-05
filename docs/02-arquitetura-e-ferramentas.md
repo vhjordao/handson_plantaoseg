@@ -150,7 +150,7 @@ Cinco decisões precisam do grupo até a Etapa 2, e quatro riscos pedem plano B 
 
 **Decisões para o grupo**
 
-- **Quanto vai no n8n:** proposta de só orquestração; revisar depois do primeiro fluxo de ponta a ponta.
+- **Quanto vai no n8n:** só orquestração. No primeiro fluxo, ele só espera o prazo e pede para a API avançar, e um teste barra nó de código, de LLM ou de banco ([ADR 0013](adr/0013-aviso-da-api-inicia-a-cascata.md)).
 - **Login da plateia:** sessão anônima com persona sorteada é mais rápido, mas exige limite de requisições contra abuso.
 - **Plano do Supabase:** definir o tamanho da plateia; acima de umas 150 pessoas conectadas ao telão, usar o Pro.
 - **Região do Supabase:** confirmar São Paulo na criação do projeto, porque a região não se troca depois sem migrar.

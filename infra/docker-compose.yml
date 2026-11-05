@@ -142,6 +142,8 @@ services:
       # Ignora a RLS: existe só aqui, no .env do servidor, e nenhum outro serviço a recebe.
       SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?defina SUPABASE_SERVICE_ROLE_KEY no .env}
       N8N_WEBHOOK_SECRET: ${N8N_WEBHOOK_SECRET:?defina N8N_WEBHOOK_SECRET no .env}
+      # Onde a API avisa que a cascata de uma vaga começou (ADR 0013). É por dentro do servidor.
+      N8N_CASCADE_URL: http://n8n:5678/webhook/cascata-ofertas
       API_CORS_ORIGINS: ${API_CORS_ORIGINS:-}
     mem_limit: 512m
     read_only: true

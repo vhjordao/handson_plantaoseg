@@ -25,6 +25,7 @@ class Settings:
     webhook_secret: str
     cors_origins: tuple[str, ...]
     expose_docs: bool
+    cascade_url: str = ""
 
     @classmethod
     def from_env(cls, env: Mapping[str, str] | None = None) -> "Settings":
@@ -39,10 +40,14 @@ class Settings:
         )
         if "*" in origins:
             raise ConfigError("API_CORS_ORIGINS não aceita *: liste os endereços da web")
+        cascade_url = source.get("N8N_CASCADE_URL", "").strip()
+        if cascade_url and not cascade_url.startswith(("http://", "https://")):
+            raise ConfigError("N8N_CASCADE_URL precisa ser um endereço http")
         return cls(
             supabase_url=_required(source, "SUPABASE_URL").rstrip("/"),
             service_key=_required(source, "SUPABASE_SERVICE_ROLE_KEY"),
             webhook_secret=secret,
             cors_origins=origins,
             expose_docs=source.get("API_DOCS", "") == "1",
+            cascade_url=cascade_url,
         )

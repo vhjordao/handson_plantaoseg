@@ -299,7 +299,14 @@ DEMO_SHIFT = _demo_shift()
 class Harness:
     """A API inteira ligada ao banco falso, com relógio fixo no dia da vaga de exemplo."""
 
-    def __init__(self, *, llm: Any = None, cors: tuple[str, ...] = (), docs: bool = False) -> None:
+    def __init__(
+        self,
+        *,
+        llm: Any = None,
+        cors: tuple[str, ...] = (),
+        docs: bool = False,
+        notifier: Any = None,
+    ) -> None:
         self.rest = FakeRest(seed_tables())
         # Prazo curto: com o relógio andando pouco, o histórico simulado não muda a agenda no meio
         # do teste, e o que muda é só o que o próprio teste fez.
@@ -320,6 +327,7 @@ class Harness:
             webhook_secret=WEBHOOK_SECRET,
             cors_origins=cors,
             expose_docs=docs,
+            notifier=notifier,
         )
         self.client = TestClient(self.app)
         self.coordinator = bearer(COORDINATOR_A)

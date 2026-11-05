@@ -1,0 +1,280 @@
+{
+  "id": "cascataOfertas01",
+  "name": "Cascata de ofertas",
+  "active": false,
+  "nodes": [
+    {
+      "id": "c0000000-0000-4000-8000-000000000001",
+      "name": "Sobre este workflow",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [-20, -40],
+      "parameters": {
+        "content": "## Cascata de ofertas (simulação)\nO n8n só **espera o prazo** e **pede para a API avançar**. Quem decide quem é chamado, as regras e o fim é a API.\n\nNenhuma oferta nasce aqui: a primeira sai no clique do coordenador, e a API avisa este workflow uma vez por vaga.\n\nFonte: `n8n/workflows/cascata-de-ofertas.json`, no Git. Mudança aqui no editor some na próxima publicação.",
+        "height": 220,
+        "width": 620,
+        "color": 7
+      }
+    },
+    {
+      "id": "c0000000-0000-4000-8000-000000000002",
+      "name": "Aviso da API",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 300],
+      "webhookId": "c0000000-0000-4000-8000-0000000000a1",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "cascata-ofertas",
+        "authentication": "headerAuth",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "segredoInterno01",
+          "name": "Segredo interno (API e n8n)"
+        }
+      }
+    },
+    {
+      "id": "c0000000-0000-4000-8000-000000000003",
+      "name": "Vaga",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [220, 300],
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c0000000-0000-4000-8000-0000000000b1",
+              "name": "shift_id",
+              "value": "={{ $json.body.shift_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "c0000000-0000-4000-8000-000000000004",
+      "name": "Pedir para avançar",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [440, 300],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "parameters": {
+        "method": "POST",
+        "url": "=http://matching-api:8000/internal/cascade/{{ $json.shift_id }}/advance",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "segredoInterno01",
+          "name": "Segredo interno (API e n8n)"
+        }
+      }
+    },
+    {
+      "id": "c0000000-0000-4000-8000-000000000005",
+      "name": "O que a API decidiu",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [660, 300],
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c0000000-0000-4000-8000-0000000000c1",
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "aguardar",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  },
+                  {
+                    "id": "c0000000-0000-4000-8000-0000000000c2",
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "oferta_enviada",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "or"
+              },
+              "renameOutput": true,
+              "outputKey": "Há oferta no prazo"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c0000000-0000-4000-8000-0000000000c3",
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "sem_candidatos",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  },
+                  {
+                    "id": "c0000000-0000-4000-8000-0000000000c4",
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "nada_a_fazer",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "or"
+              },
+              "renameOutput": true,
+              "outputKey": "A cascata acabou"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "Ação desconhecida"
+        }
+      }
+    },
+    {
+      "id": "c0000000-0000-4000-8000-000000000006",
+      "name": "Esperar o prazo",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [900, 140],
+      "webhookId": "c0000000-0000-4000-8000-0000000000a2",
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": "={{ Math.max(1, Math.ceil(DateTime.fromISO($json.offer.expires_at, { zone: 'America/Sao_Paulo' }).diffNow('seconds').seconds) + 2) }}",
+        "unit": "seconds"
+      }
+    },
+    {
+      "id": "c0000000-0000-4000-8000-000000000007",
+      "name": "Fim da cascata",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [900, 320],
+      "parameters": {}
+    },
+    {
+      "id": "c0000000-0000-4000-8000-000000000008",
+      "name": "Ação desconhecida",
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [900, 500],
+      "parameters": {
+        "errorMessage": "=A API devolveu uma ação que este workflow não conhece: {{ $json.action }}"
+      }
+    }
+  ],
+  "connections": {
+    "Aviso da API": {
+      "main": [
+        [
+          {
+            "node": "Vaga",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vaga": {
+      "main": [
+        [
+          {
+            "node": "Pedir para avançar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pedir para avançar": {
+      "main": [
+        [
+          {
+            "node": "O que a API decidiu",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "O que a API decidiu": {
+      "main": [
+        [
+          {
+            "node": "Esperar o prazo",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fim da cascata",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ação desconhecida",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Esperar o prazo": {
+      "main": [
+        [
+          {
+            "node": "Pedir para avançar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Sao_Paulo",
+    "saveDataSuccessExecution": "all",
+    "saveDataErrorExecution": "all",
+    "saveManualExecutions": true
+  },
+  "pinData": {},
+  "tags": []
+}

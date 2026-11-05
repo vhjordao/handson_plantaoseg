@@ -12,6 +12,7 @@ from fastapi.responses import JSONResponse
 from app.api.auth import JwksKeys, TokenVerifier
 from app.api.errors import ApiError
 from app.api.model_store import check_against_registry, load_active_model
+from app.api.notifier import CascadeNotifier
 from app.api.repository import Repository
 from app.api.rest import RestConflict, RestError, SupabaseRest
 from app.api.routes import router
@@ -33,6 +34,7 @@ def create_app(
     cors_origins: tuple[str, ...] = (),
     expose_docs: bool = False,
     on_startup: Callable[[], None] | None = None,
+    notifier: CascadeNotifier | None = None,
 ) -> FastAPI:
     """A aplicação com as dependências recebidas de fora. É assim que os testes a montam."""
 
@@ -55,6 +57,7 @@ def create_app(
     app.state.world = world
     app.state.verifier = verifier
     app.state.webhook_secret = webhook_secret
+    app.state.notifier = notifier
     if cors_origins:
         app.add_middleware(
             CORSMiddleware,
@@ -105,6 +108,14 @@ def _llm_from_env() -> LLMClient | None:
     return None if isinstance(client, NullClient) else client
 
 
+def notifier_from(settings: Settings) -> CascadeNotifier | None:
+    """Sem `N8N_CASCADE_URL`, como no desenvolvimento local, a API só não avisa ninguém."""
+    if not settings.cascade_url:
+        logger.warning("sem N8N_CASCADE_URL: a cascata não vai avançar sozinha")
+        return None
+    return CascadeNotifier(settings.cascade_url, settings.webhook_secret)
+
+
 def create_app_from_env() -> FastAPI:
     """A aplicação real: a API só sobe com os dados carregados e o modelo certo."""
     logging.basicConfig(level=logging.INFO)
@@ -131,4 +142,5 @@ def create_app_from_env() -> FastAPI:
         cors_origins=settings.cors_origins,
         expose_docs=settings.expose_docs,
         on_startup=startup,
+        notifier=notifier_from(settings),
     )
