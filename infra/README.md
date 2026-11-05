@@ -11,7 +11,7 @@
 
 | Serviço | O que faz | Quem alcança | Memória parada |
 | --- | --- | --- | --- |
-| Traefik | Recebe o HTTPS e encaminha. Duas rotas públicas: a da API, com limite de requisições e de tamanho do corpo e sem `/internal`, e a do editor do n8n, sem webhook, formulário nem MCP e com limite de tentativas no login | A internet, nas portas 80 e 443 | 20 MB |
+| Traefik | Recebe o HTTPS e encaminha. Duas rotas públicas: a da API, com limite de requisições e de tamanho do corpo e sem `/internal`, e a do editor do n8n, sem webhook, formulário, MCP nem a API pública dele, e com limite de tentativas no login | A internet, nas portas 80 e 443 | 20 MB |
 | API de matching | Filtro, ranking, explicação e cascata ([ficha](../services/matching-api/app/api/README.md)) | A internet, só pelo Traefik; as rotas internas, só de dentro | 56 MB |
 | n8n | Editor e entrada dos webhooks | O editor, pela internet, só em HTTPS e com login; os webhooks, só o próprio servidor. O túnel SSH segue como reserva | 329 MB |
 | n8n-worker | Executa os workflows que chegam pela fila | Só o próprio servidor | 296 MB |
@@ -123,6 +123,13 @@ Com o editor na web, no mesmo dia:
 - **Acesso do Victor:** ele relatou que conseguiu acessar o editor pela web.
 - **Túnel de reserva:** `http://localhost:5678/healthz` respondeu `200`, e a configuração mostra o cookie seguro. O login pelo túnel não foi testado.
 
+Depois de fechar a API pública do n8n, no mesmo dia:
+
+- **Aplicação:** só o n8n foi recriado, em segundos, e o Traefik não registrou erro.
+- **Fechado:** `/api`, `/api/v1/workflows`, `/api/v1/docs/` e `/api/v1/credentials` devolvem o `404` do Traefik, inclusive com uma chave no cabeçalho. Antes, a documentação abria sem login.
+- **O que continua:** a página, `/rest/settings`, o login (`401` com credencial inventada) e a API de matching respondem. Por dentro, `/api/v1/workflows` segue pedindo chave (`401`), e o webhook da cascata segue registrado. A execução que dormia continuou dormindo.
+- **Sem testar:** o editor já logado, porque o Claude Code não entra na conta do Victor. O código da interface só cita a rota no link da documentação e nas telas de promoção entre ambientes.
+
 ## 8. Dados e segurança
 
 - **Dados:** os dados sintéticos do motor ficam só na memória da API, sem nome, CRM, telefone nem valor do plantão. O único dado real é o e-mail do Victor, na conta de administrador do n8n e no certificado HTTPS.
@@ -136,7 +143,7 @@ Com o editor na web, no mesmo dia:
 - **Limite por IP.** A plateia no mesmo Wi-Fi pode sair por um único IP e dividir as 30 chamadas por segundo. O valor se ajusta por `API_RATE_AVERAGE` e `API_RATE_BURST`, no `.env`, seguidos de `docker compose up -d --no-deps matching-api`.
 - **Chave do Supabase.** O `.env` usa a `service_role`, que o Supabase marca como `legacy`, porque a `sb_secret` ficou em cerca de 50 chamadas por segundo ([ADR 0010](../docs/adr/0010-api-de-matching.md)).
 - **Editor do n8n na internet.** Antes do login, nada o protege além da versão fixa (2.46.5) e do limite de tentativas. Quem entrar no editor controla os workflows e as credenciais do n8n. O MFA e a senha longa são do Victor. O limite do próprio n8n é por e-mail: quem souber o e-mail do administrador pode mantê-lo travado, e uma senha extra no Traefik resolveria ([ADR 0012](../docs/adr/0012-editor-do-n8n-na-web.md)).
-- **A API pública do n8n (`/api/v1`) também está na rota do editor.** Ela pede chave (`401` sem ela), e nenhuma chave foi criada. Se não formos usá-la, vale fechá-la com `!PathPrefix` no Traefik.
+- **A API pública do n8n (`/api/v1`) só responde por dentro.** O link da documentação dela, nas configurações do n8n, não abre pela web, e uma ferramenta externa com chave precisaria do túnel. Nenhuma chave foi criada.
 - **Sem cabeçalhos de segurança do Traefik.** O n8n manda só um CSP em modo de relatório, sem HSTS nem `X-Frame-Options`. Dá para somar um middleware de cabeçalhos.
 - O servidor ainda não foi reiniciado com esta configuração. O teste fica para antes de 13/11, junto com o de carga.
 - O Traefik lê o socket do Docker, como no modelo. Uma falha nele alcançaria o servidor inteiro. Aceito para um servidor de poucos dias.
