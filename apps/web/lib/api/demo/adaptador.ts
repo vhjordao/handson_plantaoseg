@@ -12,6 +12,7 @@ import { carregarGrade, chaveDaGrade, obterMundo } from "../../demo/mundo";
 import type { Mundo } from "../../demo/schema";
 import {
   CandidatoInvalidoError,
+  EntradaInvalidaError,
   EstadoInvalidoError,
   ForaDaGradeError,
   JustificativaObrigatoriaError,
@@ -23,6 +24,7 @@ import { NaoImplementadoError, type PlantaoApi } from "../plantao-api";
 import {
   AprovarInputSchema,
   ConfirmarVagaInputSchema,
+  DesfazerPuloInputSchema,
   FeedbackExplicacaoInputSchema,
   LIMITE_TEXTO_VAGA,
   PularInputSchema,
@@ -32,7 +34,9 @@ import {
   type Contestacao,
   type DataHora,
   type Decisao,
+  type EstadoDaDecisao,
   type EventoPlantao,
+  type ExemploDeVaga,
   type FichaModelo,
   type Indicadores,
   type Leitura,
@@ -41,6 +45,7 @@ import {
   type Politica,
   type Recomendacao,
   type RegistroAuditoria,
+  type Unidade,
   type VerificacaoCadeia,
   type Vaga,
 } from "../types";
@@ -89,6 +94,18 @@ const AGENTE_DO_SISTEMA = "matching-api";
 const AprovarEntradaSchema = AprovarInputSchema.extend({ medicoIds: z.array(z.string()) });
 
 const copia = <T>(valor: T): T => structuredClone(valor);
+
+/** Valida a entrada e, se ela não couber no contrato, lança um erro que a tela sabe mostrar. */
+function validar<S extends z.ZodType>(esquema: S, entrada: unknown): z.output<S> {
+  const lido = esquema.safeParse(entrada);
+  if (lido.success) return lido.data;
+  const longoDemais = lido.error.issues.find((problema) => problema.code === "too_big");
+  throw new EntradaInvalidaError(
+    longoDemais
+      ? `O texto passou do limite de ${Number(longoDemais.maximum).toLocaleString("pt-BR")} caracteres. Encurte e tente de novo.`
+      : "Confira os campos e tente de novo.",
+  );
+}
 
 /** As mesmas pessoas, na mesma ordem (a ordem é a da cascata de ofertas). */
 const mesmaLista = (a: readonly string[], b: readonly string[]): boolean =>
@@ -172,6 +189,7 @@ class ApiDemo implements PlantaoApiDemo {
   async listarVagas(): Promise<Vaga[]> {
     await this.esperar();
     return this.dados.vagas
+      .filter((vaga) => !this.dados.rascunhosConcluidos.includes(vaga.id))
       .map((vaga) => this.visivel(vaga))
       .sort((a, b) => (a.criadaEm === b.criadaEm ? a.id.localeCompare(b.id) : a.criadaEm < b.criadaEm ? 1 : -1));
   }
@@ -181,14 +199,24 @@ class ApiDemo implements PlantaoApiDemo {
     return this.visivel(this.vagaOuErro(vagaId));
   }
 
+  async listarUnidades(): Promise<Unidade[]> {
+    await this.esperar();
+    return copia(this.mundo.unidades);
+  }
+
+  async listarExemplosDeVaga(): Promise<ExemploDeVaga[]> {
+    await this.esperar();
+    return this.mundo.exemplosTexto.map(({ id, rotulo, texto }) => ({ id, rotulo, texto }));
+  }
+
   async lerVaga(texto: string): Promise<Leitura> {
     await this.esperar();
-    return lerTexto(z.string().max(LIMITE_TEXTO_VAGA).parse(texto), this.relogio.hoje(), this.mundo.unidades);
+    return lerTexto(validar(z.string().max(LIMITE_TEXTO_VAGA), texto), this.relogio.hoje(), this.mundo.unidades);
   }
 
   confirmarVaga(entrada: ConfirmarVagaInput): Promise<Vaga> {
     return this.operacao(async (geracao) => {
-      const input = ConfirmarVagaInputSchema.parse(entrada);
+      const input = validar(ConfirmarVagaInputSchema, entrada);
       const inicio = normalizarDataHora(input.inicio);
       const fim = normalizarDataHora(input.fim);
       const chave = chaveDaGrade(input.unidadeId, input.especialidade, inicio);
@@ -198,7 +226,10 @@ class ApiDemo implements PlantaoApiDemo {
 
       // Publicar a mesma janela de novo devolve a vaga que já existe (não duplica a trilha).
       const existente = this.dados.vagas.find((vaga) => this.chaveDaVaga(vaga) === chave);
-      if (existente) return this.visivel(existente);
+      if (existente) {
+        this.aplicar(geracao, () => this.concluirRascunho(input.rascunhoId));
+        return this.visivel(existente);
+      }
 
       const agora = this.relogio.agora();
       const id = `vaga-${(await sha256Hex(chave)).slice(0, 12)}`;
@@ -283,6 +314,7 @@ class ApiDemo implements PlantaoApiDemo {
         this.dados.vagas.push(vaga);
         this.dados.chavesDaGrade[id] = chave;
         this.dados.auditoria.push(...novos);
+        this.concluirRascunho(input.rascunhoId);
       });
       this.barramento.emitir({ tipo: "vaga_publicada", vagaId: id, em: agora });
       this.barramento.emitir({ tipo: "recomendacao_gerada", vagaId: id, em: agora });
@@ -297,7 +329,7 @@ class ApiDemo implements PlantaoApiDemo {
 
   aprovar(entrada: z.input<typeof AprovarInputSchema>): Promise<Decisao> {
     return this.operacao(async (geracao) => {
-      const input = AprovarEntradaSchema.parse(entrada);
+      const input = validar(AprovarEntradaSchema, entrada);
       const vaga = this.vagaOuErro(input.vagaId);
       const ids = [...new Set(input.medicoIds)];
       if (vaga.status !== "aguardando_decisao") {
@@ -310,6 +342,9 @@ class ApiDemo implements PlantaoApiDemo {
       const recomendados = new Map(recomendacao.candidatos.map((c) => [c.medico.id, c]));
       if (ids.length === 0 || !ids.every((id) => recomendados.has(id))) {
         throw new CandidatoInvalidoError();
+      }
+      if (this.puladosDe(vaga.id).some((id) => ids.includes(id))) {
+        throw new CandidatoInvalidoError("Um dos nomes foi pulado. Desfaça o pulo antes de aprovar.");
       }
       const aprovados = ids.map((id) => recomendados.get(id) as Candidato);
 
@@ -368,9 +403,15 @@ class ApiDemo implements PlantaoApiDemo {
     });
   }
 
+  async obterEstadoDaDecisao(vagaId: string): Promise<EstadoDaDecisao> {
+    await this.esperar();
+    const vaga = this.vagaOuErro(vagaId);
+    return copia({ decisao: this.dados.decisoes[vaga.id] ?? null, pulados: this.puladosDe(vaga.id) });
+  }
+
   pular(entrada: z.input<typeof PularInputSchema>): Promise<void> {
     return this.operacao(async (geracao) => {
-      const input = PularInputSchema.parse(entrada);
+      const input = validar(PularInputSchema, entrada);
       const vaga = this.vagaOuErro(input.vagaId);
       if (vaga.status !== "aguardando_decisao") {
         throw new EstadoInvalidoError("Esta vaga não está aguardando decisão.");
@@ -405,10 +446,46 @@ class ApiDemo implements PlantaoApiDemo {
     });
   }
 
+  /** A trilha só cresce: o pulo continua lá, e esta linha diz que a pessoa voltou atrás. */
+  desfazerPulo(entrada: z.input<typeof DesfazerPuloInputSchema>): Promise<void> {
+    return this.operacao(async (geracao) => {
+      const input = validar(DesfazerPuloInputSchema, entrada);
+      const vaga = this.vagaOuErro(input.vagaId);
+      if (vaga.status !== "aguardando_decisao") {
+        throw new EstadoInvalidoError("Esta vaga não está aguardando decisão.");
+      }
+      // Desfazer o que já não está pulado (duplo clique) não grava nada.
+      if (!this.puladosDe(vaga.id).includes(input.medicoId)) return;
+
+      const recomendacao = await this.recomendacaoDe(vaga);
+      const candidato = recomendacao.candidatos.find((c) => c.medico.id === input.medicoId);
+      const agora = this.relogio.agora();
+      const coordenador = this.coordenadorDe(vaga.unidade.id);
+      const [registro] = await this.encadear([
+        {
+          ocorridoEm: agora,
+          papelAtor: "coordinator",
+          atorPseudoId: coordenador.pseudoId,
+          acao: "recommendation_restored",
+          entidadeTipo: "recommendation",
+          entidadeId: `${vaga.id}:${input.medicoId}`,
+          modeloVersao: recomendacao.modeloVersao,
+          detalhes: { rank: candidato?.posicao ?? null },
+        },
+      ]);
+      this.aplicar(geracao, () => {
+        this.dados.pulos = this.dados.pulos.filter(
+          (p) => p.vagaId !== vaga.id || p.medicoId !== input.medicoId,
+        );
+        this.dados.auditoria.push(registro as RegistroAuditoria);
+      });
+    });
+  }
+
   /** Só registra: fica no estado da sessão, fora da trilha de hash, e não treina nada. */
   enviarFeedbackExplicacao(entrada: z.input<typeof FeedbackExplicacaoInputSchema>): Promise<void> {
     return this.operacao(async (geracao) => {
-      const input = FeedbackExplicacaoInputSchema.parse(entrada);
+      const input = validar(FeedbackExplicacaoInputSchema, entrada);
       const vaga = this.vagaOuErro(input.vagaId);
       const recomendacao = await this.recomendacaoDe(vaga);
       if (!recomendacao.candidatos.some((c) => c.medico.id === input.medicoId)) {
@@ -519,14 +596,23 @@ class ApiDemo implements PlantaoApiDemo {
    * As decisões das vagas de exemplo não contam, porque não foram dela. Sem decisão, `null`.
    */
   private pctSugestoesAceitas(): number | null {
-    const aprovadas = new Set(
-      Object.values(this.dados.decisoes)
-        .filter((decisao) => !(decisao.vagaId in this.mundo.decisoes))
-        .flatMap((decisao) => decisao.medicoIds.map((id) => `${decisao.vagaId}:${id}`)),
-    );
-    const puladas = this.dados.pulos.filter((p) => !aprovadas.has(`${p.vagaId}:${p.medicoId}`));
-    const total = aprovadas.size + puladas.length;
-    return total === 0 ? null : (aprovadas.size / total) * 100;
+    const aprovadas = Object.values(this.dados.decisoes)
+      .filter((decisao) => !(decisao.vagaId in this.mundo.decisoes))
+      .reduce((soma, decisao) => soma + decisao.medicoIds.length, 0);
+    const total = aprovadas + this.dados.pulos.length;
+    return total === 0 ? null : (aprovadas / total) * 100;
+  }
+
+  private puladosDe(vagaId: string): string[] {
+    return this.dados.pulos.filter((p) => p.vagaId === vagaId).map((p) => p.medicoId);
+  }
+
+  /** Quem publica a partir de um rascunho o conclui. Fora disso, não faz nada. */
+  private concluirRascunho(rascunhoId: string | undefined): void {
+    const rascunho = this.dados.vagas.find((v) => v.id === rascunhoId && v.status === "rascunho");
+    if (rascunho && !this.dados.rascunhosConcluidos.includes(rascunho.id)) {
+      this.dados.rascunhosConcluidos.push(rascunho.id);
+    }
   }
 
   private async esperar(): Promise<void> {

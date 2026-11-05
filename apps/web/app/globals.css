@@ -13,6 +13,8 @@
   --ia: #2c4fd6;
   --ia-tom: #eaeffd;
   --ia-forte: #2340b0;
+  --fator-favor: #2c4fd6;
+  --fator-contra: #a8467a;
   --humano: #0b6b4d;
   --humano-tom: #e4f3ec;
   --atencao: #8a5300;
@@ -48,6 +50,8 @@
     --ia: #8ea6ff;
     --ia-tom: #1a2547;
     --ia-forte: #b6c4ff;
+    --fator-favor: #6f8bf0;
+    --fator-contra: #d0699f;
     --humano: #5fd3a3;
     --humano-tom: #12372b;
     --atencao: #f2b33d;
@@ -74,6 +78,8 @@
   --ia: #8ea6ff;
   --ia-tom: #1a2547;
   --ia-forte: #b6c4ff;
+  --fator-favor: #6f8bf0;
+  --fator-contra: #d0699f;
   --humano: #5fd3a3;
   --humano-tom: #12372b;
   --atencao: #f2b33d;
@@ -105,6 +111,8 @@
   --color-ia: var(--ia);
   --color-ia-tom: var(--ia-tom);
   --color-ia-forte: var(--ia-forte);
+  --color-fator-favor: var(--fator-favor);
+  --color-fator-contra: var(--fator-contra);
   --color-humano: var(--humano);
   --color-humano-tom: var(--humano-tom);
   --color-atencao: var(--atencao);

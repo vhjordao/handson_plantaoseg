@@ -76,8 +76,12 @@ export const ACOES_AUDITORIA_BACKEND = [
   "offer_expired",
   "shift_uncovered",
 ] as const;
-/** Ações do desenho (contestação), ainda sem backend. */
-export const ACOES_AUDITORIA_DESENHO = ["contestation_opened", "contestation_answered"] as const;
+/** Ações do desenho (contestação e desfazer um pulo), ainda sem backend. */
+export const ACOES_AUDITORIA_DESENHO = [
+  "contestation_opened",
+  "contestation_answered",
+  "recommendation_restored",
+] as const;
 export const AcaoAuditoriaSchema = z.enum([
   ...ACOES_AUDITORIA_BACKEND,
   ...ACOES_AUDITORIA_DESENHO,
@@ -228,8 +232,19 @@ export const ConfirmarVagaInputSchema = z.object({
   urgencia: UrgenciaSchema.nullable(),
   /** Chaves que a pessoa corrigiu em relação ao que a IA leu. */
   editados: z.array(ChaveCampoSchema),
+  /** O rascunho que esta publicação conclui: ele sai da lista de vagas. */
+  rascunhoId: z.string().optional(),
 });
 export type ConfirmarVagaInput = z.infer<typeof ConfirmarVagaInputSchema>;
+
+/** Um pedido de exemplo para clicar na tela "Nova vaga". */
+export const ExemploDeVagaSchema = z.object({
+  id: z.string(),
+  /** Nome do estilo ("Formal", "Ambíguo"...). */
+  rotulo: z.string(),
+  texto: z.string(),
+});
+export type ExemploDeVaga = z.infer<typeof ExemploDeVagaSchema>;
 
 // ---------------------------------------------------------------------------
 // Recomendação (a ordem sugerida)
@@ -328,6 +343,17 @@ export const PularInputSchema = z.object({
   motivo: z.string().max(LIMITE_TEXTO_LIVRE).optional(),
 });
 export type PularInput = z.infer<typeof PularInputSchema>;
+
+export const DesfazerPuloInputSchema = PularInputSchema.pick({ vagaId: true, medicoId: true });
+export type DesfazerPuloInput = z.infer<typeof DesfazerPuloInputSchema>;
+
+/** O que já foi decidido na vaga, para a tela voltar igual depois de recarregar. */
+export const EstadoDaDecisaoSchema = z.object({
+  decisao: DecisaoSchema.nullable(),
+  /** `id` de quem a pessoa pulou: esses nomes voltam marcados e não podem ser aprovados. */
+  pulados: z.array(z.string()),
+});
+export type EstadoDaDecisao = z.infer<typeof EstadoDaDecisaoSchema>;
 
 export const FeedbackExplicacaoInputSchema = z.object({
   vagaId: z.string(),

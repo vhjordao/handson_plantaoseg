@@ -29,6 +29,17 @@ export function Textarea({ className, ...props }: React.ComponentProps<"textarea
   );
 }
 
+/** A lista nativa: no celular abre o seletor do sistema, e o teclado já sabe usá-la. */
+export function Select({ className, ...props }: React.ComponentProps<"select">) {
+  return (
+    <select
+      data-slot="select"
+      className={cn(controle, "min-h-[var(--alvo-min)]", className)}
+      {...props}
+    />
+  );
+}
+
 export interface FieldProps {
   id: string;
   label: React.ReactNode;
@@ -50,7 +61,7 @@ export function Field({ id, label, hint, error, className, children }: FieldProp
   const errorId = error ? `${id}-erro` : undefined;
   const describedBy = [hintId, errorId].filter(Boolean).join(" ") || undefined;
   return (
-    <div className={cn("grid gap-1.5", className)}>
+    <div className={cn("grid grid-cols-1 gap-1.5", className)}>
       <Label htmlFor={id}>{label}</Label>
       {hint ? (
         <p id={hintId} className="text-sm text-tinta-suave">

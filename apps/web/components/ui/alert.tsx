@@ -42,7 +42,8 @@ export function Alert({ className, tone = "info", title, children, ...props }: A
       {...props}
     >
       <Icone aria-hidden="true" />
-      <div className="grid gap-1">
+      {/* Com a letra muito ampliada, uma palavra longa quebra em vez de passar da tela. */}
+      <div className="grid min-w-0 grid-cols-1 gap-1 [overflow-wrap:anywhere]">
         {title ? <p className="font-semibold">{title}</p> : null}
         {children ? <div className="text-tinta">{children}</div> : null}
       </div>
