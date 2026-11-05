@@ -1,6 +1,6 @@
 # ADR 0013: A API avisa o n8n uma vez por vaga, e o n8n pergunta à API quanto esperar
 
-- **Status:** escolhida pelo Victor em 04/11/2026 ("API avisa o n8n"). Vale quando ele fizer o merge.
+- **Status:** escolhida pelo Victor em 04/11/2026 ("API avisa o n8n"). Já aplicada no servidor, a partir da branch, e vale no repositório quando ele fizer o merge.
 - **Origem:** item `f3/cascata-n8n` do [plano da Etapa 3](../plano-etapa-3.md). A [ficha da API](../../services/matching-api/app/api/README.md) deixou em aberto como o n8n fica sabendo que uma oferta saiu.
 
 ## Contexto
@@ -21,7 +21,7 @@ O n8n precisa saber quando começar, e só a API sabe disso. A rota `/webhook` d
 ## Consequências
 
 - **Se o n8n estiver fora na hora do clique, aquela vaga não anda sozinha.** O médico ainda pode responder, e a recusa chama o próximo, mas o prazo vencido não avança. A [ficha](../../n8n/README.md) tem o comando que repete o aviso.
-- Cada vaga em cascata é uma execução dormindo no banco do n8n, que não ocupa o worker. Para a apresentação, são poucas.
+- Cada vaga em cascata é uma execução dormindo no banco do n8n, que não ocupa o worker e sobrevive a um reinício, como vimos no servidor em 04/11/2026. Para a apresentação, são poucas.
 - Repetir o aviso é seguro. Duas execuções da mesma vaga só fariam duas perguntas à API, e a trava por vaga dela garante uma oferta só por prazo vencido.
 - Quem entrar no editor pode usar o segredo interno. Mesmo assim, ele não aprova: sem o clique do coordenador, `advance` responde `409` e nenhuma oferta nasce, e um teste cobre isso.
 - O prazo vem de `offer_ttl_minutes`, que é de 60 minutos na rede simulada. Para a plateia ver a cascata andar, é preciso decidir um prazo curto no ensaio.

@@ -1,7 +1,7 @@
 # Ficha do componente: workflow da cascata no n8n
 
 - **Responsável:** Victor Jordão · **Frente:** motor e infraestrutura · **Branch:** `f3/cascata-n8n` · **Atualizado em:** 04/11/2026
-- **Estado:** publicado no n8n do servidor em 04/11/2026. **Tudo é simulação.** As decisões estão no [ADR 0013](../docs/adr/0013-aviso-da-api-inicia-a-cascata.md).
+- **Estado:** no ar no servidor desde 04/11/2026, com a API avisando e o fluxo conferido de ponta a ponta. **Tudo é simulação.** As decisões estão no [ADR 0013](../docs/adr/0013-aviso-da-api-inicia-a-cascata.md).
 
 ## 1. O que é e qual dor resolve
 
@@ -80,7 +80,12 @@ cd /docker/n8n && S=$(grep '^N8N_WEBHOOK_SECRET=' .env | cut -d= -f2-) && printf
 
 - **Entrada:** de fora, `/webhook/cascata-ofertas` devolve o `404` do Traefik. Por dentro, sem segredo ou com o segredo errado, `403`.
 - **Rede e credencial:** com o segredo certo e uma vaga inexistente, o n8n chamou a API, recebeu `vaga_nao_encontrada` e a execução terminou em erro depois das 3 tentativas. Nada foi gravado.
-- **O começo do laço (9 de 9), com aviso manual e prazo de 60 min:** o n8n dormiu até 2 s depois do prazo que a API deu, no fuso certo.
+- **O começo do laço (9 de 9), com aviso manual e prazo de 60 min:** o n8n dormiu até 2 s depois do prazo que a API deu, no fuso certo. Uma hora depois, ele acordou sozinho, recebeu `nada_a_fazer` e a execução terminou bem.
+- **De ponta a ponta (19 de 19), com a API nova avisando e prazo de 2 min:**
+  - **Ninguém responde:** sem ninguém chamar `advance`, a oferta passou ao segundo médico 3 s depois do prazo. A primeira ficou vencida, a segunda venceu também, e a vaga ficou descoberta. A trilha conta `offer_sent`, `offer_expired`, `offer_sent`, `offer_expired` e `shift_uncovered`, na ordem.
+  - **Recusa e aceite no meio do prazo:** o próximo foi chamado na hora e a vaga fechou. Ao acordar, o n8n encerrou o laço sem nova oferta.
+  - **Reinício:** o n8n e o worker foram reiniciados no meio da espera, voltaram em 12 s, e as duas execuções seguiram sem perder o horário.
+- **Falhas do aviso:** nenhuma no log da API nessas rodadas.
 
 ## 8. Dados e segurança
 
@@ -91,7 +96,8 @@ cd /docker/n8n && S=$(grep '^N8N_WEBHOOK_SECRET=' .env | cut -d= -f2-) && printf
 
 ## 9. Limitações e honestidade
 
-- **Se o n8n estiver fora na hora do clique, a vaga não anda sozinha.** O aviso tenta 3 vezes em cerca de 4 s e desiste, e o reinício do n8n leva mais que isso. A saída é repetir o aviso, como na seção 6.
+- **Se o n8n estiver fora na hora do clique, a vaga não anda sozinha.** O aviso tenta 3 vezes em cerca de 4 s e desiste, e o reinício do n8n leva 12 s. A saída é repetir o aviso, como na seção 6. Esse caminho não foi provocado no servidor: só os testes automáticos cobrem a falha do aviso. Quem já está dormindo não é afetado por um reinício.
+- **Poucas vagas ao mesmo tempo.** O teste rodou com 2 execuções dormindo. Muitas vagas juntas, com a plateia, ainda não foram medidas.
 - **Sem alerta:** uma execução com erro só aparece no editor, e um aviso perdido, só no log da API.
 - **O prazo da rede simulada é de 60 min.** A plateia não vê a cascata andar com esse valor. Encurtar é uma decisão do ensaio, em `policy_config`.
 - **Mudança no editor some na próxima publicação.** O arquivo no Git é a fonte.

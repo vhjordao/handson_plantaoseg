@@ -99,7 +99,8 @@ python scripts/conferir-api.py medir --url <url da api> --env-teste <.env.teste>
 
 - **Paridade:** montando o `Dataset` pelo repositório, a partir do banco real, comparamos 60 vagas com os CSVs de datas deslocadas. Top 5, scores e exclusões iguais nas 60.
 - **De fora, sem login:** 401 em `/me` e 404 em `/docs`, `/openapi.json` e nas rotas internas. HTTP vira HTTPS, o certificado é da Let's Encrypt e a porta 8000 está fechada.
-- **Fluxo inteiro, com login (`conferir-api.py verificar`):** 33 de 33 conferências, inclusive a cascata recusando sem aprovação, o isolamento entre organizações, a trilha contando a história na ordem e, pela RLS, o médico vendo só a própria oferta.
+- **Fluxo inteiro, com login (`conferir-api.py verificar`):** 33 de 33 conferências, inclusive a cascata recusando sem aprovação, o isolamento entre organizações, a trilha contando a história na ordem e, pela RLS, o médico vendo só a própria oferta. Repetido com o aviso ao n8n no ar: de novo, 33 de 33.
+- **Cascata sem ninguém pedir (`conferir-api.py cascata`):** 19 de 19, com a API avisando o n8n e prazo de teste de 2 min ([ficha do workflow](../../../../n8n/README.md)).
 - **Carga com 1 vCPU ([resultado completo](../../../../docs/resultados/metricas-carga-api.md)):**
 
 | Cenário | Vazão | 95% em até | CPU do servidor |

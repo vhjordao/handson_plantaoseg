@@ -30,6 +30,7 @@ Valores medidos em 04/11/2026, sem carga. O n8n só orquestra e não decide: o f
 6. O Victor rodou [`preparar-servidor.sh`](preparar-servidor.sh), que fecha o login por senha, liga o firewall e cria a swap, e conferimos o resultado de fora.
 7. A API entrou como serviço novo, com a imagem construída aqui, sem porta publicada, e a [carga foi medida](../docs/resultados/metricas-carga-api.md).
 8. O editor do n8n ganhou rota pública, só em HTTPS, com os webhooks de fora e limite de tentativas no login ([ADR 0012](../docs/adr/0012-editor-do-n8n-na-web.md)). O Compose novo foi validado no servidor com `docker compose config -q`, com o `.env` real, antes de aplicar, e só o n8n e o worker foram recriados.
+9. O [workflow da cascata](../n8n/README.md) foi publicado pelo CLI do n8n, e a API passou a avisá-lo por dentro do servidor ([ADR 0013](../docs/adr/0013-aviso-da-api-inicia-a-cascata.md)). Só a API foi recriada.
 
 ## 4. Código-chave
 
@@ -80,7 +81,9 @@ Depois de mudar o banco por fora, a API precisa reler os dados: reinicie o servi
 
 O IP, a chave e o `.env` do servidor ficam fora do Git. O `.env` segue os blocos de n8n e da API do [`.env.example`](../.env.example). Para conferir o que está rodando, entre no servidor e use `docker compose ps` e `docker compose logs` em `/docker/n8n`.
 
-**Para voltar atrás:** a cópia do que veio com o modelo está em `/root/backup-modelo-n8n`, no servidor, e o volume do Postgres 15, `n8n_pgdata`, continua lá.
+**Para publicar o workflow da cascata,** veja a [ficha dele](../n8n/README.md).
+
+**Para voltar atrás:** a cópia do que veio com o modelo está em `/root/backup-modelo-n8n`, no servidor, e o volume do Postgres 15, `n8n_pgdata`, continua lá. Antes da cascata, a imagem da API foi guardada como `plantaoseguro-matching-api:antes-cascata`, e o Compose como `docker-compose.yml.antes-cascata`, em `/docker/n8n`.
 
 **Depois de 17/11, antes de desligar,** confirme se o professor ainda precisa do sistema no ar. Depois: renovação desligada na Hostinger (Cobrança, Assinaturas), tokens de Supabase e Vercel e chave do Gemini revogados, projeto do Supabase pausado ou apagado e a decisão sobre a página na Vercel. O repositório e as entregas ficam.
 

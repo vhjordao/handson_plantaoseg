@@ -14,7 +14,11 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 - O [workflow](../n8n/README.md) é um arquivo no Git, publicado pelo CLI do n8n, sem chave da API. A credencial nasce do `.env` do servidor, sem passar pelo chat.
 - Testes de contrato amarram o workflow às ações da API e ao Compose, e barram nó de código, de LLM ou de banco.
 
-**Uso de IA:** o Victor escolheu o desenho. O Claude Code escreveu o aviso, o workflow, os scripts, os testes e os documentos e publicou o workflow no servidor.
+**No servidor real (simulação):** com o prazo de teste em 2 min, 19 de 19 conferências, sem ninguém chamar `advance`. A oferta passou ao segundo médico 3 s depois do prazo, mesmo com o n8n reiniciado no meio da espera, e a vaga ficou descoberta quando ninguém respondeu. Numa vaga com recusa e aceite, o n8n encerrou o laço sem nova oferta. Um prazo de 60 min também terminou sozinho.
+
+**Pendências:** decidir o prazo curto da demonstração, porque com os 60 min da rede simulada a plateia não vê a cascata andar. Muitas vagas ao mesmo tempo ainda não foram medidas.
+
+**Uso de IA:** o Victor escolheu o desenho e autorizou publicar a API. O Claude Code escreveu o aviso, o workflow, os scripts, os testes e os documentos, publicou e conferiu no servidor.
 
 ## 04/11/2026 (quarta): editor do n8n na web
 
