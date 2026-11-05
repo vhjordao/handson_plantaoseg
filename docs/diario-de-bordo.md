@@ -4,6 +4,18 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 04/11/2026 (quarta): workflow da cascata no n8n
+
+**Pedido do Victor:** passar ao workflow da cascata. Ele perguntou se o Claude Code precisava da chave da API do n8n e, entre as duas opções para o n8n saber que uma oferta saiu, escolheu "API avisa o n8n".
+
+**O que foi feito**
+
+- O [ADR 0013](adr/0013-aviso-da-api-inicia-a-cascata.md) registra a decisão: a API avisa uma vez por vaga, no clique do coordenador, e o n8n só espera o prazo e pergunta. Quem decide continua sendo a API.
+- O [workflow](../n8n/README.md) é um arquivo no Git, publicado pelo CLI do n8n, sem chave da API. A credencial nasce do `.env` do servidor, sem passar pelo chat.
+- Testes de contrato amarram o workflow às ações da API e ao Compose, e barram nó de código, de LLM ou de banco.
+
+**Uso de IA:** o Victor escolheu o desenho. O Claude Code escreveu o aviso, o workflow, os scripts, os testes e os documentos e publicou o workflow no servidor.
+
 ## 04/11/2026 (quarta): editor do n8n na web
 
 **Pedido do Victor:** "verifique o n8n, não consigo acessá-lo via web. o que houve?". Depois escolheu "Abrir na web" e pediu ajuda para entrar com login.

@@ -1,7 +1,7 @@
 # Ficha do componente: servidor na Hostinger
 
-- **Responsável:** Victor Jordão · **Frente:** infraestrutura · **Branches:** `f3/servidor-hostinger`, `f3/api-matching` e `f3/n8n-na-web` · **Atualizado em:** 04/11/2026
-- **Estado:** no ar desde 04/11/2026, com o n8n pronto e **sem nenhum workflow**, e com a [API de matching](../services/matching-api/app/api/README.md) respondendo por HTTPS. **O editor do n8n abre pela web, em HTTPS e com login** ([ADR 0012](../docs/adr/0012-editor-do-n8n-na-web.md)). **O servidor serve só para a apresentação de 17/11/2026** ([ADR 0009](../docs/adr/0009-servidor-so-para-a-apresentacao.md)).
+- **Responsável:** Victor Jordão · **Frente:** infraestrutura · **Branches:** `f3/servidor-hostinger`, `f3/api-matching`, `f3/n8n-na-web` e `f3/cascata-n8n` · **Atualizado em:** 04/11/2026
+- **Estado:** no ar desde 04/11/2026, com o n8n e o [workflow da cascata](../n8n/README.md), e com a [API de matching](../services/matching-api/app/api/README.md) respondendo por HTTPS. **O editor do n8n abre pela web, em HTTPS e com login** ([ADR 0012](../docs/adr/0012-editor-do-n8n-na-web.md)). **O servidor serve só para a apresentação de 17/11/2026** ([ADR 0009](../docs/adr/0009-servidor-so-para-a-apresentacao.md)).
 
 ## 1. O que é e qual dor resolve
 
@@ -151,5 +151,4 @@ O Victor decidiu usar a Hostinger, escolheu a KVM 1 e criou o servidor. O Claude
 
 Com o ok do Victor:
 
-1. Criar o workflow da cascata e versioná-lo em `n8n/workflows`.
-2. Repetir o teste de carga com as telas e reiniciar o servidor antes de 13/11.
+1. Repetir o teste de carga com as telas e reiniciar o servidor antes de 13/11.

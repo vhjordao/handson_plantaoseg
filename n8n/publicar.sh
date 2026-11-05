@@ -64,7 +64,7 @@ limpar
 echo "4/4 Reinício do n8n, que registra o webhook ao subir"
 docker compose restart n8n n8n-worker </dev/null
 for tentativa in $(seq 1 60); do
-  if curl -fsS -m 3 -o /dev/null http://127.0.0.1:5678/healthz </dev/null; then
+  if curl -fs -m 3 -o /dev/null http://127.0.0.1:5678/healthz </dev/null; then
     echo "O n8n voltou (tentativa $tentativa)."
     exit 0
   fi

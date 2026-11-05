@@ -45,7 +45,7 @@ Uma branch e um PR por item, CI verde, e nenhum merge sem o ok do Victor. As dat
 - **`f3/api-matching`, no servidor desde 04/11** ([ficha](../services/matching-api/app/api/README.md), [ADR 0010](adr/0010-api-de-matching.md)): FastAPI em `services/matching-api/app/api/`, com Pydantic, validação do JWT do Supabase e rotas internas protegidas por segredo. Uma camada de repositório monta o `Dataset` a partir do Postgres. A CLI e o núcleo continuam funcionando só com biblioteca padrão.
 - **`f3/web-coordenador`:** telas 1 a 3 dos [wireframes](wireframes/README.md) (vaga em texto livre e conferência; top 5 com motivo e alertas; excluídos com a regra), com os estados de erro já listados lá.
 - **`f3/web-medico`:** tela 4 (oferta com motivo, aceitar ou recusar) e a trilha de auditoria.
-- **`f3/cascata-n8n`:** workflow em JSON que só espera e chama `POST /internal/cascade/{id}/advance`. Roda no n8n do servidor.
+- **`f3/cascata-n8n`, publicado no servidor em 04/11** ([ficha](../n8n/README.md), [ADR 0013](adr/0013-aviso-da-api-inicia-a-cascata.md)): workflow em JSON que só espera e chama `POST /internal/cascade/{id}/advance`. A API avisa o n8n uma vez por vaga, no clique do coordenador.
 
 ### M2, até 07/11: no ar e validado
 

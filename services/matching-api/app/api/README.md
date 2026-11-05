@@ -1,7 +1,7 @@
 # Ficha do componente: API de matching
 
 - **Responsável:** Victor Jordão · **Frente:** motor e infraestrutura · **Branch:** `f3/api-matching` · **Atualizado em:** 04/11/2026
-- **Estado:** no ar no servidor, por HTTPS, desde 04/11/2026, com os dados sintéticos do projeto `plantaoseguro`. **Tudo é simulação.** A cascata no n8n e as telas ainda não usam a API.
+- **Estado:** no ar no servidor, por HTTPS, desde 04/11/2026, com os dados sintéticos do projeto `plantaoseguro`. **Tudo é simulação.** A [cascata no n8n](../../../../n8n/README.md) pergunta a ela quanto esperar. As telas ainda não usam a API.
 
 ## 1. O que é e qual dor resolve
 
@@ -16,7 +16,7 @@
 | `POST /shifts/extract` | Coordenador | Tela 1: texto vira campos, com os sinais de texto suspeito | Nada |
 | `POST /shifts` | Coordenador | Publica a vaga com os campos conferidos | Pedido, vaga e trilha |
 | `POST /shifts/{id}/recommendations` | Coordenador | Telas 2 e 3: top 5 com motivo e excluídos com a regra | Recomendações, explicações, exclusões e trilha. **Nenhuma oferta** |
-| `POST /shifts/{id}/approve` | Coordenador | **O clique.** Grava a decisão e chama o primeiro aprovado | Trilha e primeira oferta |
+| `POST /shifts/{id}/approve` | Coordenador | **O clique.** Grava a decisão, chama o primeiro aprovado e, depois da resposta, avisa o n8n ([ADR 0013](../../../../docs/adr/0013-aviso-da-api-inicia-a-cascata.md)) | Trilha e primeira oferta |
 | `POST /shifts/{id}/reject` | Coordenador | Recusa a lista e cancela a vaga | Vaga e trilha |
 | `POST /offers/{id}/respond` | O médico da oferta | Tela 4: aceita, ou recusa e chama o próximo | Oferta, vaga e trilha |
 | `POST /internal/cascade/{id}/advance` | n8n, por dentro do servidor | Se o prazo venceu, expira e chama o próximo aprovado | Oferta, vaga e trilha |
@@ -43,6 +43,7 @@ Na resposta, a API só usa IDs pseudônimos: a web lê nome e CRM sob RLS, e só
 | Arquivo | O que faz | Trecho a entender |
 | --- | --- | --- |
 | `service.py` | Os casos de uso e a cascata | `_advance`: sem a aprovação na trilha, para. `_send_next`: refaz as regras antes de chamar |
+| `notifier.py` | Avisa o n8n de que a cascata começou | `cascade_started`: 3 tentativas, e nenhuma falha sobe para quem clicou |
 | `routes.py` | Autenticação, papel e formato | `current_profile`: o JWT prova quem é, e o papel vem do banco |
 | `repository.py` | Lê e grava no Supabase | `READ_COLUMNS`: o contrato do que a API lê. `doctor_from_row`: os campos pessoais ficam vazios |
 | `rest.py` | Cliente da API REST | `column_list` e `guard_table`: as duas travas antes de a chamada sair da máquina |
@@ -74,7 +75,7 @@ python -m pytest -q
 python -m ruff check .
 ```
 
-Sem Docker: os testes usam o banco falso. Para subir localmente, com `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` e `N8N_WEBHOOK_SECRET` no ambiente, use `make api`. A implantação e a medição de carga estão na [ficha do servidor](../../../../infra/README.md).
+Sem Docker: os testes usam o banco falso. Para subir localmente, com `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` e `N8N_WEBHOOK_SECRET` no ambiente, use `make api`. Sem `N8N_CASCADE_URL`, a API sobe e só não avisa o n8n. A implantação e a medição de carga estão na [ficha do servidor](../../../../infra/README.md).
 
 **Para trocar o modelo:** `python -m app.cli evaluate`, depois `python -m app.cli freeze-model`, nova linha ativa em `model_registry` e nova imagem.
 
@@ -89,7 +90,7 @@ python scripts/conferir-api.py medir --url <url da api> --env-teste <.env.teste>
 
 **Na máquina local e na CI:**
 
-- **421 testes** no total, contra 267 antes da API. Cobrem rotas e papéis, JWT forjado, cliente REST, paridade com os CSVs, cascata, injeção de prompt pela API (os 10 tipos de ataque), neutralidade econômica no caminho da API e o contrato do Compose e da imagem.
+- **458 testes** no total, contra 267 antes da API. Cobrem rotas e papéis, JWT forjado, cliente REST, paridade com os CSVs, cascata, aviso ao n8n, injeção de prompt pela API (os 10 tipos de ataque), neutralidade econômica no caminho da API e o contrato do Compose, da imagem e do workflow.
 - **Sem aprovação não há oferta:** a cascata recusa vaga publicada, recomendada e rejeitada. O segredo do n8n, o médico e o coordenador de outro hospital não aprovam, e não se aprova quem não foi recomendado.
 - **Os testes acusam mesmo?** Abrimos 22 falhas de propósito, como oferta sem aprovação, leitura da tabela do valor do plantão, `select=*` liberado e rota interna na internet. Os testes acusaram 21 de primeira. A outra era aceitar HS256, que não abria falha real, porque a biblioteca já recusa esse token com chave EC. Criamos um teste que fixa a lista de algoritmos, e agora as 22 são acusadas.
 - **O limite dos testes:** eles usam um banco falso. O PostgREST real e o login real só foram exercitados no projeto, com os passos abaixo.
@@ -124,7 +125,7 @@ Nenhuma chamada falhou na medição, e a memória da API chegou a 79 MB de 512 M
 - **Um processo só:** as travas por vaga e a cópia dos dados em memória não servem para mais de um processo. Basta para a apresentação, e não para uma operação real.
 - **O banco dos testes é falso:** a CI não exercita o PostgREST real nem o login real. Isso foi conferido no projeto, à mão, com `conferir-api.py`.
 - **A chave `service_role` é marcada como `legacy`** pelo Supabase. Se ela for desligada antes de 17/11, a saída é trocar pela `sb_secret`, com o teto de cerca de 50 chamadas por segundo que medimos. Não sabemos a causa desse teto.
-- **Sem a cascata no n8n, oferta vencida fica pendente** até alguém chamar `advance`, e o médico recebe `oferta_expirada` ao responder.
+- **Se o aviso ao n8n se perder, oferta vencida fica pendente** até alguém chamar `advance` ou repetir o aviso, e o médico recebe `oferta_expirada` ao responder. A falha fica só no log ([ficha do workflow](../../../../n8n/README.md)).
 - **Gemini não exercitado:** sem chave e sem o SDK na imagem, tudo sai pela reserva em regras. Nem a qualidade nem a demora do LLM foram medidas.
 - **O limite de requisições é por IP:** a plateia no mesmo Wi-Fi divide as 30 chamadas por segundo. As telas precisam tentar de novo depois de um `429`.
 - **A carga é uma primeira medição,** de uma máquina só e com poucas conexões. Os limites estão no [resultado](../../../../docs/resultados/metricas-carga-api.md).
@@ -140,7 +141,6 @@ O Victor aprovou o plano, com as decisões e os riscos, antes de começar, e cri
 
 Com o ok do Victor:
 
-1. `f3/cascata-n8n`: o workflow que espera o prazo e chama `POST /internal/cascade/{id}/advance`. Falta decidir como o n8n fica sabendo que uma oferta saiu.
-2. `f3/web-coordenador` e `f3/web-medico`: as telas chamam esta API e leem o resto sob RLS.
-3. Gemini real: instalar o SDK na imagem, pôr a chave no `.env` do servidor e rodar o [teste manual](../../../../docs/teste-manual-gemini.md).
-4. Repetir a medição antes de 13/11, já com as telas, e reiniciar o servidor.
+1. `f3/web-coordenador` e `f3/web-medico`: as telas chamam esta API e leem o resto sob RLS.
+2. Gemini real: instalar o SDK na imagem, pôr a chave no `.env` do servidor e rodar o [teste manual](../../../../docs/teste-manual-gemini.md).
+3. Repetir a medição antes de 13/11, já com as telas, e reiniciar o servidor.
