@@ -4,6 +4,29 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 05/11/2026 (quinta): API pronta para o Gemini, sem gastos, e o primeiro teste real
+
+**Pedido do Victor:** preparar a API para receber a chave do Gemini. Ele colocou a chave no `.env` e decidiu: "Não quero ter gastos, use o que for free."
+
+**O que o teste real mostrou, e os testes com clientes falsos não mostravam**
+
+- **O limite de tempo de 8 s derrubava todas as chamadas.** O serviço recusa menos de 10 s ("Minimum allowed deadline is 10s"). A tela agora desiste em 6 s, e o pedido declara 10 s ao serviço.
+- **O serviço estava instável:** 9 de 16 chamadas ficaram sem resposta (`503` e `504`), e a demora mediana foi de 8 s. É uma rodada só, e não sabemos se isso é do momento ou da camada gratuita.
+- **Quando respondeu, respondeu bem:** os pedidos normais vieram certos, e nenhum dos 4 ataques com resposta foi obedecido.
+
+**Decisões**
+
+- **Camada gratuita, sem faturamento** (Victor). Isso substitui "camada paga na demo" do ADR 0003. Como o Google pode usar o conteúdo nessa camada, só texto sintético vai ao modelo: a plateia não alcança a leitura da vaga, que exige login de coordenador.
+- **Os motivos continuam no texto montado por regra**, salvo pedido explícito: cinco chamadas em fila atrasariam a tela e gastariam a cota.
+- **Fica a `generateContent`, não a Interactions**, que o Google recomenda para projetos novos: ela segue com suporte total, e a outra guarda a conversa no servidor por padrão.
+- **`nullable` saiu do esquema**, porque não está na lista de palavras que o SDK documenta.
+
+**Ainda não feito:** publicar no servidor. A web também não chama a API, então nada disso aparece na demonstração.
+
+**Conferido:** testes da API, inclusive contra o SDK real com a rede trocada por um transporte falso, e lint. A correção final do prazo (6 s na tela e 10 s no serviço) ainda não rodou contra o serviço real.
+
+**Uso de IA:** o Claude Code rodou o teste com a chave do `.env`, sem ler nem imprimir o valor, achou os problemas e fez as correções; o Victor decidiu pelos gastos zero.
+
 ## 05/11/2026 (quinta): tela do coordenador e a ordem das atividades
 
 **Pedido do Victor:** "Alinha o passo a passo e a ordem das atividades. E comece pela tela do coordenador." O merge da plataforma web (PR #13), que ele tinha autorizado, saiu antes, com a CI toda verde.

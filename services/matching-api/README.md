@@ -65,7 +65,7 @@ Cada passo foi conferido com `ruff` e `pytest` antes do commit; a decisão sobre
 | pytest | 8.3.3 | Testes (421, inclusive os da API) | Padrão do ecossistema; os testes usam `unittest`, que o pytest também executa | 0 |
 | ruff | 0.7.0 | Lint (E, F, I, UP, B) | Rápido e igual na CI e localmente | 0 |
 | GitHub Actions | checkout@v4, setup-python@v5, upload-artifact@v4 | CI com 5 jobs | Já era a escolha do `docs/02` | 0 |
-| Gemini (`google-genai`) | não instalado nem exercitado | Extração e reescrita, opcional | Decisão do Victor ([ADR 0003](../../docs/adr/0003-llm-do-produto-gemini.md)) | Estimado em menos de US$ 1 para 200 chamadas |
+| Gemini (`google-genai`) | 2.32.0, só na API; testado à parte em 05/11 | Extração e reescrita, opcional | Decisão do Victor ([ADR 0003](../../docs/adr/0003-llm-do-produto-gemini.md)) | Estimado em menos de US$ 1 para 200 chamadas |
 | Regressão logística própria | IRLS, até 15 iterações | Ranking | Explicável por peso e sem dependência; scikit-learn e LightGBM não foram testados (comparação prevista para a Etapa 3) | 0 |
 | FastAPI | ver a [ficha da API](app/api/README.md) | Porta HTTP do motor | Só `app/api/` usa pacotes de fora; o núcleo e a CLI continuam só com a biblioteca padrão | 0 |
 | n8n | adiado | Cascata | ADR 0004; a tela, o banco e a API saíram do adiamento nos ADRs 0007, 0008 e 0010 | 0 |
@@ -106,7 +106,7 @@ Só dados sintéticos; nome, CRM e telefone são fictícios e **nunca** entram n
 
 - O modelo **reaprende o simulador**: os números são simulação, sempre ao lado do baseline.
 - O fluxo recomendado avalia cada vaga isoladamente (sem ocupar a agenda de quem seria escalado), então a concentração das ofertas efetivas é estimativa superior; e o processo manual simulado é premissa do grupo (não checa disponibilidade), o que explica a maior parte do ganho de tempo.
-- O Gemini **não foi exercitado contra o serviço real**; os testes cobrem validação, fallback e injeção com clientes falsos, não o comportamento do modelo.
+- O Gemini teve **uma única rodada contra o serviço real**, em 05/11, com o serviço instável ([registro](../../docs/teste-manual-gemini.md)). Os testes automáticos cobrem validação, fallback e injeção com clientes falsos, não o comportamento do modelo.
 - Plantões de 12 h em horários fixos fazem o descanso de 11 h quase nunca ser a regra que barra; o limite de 24 h contínuas é o que aparece.
 - A distância funciona como proxy da zona de residência: zonas distantes quase não são recomendadas (ver a concentração em `docs/resultados`).
 - Contestação e avaliação de impacto algorítmico estão desenhadas, não construídas.

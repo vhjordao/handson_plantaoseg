@@ -77,7 +77,7 @@ export const ETAPAS: EtapaDoFluxo[] = [
       "O sistema lê o texto e propõe hospital, especialidade, horário e urgência. Você confere e corrige.",
     voz: "regra",
     quem: "Leitura por regras",
-    nota: "Nesta demonstração a leitura é por regras. O modelo de linguagem (Gemini) está desenhado e ainda não foi testado com chave.",
+    nota: "Nesta demonstração a leitura é por regras. O modelo de linguagem (Gemini) foi testado à parte, com textos sintéticos, e não roda nesta demonstração.",
   },
   {
     numero: 3,

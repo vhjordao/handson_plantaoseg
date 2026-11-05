@@ -11,7 +11,7 @@ from app import public_data
 from app.cli import build_parser
 from app.datadict import render_dictionary
 from app.docbuild import REPO_URL, render
-from app.llm.extraction import build_system_prompt
+from app.llm.extraction import EXTRACTION_SCHEMA, build_system_prompt
 from app.ranking.features import CONTEXT_VARIABLES, RANKING_FEATURES
 from app.ranking.report import num, pct
 from app.robustness import coordinator_chart, launch_chart, render_robustness
@@ -55,8 +55,14 @@ class TesteManualGeminiTests(unittest.TestCase):
         for attack in ATTACK_TYPES:
             self.assertIn(attack, text)
 
-    def test_declara_que_nao_foi_executado(self):
-        self.assertIn("não executado", read("teste-manual-gemini.md"))
+    def test_o_esquema_do_documento_e_o_do_codigo(self):
+        bloco = re.search(r"```json\n(.*?)```", read("teste-manual-gemini.md"), re.DOTALL)
+        self.assertEqual(json.loads(bloco.group(1)), EXTRACTION_SCHEMA)
+
+    def test_declara_o_alcance_do_que_foi_medido(self):
+        text = read("teste-manual-gemini.md")
+        self.assertIn("uma rodada só", text)
+        self.assertIn("não generalize", text)
 
 
 class NumerosCitadosTests(unittest.TestCase):

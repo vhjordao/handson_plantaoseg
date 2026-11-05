@@ -299,7 +299,7 @@ describe("FichaDoModelo", () => {
     expect(screen.getByText(mundo.fichaModelo.versao)).toBeInTheDocument();
     expect(screen.getByText("Medidas, em simulação")).toBeInTheDocument();
     expect(screen.getByText(/Valor do plantão e pagamento/)).toBeInTheDocument();
-    expect(screen.getByText("O Gemini não foi exercitado.")).toBeInTheDocument();
+    expect(screen.getByText("O Gemini só foi testado à parte, com textos sintéticos.")).toBeInTheDocument();
     expect(screen.getAllByText(/validar com jurídico/).length).toBeGreaterThan(0);
   });
 });

@@ -24,7 +24,7 @@
 
 Na resposta, a API só usa IDs pseudônimos: a web lê nome e CRM sob RLS, e só de quem o coordenador pode ver. As horas vão em hora local de São Paulo, sem fuso. Os erros têm a forma `{"erro": "codigo", "mensagem": "..."}`, para a tela tratar pelo código.
 
-**Onde há IA:** o LLM só extrai campos e reescreve a explicação. Sem a chave do Gemini, como hoje, tudo sai pela reserva em regras e pelo texto fixo. Filtro, ranking, cascata e aprovação são código, e o n8n só pede para avançar.
+**Onde há IA:** o LLM só extrai campos e reescreve a explicação. Sem a chave do Gemini, tudo sai pela reserva em regras e pelo texto fixo. Com a chave, o Gemini lê o pedido; os motivos continuam no texto fixo, salvo `LLM_REESCREVER_MOTIVOS=1`. Se ele falhar ou passar de 6 s, a leitura sai pelas regras, e as próximas chamadas não tentam por 60 s. Filtro, ranking, cascata e aprovação são código, e o n8n só pede para avançar.
 
 ## 3. Como foi feito
 
@@ -62,6 +62,7 @@ Na resposta, a API só usa IDs pseudônimos: a web lê nome e CRM sob RLS, e só
 | uvicorn | 0.54.0 | Servidor HTTP | O padrão do FastAPI. Um processo só, com 1 vCPU | 0 |
 | httpx | 0.28.1 | Chamadas ao Supabase | Conexões reaproveitadas e transporte falso nos testes | 0 |
 | PyJWT e cryptography | 2.15.1 e 50.0.2 | Validar o JWT em ES256 | Lista fechada de algoritmos. O SDK do Supabase traria muito mais do que isso | 0 |
+| `google-genai` | 2.32.0 | Chamar o Gemini | SDK oficial; a chamada `generateContent` fica por não guardar o texto no servidor ([ADR 0003](../../../../docs/adr/0003-llm-do-produto-gemini.md)). Importado só quando há chave | 0: camada gratuita, sem faturamento |
 | Python (imagem) | 3.12.14-slim | Base da imagem | A mesma linha da CI, com versão fixa | 0 |
 
 As decisões e as alternativas estão no [ADR 0010](../../../../docs/adr/0010-api-de-matching.md).
@@ -127,7 +128,7 @@ Nenhuma chamada falhou na medição, e a memória da API chegou a 79 MB de 512 M
 - **O banco dos testes é falso:** a CI não exercita o PostgREST real nem o login real. Isso foi conferido no projeto, à mão, com `conferir-api.py`.
 - **A chave `service_role` é marcada como `legacy`** pelo Supabase. Se ela for desligada antes de 17/11, a saída é trocar pela `sb_secret`, com o teto de cerca de 50 chamadas por segundo que medimos. Não sabemos a causa desse teto.
 - **Se o aviso ao n8n se perder, oferta vencida fica pendente** até alguém chamar `advance` ou repetir o aviso, e o médico recebe `oferta_expirada` ao responder. A falha fica só no log ([ficha do workflow](../../../../n8n/README.md)).
-- **Gemini não exercitado:** sem chave e sem o SDK na imagem, tudo sai pela reserva em regras. Nem a qualidade nem a demora do LLM foram medidas.
+- **Gemini instável e em camada gratuita:** na única rodada real, em 05/11, 9 de 16 chamadas ficaram sem resposta, e a demora mediana foi de 8 s ([registro](../../../../docs/teste-manual-gemini.md)). A qualidade e a demora em condições normais não foram medidas. Só texto sintético pode ir ao modelo, e a cota é limitada: passando dela, a leitura cai nas regras. A API com a chave ainda não foi publicada no servidor.
 - **O limite de requisições é por IP:** a plateia no mesmo Wi-Fi divide as 30 chamadas por segundo. As telas precisam tentar de novo depois de um `429`.
 - **A carga é uma primeira medição,** de uma máquina só e com poucas conexões. Os limites estão no [resultado](../../../../docs/resultados/metricas-carga-api.md).
 - **A organização de teste:** os registros dela ficam para sempre na trilha, que é só de inserção, e ela fica no banco por causa disso. Até o `remover`, os 2 médicos de teste aparecem como excluídos por raio nas recomendações da rede simulada.
@@ -143,5 +144,5 @@ O Victor aprovou o plano, com as decisões e os riscos, antes de começar, e cri
 Com o ok do Victor:
 
 1. `f3/web-coordenador` e `f3/web-medico`: as telas chamam esta API e leem o resto sob RLS.
-2. Gemini real: instalar o SDK na imagem, pôr a chave no `.env` do servidor e rodar o [teste manual](../../../../docs/teste-manual-gemini.md).
+2. Gemini: pôr a chave no `.env` do servidor, publicar a imagem 0.2.0, conferir a memória com `docker stats` (o limite é de 512 MB) e repetir o [teste](../../../../docs/teste-manual-gemini.md) em outro horário.
 3. Repetir a medição antes de 13/11, já com as telas, e reiniciar o servidor.

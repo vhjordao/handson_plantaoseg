@@ -303,6 +303,7 @@ class Harness:
         self,
         *,
         llm: Any = None,
+        reescrever_motivos: bool = True,
         cors: tuple[str, ...] = (),
         docs: bool = False,
         notifier: Any = None,
@@ -317,7 +318,12 @@ class Harness:
         self.world.load()
         self.clock = FixedClock(DEMO_SHIFT.published_at)
         self.service = MatchingService(
-            self.repository, self.world, small_model(), llm=llm, clock=self.clock
+            self.repository,
+            self.world,
+            small_model(),
+            llm=llm,
+            reescrever_motivos=reescrever_motivos,
+            clock=self.clock,
         )
         self.app = create_app(
             service=self.service,

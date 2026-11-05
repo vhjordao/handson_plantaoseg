@@ -64,7 +64,7 @@ Cada etapa do fluxo tem uma ferramenta principal e uma alternativa; a escolha pr
 | Interface (coordenador, médico e telão) | Next.js, Tailwind e shadcn/ui, web responsiva e sem PWA ([ADR 0011](adr/0011-web-responsiva-sem-pwa.md)) | Vite com React | A plateia entra por QR code, sem instalar nada |
 | Login e perfis | Supabase Auth, com login anônimo e persona para a plateia | Magic link por e-mail | O perfil guarda hospital e papel, que a RLS consulta ([ADR 0008](adr/0008-banco-no-supabase.md)) |
 | Entrada da vaga | Formulário no web app que chama a API ([ADR 0010](adr/0010-api-de-matching.md)) | Telegram | Texto livre, com campos opcionais |
-| Extração dos campos | Gemini 3.5 Flash-Lite (SDK `google-genai`) com saída estruturada (JSON Schema) e validação com Pydantic | Gemini 3.8 Flash nos casos ambíguos | Nome, CRM e telefone nunca vão ao modelo; na demo, camada paga (ADR 0003) |
+| Extração dos campos | Gemini 3.5 Flash-Lite (SDK `google-genai`) com saída estruturada (JSON Schema) e validação com Pydantic | Gemini 3.8 Flash nos casos ambíguos | Nome, CRM e telefone nunca vão ao modelo; só a camada gratuita, sem gastos, e só texto sintético (ADR 0003) |
 | Filtro de regras | Regras em Python, na API, com a política por hospital em tabela ([ADR 0008](adr/0008-banco-no-supabase.md)) | Funções SQL no Postgres | Determinístico, testável e auditável |
 | Ranking | Regressão logística e LightGBM (scikit-learn), mais baseline heurístico | CatBoost | Versione o modelo e guarde as métricas |
 | Explicação | LLM redige a partir dos fatores do modelo | Template fixo se a API falhar | Recebe só os fatores, então não inventa motivos |
@@ -162,7 +162,7 @@ Cinco decisões precisam do grupo até a Etapa 2, e quatro riscos pedem plano B 
 - **Latência do LLM:** extração e explicação somam segundos por vaga. Mitigação: medir no ensaio e manter o template fixo como alternativa.
 - **Dependência de APIs externas:** LLM e Telegram podem falhar na hora. Mitigação: respostas pré-carregadas e vídeo gravado.
 - **Dados reais e LLM:** com dados reais, só com base legal, termo de uso e acordo de tratamento de dados com o provedor; na prova de conceito, nada real.
-- **Camada gratuita do Gemini:** o Google usa o conteúdo para melhorar produtos e revisores humanos podem lê-lo; a plateia digita texto livre na demo. Mitigação: camada paga na demo, aviso "não digite dados reais" na tela e só dados sintéticos nos testes (ADR 0003).
+- **Camada gratuita do Gemini:** o Google usa o conteúdo para melhorar produtos e revisores humanos podem lê-lo; por decisão do Victor, o projeto não gasta e fica nessa camada. Mitigação: só o login de coordenador chega ao LLM, e quem o usa é o grupo, com pedidos sintéticos; a plateia não alcança a leitura da vaga; aviso "não digite dados reais" na tela; se a plateia passar a escrever pedidos, a chave sai do servidor antes (ADR 0003).
 
 ## Fontes consultadas
 

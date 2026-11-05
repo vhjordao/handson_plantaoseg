@@ -12,13 +12,13 @@ O que vem antes de quê, e por quê. As datas são metas. Esta tabela manda quan
 | 1 | Tela do coordenador: nova vaga, sugestões com motivo e decisão (`f3/web-coordenador`) | Claude Code; Victor aprova | 05/11 | O teste de usabilidade e a seção de experiência da Entrega 3 dependem dela |
 | 2 | Entrevistas com coordenadores e plantonistas | Colegas; Victor confirma com o professor | 06/11 | Os números calibram o simulador e entram no documento |
 | 3 | Teste de usabilidade da tarefa do coordenador, no link público | Colegas | 06/11 | Só existe com a tela pronta. As tarefas do médico ficam para depois da tela dele, e o documento diz isso |
-| 4 | Teste contra a concentração das ofertas e Gemini com a chave real | Claude Code; Victor gera a chave | 07/11 | O documento hoje declara os dois como pendentes; o que der tempo vira resultado, o resto continua declarado |
+| 4 | Teste contra a concentração das ofertas e Gemini com a chave real (primeira rodada do Gemini feita em 05/11, com o serviço instável) | Claude Code; chave do Victor, na camada gratuita | 07/11 | O documento hoje declara os dois como pendentes; o que der tempo vira resultado, o resto continua declarado |
 | 5 | Corrigir e fechar a Entrega 3, com os resultados de 2 a 4 | Claude Code redige; Victor revisa e autoriza o PR | 07/11 | É a entrega de maior prazo imediato (até 2,0) |
 | 6 | Tela do médico e adaptador `live`, que liga a web à API e à cascata (`f3/web-medico`) | Claude Code; Victor decide as divergências do [ADR 0014](adr/0014-estrutura-da-plataforma-web.md) | 10/11 | Sem o `live`, a demonstração não chama a API nem o n8n |
 | 7 | Telão, QR code, contestação, plano B, teste de carga e reinício do servidor | Claude Code; Victor decide o prazo curto da cascata | 13/11 | É a experiência da plateia. **Código congelado em 13/11.** Ordem de corte em M4 |
 | 8 | Ensaio e pitch, com o roteiro da aula de 10/11 | Grupo | 17/11 | Apresentação final (até 4,0) |
 
-**Só o Victor pode fazer:** confirmar com o professor que as entrevistas seguem como atividade da disciplina; gerar a chave do Gemini; ligar o MFA do n8n e conferir que a renovação do servidor ficou desligada; decidir o prazo curto da demonstração (recomendação: 2 min; a rede simulada usa 60); rodar `usuarios-de-teste.py limpar` e `remover` antes de 17/11.
+**Só o Victor pode fazer:** confirmar com o professor que as entrevistas seguem como atividade da disciplina; conferir que o projeto do Gemini está sem faturamento; ligar o MFA do n8n e conferir que a renovação do servidor ficou desligada; decidir o prazo curto da demonstração (recomendação: 2 min; a rede simulada usa 60); rodar `usuarios-de-teste.py limpar` e `remover` antes de 17/11.
 
 ## Contexto
 
@@ -118,7 +118,7 @@ Quando as contas existirem, o Victor avisa; o clone novo e um `.env` vazio são 
 - **Até 04/11, antes da primeira entrevista:** confirmar com o professor que as conversas podem seguir como atividade da disciplina ([kit](entrevistas/kit-do-entrevistador.md), seção 3).
 - **Feito em 04/11:** Hostinger KVM 1, por 1 mês, com acesso SSH por chave ([ADR 0009](adr/0009-servidor-so-para-a-apresentacao.md)). O script de proteção já rodou. Falta o Victor conferir no painel que a renovação ficou desligada.
 
-**Custo estimado em novembro:** Supabase e Vercel gratuitos (o Supabase Free aceita 200 conexões em tempo real e pausa após 1 semana parado), KVM 1 por R$ 52,99 no mês (carrinho de 04/11; sem desligar a renovação, passa a R$ 87,99 por mês) e Gemini abaixo de US$ 1 por 200 chamadas, preço lido em outubro.
+**Custo estimado em novembro:** Supabase e Vercel gratuitos (o Supabase Free aceita 200 conexões em tempo real e pausa após 1 semana parado), KVM 1 por R$ 52,99 no mês (carrinho de 04/11; sem desligar a renovação, passa a R$ 87,99 por mês) e Gemini de graça, na camada gratuita e sem faturamento (decisão do Victor em 05/11).
 
 ## O que se reaproveita
 
@@ -150,5 +150,5 @@ Só dados sintéticos; sem o clique do coordenador não sai oferta; nome, CRM e 
 | Entrevistas não acontecerem até 07/11 | Teste de usabilidade com colegas e conhecidos, com a limitação dita no documento |
 | Entrevistas dependerem de comitê de ética | O Victor confirma com o professor antes da primeira; se não puderem seguir no prazo, ficam os agregados públicos e a análise de sensibilidade, com a limitação dita no documento |
 | Serviço externo cair ao vivo | Fallback em regras, respostas pré-carregadas e vídeo |
-| Plateia digitar dado real | Aviso na tela e camada paga do Gemini na demo |
+| Plateia digitar dado real | Aviso na tela; a plateia não alcança a leitura da vaga, a única etapa que vai ao Gemini, e a chave sai do servidor se isso mudar |
 | Disco apertado na máquina local | Sem Docker local; imagens só na VPS e na CI |

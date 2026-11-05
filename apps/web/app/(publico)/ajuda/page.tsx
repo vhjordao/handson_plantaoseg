@@ -26,7 +26,7 @@ const SIMULADO = [
 ];
 
 const AINDA_NAO = [
-  "O modelo de linguagem (Gemini) ainda não foi testado com chave: a leitura da vaga é por regras.",
+  "O modelo de linguagem (Gemini) foi testado à parte, com textos sintéticos: nesta demonstração, a leitura da vaga é por regras.",
   "O rastro de pagamentos e o check-in ficam para uma versão futura.",
 ];
 

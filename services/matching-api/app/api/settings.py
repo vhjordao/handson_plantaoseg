@@ -26,6 +26,7 @@ class Settings:
     cors_origins: tuple[str, ...]
     expose_docs: bool
     cascade_url: str = ""
+    reescrever_motivos: bool = False
 
     @classmethod
     def from_env(cls, env: Mapping[str, str] | None = None) -> "Settings":
@@ -50,4 +51,5 @@ class Settings:
             cors_origins=origins,
             expose_docs=source.get("API_DOCS", "") == "1",
             cascade_url=cascade_url,
+            reescrever_motivos=source.get("LLM_REESCREVER_MOTIVOS", "") == "1",
         )

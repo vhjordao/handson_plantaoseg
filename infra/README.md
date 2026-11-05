@@ -134,7 +134,7 @@ Depois de fechar a API pública do n8n, no mesmo dia:
 
 - **Dados:** os dados sintéticos do motor ficam só na memória da API, sem nome, CRM, telefone nem valor do plantão. O único dado real é o e-mail do Victor, na conta de administrador do n8n e no certificado HTTPS.
 - **Ameaças consideradas:** adivinhar a senha do root, invadir pelo editor do n8n (agora na internet, com login, limite de tentativas e os webhooks de fora, [ADR 0012](../docs/adr/0012-editor-do-n8n-na-web.md)), abrir porta sem querer e publicar um segredo no repositório público.
-- **Segredos:** senha do banco, chave de criptografia do n8n, e-mail, **chave de serviço do Supabase** e segredo do n8n ficam no `.env` do servidor, só legível pelo root. A cópia do modelo também. Só a API recebe a chave de serviço, que ignora a RLS: quem controla este servidor lê e grava tudo no banco.
+- **Segredos:** senha do banco, chave de criptografia do n8n, e-mail, **chave de serviço do Supabase**, segredo do n8n e **chave do Gemini** (opcional; só a API a recebe) ficam no `.env` do servidor, só legível pelo root. A cópia do modelo também. Só a API recebe a chave de serviço, que ignora a RLS: quem controla este servidor lê e grava tudo no banco.
 - **Firewall:** o Docker publica portas por fora do `ufw`. Por isso o teste de contrato só aceita 80, 443 e o que estiver em `127.0.0.1`.
 
 ## 9. Limitações e honestidade

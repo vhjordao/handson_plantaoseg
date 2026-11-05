@@ -130,12 +130,16 @@ class MatchingService:
         model: LogisticModel,
         *,
         llm: LLMClient | None = None,
+        reescrever_motivos: bool = False,
         clock: Callable[[], datetime] = local_now,
     ) -> None:
         self._repository = repository
         self._world = world
         self._model = model
         self._llm = llm
+        # Desligado por padrão: cinco chamadas em fila atrasam a tela e gastam a cota gratuita
+        # do Gemini, e o texto montado por regra já diz o mesmo (ADR 0003).
+        self._llm_dos_motivos = llm if reescrever_motivos else None
         self._clock = clock
         self._locks = _ShiftLocks()
 
@@ -232,7 +236,7 @@ class MatchingService:
                     shift.unit_id, shift.specialty, shift.starts_at, shift.ends_at, shift.urgency
                 ),
                 self._clock(),
-                client=self._llm,
+                client=self._llm_dos_motivos,
                 audit=audit,
                 key=shift_id,
             )

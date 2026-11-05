@@ -143,7 +143,7 @@ jobs:
       - name: A imagem da API constrói e a aplicação importa, no Linux
         run: |
           docker build -t plantaoseguro-matching-api:ci services/matching-api
-          docker run --rm --read-only plantaoseguro-matching-api:ci python -c "import app.api.main"
+          docker run --rm --read-only plantaoseguro-matching-api:ci python -c "import app.api.main, google.genai"
 
   banco:
     name: Banco (migrações, RLS e auditoria)
