@@ -2,40 +2,19 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import {
-  Ban,
-  CircleCheck,
-  CircleDashed,
-  ClipboardList,
-  FilePen,
-  Send,
-  TriangleAlert,
-  type LucideIcon,
-} from "lucide-react";
+import { ClipboardList } from "lucide-react";
 import { SuperficieVoz } from "@/components/dominio/superficie-voz";
 import { Alert } from "@/components/ui/alert";
-import { Badge, type BadgeProps } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useVagas } from "@/lib/api/hooks";
 import { useEstadoApi } from "@/lib/api/provider";
 import type { StatusVaga, Vaga } from "@/lib/api/types";
-import { ROTULO_ESPECIALIDADE, ROTULO_STATUS_VAGA, ROTULO_URGENCIA } from "@/lib/copy/rotulos";
-import { formatarIntervalo, plural } from "@/lib/format/datas";
+import { ROTULO_ESPECIALIDADE } from "@/lib/copy/rotulos";
+import { plural } from "@/lib/format/datas";
 import { cn } from "@/lib/utils";
-
-/**
- * A etiqueta de cada estado. O tracejado é a voz da sugestão que espera uma decisão: a linha
- * inteira da vaga "Aguardando sua decisão" também é tracejada.
- */
-const ESTADO: Record<StatusVaga, { icone: LucideIcon; tone: NonNullable<BadgeProps["tone"]> }> = {
-  rascunho: { icone: FilePen, tone: "neutro" },
-  aguardando_decisao: { icone: CircleDashed, tone: "ia" },
-  oferta_em_andamento: { icone: Send, tone: "regra" },
-  preenchida: { icone: CircleCheck, tone: "humano" },
-  sem_cobertura: { icone: Ban, tone: "erro" },
-};
+import { descreverVaga, EtiquetasDaVaga } from "./etiquetas-da-vaga";
 
 const FILTROS = [
   { id: "todas", rotulo: "Todas", serve: () => true },
@@ -61,13 +40,6 @@ function prioridade(vaga: Vaga): number {
 
 function porPrioridade(a: Vaga, b: Vaga): number {
   return prioridade(a) - prioridade(b) || b.criadaEm.localeCompare(a.criadaEm);
-}
-
-function descrever(vaga: Vaga): string {
-  const horario =
-    vaga.inicio && vaga.fim ? formatarIntervalo(vaga.inicio, vaga.fim) : "horário ainda não conferido";
-  const urgencia = vaga.urgencia ? `, urgência ${ROTULO_URGENCIA[vaga.urgencia]}` : "";
-  return `${vaga.unidade.nome}, ${horario}${urgencia}`;
 }
 
 /** "Exigem a sua ação": o que o coordenador precisa ver antes de qualquer número. */
@@ -102,7 +74,6 @@ function ResumoDeAcao({ vagas }: { vagas: Vaga[] }) {
 }
 
 function LinhaDeVaga({ vaga }: { vaga: Vaga }) {
-  const { icone: Icone, tone } = ESTADO[vaga.status];
   const rascunho = vaga.status === "rascunho";
   const aguardando = vaga.status === "aguardando_decisao";
 
@@ -113,19 +84,10 @@ function LinhaDeVaga({ vaga }: { vaga: Vaga }) {
           <h3 id={`vaga-${vaga.id}-titulo`} className="font-serif text-xl font-semibold">
             {vaga.especialidade ? ROTULO_ESPECIALIDADE[vaga.especialidade] : "Vaga sem especialidade"}
           </h3>
-          <Badge tone={tone}>
-            <Icone aria-hidden="true" />
-            {ROTULO_STATUS_VAGA[vaga.status]}
-          </Badge>
-          {vaga.emRisco ? (
-            <Badge tone="atencao">
-              <TriangleAlert aria-hidden="true" />
-              Em risco
-            </Badge>
-          ) : null}
+          <EtiquetasDaVaga vaga={vaga} />
         </div>
         <p id={`vaga-${vaga.id}-descricao`} className="mt-0.5 text-tinta-suave">
-          {descrever(vaga)}
+          {descreverVaga(vaga)}
         </p>
         {rascunho ? (
           <p className="mt-1 line-clamp-2 text-sm text-tinta-suave">Pedido: “{vaga.textoOriginal}”</p>
@@ -142,7 +104,7 @@ function LinhaDeVaga({ vaga }: { vaga: Vaga }) {
       </div>
       <Button asChild variant={aguardando ? "primary" : "secondary"} className="w-full md:w-auto">
         <Link
-          href={rascunho ? "/coordenador/vagas/nova" : `/coordenador/vagas/${vaga.id}`}
+          href={rascunho ? `/coordenador/vagas/nova?rascunho=${vaga.id}` : `/coordenador/vagas/${vaga.id}`}
           // Vários links iguais ("Abrir a vaga") só se distinguem pela vaga que está ao lado.
           aria-describedby={`vaga-${vaga.id}-titulo vaga-${vaga.id}-descricao`}
         >
