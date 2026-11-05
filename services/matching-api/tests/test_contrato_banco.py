@@ -44,7 +44,8 @@ def _columns(table: str) -> set[str]:
 def _enum(name: str) -> set[str]:
     match = re.search(rf"create type public\.{name} as enum \((.*?)\);", SQL, re.DOTALL)
     assert match, f"tipo {name} não encontrado nas migrações"
-    return set(re.findall(r"'([^']+)'", match.group(1)))
+    added = re.findall(rf"alter type public\.{name} add value if not exists '([^']+)'", SQL)
+    return set(re.findall(r"'([^']+)'", match.group(1))) | set(added)
 
 
 def _browser_columns(table: str) -> set[str]:

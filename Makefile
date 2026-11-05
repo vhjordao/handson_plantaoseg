@@ -7,7 +7,7 @@ API := services/matching-api
 CLI := cd $(API) && $(PYTHON) -m app.cli
 SUPABASE := npx --yes supabase@3.0.0
 
-.PHONY: help doctor env seed evaluate flow demo walkthrough analyze robustez dicionario entrega kit-entrevistas poc test lint
+.PHONY: help doctor env seed evaluate flow demo walkthrough analyze robustez dicionario entrega kit-entrevistas poc api test lint
 
 help: ## Lista os comandos
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | sed 's/:.*## /\t/'
@@ -56,6 +56,9 @@ kit-entrevistas: ## Gera os casos da revisão às cegas e os PDFs do kit (precis
 	rm -f docs/entrevistas/Kit-do-entrevistador.html docs/entrevistas/Casos-revisao-cega.html
 
 poc: seed evaluate flow demo walkthrough analyze ## Roda a PoC mínima inteira, na ordem
+
+api: ## API de matching em desenvolvimento (precisa de SUPABASE_URL, chave e segredo no ambiente)
+	cd $(API) && $(PYTHON) -m uvicorn --factory app.api.main:create_app_from_env --port 8000
 
 test: ## Roda o pytest da matching-api
 	cd $(API) && $(PYTHON) -m pytest -q

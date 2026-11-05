@@ -5,7 +5,7 @@
  * llm/guardrails). Os códigos (`clinica_medica`, `high`, `outside_radius`...) são os do
  * backend: o texto em português vive em `lib/copy`, nunca aqui. Onde a tela quer algo que o
  * backend ainda não entrega, o campo é opcional e está marcado "ainda sem backend" (ver o
- * ADR 0011).
+ * ADR 0012).
  */
 import { z } from "zod";
 

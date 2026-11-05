@@ -1,5 +1,5 @@
 /**
- * Sessão por persona, sem senha (WCAG 3.3.8; ADR 0011).
+ * Sessão por persona, sem senha (WCAG 3.3.8; ADR 0012).
  *
  * O cookie guarda só `{papel, personaId}`: nada pessoal. Na demonstração ele **não é assinado**,
  * porque tudo é simulação e não há dado real a proteger. No modo `live`, a persona passa a ser

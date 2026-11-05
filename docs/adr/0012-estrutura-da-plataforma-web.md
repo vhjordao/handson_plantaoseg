@@ -1,6 +1,8 @@
-# ADR 0011: Estrutura da plataforma web, sessão por persona e camada de dados com dois modos
+# ADR 0012: Estrutura da plataforma web, sessão por persona e camada de dados com dois modos
 
 - **Status:** proposta em 03/11/2026, para o ok do Victor no PR `f3/web-plataforma`. Detalhe do desenho em [`docs/design/prompt-frontend.md`](../design/prompt-frontend.md) (seções 7 e 12).
+- **Numeração:** saiu como 0011 em 03/11 e passou a 0012 em 04/11, porque a API de matching tomou o 0010 (ver o [ADR 0011](0011-web-responsiva-sem-pwa.md)).
+- **Atualização de 04/11/2026:** a API de matching ([ADR 0010](0010-api-de-matching.md)) e o banco ([ADR 0008](0008-banco-no-supabase.md)) entraram na `main` depois deste texto. As frases abaixo sobre "ainda não tem API" e a lista de divergências descrevem o backend de 03/11 e ainda não foram reconferidas contra `services/matching-api/app/api/`; isso entra antes do adaptador `live` (UI-2).
 - **Origem:** o Victor pediu uma página inicial que apresente o produto, uma área de login e uma **plataforma funcional**, aberta no computador e no celular. O [ADR 0007](0007-web-sai-do-adiamento.md) tinha liberado só uma página provisória.
 
 ## Contexto
@@ -24,7 +26,7 @@ A web precisa servir quatro públicos com trabalhos diferentes (coordenador, mé
 
 - A demonstração roda **sem API e sem banco**, e o mesmo código passa ao `live` quando a API existir.
 - As fixtures vêm do pipeline real, então motivos, alertas e regras que a tela mostra são os que o backend produz.
-- Um `docs/02` mais enxuto: a linha da interface passa a "web responsiva, sem PWA" ([ADR 0010](0010-web-responsiva-sem-pwa.md)).
+- Um `docs/02` mais enxuto: a linha da interface passa a "web responsiva, sem PWA" ([ADR 0011](0011-web-responsiva-sem-pwa.md)).
 - O que o backend ainda não tem (`POST` de vaga, aprovação, contestação) fica atrás de `PlantaoApi`; o adaptador `live` é escrito na UI-2.
 
 ## Divergências conhecidas com o backend

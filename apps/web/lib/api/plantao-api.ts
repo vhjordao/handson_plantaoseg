@@ -4,7 +4,7 @@
  * Os componentes e as telas falam **só** com `PlantaoApi`. Há dois adaptadores:
  * `demo` (no navegador, com fixtures do pipeline real e relógio simulado, sem rede) e
  * `live` (a `matching-api` e o Supabase, por rotas e ações de servidor; a chave de serviço
- * nunca vai ao navegador). A escolha é `NEXT_PUBLIC_DATA_MODE=demo|live` (ADR 0011).
+ * nunca vai ao navegador). A escolha é `NEXT_PUBLIC_DATA_MODE=demo|live` (ADR 0012).
  */
 import type {
   AprovarInput,

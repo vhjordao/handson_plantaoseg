@@ -21,16 +21,37 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 - Aprovar a mesma lista de novo devolve a decisão já tomada (duplo clique não duplica a trilha); a geração é lida antes da espera, então reiniciar a demonstração no meio descarta a operação; o feedback da explicação passa pela mesma fila.
 - Limpeza de dados pessoais mais larga (CRM com UF e "nº", telefone sem DDD, e-mail, CPF/CNPJ, números longos) sem tocar em datas, horários nem intervalos de anos; limite de 2.000 caracteres para o pedido e 1.000 para textos livres.
 - `erros.ts` subiu para `lib/api` (os erros são do contrato). Cookie `secure` pelo protocolo real, `destinoSeguro` só com o papel exato e cabeçalhos de segurança (`nosniff`, `Referrer-Policy`, `Permissions-Policy`, `frame-ancestors 'none'`).
-- ADR 0011 ganhou as **divergências conhecidas com o backend**; o README da demo passou a dizer que o hash encadeado detecta alteração mas não impede forja.
+- ADR 0012 ganhou as **divergências conhecidas com o backend**; o README da demo passou a dizer que o hash encadeado detecta alteração mas não impede forja.
 
 **Medidas:** Vitest 135 passando; Playwright 64 passando e 8 ignorados de propósito, no build de produção; contraste (com os pares do telão em 7:1), fixtures (`--check`) e `ruff` limpos. O Lighthouse não foi repetido depois da revisão (a medida de 03/11 continua na ficha).
 
 **Descobertas**
 
 - Rodar a jornada contra o servidor de desenvolvimento derrubou 5 testes do computador por tempo (30 s); no build de produção, como na CI, passam todos. A medida que vale é a do build.
+- **Colisão de número de ADR:** a web tinha reservado "0010 em diante" para não colidir com o banco e a API, mas a API entrou na `main` (PR #16) justamente como ADR 0010. Como os ADRs da web ainda não estavam na `main`, foram eles que mudaram: viraram 0011 (web responsiva, sem PWA) e 0012 (estrutura da plataforma). Número reservado não segura com duas sessões em paralelo; vale conferir `docs/adr/` da `main` antes de numerar.
 - Uma medição de Lighthouse dá resultado inválido se algum servidor velho ficar na porta: a primeira saiu com acessibilidade 93 e `/entrar` com erro por isso.
 
 **Uso de IA:** o Claude Code aplicou os achados dos dois revisores e escreveu os testes novos; o agente `acessibilidade` auditou o código final, e o Claude Code aplicou os achados e os cobriu com testes. O Victor aprova ou ajusta no PR; nada foi mesclado.
+
+## 04/11/2026 (quarta): API de matching no servidor
+
+**Pedido do Victor:** aprovou o plano da API com as decisões e os riscos ("Pode começar") e rodou o comando que cria os logins de teste.
+
+**O que foi feito**
+
+- A [API](../services/matching-api/app/api/README.md) em FastAPI, sobre o motor que já existia. A CLI e o núcleo continuam só com a biblioteca padrão, e um teste barra pacote de fora. As decisões estão no [ADR 0010](adr/0010-api-de-matching.md).
+- A API nem carrega nome, CRM, telefone, atributo protegido, valor do plantão nem gabarito. Os pesos do modelo ficam em arquivo versionado, conferido com `model_registry` na subida.
+- Uma migração pôs as ofertas na trilha. A cascata só chama quem está na aprovação gravada e refaz as regras antes de cada chamada.
+- A API entrou no Compose, atrás do Traefik, com limite de requisições, sem porta publicada e com as rotas internas fora da internet.
+- Os testes foram de 267 para 421. Abrimos 22 falhas de propósito, e hoje todas são acusadas.
+
+**No servidor real (simulação):** 60 de 60 vagas iguais aos CSVs, lendo do banco real. 33 de 33 conferências no fluxo inteiro com login. Nenhuma chamada falhou na [medição de carga](resultados/metricas-carga-api.md).
+
+**A descoberta do dia:** a primeira medição travou em 50 chamadas por segundo, com a CPU em menos de 30%. O que parecia limite do servidor era a chave do Supabase: a `sb_secret` tem esse teto, e a `service_role` passou de 900 por segundo no mesmo teste. Com a troca, a API chegou a cerca de 270 por segundo, e só então a CPU virou o limite. A causa do teto segue desconhecida.
+
+**Pendências:** o workflow da cascata, as telas, o teste do Gemini com chave e a repetição da carga antes de 13/11, com as telas e os celulares.
+
+**Uso de IA:** o Victor decidiu o escopo e aprovou o plano. O Claude Code escreveu o código, os testes e os documentos e fez a implantação. Os logins de teste e a limpeza do banco ficam com o Victor, porque o Claude Code não cria contas nem apaga dados no projeto real. A hipótese inicial do Claude Code para o teto, a de que a culpa era do ES256, estava errada, e a medição mostrou isso. Ele também corrigiu o que apareceu no caminho: o log do `httpx` registrava cada chamada ao banco com a URL inteira, e uma vaga sem elegíveis duplicaria as exclusões.
 
 ## 04/11/2026 (quarta): servidor na Hostinger
 
@@ -69,10 +90,10 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 **Decisões**
 
-- **Isolamento:** o trabalho correu num worktree próprio (`C:\dev\plantaoseg-web`, branch `f3/web-plataforma`), sem trocar a branch do checkout da outra sessão. Os ADRs de web começam em 0010 para não colidir com os do banco.
+- **Isolamento:** o trabalho correu num worktree próprio (`C:\dev\plantaoseg-web`, branch `f3/web-plataforma`), sem trocar a branch do checkout da outra sessão. Os ADRs de web começaram em 0010 para não colidir com os do banco; em 04/11 foram renumerados para 0011 e 0012, porque a API de matching entrou na `main` como ADR 0010.
 - **Prompt v2** em [`docs/design/prompt-frontend.md`](design/prompt-frontend.md), no lugar do v1: corrige o segmento (pronto-socorro de hospital privado, não UPA), o formato do CRM sintético, a 2.462 suspensa e a ordem de autoridade.
 - **Metáfora de arte:** "rascunho a lápis, decisão a carimbo". A IA é tracejada, a pessoa é contínua com selo, a regra é cinza. A **voz segue a origem real**: como a leitura da vaga é por regras (o Gemini não foi testado), ela aparece em cinza, não como sugestão da IA.
-- **Web responsiva, sem PWA** ([ADR 0010](adr/0010-web-responsiva-sem-pwa.md)) e **estrutura da plataforma** ([ADR 0011](adr/0011-estrutura-da-plataforma-web.md)): rotas por papel, sessão por persona sem senha, `PlantaoApi` com adaptador `demo` (fixtures do pipeline real) e `live` (depois).
+- **Web responsiva, sem PWA** ([ADR 0011](adr/0011-web-responsiva-sem-pwa.md)) e **estrutura da plataforma** ([ADR 0012](adr/0012-estrutura-da-plataforma-web.md)): rotas por papel, sessão por persona sem senha, `PlantaoApi` com adaptador `demo` (fixtures do pipeline real) e `live` (depois).
 - **Idioma do código:** domínio e tokens em português (glossário fixo), nomes técnicos genéricos em inglês (`Button`, `Dialog`), códigos do backend como estão. É uma exceção consciente à linha "identificadores em inglês" do prompt v1.
 
 **O que ficou pronto:** landing com demonstração viva (saída real da PoC), entrada por persona, cascas do coordenador e do médico, "Minha conta e transparência" do médico, tela de Vagas com indicadores simulados, telão provisório, testes de componente, jornada e `axe` nos temas claro e escuro, e script de contraste dos tokens. Tudo o que depende de fases seguintes diz "esta tela chega na fase UI-n".
@@ -86,7 +107,7 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 **Uso de IA:** o Claude Code escreveu o prompt v2, a direção de arte, os componentes e os testes; um subagente gerou as fixtures a partir do pipeline Python; três agentes (`designer-ui`, `revisor-frontend`, `acessibilidade`) revisam de olhos novos. O Victor aprova ou ajusta no PR.
 
-**Pendências para o Victor:** revisar texto e visual no PR; decidir se o prompt v2 substitui de vez o v1; combinar com a sessão do banco os contratos que a interface espera (campo `trecho` e o texto de `evidencia` das exclusões), registrados no ADR 0011.
+**Pendências para o Victor:** revisar texto e visual no PR; decidir se o prompt v2 substitui de vez o v1; combinar com a sessão do banco os contratos que a interface espera (campo `trecho` e o texto de `evidencia` das exclusões), registrados no ADR 0012.
 
 ## 03/11/2026 (terça): banco no Supabase
 

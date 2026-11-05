@@ -1,0 +1,9 @@
+# Só a API HTTP (app/api). A CLI e o núcleo continuam só com a biblioteca padrão.
+# Versões publicadas há pelo menos duas semanas em 04/11/2026.
+fastapi==0.156.3
+starlette==1.9.0
+uvicorn==0.54.0
+pydantic==2.14.1
+httpx==0.28.1
+PyJWT==2.15.1
+cryptography==50.0.2

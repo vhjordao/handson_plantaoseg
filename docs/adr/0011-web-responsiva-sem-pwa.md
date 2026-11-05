@@ -1,7 +1,7 @@
-# ADR 0010: Interface web responsiva, sem PWA
+# ADR 0011: Interface web responsiva, sem PWA
 
 - **Status:** proposta em 03/11/2026, para o ok do Victor no PR `f3/web-plataforma`.
-- **Numeração:** os ADRs de web começam em 0010 para não colidir com os do banco e da API, que estão em andamento em outra sessão (0008 e 0009 ficam reservados).
+- **Numeração:** saiu como 0010 em 03/11, para não colidir com os do banco e da API, que andavam em outra sessão. Em 04/11 a API entrou na `main` como [ADR 0010](0010-api-de-matching.md), e os ADRs da web passaram a 0011 e 0012.
 - **Origem:** o Victor pediu uma **plataforma web** que abra no computador e no celular ("via web, mas com a tela menor"), e não um app. O `docs/02` e o README ainda descrevem a interface "como PWA".
 
 ## Contexto
