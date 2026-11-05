@@ -4,10 +4,10 @@
 
 Projeto final da disciplina **Hands On – Aplicação de IA nos negócios** (pós-graduação, Mackenzie), Prof. Fabio Versolatto.
 
-> **Status (30/10/2026):** Entrega 1 (descoberta) realizada; **Entrega 2 pronta**: dados sintéticos, análise, solução de IA e uma **PoC mínima executável** (recomendação e explicação, por linha de comando), com o documento em [PDF de 6 páginas](docs/entrega-2/Entrega2-PlantaoSeguro.pdf) e o [guia de postagem](docs/entrega-2/LEIAME.md). Interface, API e n8n estão **adiados** ([ADR 0004](docs/adr/0004-prototipo-adiado.md) e [0005](docs/adr/0005-gp-poc-minima-e-especificacao.md)); o LLM do produto é o **Gemini** ([ADR 0003](docs/adr/0003-llm-do-produto-gemini.md)), ainda **não exercitado** com chave.
+> **Status (30/10/2026):** Entrega 1 (descoberta) realizada; **Entrega 2 pronta**: dados sintéticos, análise, solução de IA e uma **PoC mínima executável** (recomendação e explicação, por linha de comando), com o documento em [PDF de 6 páginas](docs/entrega-2/Entrega2-PlantaoSeguro.pdf) e o [guia de postagem](docs/entrega-2/LEIAME.md). Naquela data, interface, API e n8n estavam adiados ([ADR 0004](docs/adr/0004-prototipo-adiado.md) e [0005](docs/adr/0005-gp-poc-minima-e-especificacao.md)); o LLM do produto é o **Gemini** ([ADR 0003](docs/adr/0003-llm-do-produto-gemini.md)), ainda **não exercitado** com chave.
 > Projeto acadêmico: todos os dados da demonstração serão sintéticos e nenhum documento gerado tem validade médica ou legal.
 >
-> **Atualização de 03/11/2026:** a interface web saiu do adiamento ([ADR 0007](docs/adr/0007-web-sai-do-adiamento.md)). Há uma [página provisória](https://handson-plantaoseg.vercel.app), sem dados nem login, publicada na Vercel a partir de [`apps/web`](apps/web/README.md). O banco está no ar, com os dados sintéticos, migrações, RLS e testes ([ficha](supabase/README.md)). O [servidor](infra/README.md) está no ar desde 04/11, só para a apresentação, com o n8n ainda sem workflows. A API continua adiada.
+> **Atualização de 05/11/2026:** o protótipo está em construção. A [plataforma web](https://handson-plantaoseg.vercel.app) tem a página inicial, a entrada por persona e as áreas de cada papel, em modo de demonstração; as telas do coordenador e do médico vêm a seguir, e a web ainda não chama a API ([ficha](apps/web/README.md)). O banco está no ar, com os dados sintéticos, migrações, RLS e testes ([ficha](supabase/README.md)). No [servidor](infra/README.md), que vale só para a apresentação, rodam a [API de matching](services/matching-api/app/api/README.md) e o [workflow da cascata no n8n](n8n/README.md), conferidos de ponta a ponta em simulação.
 
 ## A ideia em um parágrafo
 
@@ -80,7 +80,8 @@ Custo estimado do mês da apresentação: US$ 34 a US$ 41 (VPS e Supabase lidos 
 | [docs/conformidade/](docs/conformidade/README.md) | O que os textos oficiais das Res. CFM 2.454, 2.460 e 2.462 dizem, lidos em 30/10/2026, e o que depende de jurídico (não é parecer jurídico) |
 | [docs/plano-etapa-2.md](docs/plano-etapa-2.md) | Plano da Etapa 2: escopo, frentes, cronograma com portões de aprovação, contratos e metas com linha de base (proposta) |
 | [docs/plano-etapa-3.md](docs/plano-etapa-3.md) | Plano do protótipo e da Etapa 3: arquitetura, marcos, o que depende do Victor, verificação e riscos (aprovado; a construção começou pela web) |
-| [apps/web/](apps/web/README.md) | Ficha da interface web: página provisória, como rodar, testes e limites |
+| [apps/web/](apps/web/README.md) | Ficha da plataforma web: como funciona, como rodar, testes e limites |
+| [n8n/](n8n/README.md) | Ficha do workflow da cascata: como funciona, como publicar, testes e limites |
 | [supabase/](supabase/README.md) | Ficha do banco: quem enxerga o quê, migrações, testes e limites |
 | [infra/](infra/README.md) | Ficha do servidor: o que roda nele, como entrar, testes e limites |
 | [docs/CONTRIBUINDO.md](docs/CONTRIBUINDO.md) | Guia de entrada da equipe: ferramentas, primeiro dia, uso do Claude Code, fluxo de Git e documentação obrigatória |

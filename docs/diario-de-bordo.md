@@ -16,6 +16,7 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 - **"Sugestões aceitas" nunca saía do travessão**, embora a tela prometesse o número depois da decisão. Agora conta o que a pessoa decidiu na sessão.
 - **Voltar do login perdia o filtro da lista**, porque o `proxy` guardava só o caminho.
 - **As fixtures não eram conferidas na CI:** o job `poc` agora roda `exportar_fixtures_web.py --check`, e o `ruff` passa também em `scripts/`.
+- **Documentos parados no tempo:** o README público ainda dizia "a API continua adiada", o guia da equipe dizia que não se construía API, n8n nem banco, e o plano dizia "n8n sem workflows". Os três foram atualizados.
 
 **Ficam para as telas que usam cada recurso (UI-1 e UI-2):** o nome pulado ainda não volta marcado nas sugestões nem bloqueia a aprovação; entrada fora do contrato sai como `ZodError`, e não como erro de domínio; e o cabeçalho mostra o relógio fixo, o que só importa quando houver o controle que adianta o relógio.
 

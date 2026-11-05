@@ -2,7 +2,7 @@
 
 20/10/2026 · Victor
 
-> **Atualizado em 04/11/2026:** a [API de matching](../services/matching-api/app/api/README.md) está no servidor, com as decisões no [ADR 0010](adr/0010-api-de-matching.md). Os pesos do modelo ficam em arquivo versionado, e a API acessa o banco pela API REST do Supabase, com a chave de serviço, sem carregar dado pessoal nem o valor do plantão.
+> **Atualizado em 04/11/2026:** a [API de matching](../services/matching-api/app/api/README.md) está no servidor, com as decisões no [ADR 0010](adr/0010-api-de-matching.md). Os pesos do modelo ficam em arquivo versionado, e a API acessa o banco pela API REST do Supabase, com a chave de serviço, sem carregar dado pessoal nem o valor do plantão. O [workflow da cascata](../n8n/README.md) está no n8n do servidor ([ADR 0013](adr/0013-aviso-da-api-inicia-a-cascata.md)), e a [web](../apps/web/README.md) tem a fundação, em modo de demonstração ([ADR 0014](adr/0014-estrutura-da-plataforma-web.md)).
 >
 > **Atualizado em 03/11/2026:** como cada dado seria coletado, atualizado e integrado em um ambiente real está em [dados em produção](dados/dados-em-producao.md).
 >

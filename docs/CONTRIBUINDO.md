@@ -8,7 +8,7 @@ Para quem entra no projeto (Roberval, Guilherme, Sergio, Lucas e Plinio) e para 
 >
 > **Atualização de 30/10:** a **PoC mínima já existe e roda**: comece por `make poc` e pela [ficha do componente](../services/matching-api/README.md). O que falta é a Etapa 3 (entrevistas, teste do Gemini com chave, mitigar o viés de distância, previsão de vagas e, com o ok do Victor, interface, API e n8n).
 >
-> **Dois avisos de 28/10:** o **protótipo está adiado** ([ADR 0004](adr/0004-prototipo-adiado.md)): por ora não se constrói API, n8n nem banco, e a interface tem só uma página provisória desde 03/11 ([ADR 0007](adr/0007-web-sai-do-adiamento.md)); o trabalho é Dados, Análise, Solução de IA e segurança. E o **LLM do produto é o Gemini** ([ADR 0003](adr/0003-llm-do-produto-gemini.md)); o Claude Code é só a ferramenta de desenvolvimento de cada um.
+> **Dois avisos, atualizados em 05/11:** o **protótipo saiu do adiamento aos poucos**, sempre com o ok do Victor: o banco ([ADR 0008](adr/0008-banco-no-supabase.md)), a API ([ADR 0010](adr/0010-api-de-matching.md)), o workflow da cascata ([ADR 0013](adr/0013-aviso-da-api-inicia-a-cascata.md)) e a fundação da web ([ADR 0014](adr/0014-estrutura-da-plataforma-web.md)) já existem, e cada novo pedaço continua pedindo esse ok. E o **LLM do produto é o Gemini** ([ADR 0003](adr/0003-llm-do-produto-gemini.md)); o Claude Code é só a ferramenta de desenvolvimento de cada um.
 
 ## 1. Antes de começar
 
@@ -73,7 +73,7 @@ gh pr create                                 # preencha o modelo do PR
 | A4 Solução de IA: LLM com Gemini | `docs/solucao-ia.md` (seção LLM) | Prompts, esquema de saída, guardrails, casos de injeção, fallback |
 | A5 Segurança, ética e conformidade | `docs/seguranca-ameacas.md`, `docs/conformidade/` | STRIDE, textos oficiais das normas, ficha de risco, viés |
 
-Os workflows em `n8n/` e a API ficam **congelados** até o ok do Victor (ADR 0004). `infra/` descreve o servidor, que serve só para a apresentação ([ficha](../infra/README.md)). `apps/web/` saiu do adiamento em 03/11 só com a página provisória ([ficha](../apps/web/README.md)), e `supabase/` tem as migrações do banco ([ficha](../supabase/README.md)); novas telas e mudanças no banco também pedem o ok dele.
+`infra/` descreve o servidor, que serve só para a apresentação ([ficha](../infra/README.md)). `n8n/` guarda o workflow da cascata, e a mudança vai pelo arquivo no Git, nunca pelo editor ([ficha](../n8n/README.md)). `apps/web/` tem a plataforma ([ficha](../apps/web/README.md)), `services/matching-api/app/api/` tem a API ([ficha](../services/matching-api/app/api/README.md)) e `supabase/` tem as migrações do banco ([ficha](../supabase/README.md)). Novas telas e mudanças na API, no workflow e no banco pedem o ok do Victor.
 
 Arquivos compartilhados e de alto risco de conflito: `CLAUDE.md`, `docs/rastreabilidade-professor.md`, `docs/diario-de-bordo.md`, `docs/02-arquitetura-e-ferramentas.md`, `README.md`. Mexa neles só em PR pequeno e avise no grupo.
 
