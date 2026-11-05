@@ -52,7 +52,7 @@ class ComposeTests(unittest.TestCase):
 
 
 class EditorDoN8nTests(unittest.TestCase):
-    """O editor abre pela web (ADR 0012), e só ele: webhook, formulário e MCP ficam por dentro."""
+    """O editor abre pela web (ADR 0012), e só ele: o resto do n8n fica por dentro."""
 
     def setUp(self):
         self.service = _service("n8n")
@@ -63,9 +63,9 @@ class EditorDoN8nTests(unittest.TestCase):
         self.assertIn("routers.n8n.entrypoints=websecure", self.service)
         self.assertIn("routers.n8n.tls.certresolver=mytlschallenge", self.service)
 
-    def test_webhook_formulario_e_mcp_ficam_fora_da_rota_publica(self):
+    def test_webhook_formulario_mcp_e_api_ficam_fora_da_rota_publica(self):
         rule = re.search(r"routers\.n8n\.rule=(.+)", self.service).group(1)
-        for path in ("/webhook", "/form", "/mcp"):
+        for path in ("/webhook", "/form", "/mcp", "/api"):
             self.assertIn(f"!PathPrefix(`{path}`)", rule)
 
     def test_login_tem_rota_propria_com_limite_de_tentativas(self):

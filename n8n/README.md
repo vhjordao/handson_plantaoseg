@@ -92,7 +92,7 @@ cd /docker/n8n && S=$(grep '^N8N_WEBHOOK_SECRET=' .env | cut -d= -f2-) && printf
 - **Dados:** só o ID pseudônimo da vaga e a resposta do `advance`, que traz IDs pseudônimos e horários. Nome, CRM e telefone não passam por aqui. As execuções ficam no Postgres do n8n, e não no Supabase.
 - **Segredo:** a credencial guarda `N8N_WEBHOOK_SECRET`, cifrada pelo n8n. Ela nasce do `.env` do servidor, e nunca fica no Git. O workflow só cita o ID dela.
 - **Ameaças consideradas:** disparar a cascata de fora (o webhook não existe na internet e pede o segredo), e entrar no editor e usar o segredo. Nesse caso, sem o clique do coordenador, `advance` responde `409` e nenhuma oferta nasce. O segredo também não aprova, e um teste cobre isso.
-- **Sem chave da API do n8n:** nenhuma foi criada.
+- **Sem chave da API do n8n:** nenhuma foi criada, e `/api` não existe na internet ([ADR 0012](../docs/adr/0012-editor-do-n8n-na-web.md)).
 
 ## 9. Limitações e honestidade
 
