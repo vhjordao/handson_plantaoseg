@@ -106,11 +106,6 @@ export const MedicoSchema = z.object({
   crm: z.string(),
   especialidade: EspecialidadeSchema,
   especialidadeSecundaria: EspecialidadeSchema.nullable(),
-  /**
-   * Zona de residência. A RLS não a libera ao navegador (`doctors.home_zone`), então no `live`
-   * ela não vem; nenhuma tela a lê (ADR 0014, divergência sobre o cadastro do médico).
-   */
-  zona: z.string().optional(),
 });
 export type Medico = z.infer<typeof MedicoSchema>;
 

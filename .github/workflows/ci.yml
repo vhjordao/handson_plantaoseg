@@ -55,7 +55,7 @@ jobs:
           cache-dependency-path: services/matching-api/requirements-*.txt
       - run: pip install -r requirements-dev.txt
       - name: Lint (ruff)
-        run: ruff check .
+        run: ruff check . ../../scripts --config pyproject.toml
       - name: Testes (pytest)
         run: python -m pytest -q
 
@@ -109,6 +109,8 @@ jobs:
           python -m app.cli demo --yes --fresh | tee /tmp/evidencias/demo.txt
       - name: Análise exploratória
         run: python -m app.cli analyze --out /tmp/evidencias/analise
+      - name: As fixtures da web são as que o pipeline gera
+        run: python ../../scripts/exportar_fixtures_web.py --check
       - name: Reprodutibilidade entre máquinas (informativo, não reprova)
         continue-on-error: true
         run: |

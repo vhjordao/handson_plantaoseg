@@ -5,10 +5,10 @@
  * pseudônimos; como a pessoa pode digitar qualquer coisa, o texto passa por aqui antes de ser
  * gravado.
  *
- * É uma barreira de melhor esforço, não uma garantia: pega os nomes da demonstração, CRM, e-mail
- * e os formatos brasileiros de telefone e documento. Prefere apagar a mais a deixar passar: um
- * número comprido que não seja telefone também some. O aviso "Não digite dados reais" continua
- * valendo na tela.
+ * É uma barreira de melhor esforço, não uma garantia: pega os nomes da demonstração (inteiros ou
+ * em partes), CRM, e-mail e os formatos brasileiros de telefone e documento. Prefere apagar a
+ * mais a deixar passar: um sobrenome que também seja palavra comum ("Jardim") e um número comprido
+ * que não seja telefone também somem. O aviso "Não digite dados reais" continua valendo na tela.
  */
 import { normalizar } from "./leitura";
 
@@ -45,22 +45,49 @@ function escapar(texto: string): string {
   return texto.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-function removerNomes(texto: string, nomes: readonly string[]): string {
+/** Partes de um nome mais curtas que isto ("Ana", "de") casariam com palavras comuns. */
+const MINIMO_DA_PARTE = 4;
+
+/**
+ * Apaga o alvo sem acento e sem diferença de caixa, só como palavra inteira ("Lucas", e não o
+ * começo de "Lucasfilm"). Só funciona se cada caractere mantém o tamanho ao normalizar.
+ */
+function apagarSemAcento(texto: string, alvo: string): string {
+  const padrao = new RegExp(`(?<![\\p{L}\\p{N}])${escapar(alvo)}(?![\\p{L}\\p{N}])`, "u");
   let resultado = texto;
+  for (;;) {
+    const comparavel = normalizar(resultado);
+    if (comparavel.length !== resultado.length) return resultado;
+    const achado = padrao.exec(comparavel);
+    if (!achado) return resultado;
+    resultado =
+      resultado.slice(0, achado.index) + MARCA_NOME + resultado.slice(achado.index + alvo.length);
+  }
+}
+
+function removerNomes(texto: string, nomes: readonly string[]): string {
+  // Forma composta: um "ó" colado de outro programa pode vir como "o" mais o acento em separado.
+  let resultado = texto.normalize("NFC");
   for (const nome of nomes) {
     const alvo = normalizar(nome);
     if (alvo.length < 5) continue; // nome curto demais casaria com palavras comuns
     resultado = resultado.replace(new RegExp(escapar(nome), "giu"), MARCA_NOME);
-    // Sem acento e sem diferença de caixa: só se cada caractere mantém o tamanho ao normalizar.
-    for (;;) {
-      const comparavel = normalizar(resultado);
-      const posicao = comparavel.length === resultado.length ? comparavel.indexOf(alvo) : -1;
-      if (posicao < 0) break;
-      resultado = resultado.slice(0, posicao) + MARCA_NOME + resultado.slice(posicao + alvo.length);
-    }
+    resultado = apagarSemAcento(resultado, alvo);
   }
-  return resultado;
+  // Depois dos nomes inteiros, as partes: "Felipe Ferraz" não é o nome completo, mas é ele.
+  const partes = new Set(
+    nomes.flatMap((nome) =>
+      normalizar(nome)
+        .split(/\s+/u)
+        .filter((parte) => parte.length >= MINIMO_DA_PARTE),
+    ),
+  );
+  for (const parte of partes) resultado = apagarSemAcento(resultado, parte);
+  return resultado.replace(NOMES_VIZINHOS, MARCA_NOME);
 }
+
+/** Um nome em partes vira uma marca só, e não "[nome removido] [nome removido]". */
+const NOMES_VIZINHOS = /\[nome removido\](?:\s+\[nome removido\])+/gu;
 
 /** O texto sem os nomes dados, sem CRM, e-mail, telefone nem número de documento. */
 export function removerDadosPessoais(texto: string, nomes: readonly string[] = []): string {
@@ -70,4 +97,11 @@ export function removerDadosPessoais(texto: string, nomes: readonly string[] = [
     .replace(CRM, MARCA_CRM)
     .replace(TELEFONE, MARCA_TELEFONE)
     .replace(NUMERO_LONGO, MARCA_NUMERO);
+}
+
+const MARCAS_DE_REMOCAO = /\[(?:nome|CRM|telefone|e-mail|número) removido\]/gu;
+
+/** O que sobra do texto limpo sem as marcas: é o que a pessoa escreveu de fato. */
+export function semMarcasDeRemocao(texto: string): string {
+  return texto.replace(MARCAS_DE_REMOCAO, "").replace(/\s+/gu, " ").trim();
 }

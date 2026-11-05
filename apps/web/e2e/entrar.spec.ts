@@ -19,6 +19,13 @@ test.describe("entrada por persona", () => {
     await expect(page.getByText("entre como coordenador")).toBeVisible();
   });
 
+  test("quem volta do login reencontra o filtro da lista", async ({ page }) => {
+    await page.goto("/coordenador/vagas?status=risco");
+    await expect(page).toHaveURL(/de=%2Fcoordenador%2Fvagas%3Fstatus%3Drisco/);
+    await page.getByRole("button", { name: "Entrar como coordenador" }).click();
+    await expect(page).toHaveURL(/\/coordenador\/vagas\?status=risco$/);
+  });
+
   test("entrar como coordenador abre a plataforma com hospital, relógio simulado e Ajuda à direita", async ({ page, isMobile }) => {
     await entrarComoCoordenador(page);
     await expect(page.getByRole("region", { name: "Aviso de demonstração" })).toBeVisible();

@@ -198,6 +198,22 @@ describe("textos livres na trilha", () => {
     expect(removerDadosPessoais(`Quem é ${semAcento}?`, nomes)).toBe("Quem é [nome removido]?");
   });
 
+  it("tira o nome em partes e o que vem com o acento em separado (texto colado)", () => {
+    const nomes = ["Felipe Ferraz Siqueira", "Olívia Ibarra Nogueira"];
+    expect(removerDadosPessoais("Felipe Ferraz fez esse plantão", nomes)).toBe(
+      "[nome removido] fez esse plantão",
+    );
+    expect(removerDadosPessoais("Falei com Siqueira ontem", nomes)).toBe(
+      "Falei com [nome removido] ontem",
+    );
+    expect(removerDadosPessoais("Quem é Olívia?".normalize("NFD"), nomes)).toBe(
+      "Quem é [nome removido]?",
+    );
+    // A parte só vale como palavra inteira, e parte curta não apaga nada.
+    expect(removerDadosPessoais("Felipesco e Ferrazópolis", nomes)).toBe("Felipesco e Ferrazópolis");
+    expect(removerDadosPessoais("Ana viu a banana", ["Ana Ramos Tavares"])).toBe("Ana viu a banana");
+  });
+
   it("pega CRM em vários formatos, com UF, número e pontos", () => {
     const casos = [
       "CRM 123456",

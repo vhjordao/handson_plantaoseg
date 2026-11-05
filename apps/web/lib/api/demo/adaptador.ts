@@ -56,7 +56,7 @@ import {
   type DadosDaSessao,
 } from "./estado";
 import { lerTexto } from "./leitura";
-import { removerDadosPessoais } from "./privacidade";
+import { removerDadosPessoais, semMarcasDeRemocao } from "./privacidade";
 import { Relogio } from "./relogio";
 import { sha256Hex } from "./sha256";
 
@@ -317,11 +317,17 @@ class ApiDemo implements PlantaoApiDemo {
       const comAlerta = aprovados.filter((c) => c.alertas.length > 0);
       let excecao: Decisao["excecao"] = null;
       if (comAlerta.length > 0) {
-        const justificativa = (input.justificativa ?? "").trim();
-        if (justificativa.length < MIN_CARACTERES_JUSTIFICATIVA) throw new JustificativaObrigatoriaError();
+        const justificativa = removerDadosPessoais(
+          (input.justificativa ?? "").trim(),
+          this.nomesConhecidos(recomendacao),
+        );
+        // Conta o que sobra depois de limpar: só um nome ou um telefone não justifica a exceção.
+        if (semMarcasDeRemocao(justificativa).length < MIN_CARACTERES_JUSTIFICATIVA) {
+          throw new JustificativaObrigatoriaError();
+        }
         excecao = {
           alertas: [...new Set(comAlerta.flatMap((c) => c.alertas))],
-          justificativa: removerDadosPessoais(justificativa, this.nomesConhecidos(recomendacao)),
+          justificativa,
         };
       }
 
@@ -487,7 +493,7 @@ class ApiDemo implements PlantaoApiDemo {
       rotulo: "simulado",
       tempoMedioAtePreencherMin: base.tempoMedioFluxoMin,
       pctPreenchidasComAntecedencia24h: base.pctPreenchidasComAntecedencia24h,
-      pctSugestoesAceitas: base.pctSugestoesAceitas,
+      pctSugestoesAceitas: this.pctSugestoesAceitas() ?? base.pctSugestoesAceitas,
       // O processo manual simulado, nas mesmas vagas de teste: o "contra X" do painel.
       linhaDeBase: {
         tempoMedioAtePreencherMin: base.tempoMedioManualMin,
@@ -507,6 +513,21 @@ class ApiDemo implements PlantaoApiDemo {
   }
 
   // --- Apoio interno --------------------------------------------------------------------------
+
+  /**
+   * Das sugestões que passaram pela decisão da pessoa nesta sessão, quantas ela aprovou (0 a 100).
+   * As decisões das vagas de exemplo não contam, porque não foram dela. Sem decisão, `null`.
+   */
+  private pctSugestoesAceitas(): number | null {
+    const aprovadas = new Set(
+      Object.values(this.dados.decisoes)
+        .filter((decisao) => !(decisao.vagaId in this.mundo.decisoes))
+        .flatMap((decisao) => decisao.medicoIds.map((id) => `${decisao.vagaId}:${id}`)),
+    );
+    const puladas = this.dados.pulos.filter((p) => !aprovadas.has(`${p.vagaId}:${p.medicoId}`));
+    const total = aprovadas.size + puladas.length;
+    return total === 0 ? null : (aprovadas.size / total) * 100;
+  }
 
   private async esperar(): Promise<void> {
     if (this.latenciaMs > 0) {

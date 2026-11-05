@@ -350,8 +350,7 @@ def medico_json(doctor: Doctor) -> dict[str, Any]:
         "crm": doctor.crm_sim,
         "especialidade": doctor.specialty,
         "especialidadeSecundaria": doctor.secondary_specialty or None,
-        "zona": doctor.home_zone,
-    }  # `phone_sim` e os atributos protegidos nunca saem do pipeline
+    }  # `phone_sim`, a zona de residência e os atributos protegidos nunca saem do pipeline
 
 
 def unidade_da_zona(dataset: Dataset, zona: str) -> Unit:

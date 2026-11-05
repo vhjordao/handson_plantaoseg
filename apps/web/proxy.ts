@@ -6,7 +6,7 @@ import { COOKIE_SESSAO, lerSessaoDoValor } from "@/lib/session/sessao";
  * (Next.js 16: `proxy.ts` é o antigo `middleware.ts`.) O servidor das telas confere de novo.
  */
 export function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const { pathname, search } = request.nextUrl;
   const exigido = pathname.startsWith("/coordenador") ? "coordenador" : "medico";
   const sessao = lerSessaoDoValor(request.cookies.get(COOKIE_SESSAO)?.value);
 
@@ -16,7 +16,8 @@ export function proxy(request: NextRequest) {
   destino.pathname = "/entrar";
   destino.search = "";
   destino.searchParams.set("papel", exigido);
-  destino.searchParams.set("de", pathname);
+  // Com a busca: quem volta do login reencontra o mesmo filtro da lista.
+  destino.searchParams.set("de", `${pathname}${search}`);
   return NextResponse.redirect(destino);
 }
 

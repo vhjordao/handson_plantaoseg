@@ -277,6 +277,9 @@ describe("fluxo completo: ler, confirmar, sugerir e decidir", () => {
     await expect(
       api.aprovar({ vagaId: "vaga-demo-1", medicoIds: ids, justificativa: "   nove car   " }),
     ).rejects.toBeInstanceOf(JustificativaObrigatoriaError); // 8 caracteres depois de aparar
+    await expect(
+      api.aprovar({ vagaId: "vaga-demo-1", medicoIds: ids, justificativa: comAlerta.medico.nome }),
+    ).rejects.toBeInstanceOf(JustificativaObrigatoriaError); // só um nome, que a limpeza apaga
     // Nada foi gravado nas tentativas que falharam, e a vaga continua aguardando.
     expect((await api.listarAuditoria()).length).toBe(total);
     expect((await api.obterVaga("vaga-demo-1")).status).toBe("aguardando_decisao");
@@ -657,6 +660,20 @@ describe("indicadores", () => {
     const vaga = await api.confirmarVaga(entradaDe("norte", "pediatria", "2026-10-06T19:00:00"));
     await api.aprovar({ vagaId: vaga.id, medicoIds: [await primeiroSemAlerta(api, vaga.id)] });
     expect(await api.obterIndicadores()).toMatchObject({ vagasPublicadas: 6, decisoesHumanas: 4, aceites: 1 });
+  });
+
+  it("as sugestões aceitas contam só o que a pessoa decidiu nesta sessão", async () => {
+    const api = criarApiDemo();
+    expect((await api.obterIndicadores()).pctSugestoesAceitas).toBeNull(); // as de exemplo não contam
+
+    const { candidatos } = await api.obterSugestoes("vaga-demo-1");
+    const aprovado = await primeiroSemAlerta(api, "vaga-demo-1");
+    const pulado = candidatos.find((c) => c.medico.id !== aprovado)!.medico.id;
+    await api.pular({ vagaId: "vaga-demo-1", medicoId: pulado });
+    expect((await api.obterIndicadores()).pctSugestoesAceitas).toBe(0);
+
+    await api.aprovar({ vagaId: "vaga-demo-1", medicoIds: [aprovado] });
+    expect((await api.obterIndicadores()).pctSugestoesAceitas).toBe(50);
   });
 });
 

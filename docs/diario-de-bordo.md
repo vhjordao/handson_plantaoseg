@@ -4,6 +4,25 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 05/11/2026 (quinta): revisão final antes do merge da plataforma web
+
+**Pedido do Victor:** revisar o que foi feito nesta e nas outras sessões e fazer o merge final.
+
+**O que a revisão achou e corrigiu**
+
+- **A zona de residência dos médicos ia ao navegador** nas fixtures, embora a API e a RLS não a liberem e o próprio script dissesse o contrário. Saiu do contrato e das fixtures, e um teste barra a volta dela e dos outros atributos protegidos.
+- **A limpeza de dados pessoais deixava passar nome em partes** ("Felipe Ferraz") **e texto colado com o acento em separado.** Os dois chegariam à trilha, que é só de inserção.
+- **Uma justificativa feita só de um nome valia como exceção:** o mínimo de caracteres passou a contar o que sobra depois da limpeza.
+- **"Sugestões aceitas" nunca saía do travessão**, embora a tela prometesse o número depois da decisão. Agora conta o que a pessoa decidiu na sessão.
+- **Voltar do login perdia o filtro da lista**, porque o `proxy` guardava só o caminho.
+- **As fixtures não eram conferidas na CI:** o job `poc` agora roda `exportar_fixtures_web.py --check`, e o `ruff` passa também em `scripts/`.
+
+**Ficam para as telas que usam cada recurso (UI-1 e UI-2):** o nome pulado ainda não volta marcado nas sugestões nem bloqueia a aprovação; entrada fora do contrato sai como `ZodError`, e não como erro de domínio; e o cabeçalho mostra o relógio fixo, o que só importa quando houver o controle que adianta o relógio.
+
+**Conferido:** 141 testes de componente, a jornada de entrada no navegador (24 de 24) e lint, tipos e contraste. Na varredura do repositório inteiro, nenhuma chave real nem nome ou IP do servidor.
+
+**Uso de IA:** o Claude Code revisou o trabalho das sessões, corrigiu o que achou e concluiu o merge que a sessão da web havia deixado pela metade. O Victor autorizou o merge final.
+
 ## 04/11/2026 (quarta): revisão de olhos novos da plataforma web
 
 **O que aconteceu:** os agentes `designer-ui` e `revisor-frontend` leram a plataforma sem ter visto o processo e devolveram achados; este dia aplicou os que valiam, no mesmo PR (`f3/web-plataforma`), e corrigiu o que os testes mostraram.

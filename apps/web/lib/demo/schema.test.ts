@@ -81,6 +81,25 @@ describe("mundo.json", () => {
     expect(base.fonte).toBe("docs/resultados/metricas-fluxo.md, simulação");
   });
 
+  it("não leva ao navegador a zona de residência nem outro atributo protegido dos médicos", async () => {
+    const proibidos = ["zona", "home_zone", "gender", "age_band", "phone_sim", "home_lat", "home_lon"];
+    const brutos = [
+      (await import("./mundo.json")).default,
+      (await import("./grade.json")).default,
+    ];
+    const achados: string[] = [];
+    const varrer = (valor: unknown, dentroDeMedico: boolean): void => {
+      if (Array.isArray(valor)) return valor.forEach((item) => varrer(item, dentroDeMedico));
+      if (valor === null || typeof valor !== "object") return;
+      for (const [chave, interno] of Object.entries(valor)) {
+        if (dentroDeMedico && proibidos.includes(chave)) achados.push(chave);
+        varrer(interno, chave === "medico");
+      }
+    };
+    brutos.forEach((bruto) => varrer(bruto, false));
+    expect(achados).toEqual([]);
+  });
+
   it("tem 2 coordenadores e 12 médicos, 6 de cada uma das duas vagas que aguardam decisão", () => {
     const coordenadores = mundo.personas.filter((p) => p.papel === "coordenador");
     expect(coordenadores.map((c) => `${c.nome} (${c.unidade.nome})`)).toEqual([
