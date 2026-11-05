@@ -76,6 +76,8 @@ const pares = [
   ["sobre-tinta", "tinta", TEXTO, "Botão primário (rótulo)"],
   ["sobre-humano", "humano", TEXTO, "Botão de decisão (rótulo)"],
   ["sobre-atencao", "atencao-fundo", TEXTO, "Preenchimento de atenção (rótulo)"],
+  ["fator-favor", "papel", COMPONENTE, "Barra a favor em Ver motivos"],
+  ["fator-contra", "papel", COMPONENTE, "Barra contra em Ver motivos"],
   ["campo", "papel", COMPONENTE, "Borda de campo sobre papel"],
   ["campo", "gaze", COMPONENTE, "Borda de campo sobre a página"],
   ["ia", "papel", COMPONENTE, "Contorno tracejado da IA sobre papel"],

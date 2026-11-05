@@ -30,6 +30,8 @@ export const DadosDaSessaoSchema = z.object({
   vagas: z.array(VagaSchema),
   /** Chave da grade de cada vaga criada na sessão (as de exemplo têm a recomendação no mundo). */
   chavesDaGrade: z.record(z.string(), z.string()),
+  /** Rascunhos já publicados: ficam em `vagas` (são do mundo), mas saem da lista. */
+  rascunhosConcluidos: z.array(z.string()).default([]),
   decisoes: z.record(z.string(), DecisaoSchema),
   pulos: z.array(PuloSchema),
   feedbacks: z.array(FeedbackGuardadoSchema),
@@ -48,6 +50,7 @@ export function estadoInicial(mundo: Mundo): DadosDaSessao {
     versao: 1 as const,
     vagas: mundo.vagas,
     chavesDaGrade: {},
+    rascunhosConcluidos: [],
     decisoes: mundo.decisoes,
     pulos: [],
     feedbacks: [],

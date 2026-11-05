@@ -257,6 +257,9 @@ O divisor (1,28:1 no claro, 1,54:1 no escuro) é decorativo, não carrega inform
 | A tela de Vagas começa pela **lista**, com o resumo "Exigem a sua ação"; os indicadores vêm depois | A tarefa do coordenador é decidir; os números respondiam a uma pergunta que ele não fez ao abrir a tela. As vagas "aguardando" usam o contorno tracejado da IA |
 | Os indicadores levam "simulado" ao lado de cada valor e um link para a fonte dos tempos | Número de simulação nunca aparece sem o rótulo |
 | Telão provisório com corpo de 28 px e a legenda das vozes em escala de sala | É lido a 15 m, com a sala escura |
+| Sugestões: um único contorno tracejado em volta da lista, com divisórias entre os nomes, em vez de um contorno por nome | Cinco contornos tracejados viravam ruído. O momento memorável fica maior: é a lista inteira que fecha |
+| Sugestões: caixa "Incluir na oferta" em cada nome e um só "Aprovar e oferecer" no fim, em vez de um botão por nome (como no esboço de 390 px) | A API recebe uma lista em ordem, e a cascata precisa de mais de um nome. Nenhuma caixa vem marcada, para a escolha ser sempre um gesto da pessoa |
+| Barras de "Ver motivos" com duas cores só delas (`--fator-favor` e `--fator-contra`, conferidas com o validador de paleta nos dois temas) | O cinza e o azul da IA ficavam parecidos no escuro, e o âmbar, o vermelho e o verde já têm significado. O sentido também vem na posição e na palavra |
 
 **Que acessório saiu** (a regra de Chanel): o menu de âncoras no celular (a página é uma rolagem só); a animação de entrada de cada seção (sobrou a revelação do hero e o fechamento do tracejado); o botão "Pular" do hero (só o "Aprovar e oferecer" funciona, e um botão que não faz nada é pior do que nenhum); e a faixa de demonstração fixa no celular (ela some na rolagem e volta a cada página).
 

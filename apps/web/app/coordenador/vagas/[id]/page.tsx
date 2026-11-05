@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
-import { TelaEmConstrucao } from "@/components/dominio/tela-em-construcao";
+import { TelaDaVaga } from "@/components/coordenador/tela-da-vaga";
 
 export const metadata: Metadata = { title: "Vaga" };
 
-export default function Vaga() {
-  return (
-    <TelaEmConstrucao
-      titulo="Vaga"
-      descricao="Esta é a tela mais importante: a ordem sugerida, com o motivo de cada nome, os alertas de jornada, quem ficou de fora e a regra que o barrou, e o diálogo em que você aprova e o tracejado se fecha."
-    />
-  );
+export default async function PaginaDaVaga({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ existente?: string | string[] }>;
+}) {
+  const [{ id }, { existente }] = await Promise.all([params, searchParams]);
+  return <TelaDaVaga vagaId={id} jaExistia={existente === "1"} />;
 }

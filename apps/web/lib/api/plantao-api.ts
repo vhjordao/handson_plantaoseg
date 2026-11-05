@@ -13,7 +13,10 @@ import type {
   ContestarInput,
   Contestacao,
   Decisao,
+  DesfazerPuloInput,
+  EstadoDaDecisao,
   EventoPlantao,
+  ExemploDeVaga,
   FeedbackExplicacaoInput,
   FichaModelo,
   Indicadores,
@@ -25,6 +28,7 @@ import type {
   Recomendacao,
   RegistroAuditoria,
   RespostaOfertaInput,
+  Unidade,
   VerificacaoCadeia,
   Vaga,
   DataHora,
@@ -60,6 +64,10 @@ export interface PlantaoApi {
   // --- Vagas (coordenador) --------------------------------------------------
   listarVagas(): Promise<Vaga[]>;
   obterVaga(vagaId: string): Promise<Vaga>;
+  /** Os hospitais que a pessoa pode escolher ao conferir a vaga. */
+  listarUnidades(): Promise<Unidade[]>;
+  /** Pedidos de exemplo para clicar na tela "Nova vaga". */
+  listarExemplosDeVaga(): Promise<ExemploDeVaga[]>;
   /** "Ler a vaga": extrai os campos do texto livre. Não cria nada; a pessoa confere antes. */
   lerVaga(texto: string): Promise<Leitura>;
   /** Registra os campos conferidos (`extraction_confirmed` e `shift_published`). */
@@ -67,8 +75,12 @@ export interface PlantaoApi {
   obterSugestoes(vagaId: string): Promise<Recomendacao>;
   /** A decisão humana. Sem esta chamada, nenhuma oferta pode sair. */
   aprovar(input: AprovarInput): Promise<Decisao>;
+  /** A decisão já tomada na vaga e os nomes pulados. */
+  obterEstadoDaDecisao(vagaId: string): Promise<EstadoDaDecisao>;
   /** "Pular" um sugerido, sem culpa (`recommendation_rejected`). */
   pular(input: PularInput): Promise<void>;
+  /** Traz de volta um nome pulado, enquanto a vaga espera a decisão (`recommendation_restored`). */
+  desfazerPulo(input: DesfazerPuloInput): Promise<void>;
   /** "Esta explicação ajudou?". Fica registrado; não treina o modelo agora. */
   enviarFeedbackExplicacao(input: FeedbackExplicacaoInput): Promise<void>;
   obterFichaModelo(): Promise<FichaModelo>;

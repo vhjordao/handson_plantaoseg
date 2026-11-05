@@ -3,10 +3,12 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { carregarGrade, chaveDaGrade, obterMundo } from "../../demo/mundo";
 import {
   CandidatoInvalidoError,
+  EntradaInvalidaError,
   EstadoInvalidoError,
   ForaDaGradeError,
   JustificativaObrigatoriaError,
   MENSAGEM_FORA_DA_GRADE,
+  mensagemDoErro,
   NaoEncontradoError,
   SemRecomendacaoError,
 } from "../erros";
@@ -758,5 +760,127 @@ describe("eventos, latência e o que ficou para a próxima etapa", () => {
 
   it("tem a grade carregada uma vez só (a mesma promessa)", () => {
     expect(carregarGrade()).toBe(carregarGrade());
+  });
+});
+
+describe("o que a tela do coordenador usa", () => {
+  it("lista os hospitais e os pedidos de exemplo, sem o id da linha de origem", async () => {
+    const api = criarApiDemo();
+    expect((await api.listarUnidades()).map((u) => u.zona).sort()).toEqual(["centro", "norte", "sul"]);
+    const exemplos = await api.listarExemplosDeVaga();
+    expect(exemplos).toHaveLength(mundo.exemplosTexto.length);
+    for (const exemplo of exemplos) expect(Object.keys(exemplo).sort()).toEqual(["id", "rotulo", "texto"]);
+  });
+
+  it("lê a decisão já tomada e os nomes pulados, que voltam iguais depois de recarregar", async () => {
+    const armazenamento = new ArmazenamentoFalso();
+    const api = criarApiDemo({ storage: armazenamento });
+    expect(await api.obterEstadoDaDecisao("vaga-demo-1")).toEqual({ decisao: null, pulados: [] });
+    expect((await api.obterEstadoDaDecisao("vaga-demo-3")).decisao?.vagaId).toBe("vaga-demo-3");
+    await expect(api.obterEstadoDaDecisao("nao-existe")).rejects.toBeInstanceOf(NaoEncontradoError);
+
+    const aprovado = await primeiroSemAlerta(api, "vaga-demo-1");
+    const { candidatos } = await api.obterSugestoes("vaga-demo-1");
+    const pulado = candidatos.find((c) => c.medico.id !== aprovado)!.medico.id;
+    await api.pular({ vagaId: "vaga-demo-1", medicoId: pulado });
+    await api.aprovar({ vagaId: "vaga-demo-1", medicoIds: [aprovado] });
+
+    const depois = await criarApiDemo({ storage: armazenamento }).obterEstadoDaDecisao("vaga-demo-1");
+    expect(depois.pulados).toEqual([pulado]);
+    expect(depois.decisao?.medicoIds).toEqual([aprovado]);
+  });
+
+  it("não aprova quem foi pulado, e o erro diz o que fazer", async () => {
+    const api = criarApiDemo();
+    const medicoId = await primeiroSemAlerta(api, "vaga-demo-2");
+    await api.pular({ vagaId: "vaga-demo-2", medicoId });
+    const tentativa = api.aprovar({ vagaId: "vaga-demo-2", medicoIds: [medicoId] });
+    await expect(tentativa).rejects.toBeInstanceOf(CandidatoInvalidoError);
+    await expect(tentativa).rejects.toThrow(/Desfaça o pulo/);
+    expect((await api.obterVaga("vaga-demo-2")).status).toBe("aguardando_decisao");
+  });
+
+  it("desfazer um pulo libera o nome e a trilha só cresce, com a cadeia íntegra", async () => {
+    const api = criarApiDemo();
+    const medicoId = await primeiroSemAlerta(api, "vaga-demo-2");
+    await api.pular({ vagaId: "vaga-demo-2", medicoId });
+    await api.desfazerPulo({ vagaId: "vaga-demo-2", medicoId });
+    await api.desfazerPulo({ vagaId: "vaga-demo-2", medicoId }); // de novo: sem duplicar
+
+    expect((await api.obterEstadoDaDecisao("vaga-demo-2")).pulados).toEqual([]);
+    const acoes = (await api.listarAuditoria({ vagaId: "vaga-demo-2" }))
+      .filter((r) => r.entidadeId === `vaga-demo-2:${medicoId}`)
+      .map((r) => r.acao);
+    expect(acoes.slice(-2)).toEqual(["recommendation_rejected", "recommendation_restored"]);
+    expect((await api.verificarCadeia()).integra).toBe(true);
+
+    await api.aprovar({ vagaId: "vaga-demo-2", medicoIds: [medicoId] });
+    expect((await api.obterVaga("vaga-demo-2")).status).toBe("oferta_em_andamento");
+  });
+
+  it("não desfaz um pulo depois da decisão", async () => {
+    const api = criarApiDemo();
+    const aprovado = await primeiroSemAlerta(api, "vaga-demo-2");
+    const { candidatos } = await api.obterSugestoes("vaga-demo-2");
+    const pulado = candidatos.find((c) => c.medico.id !== aprovado)!.medico.id;
+    await api.pular({ vagaId: "vaga-demo-2", medicoId: pulado });
+    await api.aprovar({ vagaId: "vaga-demo-2", medicoIds: [aprovado] });
+    await expect(api.desfazerPulo({ vagaId: "vaga-demo-2", medicoId: pulado })).rejects.toBeInstanceOf(
+      EstadoInvalidoError,
+    );
+  });
+
+  it("entrada fora do contrato vira erro de domínio, não um erro técnico na tela", async () => {
+    const api = criarApiDemo();
+    const longoDemais = api.lerVaga("x".repeat(LIMITE_TEXTO_VAGA + 1));
+    await expect(longoDemais).rejects.toBeInstanceOf(EntradaInvalidaError);
+    await expect(longoDemais).rejects.toThrow("O texto passou do limite de 2.000 caracteres");
+    await expect(
+      api.confirmarVaga({ ...entradaDe("norte", "pediatria", NOITE_DE_SEXTA), inicio: "isto não é uma data" }),
+    ).rejects.toBeInstanceOf(EntradaInvalidaError);
+    await expect(
+      api.aprovar({ vagaId: "vaga-demo-2", medicoIds: ["x"], justificativa: "x".repeat(LIMITE_TEXTO_LIVRE + 1) }),
+    ).rejects.toThrow("1.000 caracteres");
+  });
+
+  it("publicar a partir de um rascunho o tira da lista, e isso sobrevive ao recarregar", async () => {
+    const armazenamento = new ArmazenamentoFalso();
+    const api = criarApiDemo({ storage: armazenamento });
+    expect((await api.listarVagas()).some((v) => v.id === "vaga-demo-5")).toBe(true);
+
+    const nova = await api.confirmarVaga(
+      entradaDe("centro", "clinica_medica", "2026-10-03T19:00:00", { rascunhoId: "vaga-demo-5" }),
+    );
+    expect(nova.status).toBe("aguardando_decisao");
+
+    const listar = async (a: ReturnType<typeof criarApiDemo>) => (await a.listarVagas()).map((v) => v.id);
+    expect(await listar(api)).not.toContain("vaga-demo-5");
+    expect(await listar(api)).toContain(nova.id);
+    // O mundo continua inteiro: a sessão guardada é aceita de volta, não recomeça do zero.
+    expect(await listar(criarApiDemo({ storage: armazenamento }))).toEqual(await listar(api));
+    expect((await api.obterVaga("vaga-demo-5")).status).toBe("rascunho");
+  });
+
+  it("publicar numa janela que já existe também conclui o rascunho", async () => {
+    const api = criarApiDemo();
+    const existente = await api.confirmarVaga(
+      entradaDe("centro", "pediatria", NOITE_DE_SEXTA, { rascunhoId: "vaga-demo-5" }),
+    );
+    expect(existente.id).toBe("vaga-demo-1");
+    expect((await api.listarVagas()).map((v) => v.id)).not.toContain("vaga-demo-5");
+  });
+
+  it("um rascunhoId que não é rascunho não tira nenhuma vaga da lista", async () => {
+    const api = criarApiDemo();
+    await api.confirmarVaga(
+      entradaDe("norte", "pediatria", "2026-10-06T19:00:00", { rascunhoId: "vaga-demo-2" }),
+    );
+    expect((await api.listarVagas()).map((v) => v.id)).toContain("vaga-demo-2");
+  });
+
+  it("a mensagem que vai à tela é a do domínio; erro de programação não vaza", () => {
+    expect(mensagemDoErro(new ForaDaGradeError(), "padrão")).toBe(MENSAGEM_FORA_DA_GRADE);
+    expect(mensagemDoErro(new TypeError("x is not a function"), "padrão")).toBe("padrão");
+    expect(mensagemDoErro("texto solto", "padrão")).toBe("padrão");
   });
 });

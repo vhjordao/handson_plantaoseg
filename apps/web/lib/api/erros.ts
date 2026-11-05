@@ -27,10 +27,10 @@ export class JustificativaObrigatoriaError extends Error {
   }
 }
 
-/** Só se aprova quem foi recomendado, e pelo menos um candidato. */
+/** Só se aprova quem foi recomendado e não foi pulado, e pelo menos um candidato. */
 export class CandidatoInvalidoError extends Error {
-  constructor() {
-    super("Só é possível aprovar candidatos recomendados, e pelo menos um.");
+  constructor(mensagem = "Só é possível aprovar candidatos recomendados, e pelo menos um.") {
+    super(mensagem);
     this.name = "CandidatoInvalidoError";
   }
 }
@@ -57,4 +57,31 @@ export class EstadoInvalidoError extends Error {
     super(mensagem);
     this.name = "EstadoInvalidoError";
   }
+}
+
+/** O que a tela enviou não cabe no contrato: texto longo demais, data malformada. */
+export class EntradaInvalidaError extends Error {
+  constructor(mensagem: string) {
+    super(mensagem);
+    this.name = "EntradaInvalidaError";
+  }
+}
+
+const ERROS_DE_DOMINIO = [
+  ForaDaGradeError,
+  JustificativaObrigatoriaError,
+  CandidatoInvalidoError,
+  NaoEncontradoError,
+  SemRecomendacaoError,
+  EstadoInvalidoError,
+  EntradaInvalidaError,
+];
+
+/**
+ * O texto que a tela mostra para um erro: o do domínio, que diz o que houve e o que fazer, ou o
+ * padrão que a tela passa. Um erro de programação nunca chega ao usuário com a mensagem técnica.
+ */
+export function mensagemDoErro(erro: unknown, padrao: string): string {
+  const conhecido = ERROS_DE_DOMINIO.some((Classe) => erro instanceof Classe);
+  return conhecido ? (erro as Error).message : padrao;
 }
