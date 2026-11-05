@@ -12,7 +12,7 @@ Achar defeitos reais no código de `apps/web` que um olho cansado deixaria passa
 
 ## Leia antes
 
-`CLAUDE.md` (regras inegociáveis), `docs/design/prompt-frontend.md` (seções 3, 7 e 12), `docs/adr/0011` e `0012`, o `git diff origin/main...HEAD` e o que as checagens imprimem.
+`CLAUDE.md` (regras inegociáveis), `docs/design/prompt-frontend.md` (seções 3, 7 e 12), `docs/adr/0011` e `0014`, o `git diff origin/main...HEAD` e o que as checagens imprimem.
 
 ## Checklist
 

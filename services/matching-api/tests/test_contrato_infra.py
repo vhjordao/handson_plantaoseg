@@ -29,9 +29,6 @@ class ComposeTests(unittest.TestCase):
         ]
         self.assertEqual(sorted(ports), ["127.0.0.1:5678:5678", "443:443", "80:80"])
 
-    def test_editor_do_n8n_fora_do_traefik(self):
-        self.assertNotIn("traefik.", _service("n8n"))
-
     def test_api_insegura_do_traefik_desligada(self):
         self.assertNotIn("api.insecure", COMPOSE)
 
@@ -52,6 +49,47 @@ class ComposeTests(unittest.TestCase):
         self.assertEqual(len(lines), 6)
         for line in lines:
             self.assertIn("${", line)
+
+
+class EditorDoN8nTests(unittest.TestCase):
+    """O editor abre pela web (ADR 0012), e só ele: webhook, formulário e MCP ficam por dentro."""
+
+    def setUp(self):
+        self.service = _service("n8n")
+
+    def test_passa_pelo_traefik_com_https_e_nome_por_variavel(self):
+        self.assertIn("traefik.enable=true", self.service)
+        self.assertIn("routers.n8n.rule=Host(`${N8N_EDITOR_HOST:?", self.service)
+        self.assertIn("routers.n8n.entrypoints=websecure", self.service)
+        self.assertIn("routers.n8n.tls.certresolver=mytlschallenge", self.service)
+
+    def test_webhook_formulario_e_mcp_ficam_fora_da_rota_publica(self):
+        rule = re.search(r"routers\.n8n\.rule=(.+)", self.service).group(1)
+        for path in ("/webhook", "/form", "/mcp"):
+            self.assertIn(f"!PathPrefix(`{path}`)", rule)
+
+    def test_login_tem_rota_propria_com_limite_de_tentativas(self):
+        rule = re.search(r"routers\.n8n-login\.rule=(.+)", self.service).group(1)
+        self.assertIn("Path(`/rest/login`)", rule)
+        self.assertIn("Method(`POST`)", rule)
+        self.assertIn("routers.n8n-login.middlewares=n8n-login-limite", self.service)
+        self.assertRegex(self.service, r"n8n-login-limite\.ratelimit\.average=\d+")
+        self.assertRegex(self.service, r"n8n-login-limite\.ratelimit\.period=\d+m")
+        self.assertRegex(self.service, r"n8n-login-limite\.ratelimit\.burst=\d+")
+
+    def test_rota_do_login_vence_a_rota_geral(self):
+        # Sem prioridade explícita, a regra mais longa ganha, e a geral é mais longa que a do login.
+        priority = int(re.search(r"routers\.n8n-login\.priority=(\d+)", self.service).group(1))
+        general = re.search(r"routers\.n8n\.rule=(.+)", self.service).group(1)
+        self.assertGreater(priority, len(general))
+
+    def test_cookie_seguro_e_proxy_confiavel(self):
+        self.assertNotIn("N8N_SECURE_COOKIE", COMPOSE)  # o padrão do n8n é cookie seguro
+        self.assertIn("N8N_PROTOCOL: https", COMPOSE)
+        self.assertIn('N8N_PROXY_HOPS: "1"', COMPOSE)
+
+    def test_webhooks_seguem_por_dentro_do_servidor(self):
+        self.assertIn("WEBHOOK_URL: http://n8n:5678/", COMPOSE)
 
 
 class ApiDeMatchingTests(unittest.TestCase):

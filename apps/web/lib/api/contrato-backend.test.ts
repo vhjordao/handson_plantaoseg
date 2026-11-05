@@ -1,7 +1,7 @@
 /**
  * O contrato da interface (`types.ts`) espelha listas fechadas do backend. Estes testes leem o
  * código Python e falham se uma delas mudar sem a interface acompanhar. Já aconteceu: a API
- * passou a gravar `shift_uncovered` e o contrato não tinha essa ação (ADR 0012, divergências).
+ * passou a gravar `shift_uncovered` e o contrato não tinha essa ação (ADR 0014, divergências).
  */
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";

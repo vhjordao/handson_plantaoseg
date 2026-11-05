@@ -1,7 +1,7 @@
-# ADR 0012: Estrutura da plataforma web, sessão por persona e camada de dados com dois modos
+# ADR 0014: Estrutura da plataforma web, sessão por persona e camada de dados com dois modos
 
 - **Status:** proposta em 03/11/2026, para o ok do Victor no PR `f3/web-plataforma`. Detalhe do desenho em [`docs/design/prompt-frontend.md`](../design/prompt-frontend.md) (seções 7 e 12).
-- **Numeração:** saiu como 0011 em 03/11 e passou a 0012 em 04/11, porque a API de matching tomou o 0010 (ver o [ADR 0011](0011-web-responsiva-sem-pwa.md)).
+- **Numeração:** saiu como 0011 em 03/11, passou a 0012 em 04/11 (a API de matching tomou o 0010) e a 0014 no mesmo dia, porque o n8n tomou o 0012 e o 0013 ([ADR 0012](0012-editor-do-n8n-na-web.md) e [ADR 0013](0013-aviso-da-api-inicia-a-cascata.md)). Ver também o [ADR 0011](0011-web-responsiva-sem-pwa.md).
 - **Atualização de 04/11/2026:** a API de matching ([ADR 0010](0010-api-de-matching.md)) e o banco ([ADR 0008](0008-banco-no-supabase.md)) entraram na `main` depois do texto de 03/11. A seção de divergências foi reconferida contra a API (rotas e `schemas.py`), as migrações e a RLS de `supabase/`, e as frases de contexto e de consequências foram ajustadas. A decisão em si não mudou.
 - **Origem:** o Victor pediu uma página inicial que apresente o produto, uma área de login e uma **plataforma funcional**, aberta no computador e no celular. O [ADR 0007](0007-web-sai-do-adiamento.md) tinha liberado só uma página provisória.
 

@@ -8,7 +8,10 @@ trilha desta organização, e o hospital fica fora do raio dos outros médicos.
     py -3.12 scripts/usuarios-de-teste.py criar   --env C:\\dev\\handson_plantaoseg\\.env
     py -3.12 scripts/usuarios-de-teste.py limpar  --env C:\\dev\\handson_plantaoseg\\.env
     py -3.12 scripts/usuarios-de-teste.py remover --env C:\\dev\\handson_plantaoseg\\.env
+    py -3.12 scripts/usuarios-de-teste.py prazo --minutos 2 --env C:\\dev\\handson_plantaoseg\\.env
 
+`prazo`: muda o prazo da oferta só na organização de teste. Serve para ver a cascata do n8n andar
+sem esperar 1 hora; no fim, volte para 60. Depois de mudar, a API precisa reler os dados.
 `criar`: cria tudo e grava os tokens de sessão em `.env.teste`, ao lado do `.env`, fora do Git. As
 senhas são sorteadas e descartadas: ninguém as vê.
 `limpar`: apaga as vagas, as recomendações e as ofertas da organização de teste.
@@ -323,11 +326,26 @@ def remove(project: Project) -> None:
     print("A organização de teste fica, porque a trilha aponta para ela.")
 
 
+def set_offer_ttl(project: Project, minutes: int) -> None:
+    """Só a política da organização de teste: a rede simulada não muda."""
+    project.rest(
+        "PATCH",
+        f"policy_config?organization_id=eq.{ORGANIZATION_ID}",
+        {"offer_ttl_minutes": minutes},
+        prefer="return=minimal",
+    )
+    print(f"Prazo da oferta na organização de teste: {minutes} min.")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("comando", choices=("criar", "limpar", "remover"))
+    parser.add_argument("comando", choices=("criar", "limpar", "remover", "prazo"))
     parser.add_argument("--env", default=".env", help="caminho do .env com os tokens do projeto")
+    parser.add_argument("--minutos", type=int, default=60, help="prazo da oferta, no comando prazo")
     args = parser.parse_args()
+    if not 1 <= args.minutos <= 1440:
+        print("--minutos precisa ficar entre 1 e 1440", file=sys.stderr)
+        return 2
     env_path = Path(args.env).resolve()
     env = read_env(env_path)
     if not env.get("SUPABASE_PROJECT_REF") or not env.get("SUPABASE_ACCESS_TOKEN"):
@@ -338,6 +356,8 @@ def main() -> int:
         create(project, env_path)
     elif args.comando == "limpar":
         clean(project)
+    elif args.comando == "prazo":
+        set_offer_ttl(project, args.minutos)
     else:
         remove(project)
     print("Lembrete: depois de mudar o banco por aqui, a API precisa reler os dados.")

@@ -20,9 +20,12 @@ x-n8n-env: &n8n-env
   QUEUE_BULL_REDIS_HOST: redis
   QUEUE_BULL_REDIS_PORT: "6379"
   N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY:?defina N8N_ENCRYPTION_KEY no .env}
-  N8N_HOST: localhost
-  N8N_PROTOCOL: http
-  N8N_EDITOR_BASE_URL: http://localhost:5678/
+  # O editor abre pela web, em HTTPS, no nome do servidor (ADR 0012). O nome fica só no .env.
+  N8N_HOST: ${N8N_EDITOR_HOST:?defina N8N_EDITOR_HOST no .env}
+  N8N_PROTOCOL: https
+  N8N_EDITOR_BASE_URL: https://${N8N_EDITOR_HOST}/
+  # Há um proxy na frente (o Traefik): o n8n lê o IP de quem chamou no cabeçalho que ele manda.
+  N8N_PROXY_HOPS: "1"
   # A API chama o n8n por dentro do servidor, sem passar pela internet.
   WEBHOOK_URL: http://n8n:5678/
   N8N_RUNNERS_ENABLED: "true"
@@ -86,12 +89,10 @@ services:
     environment:
       <<: *n8n-env
       N8N_PORT: "5678"
-      # O editor só abre pelo túnel SSH, em http://localhost: o túnel já cifra o caminho.
-      N8N_SECURE_COOKIE: "false"
       N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: "true"
       OFFLOAD_MANUAL_EXECUTIONS_TO_WORKERS: "true"
     ports:
-      # Só no próprio servidor: o editor do n8n nunca fica na internet pública.
+      # Reserva para o túnel SSH (infra/README.md): só no próprio servidor. A internet entra pelo Traefik.
       - "127.0.0.1:5678:5678"
     volumes:
       - n8n_data:/home/node/.n8n
@@ -100,6 +101,26 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+    labels:
+      - traefik.enable=true
+      # Só o editor vai à internet (ADR 0012). Webhooks (inclusive os de teste e de espera), formulários
+      # e MCP ficam fora da rota pública: a API chama o n8n por dentro do servidor.
+      - traefik.http.routers.n8n.rule=Host(`${N8N_EDITOR_HOST:?defina N8N_EDITOR_HOST no .env}`) && !PathPrefix(`/webhook`) && !PathPrefix(`/form`) && !PathPrefix(`/mcp`)
+      - traefik.http.routers.n8n.entrypoints=websecure
+      - traefik.http.routers.n8n.tls.certresolver=mytlschallenge
+      - traefik.http.routers.n8n.service=n8n
+      # O login tem rota própria, com prioridade sobre a geral, para limitar as tentativas por IP de origem:
+      # 5 por minuto, com rajada de 5.
+      - traefik.http.routers.n8n-login.rule=Host(`${N8N_EDITOR_HOST}`) && Path(`/rest/login`) && Method(`POST`)
+      - traefik.http.routers.n8n-login.priority=1000
+      - traefik.http.routers.n8n-login.entrypoints=websecure
+      - traefik.http.routers.n8n-login.tls.certresolver=mytlschallenge
+      - traefik.http.routers.n8n-login.service=n8n
+      - traefik.http.routers.n8n-login.middlewares=n8n-login-limite
+      - traefik.http.middlewares.n8n-login-limite.ratelimit.average=5
+      - traefik.http.middlewares.n8n-login-limite.ratelimit.period=1m
+      - traefik.http.middlewares.n8n-login-limite.ratelimit.burst=5
+      - traefik.http.services.n8n.loadbalancer.server.port=5678
 
   n8n-worker:
     image: *n8n-image
@@ -121,6 +142,8 @@ services:
       # Ignora a RLS: existe só aqui, no .env do servidor, e nenhum outro serviço a recebe.
       SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?defina SUPABASE_SERVICE_ROLE_KEY no .env}
       N8N_WEBHOOK_SECRET: ${N8N_WEBHOOK_SECRET:?defina N8N_WEBHOOK_SECRET no .env}
+      # Onde a API avisa que a cascata de uma vaga começou (ADR 0013). É por dentro do servidor.
+      N8N_CASCADE_URL: http://n8n:5678/webhook/cascata-ofertas
       API_CORS_ORIGINS: ${API_CORS_ORIGINS:-}
     mem_limit: 512m
     read_only: true

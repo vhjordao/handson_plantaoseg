@@ -9,7 +9,7 @@ from datetime import timedelta
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Header, Request
+from fastapi import APIRouter, BackgroundTasks, Depends, Header, Request
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from app.api.errors import ApiError
@@ -220,10 +220,23 @@ def recommend_shift(shift_id: UUID, profile: Coordinator, service: Service) -> R
 
 @router.post("/shifts/{shift_id}/approve", response_model=AdvanceOut)
 def approve_shift(
-    shift_id: UUID, body: ApproveIn, profile: Coordinator, service: Service
+    shift_id: UUID,
+    body: ApproveIn,
+    profile: Coordinator,
+    service: Service,
+    request: Request,
+    tasks: BackgroundTasks,
 ) -> AdvanceOut:
-    """O clique do coordenador. É a única forma de uma oferta nascer."""
-    return _step_out(service.approve(profile, str(shift_id), [str(i) for i in body.doctor_ids]))
+    """O clique do coordenador. É a única forma de uma oferta nascer.
+
+    Se uma oferta saiu, o n8n é avisado depois da resposta, para o clique não esperar por ele. O
+    aviso é um só: daí em diante, o n8n pergunta à API quanto esperar (ADR 0013).
+    """
+    step = service.approve(profile, str(shift_id), [str(i) for i in body.doctor_ids])
+    notifier = request.app.state.notifier
+    if notifier is not None and step.action == "oferta_enviada":
+        tasks.add_task(notifier.cascade_started, step.shift_id)
+    return _step_out(step)
 
 
 @router.post("/shifts/{shift_id}/reject", response_model=RejectOut)

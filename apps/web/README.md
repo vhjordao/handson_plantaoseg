@@ -1,7 +1,7 @@
 # Ficha do componente: interface web (plataforma)
 
 - **Responsável:** Victor Jordão, com o Claude Code · **Frente:** interface · **Branch:** `f3/web-plataforma` · **Atualizado em:** 04/11/2026
-- **Estado:** fase **UI-0 (fundação)**: site público (landing, entrada, ajuda), cascas dos três papéis, telão provisório e a camada de dados no modo `demo`. As telas do coordenador (UI-1), do médico (UI-2), o telão ao vivo e a auditoria (UI-3) seguem o [prompt de frontend](../../docs/design/prompt-frontend.md), seção 16. Decisões: [ADR 0011](../../docs/adr/0011-web-responsiva-sem-pwa.md) (web responsiva, sem PWA) e [ADR 0012](../../docs/adr/0012-estrutura-da-plataforma-web.md) (estrutura, sessão e camada de dados).
+- **Estado:** fase **UI-0 (fundação)**: site público (landing, entrada, ajuda), cascas dos três papéis, telão provisório e a camada de dados no modo `demo`. As telas do coordenador (UI-1), do médico (UI-2), o telão ao vivo e a auditoria (UI-3) seguem o [prompt de frontend](../../docs/design/prompt-frontend.md), seção 16. Decisões: [ADR 0011](../../docs/adr/0011-web-responsiva-sem-pwa.md) (web responsiva, sem PWA) e [ADR 0014](../../docs/adr/0014-estrutura-da-plataforma-web.md) (estrutura, sessão e camada de dados).
 
 ## 1. O que é e qual dor resolve
 

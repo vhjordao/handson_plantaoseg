@@ -21,18 +21,52 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 - Aprovar a mesma lista de novo devolve a decisão já tomada (duplo clique não duplica a trilha); a geração é lida antes da espera, então reiniciar a demonstração no meio descarta a operação; o feedback da explicação passa pela mesma fila.
 - Limpeza de dados pessoais mais larga (CRM com UF e "nº", telefone sem DDD, e-mail, CPF/CNPJ, números longos) sem tocar em datas, horários nem intervalos de anos; limite de 2.000 caracteres para o pedido e 1.000 para textos livres.
 - `erros.ts` subiu para `lib/api` (os erros são do contrato). Cookie `secure` pelo protocolo real, `destinoSeguro` só com o papel exato e cabeçalhos de segurança (`nosniff`, `Referrer-Policy`, `Permissions-Policy`, `frame-ancestors 'none'`).
-- ADR 0012 ganhou as **divergências conhecidas com o backend**; o README da demo passou a dizer que o hash encadeado detecta alteração mas não impede forja.
+- ADR 0014 ganhou as **divergências conhecidas com o backend**; o README da demo passou a dizer que o hash encadeado detecta alteração mas não impede forja.
 
 **Medidas:** Vitest 135 passando (138 depois da reconferência com a API, com os 3 testes de paridade com o backend); Playwright 64 passando e 8 ignorados de propósito, no build de produção; contraste (com os pares do telão em 7:1), fixtures (`--check`) e `ruff` limpos. O Lighthouse não foi repetido depois da revisão (a medida de 03/11 continua na ficha).
 
 **Descobertas**
 
 - Rodar a jornada contra o servidor de desenvolvimento derrubou 5 testes do computador por tempo (30 s); no build de produção, como na CI, passam todos. A medida que vale é a do build.
-- **A API desfez 2 das 6 divergências e mostrou 10 novas:** a reconferência do ADR 0012 contra a API do PR #16 (rotas e `schemas.py`), as migrações e a RLS mostrou que as variáveis do candidato e o id da vaga já coincidem. Ficam abertas, entre outras: a aprovação não aceita justificativa (422); `reject` cancela a vaga inteira e não serve ao "pular"; a recusa de oferta só tem 4 motivos; o coordenador não lê a política nem a ficha do modelo (a RLS deixa só o admin); e a API só atende quem tem perfil, o que não casa com o login anônimo previsto. Nada disso mudou no backend; a lista, com a proposta de cada uma, está no ADR 0012. Na interface, faltava a ação `shift_uncovered` no contrato (a leitura da trilha falharia no `live`) e `Medico.zona` não existe sob a RLS (passou a ser opcional); um teste novo compara as listas fechadas da interface com o código Python.
-- **Colisão de número de ADR:** a web tinha reservado "0010 em diante" para não colidir com o banco e a API, mas a API entrou na `main` (PR #16) justamente como ADR 0010. Como os ADRs da web ainda não estavam na `main`, foram eles que mudaram: viraram 0011 (web responsiva, sem PWA) e 0012 (estrutura da plataforma). Número reservado não segura com duas sessões em paralelo; vale conferir `docs/adr/` da `main` antes de numerar.
+- **A API desfez 2 das 6 divergências e mostrou 10 novas:** a reconferência do ADR 0014 contra a API do PR #16 (rotas e `schemas.py`), as migrações e a RLS mostrou que as variáveis do candidato e o id da vaga já coincidem. Ficam abertas, entre outras: a aprovação não aceita justificativa (422); `reject` cancela a vaga inteira e não serve ao "pular"; a recusa de oferta só tem 4 motivos; o coordenador não lê a política nem a ficha do modelo (a RLS deixa só o admin); e a API só atende quem tem perfil, o que não casa com o login anônimo previsto. Nada disso mudou no backend; a lista, com a proposta de cada uma, está no ADR 0014. Na interface, faltava a ação `shift_uncovered` no contrato (a leitura da trilha falharia no `live`) e `Medico.zona` não existe sob a RLS (passou a ser opcional); um teste novo compara as listas fechadas da interface com o código Python.
+- **Colisão de número de ADR, duas vezes:** a web tinha reservado "0010 em diante" para não colidir com o banco e a API, mas a API entrou na `main` (PR #16) justamente como ADR 0010. Renumerei os da web para 0011 e 0012, e horas depois o n8n (PRs #17 e #18) entrou com o 0012 e o 0013. Como os ADRs da web ainda não estavam na `main`, foram eles que mudaram de novo: ficaram 0011 (web responsiva, sem PWA, número que a `main` deixou livre) e 0014 (estrutura da plataforma). Número reservado não segura com sessões em paralelo; vale conferir `docs/adr/` da `main` antes de numerar e de novo ao mesclar a `main`.
 - Uma medição de Lighthouse dá resultado inválido se algum servidor velho ficar na porta: a primeira saiu com acessibilidade 93 e `/entrar` com erro por isso.
 
 **Uso de IA:** o Claude Code aplicou os achados dos dois revisores e escreveu os testes novos; o agente `acessibilidade` auditou o código final, e o Claude Code aplicou os achados e os cobriu com testes. O Victor aprova ou ajusta no PR; nada foi mesclado.
+
+## 04/11/2026 (quarta): workflow da cascata no n8n
+
+**Pedido do Victor:** passar ao workflow da cascata. Ele perguntou se o Claude Code precisava da chave da API do n8n e, entre as duas opções para o n8n saber que uma oferta saiu, escolheu "API avisa o n8n".
+
+**O que foi feito**
+
+- O [ADR 0013](adr/0013-aviso-da-api-inicia-a-cascata.md) registra a decisão: a API avisa uma vez por vaga, no clique do coordenador, e o n8n só espera o prazo e pergunta. Quem decide continua sendo a API.
+- O [workflow](../n8n/README.md) é um arquivo no Git, publicado pelo CLI do n8n, sem chave da API. A credencial nasce do `.env` do servidor, sem passar pelo chat.
+- Testes de contrato amarram o workflow às ações da API e ao Compose, e barram nó de código, de LLM ou de banco.
+
+**No servidor real (simulação):** com o prazo de teste em 2 min, 19 de 19 conferências, sem ninguém chamar `advance`. A oferta passou ao segundo médico 3 s depois do prazo, mesmo com o n8n reiniciado no meio da espera, e a vaga ficou descoberta quando ninguém respondeu. Numa vaga com recusa e aceite, o n8n encerrou o laço sem nova oferta. Um prazo de 60 min também terminou sozinho.
+
+**Pendências:** decidir o prazo curto da demonstração, porque com os 60 min da rede simulada a plateia não vê a cascata andar. Muitas vagas ao mesmo tempo ainda não foram medidas.
+
+**Uso de IA:** o Victor escolheu o desenho e autorizou publicar a API. O Claude Code escreveu o aviso, o workflow, os scripts, os testes e os documentos, publicou e conferiu no servidor.
+
+## 04/11/2026 (quarta): editor do n8n na web
+
+**Pedido do Victor:** "verifique o n8n, não consigo acessá-lo via web. o que houve?". Depois escolheu "Abrir na web" e pediu ajuda para entrar com login.
+
+**O que foi feito**
+
+- O n8n não tinha caído: estava no ar e saudável. O endereço público devolvia 404 porque o [ADR 0009](adr/0009-servidor-so-para-a-apresentacao.md) tirou a rota do editor, e o editor só abria por túnel SSH. A decisão era nossa, e ele não a tinha presente.
+- O [ADR 0012](adr/0012-editor-do-n8n-na-web.md) abre o editor na web, só em HTTPS, e mantém webhook, formulário e MCP fora da internet. O login tem limite de tentativas por IP no Traefik, além do limite por e-mail que o próprio n8n já tem. O túnel SSH fica como reserva.
+- O teste de contrato trocou "editor fora do Traefik" por seis testes novos, e o Compose novo foi validado no servidor, com o `.env` real, antes de aplicar.
+
+**No servidor real:** só o n8n e o worker foram recriados (cerca de 12 s). De fora, a página abre por HTTPS, o cookie ficou seguro, os 7 caminhos de webhook, formulário e MCP respondem 404 e o limite barra a 6ª tentativa de login. O Victor relatou que conseguiu acessar.
+
+**A correção do dia:** eu havia escrito que, depois da rajada, o login voltava a uma tentativa a cada 12 segundos. Os cabeçalhos das respostas mostraram dois limites: o do Traefik, por IP, e o do próprio n8n, de 5 por minuto por e-mail, que li no código da imagem. O ADR foi corrigido.
+
+**Pendências:** o MFA do n8n (do Victor), a decisão de fechar `/api/v1` na rota pública e o workflow da cascata (`f3/cascata-n8n`), que depende de decidir como o n8n fica sabendo que uma oferta saiu.
+
+**Uso de IA:** o Victor decidiu abrir o editor na web. O Claude Code diagnosticou, escreveu o Compose, os testes e os documentos e aplicou no servidor a pedido dele. Errou ao descrever o limite do login, e a medição corrigiu. O certificado visto desta máquina é o do antivírus, que intercepta o HTTPS, então o real foi conferido de dentro do servidor.
 
 ## 04/11/2026 (quarta): API de matching no servidor
 
@@ -91,10 +125,10 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 **Decisões**
 
-- **Isolamento:** o trabalho correu num worktree próprio (`C:\dev\plantaoseg-web`, branch `f3/web-plataforma`), sem trocar a branch do checkout da outra sessão. Os ADRs de web começaram em 0010 para não colidir com os do banco; em 04/11 foram renumerados para 0011 e 0012, porque a API de matching entrou na `main` como ADR 0010.
+- **Isolamento:** o trabalho correu num worktree próprio (`C:\dev\plantaoseg-web`, branch `f3/web-plataforma`), sem trocar a branch do checkout da outra sessão. Os ADRs de web começaram em 0010 para não colidir com os do banco; em 04/11 foram renumerados para 0011 e 0014, porque a API (ADR 0010) e o n8n (ADR 0012 e 0013) entraram na `main` antes.
 - **Prompt v2** em [`docs/design/prompt-frontend.md`](design/prompt-frontend.md), no lugar do v1: corrige o segmento (pronto-socorro de hospital privado, não UPA), o formato do CRM sintético, a 2.462 suspensa e a ordem de autoridade.
 - **Metáfora de arte:** "rascunho a lápis, decisão a carimbo". A IA é tracejada, a pessoa é contínua com selo, a regra é cinza. A **voz segue a origem real**: como a leitura da vaga é por regras (o Gemini não foi testado), ela aparece em cinza, não como sugestão da IA.
-- **Web responsiva, sem PWA** ([ADR 0011](adr/0011-web-responsiva-sem-pwa.md)) e **estrutura da plataforma** ([ADR 0012](adr/0012-estrutura-da-plataforma-web.md)): rotas por papel, sessão por persona sem senha, `PlantaoApi` com adaptador `demo` (fixtures do pipeline real) e `live` (depois).
+- **Web responsiva, sem PWA** ([ADR 0011](adr/0011-web-responsiva-sem-pwa.md)) e **estrutura da plataforma** ([ADR 0014](adr/0014-estrutura-da-plataforma-web.md)): rotas por papel, sessão por persona sem senha, `PlantaoApi` com adaptador `demo` (fixtures do pipeline real) e `live` (depois).
 - **Idioma do código:** domínio e tokens em português (glossário fixo), nomes técnicos genéricos em inglês (`Button`, `Dialog`), códigos do backend como estão. É uma exceção consciente à linha "identificadores em inglês" do prompt v1.
 
 **O que ficou pronto:** landing com demonstração viva (saída real da PoC), entrada por persona, cascas do coordenador e do médico, "Minha conta e transparência" do médico, tela de Vagas com indicadores simulados, telão provisório, testes de componente, jornada e `axe` nos temas claro e escuro, e script de contraste dos tokens. Tudo o que depende de fases seguintes diz "esta tela chega na fase UI-n".
@@ -108,7 +142,7 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 **Uso de IA:** o Claude Code escreveu o prompt v2, a direção de arte, os componentes e os testes; um subagente gerou as fixtures a partir do pipeline Python; três agentes (`designer-ui`, `revisor-frontend`, `acessibilidade`) revisam de olhos novos. O Victor aprova ou ajusta no PR.
 
-**Pendências para o Victor:** revisar texto e visual no PR; decidir se o prompt v2 substitui de vez o v1; combinar com a sessão do banco os contratos que a interface espera (campo `trecho` e o texto de `evidencia` das exclusões), registrados no ADR 0012.
+**Pendências para o Victor:** revisar texto e visual no PR; decidir se o prompt v2 substitui de vez o v1; combinar com a sessão do banco os contratos que a interface espera (campo `trecho` e o texto de `evidencia` das exclusões), registrados no ADR 0014.
 
 ## 03/11/2026 (terça): banco no Supabase
 
