@@ -12,13 +12,13 @@ O que vem antes de quê, e por quê. As datas são metas. Esta tabela manda quan
 | 1 | Tela do coordenador: nova vaga, sugestões com motivo e decisão (`f3/web-coordenador`) | Claude Code; Victor aprova | 05/11 | O teste de usabilidade e a seção de experiência da Entrega 3 dependem dela |
 | 2 | Entrevistas com coordenadores e plantonistas | Colegas; Victor confirma com o professor | 06/11 | Os números calibram o simulador e entram no documento |
 | 3 | Teste de usabilidade da tarefa do coordenador, no link público | Colegas | 06/11 | Só existe com a tela pronta. As tarefas do médico ficam para depois da tela dele, e o documento diz isso |
-| 4 | Teste contra a concentração das ofertas e Gemini com a chave real (primeira rodada do Gemini feita em 05/11, com o serviço instável) | Claude Code; chave do Victor, na camada gratuita | 07/11 | O documento hoje declara os dois como pendentes; o que der tempo vira resultado, o resto continua declarado |
+| 4 | Teste contra a concentração das ofertas e Gemini com a chave real (Gemini medido em 05/11, com o modelo escolhido) | Claude Code; chave do Victor, na camada gratuita | 07/11 | O documento hoje declara os dois como pendentes; o que der tempo vira resultado, o resto continua declarado |
 | 5 | Corrigir e fechar a Entrega 3, com os resultados de 2 a 4 | Claude Code redige; Victor revisa e autoriza o PR | 07/11 | É a entrega de maior prazo imediato (até 2,0) |
 | 6 | Tela do médico e adaptador `live`, que liga a web à API e à cascata (`f3/web-medico`) | Claude Code; Victor decide as divergências do [ADR 0014](adr/0014-estrutura-da-plataforma-web.md) | 10/11 | Sem o `live`, a demonstração não chama a API nem o n8n |
 | 7 | Telão, QR code, contestação, plano B, teste de carga e reinício do servidor | Claude Code; Victor decide o prazo curto da cascata | 13/11 | É a experiência da plateia. **Código congelado em 13/11.** Ordem de corte em M4 |
-| 8 | Ensaio e pitch, com o roteiro da aula de 10/11 | Grupo | 17/11 | Apresentação final (até 4,0) |
+| 8 | Ensaio e pitch, com o roteiro da aula de 10/11. A chave do Gemini só entra no servidor aqui ([passo a passo](../infra/README.md)) | Grupo | 17/11 | Apresentação final (até 4,0) |
 
-**Só o Victor pode fazer:** confirmar com o professor que as entrevistas seguem como atividade da disciplina; conferir que o projeto do Gemini está sem faturamento; ligar o MFA do n8n e conferir que a renovação do servidor ficou desligada; decidir o prazo curto da demonstração (recomendação: 2 min; a rede simulada usa 60); rodar `usuarios-de-teste.py limpar` e `remover` antes de 17/11.
+**Só o Victor pode fazer:** confirmar com o professor que as entrevistas seguem como atividade da disciplina; ligar o MFA do n8n e conferir que a renovação do servidor ficou desligada; decidir o prazo curto da demonstração (recomendação: 2 min; a rede simulada usa 60); rodar `usuarios-de-teste.py limpar` e `remover` antes de 17/11.
 
 ## Contexto
 

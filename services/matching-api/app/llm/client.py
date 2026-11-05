@@ -29,6 +29,9 @@ ESPERA_ANTES_DE_REPETIR_S = 0.5
 # Depois de uma falha, as próximas chamadas nem tentam. Sem isso, os cinco motivos de uma
 # recomendação esperariam o limite um a um, e uma queda do serviço travaria a apresentação.
 PAUSA_DEPOIS_DE_FALHA_S = 60.0
+# Estável, com camada gratuita, e o único que respondeu de forma confiável na medição de
+# 05/11/2026 (docs/teste-manual-gemini.md).
+MODELO_PADRAO = "gemini-3.1-flash-lite"
 
 
 class LLMUnavailableError(RuntimeError):
@@ -95,7 +98,9 @@ class GeminiClient:
                 headers={"X-Server-Timeout": str(prazo)},
                 httpx_client=self._http_client,
             )
-            self._sdk = genai.Client(api_key=self._api_key, http_options=options)
+            # `vertexai=False` por escrito: uma variável de ambiente esquecida levaria a chamada
+            # ao Google Cloud, que cobra. O projeto não gasta com o Gemini (ADR 0003).
+            self._sdk = genai.Client(api_key=self._api_key, vertexai=False, http_options=options)
         return self._sdk
 
     def generate_json(self, *, system: str, user: str, schema: dict[str, Any]) -> str:
@@ -141,4 +146,4 @@ def client_from_env(env: Mapping[str, str] | None = None) -> LLMClient:
     key = source.get("GEMINI_API_KEY", "")
     if not key:
         return NullClient()
-    return GeminiClient(key, source.get("LLM_MODEL_EXTRACAO", "gemini-3.5-flash-lite"))
+    return GeminiClient(key, source.get("LLM_MODEL_EXTRACAO", MODELO_PADRAO))

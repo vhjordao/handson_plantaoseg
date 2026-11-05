@@ -106,7 +106,7 @@ Só dados sintéticos; nome, CRM e telefone são fictícios e **nunca** entram n
 
 - O modelo **reaprende o simulador**: os números são simulação, sempre ao lado do baseline.
 - O fluxo recomendado avalia cada vaga isoladamente (sem ocupar a agenda de quem seria escalado), então a concentração das ofertas efetivas é estimativa superior; e o processo manual simulado é premissa do grupo (não checa disponibilidade), o que explica a maior parte do ganho de tempo.
-- O Gemini teve **uma única rodada contra o serviço real**, em 05/11, com o serviço instável ([registro](../../docs/teste-manual-gemini.md)). Os testes automáticos cobrem validação, fallback e injeção com clientes falsos, não o comportamento do modelo.
+- O Gemini foi **medido contra o serviço real numa manhã só**, em 05/11 ([registro](../../docs/teste-manual-gemini.md)), na camada gratuita. Os testes automáticos cobrem validação, fallback e injeção com clientes falsos, não o comportamento do modelo.
 - Plantões de 12 h em horários fixos fazem o descanso de 11 h quase nunca ser a regra que barra; o limite de 24 h contínuas é o que aparece.
 - A distância funciona como proxy da zona de residência: zonas distantes quase não são recomendadas (ver a concentração em `docs/resultados`).
 - Contestação e avaliação de impacto algorítmico estão desenhadas, não construídas.

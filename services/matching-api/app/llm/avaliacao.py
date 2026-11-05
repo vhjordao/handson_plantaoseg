@@ -6,6 +6,10 @@ Markdown. Não imprime a chave. Só usa textos sintéticos.
     docker compose exec matching-api python -m app.llm.avaliacao
     docker compose exec matching-api python -m app.llm.avaliacao --modelo gemini-3.8-flash
 
+Para conferir o serviço no dia, com uma chamada só e o mesmo limite de tempo da API:
+
+    docker compose exec matching-api python -m app.llm.avaliacao --rapido
+
 Os ataques vão direto ao modelo, sem a detecção que os barra na API: o que se mede aqui é o que
 aconteceria se um deles passasse. Quem decide o que vale é a validação do nosso código.
 """
@@ -20,7 +24,7 @@ from datetime import date, datetime
 from typing import Any
 
 from app.explain import explain
-from app.llm.client import GeminiClient, LLMClient, LLMUnavailableError
+from app.llm.client import MODELO_PADRAO, TIMEOUT_MS, GeminiClient, LLMClient, LLMUnavailableError
 from app.llm.extraction import EXTRACTION_SCHEMA, build_system_prompt, build_user_prompt
 from app.llm.guardrails import GuardrailError, sanitize_text, validate_extraction
 from app.models import Unit
@@ -174,18 +178,23 @@ def relatorio(linhas: list[Linha], modelo: str) -> str:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Teste do Gemini com a chave real")
-    parser.add_argument(
-        "--modelo", default=os.environ.get("LLM_MODEL_EXTRACAO", "gemini-3.5-flash-lite")
-    )
+    parser.add_argument("--modelo", default=os.environ.get("LLM_MODEL_EXTRACAO", MODELO_PADRAO))
     # Mais folga que a da API: aqui se mede o modelo, inclusive o que ele demora.
     parser.add_argument("--limite-ms", type=int, default=30_000)
+    parser.add_argument("--rapido", action="store_true", help="uma chamada só, como a API faria")
     args = parser.parse_args(argv)
     chave = os.environ.get("GEMINI_API_KEY", "")
     if not chave:
         print("Defina GEMINI_API_KEY: sem chave não há o que testar.", file=sys.stderr)
         return 2
     # Sem pausa: aqui importa ver o resultado de cada caso, mesmo depois de uma falha.
-    cliente = GeminiClient(chave, args.modelo, timeout_ms=args.limite_ms, pausa_s=0)
+    limite = TIMEOUT_MS if args.rapido else args.limite_ms
+    cliente = GeminiClient(chave, args.modelo, timeout_ms=limite, pausa_s=0)
+    if args.rapido:
+        linha = _ler(cliente, *CASOS_DE_LEITURA[0])
+        print(f"{'certo' if linha.campos_certos else 'falhou'} em {linha.latencia_ms} ms")
+        print(linha.observacao)
+        return 0 if linha.campos_certos else 1
     print(relatorio(avaliar(cliente), args.modelo))
     return 0
 

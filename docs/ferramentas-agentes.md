@@ -68,7 +68,7 @@ O Victor criou as contas de Supabase e Vercel em 03/11, só deste projeto, e nad
 | Item | Escolha | Observação |
 | --- | --- | --- |
 | Provedor | Gemini API (Google), SDK `google-genai` | Decisão do Victor, 28/10/2026 ([ADR 0003](adr/0003-llm-do-produto-gemini.md)) |
-| Modelos | `gemini-3.5-flash-lite` e `gemini-3.8-flash` | IDs e preços lidos nas páginas oficiais em 28/10/2026; reconferir antes de fixar |
+| Modelo | `gemini-3.1-flash-lite` | Estável e com camada gratuita; escolhido pela medição de 05/11/2026 ([registro](teste-manual-gemini.md)) |
 | Dados na camada gratuita | Só sintéticos | O Google usa o conteúdo para melhorar produtos; o projeto fica nessa camada, sem gastos |
 
 O Claude Code (usado por cada integrante para desenvolver) não faz parte do produto.

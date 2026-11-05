@@ -61,7 +61,7 @@ A demonstração recebe uma vaga em texto livre, mostra os campos extraídos, o 
 
 ## Stack da PoC e stack prevista
 
-**PoC:** Python 3.12 (só biblioteca padrão), pytest, ruff, GitHub Actions. **API:** FastAPI sobre o mesmo motor, no servidor ([ficha](services/matching-api/app/api/README.md)). **Prevista:** Next.js, Tailwind e shadcn/ui (web responsiva, sem PWA) · n8n em modo fila (Redis + Postgres próprio) · Supabase (Postgres, Auth, RLS, Realtime) · Gemini (3.5 Flash-Lite e 3.8 Flash) com saída estruturada · scikit-learn e LightGBM (ranking) · Fairlearn (equidade) · Langfuse (observabilidade de IA) · Docker Compose e Traefik em VPS Hostinger no Brasil · GitHub Actions.
+**PoC:** Python 3.12 (só biblioteca padrão), pytest, ruff, GitHub Actions. **API:** FastAPI sobre o mesmo motor, no servidor ([ficha](services/matching-api/app/api/README.md)). **Prevista:** Next.js, Tailwind e shadcn/ui (web responsiva, sem PWA) · n8n em modo fila (Redis + Postgres próprio) · Supabase (Postgres, Auth, RLS, Realtime) · Gemini (3.1 Flash-Lite, na camada gratuita) com saída estruturada · scikit-learn e LightGBM (ranking) · Fairlearn (equidade) · Langfuse (observabilidade de IA) · Docker Compose e Traefik em VPS Hostinger no Brasil · GitHub Actions.
 
 Custo estimado do mês da apresentação: US$ 34 a US$ 41 (VPS e Supabase lidos em 20/10/2026; Gemini em 28/10/2026; conferir antes de contratar). Veja [Arquitetura e ferramentas](docs/02-arquitetura-e-ferramentas.md).
 

@@ -55,7 +55,7 @@ A diferença modelo menos baseline é de 3,5 pontos percentuais (erro-padrão 0,
 
 ## 4. LLM com Gemini
 
-**Onde entra:** só em duas etapas estreitas, **sem ferramentas e sem segredos**: extrair os campos e reescrever a explicação. Modelos (ADR 0003): `gemini-3.5-flash-lite` (extração e explicação) e `gemini-3.8-flash` (casos ambíguos). A interface fica atrás de `LLMClient`, para o resto do sistema funcionar sem LLM. **Desde 05/11/2026, por decisão do Victor, o projeto usa só a camada gratuita**, e por isso só texto sintético vai ao modelo; a reescrita da explicação fica desligada por padrão ([ADR 0003](adr/0003-llm-do-produto-gemini.md)). O primeiro teste real está em [teste-manual-gemini.md](teste-manual-gemini.md).
+**Onde entra:** só em duas etapas estreitas, **sem ferramentas e sem segredos**: extrair os campos e reescrever a explicação. Modelo (ADR 0003): `gemini-3.1-flash-lite`, escolhido pela medição de 05/11/2026. A interface fica atrás de `LLMClient`, para o resto do sistema funcionar sem LLM. **Desde 05/11/2026, por decisão do Victor, o projeto usa só a camada gratuita**, e por isso só texto sintético vai ao modelo; a reescrita da explicação fica desligada por padrão ([ADR 0003](adr/0003-llm-do-produto-gemini.md)). O primeiro teste real está em [teste-manual-gemini.md](teste-manual-gemini.md).
 
 **Prompt** versionado (`extracao-v1`): trata o texto entre `<pedido>` e `</pedido>` como **dado não confiável**, pede JSON com 5 chaves e informa unidades e datas válidas. A cópia exata está em [teste-manual-gemini.md](teste-manual-gemini.md).
 

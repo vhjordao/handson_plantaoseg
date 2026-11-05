@@ -17,7 +17,14 @@ pytest.importorskip("google.genai")
 
 from app.explain import REWRITE_SCHEMA, explain  # noqa: E402
 from app.llm.avaliacao import CASOS_DE_LEITURA, avaliar, main, relatorio  # noqa: E402
-from app.llm.client import TIMEOUT_MS, GeminiClient, LLMUnavailableError, NullClient  # noqa: E402
+from app.llm.client import (  # noqa: E402
+    MODELO_PADRAO,
+    TIMEOUT_MS,
+    GeminiClient,
+    LLMUnavailableError,
+    NullClient,
+    client_from_env,
+)
 from app.llm.extraction import EXTRACTION_SCHEMA, extract  # noqa: E402
 from tests.helpers import small_dataset  # noqa: E402
 
@@ -61,7 +68,7 @@ def _cliente(tratar, **extras) -> tuple[GeminiClient, list]:
 
     http = httpx.Client(transport=httpx.MockTransport(transporte))
     extras.setdefault("dormir", lambda _segundos: None)
-    return GeminiClient(CHAVE, "gemini-3.5-flash-lite", http_client=http, **extras), pedidos
+    return GeminiClient(CHAVE, MODELO_PADRAO, http_client=http, **extras), pedidos
 
 
 def _responde_json(texto):
@@ -86,7 +93,7 @@ class TestPedido:
             == '{"ok": true}'
         )
         pedido = pedidos[0]
-        assert str(pedido.url).endswith("/models/gemini-3.5-flash-lite:generateContent")
+        assert str(pedido.url).endswith(f"/models/{MODELO_PADRAO}:generateContent")
         corpo = json.loads(pedido.content)
         assert corpo["contents"][0]["parts"][0]["text"] == "pergunta"
         assert corpo["systemInstruction"]["parts"][0]["text"] == "sistema"
@@ -117,6 +124,17 @@ class TestPedido:
         _chamar(cliente)
         assert pedidos[0].headers["x-server-timeout"] == "30"
         assert pedidos[0].extensions["timeout"]["read"] == 30.0
+
+    def test_nunca_vai_ao_google_cloud_que_e_o_caminho_que_cobra(self):
+        cloud = {
+            "GOOGLE_GENAI_USE_VERTEXAI": "true",
+            "GOOGLE_CLOUD_PROJECT": "projeto",
+            "GOOGLE_CLOUD_LOCATION": "us-central1",
+        }
+        with mock.patch.dict("os.environ", cloud):
+            cliente, pedidos = _cliente(_responde_json("{}"))
+            _chamar(cliente)
+        assert pedidos[0].url.host == "generativelanguage.googleapis.com"
 
     def test_o_mesmo_cliente_do_sdk_e_reaproveitado(self):
         cliente, _ = _cliente(_responde_json("{}"))
@@ -374,6 +392,31 @@ class TestAvaliacao:
             assert main([]) == 2
         assert "GEMINI_API_KEY" in capsys.readouterr().err
 
+    def test_a_conferencia_do_dia_faz_uma_chamada_so(self, capsys):
+        falso = ClienteFalso()
+        with (
+            mock.patch.dict("os.environ", {"GEMINI_API_KEY": CHAVE}),
+            mock.patch("app.llm.avaliacao.GeminiClient", return_value=falso) as construtor,
+        ):
+            assert main(["--rapido"]) == 0
+        assert len(falso.usuarios) == 1
+        assert construtor.call_args.kwargs["timeout_ms"] == TIMEOUT_MS
+        saida = capsys.readouterr().out
+        assert saida.startswith("certo em ")
+        assert CHAVE not in saida
+
+    def test_a_conferencia_do_dia_avisa_quando_o_servico_falha(self, capsys):
+        class ForaDoAr(ClienteFalso):
+            def generate_json(self, *, system, user, schema):
+                raise LLMUnavailableError("falha ao chamar o Gemini: ServerError 503")
+
+        with (
+            mock.patch.dict("os.environ", {"GEMINI_API_KEY": CHAVE}),
+            mock.patch("app.llm.avaliacao.GeminiClient", return_value=ForaDoAr()),
+        ):
+            assert main(["--rapido"]) == 1
+        assert capsys.readouterr().out.startswith("falhou em ")
+
     def test_a_chave_nao_aparece_na_saida(self, capsys):
         with (
             mock.patch.dict("os.environ", {"GEMINI_API_KEY": CHAVE}),
@@ -414,6 +457,13 @@ class TestServico:
 
 
 class TestConfiguracao:
+    def test_o_modelo_padrao_e_o_mesmo_no_codigo_no_compose_e_no_exemplo(self):
+        assert client_from_env({"GEMINI_API_KEY": CHAVE}).model == MODELO_PADRAO
+        compose = (RAIZ / "infra" / "docker-compose.yml").read_text(encoding="utf-8")
+        assert f"${{LLM_MODEL_EXTRACAO:-{MODELO_PADRAO}}}" in compose
+        exemplo = (RAIZ / ".env.example").read_text(encoding="utf-8")
+        assert f"LLM_MODEL_EXTRACAO={MODELO_PADRAO}\n" in exemplo.replace("\r\n", "\n")
+
     def test_so_a_api_recebe_a_chave_e_ela_e_opcional(self):
         compose = (RAIZ / "infra" / "docker-compose.yml").read_text(encoding="utf-8")
         linhas = [

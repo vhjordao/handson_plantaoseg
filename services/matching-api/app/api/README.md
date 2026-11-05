@@ -128,7 +128,7 @@ Nenhuma chamada falhou na medição, e a memória da API chegou a 79 MB de 512 M
 - **O banco dos testes é falso:** a CI não exercita o PostgREST real nem o login real. Isso foi conferido no projeto, à mão, com `conferir-api.py`.
 - **A chave `service_role` é marcada como `legacy`** pelo Supabase. Se ela for desligada antes de 17/11, a saída é trocar pela `sb_secret`, com o teto de cerca de 50 chamadas por segundo que medimos. Não sabemos a causa desse teto.
 - **Se o aviso ao n8n se perder, oferta vencida fica pendente** até alguém chamar `advance` ou repetir o aviso, e o médico recebe `oferta_expirada` ao responder. A falha fica só no log ([ficha do workflow](../../../../n8n/README.md)).
-- **Gemini instável e em camada gratuita:** na única rodada real, em 05/11, 9 de 16 chamadas ficaram sem resposta, e a demora mediana foi de 8 s ([registro](../../../../docs/teste-manual-gemini.md)). A qualidade e a demora em condições normais não foram medidas. Só texto sintético pode ir ao modelo, e a cota é limitada: passando dela, a leitura cai nas regras. A API com a chave ainda não foi publicada no servidor.
+- **Gemini medido numa manhã só e em camada gratuita:** o `gemini-3.1-flash-lite` respondeu 14 de 16 chamadas, e outros modelos gratuitos quase não responderam no mesmo momento ([registro](../../../../docs/teste-manual-gemini.md)). O serviço pode mudar, e por isso há uma conferência de uma chamada para o dia. Só texto sintético pode ir ao modelo, e a cota é limitada: passando dela, a leitura cai nas regras. A API com a chave ainda não foi publicada no servidor.
 - **O limite de requisições é por IP:** a plateia no mesmo Wi-Fi divide as 30 chamadas por segundo. As telas precisam tentar de novo depois de um `429`.
 - **A carga é uma primeira medição,** de uma máquina só e com poucas conexões. Os limites estão no [resultado](../../../../docs/resultados/metricas-carga-api.md).
 - **A organização de teste:** os registros dela ficam para sempre na trilha, que é só de inserção, e ela fica no banco por causa disso. Até o `remover`, os 2 médicos de teste aparecem como excluídos por raio nas recomendações da rede simulada.
@@ -144,5 +144,5 @@ O Victor aprovou o plano, com as decisões e os riscos, antes de começar, e cri
 Com o ok do Victor:
 
 1. `f3/web-coordenador` e `f3/web-medico`: as telas chamam esta API e leem o resto sob RLS.
-2. Gemini: pôr a chave no `.env` do servidor, publicar a imagem 0.2.0, conferir a memória com `docker stats` (o limite é de 512 MB) e repetir o [teste](../../../../docs/teste-manual-gemini.md) em outro horário.
+2. Gemini: publicar a imagem 0.2.0, sem a chave. A chave só entra no ensaio e no dia ([passo a passo](../../../../infra/README.md)), e no ensaio se confere a memória com `docker stats` (o limite é de 512 MB).
 3. Repetir a medição antes de 13/11, já com as telas, e reiniciar o servidor.

@@ -61,7 +61,7 @@ class TesteManualGeminiTests(unittest.TestCase):
 
     def test_declara_o_alcance_do_que_foi_medido(self):
         text = read("teste-manual-gemini.md")
-        self.assertIn("uma rodada só", text)
+        self.assertIn("uma manhã só", text)
         self.assertIn("não generalize", text)
 
 
