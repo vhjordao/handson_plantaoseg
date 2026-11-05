@@ -4,6 +4,56 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 05/11/2026 (quinta): revisão final antes do merge da plataforma web
+
+**Pedido do Victor:** revisar o que foi feito nesta e nas outras sessões e fazer o merge final.
+
+**O que a revisão achou e corrigiu**
+
+- **A zona de residência dos médicos ia ao navegador** nas fixtures, embora a API e a RLS não a liberem e o próprio script dissesse o contrário. Saiu do contrato e das fixtures, e um teste barra a volta dela e dos outros atributos protegidos.
+- **A limpeza de dados pessoais deixava passar nome em partes** ("Felipe Ferraz") **e texto colado com o acento em separado.** Os dois chegariam à trilha, que é só de inserção.
+- **Uma justificativa feita só de um nome valia como exceção:** o mínimo de caracteres passou a contar o que sobra depois da limpeza.
+- **"Sugestões aceitas" nunca saía do travessão**, embora a tela prometesse o número depois da decisão. Agora conta o que a pessoa decidiu na sessão.
+- **Voltar do login perdia o filtro da lista**, porque o `proxy` guardava só o caminho.
+- **As fixtures não eram conferidas na CI:** o job `poc` agora roda `exportar_fixtures_web.py --check`, e o `ruff` passa também em `scripts/`.
+- **Documentos parados no tempo:** o README público ainda dizia "a API continua adiada", o guia da equipe dizia que não se construía API, n8n nem banco, e o plano dizia "n8n sem workflows". Os três foram atualizados.
+
+**Ficam para as telas que usam cada recurso (UI-1 e UI-2):** o nome pulado ainda não volta marcado nas sugestões nem bloqueia a aprovação; entrada fora do contrato sai como `ZodError`, e não como erro de domínio; e o cabeçalho mostra o relógio fixo, o que só importa quando houver o controle que adianta o relógio.
+
+**Conferido:** 141 testes de componente, a jornada de entrada no navegador (24 de 24) e lint, tipos e contraste. Na varredura do repositório inteiro, nenhuma chave real nem nome ou IP do servidor.
+
+**Uso de IA:** o Claude Code revisou o trabalho das sessões, corrigiu o que achou e concluiu o merge que a sessão da web havia deixado pela metade. O Victor autorizou o merge final.
+
+## 04/11/2026 (quarta): revisão de olhos novos da plataforma web
+
+**O que aconteceu:** os agentes `designer-ui` e `revisor-frontend` leram a plataforma sem ter visto o processo e devolveram achados; este dia aplicou os que valiam, no mesmo PR (`f3/web-plataforma`), e corrigiu o que os testes mostraram.
+
+**Mudanças na interface**
+
+- **Texto sem jargão:** "ordem sugerida", "cinco primeiros", "Teste da aprovação"; a origem dos campos passou de "achei/deduzi" para "Está no texto", "Calculado do texto" e "Não está no texto".
+- **Entrada em casca própria:** `/entrar` saiu do site público (route group `(entrada)`), com cabeçalho só de marca e Ajuda; as três portas sem ícone, na mesma altura.
+- **Vagas começa pela lista**, com o resumo "Exigem a sua ação"; os indicadores levam "simulado" e a fonte dos tempos.
+- **Acessibilidade (auditoria do agente, 17 achados, nenhum bloqueando o uso):** o foco voltando com Shift+Tab não fica mais sob o cabeçalho fixo (cabeçalho de uma linha no celular e `scroll-padding`); sem rolagem horizontal a 320 px e com a letra a 200%; a porta em destaque de `/entrar?papel=` vem primeiro no HTML; o filtro das vagas e a decisão do hero são anunciados em regiões de status; o item atual aparece em alto contraste; abas, alvos de toque, 404 com título e `h1`. Tudo virou teste (`e2e/acessibilidade.spec.ts`).
+- **Hero** com 2 sugestões em vez de 5 (cabia na tela do celular) e "Como funciona" com trilho tracejado, contínuo e fino. Telão provisório em corpo de 28 px.
+
+**Mudanças na camada de dados e na segurança**
+
+- Aprovar a mesma lista de novo devolve a decisão já tomada (duplo clique não duplica a trilha); a geração é lida antes da espera, então reiniciar a demonstração no meio descarta a operação; o feedback da explicação passa pela mesma fila.
+- Limpeza de dados pessoais mais larga (CRM com UF e "nº", telefone sem DDD, e-mail, CPF/CNPJ, números longos) sem tocar em datas, horários nem intervalos de anos; limite de 2.000 caracteres para o pedido e 1.000 para textos livres.
+- `erros.ts` subiu para `lib/api` (os erros são do contrato). Cookie `secure` pelo protocolo real, `destinoSeguro` só com o papel exato e cabeçalhos de segurança (`nosniff`, `Referrer-Policy`, `Permissions-Policy`, `frame-ancestors 'none'`).
+- ADR 0014 ganhou as **divergências conhecidas com o backend**; o README da demo passou a dizer que o hash encadeado detecta alteração mas não impede forja.
+
+**Medidas:** Vitest 135 passando (138 depois da reconferência com a API, com os 3 testes de paridade com o backend); Playwright 64 passando e 8 ignorados de propósito, no build de produção; contraste (com os pares do telão em 7:1), fixtures (`--check`) e `ruff` limpos. O Lighthouse não foi repetido depois da revisão (a medida de 03/11 continua na ficha).
+
+**Descobertas**
+
+- Rodar a jornada contra o servidor de desenvolvimento derrubou 5 testes do computador por tempo (30 s); no build de produção, como na CI, passam todos. A medida que vale é a do build.
+- **A API desfez 2 das 6 divergências e mostrou 10 novas:** a reconferência do ADR 0014 contra a API do PR #16 (rotas e `schemas.py`), as migrações e a RLS mostrou que as variáveis do candidato e o id da vaga já coincidem. Ficam abertas, entre outras: a aprovação não aceita justificativa (422); `reject` cancela a vaga inteira e não serve ao "pular"; a recusa de oferta só tem 4 motivos; o coordenador não lê a política nem a ficha do modelo (a RLS deixa só o admin); e a API só atende quem tem perfil, o que não casa com o login anônimo previsto. Nada disso mudou no backend; a lista, com a proposta de cada uma, está no ADR 0014. Na interface, faltava a ação `shift_uncovered` no contrato (a leitura da trilha falharia no `live`) e `Medico.zona` não existe sob a RLS (passou a ser opcional); um teste novo compara as listas fechadas da interface com o código Python.
+- **Colisão de número de ADR, duas vezes:** a web tinha reservado "0010 em diante" para não colidir com o banco e a API, mas a API entrou na `main` (PR #16) justamente como ADR 0010. Renumerei os da web para 0011 e 0012, e horas depois o n8n (PRs #17 e #18) entrou com o 0012 e o 0013. Como os ADRs da web ainda não estavam na `main`, foram eles que mudaram de novo: ficaram 0011 (web responsiva, sem PWA, número que a `main` deixou livre) e 0014 (estrutura da plataforma). Número reservado não segura com sessões em paralelo; vale conferir `docs/adr/` da `main` antes de numerar e de novo ao mesclar a `main`.
+- Uma medição de Lighthouse dá resultado inválido se algum servidor velho ficar na porta: a primeira saiu com acessibilidade 93 e `/entrar` com erro por isso.
+
+**Uso de IA:** o Claude Code aplicou os achados dos dois revisores e escreveu os testes novos; o agente `acessibilidade` auditou o código final, e o Claude Code aplicou os achados e os cobriu com testes. O Victor aprova ou ajusta no PR; nada foi mesclado.
+
 ## 04/11/2026 (quarta): API pública do n8n fechada
 
 **Pedido do Victor:** depois de ver o que implicava, "pode fechar" a rota `/api/v1` do n8n para a internet.
@@ -98,6 +148,31 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 **No projeto real:** o Victor aprovou, e a carga entrou depois de a CI ficar verde. Pela API, todas as contagens bateram (16.547 linhas), e a tabela do gabarito não existe. De fora, com a chave pública, ler, gravar e chamar funções continuou recusado. O histórico vai até 12/11, então parte dos registros tem data no futuro até esse dia.
 
 **Uso de IA:** o Claude Code escreveu o gerador, os testes e a conferência; a revisão é do Victor, no PR.
+
+## 03/11/2026 (terça, à noite): plataforma web, prompt de frontend v2 e agentes de revisão
+
+**Pedido do Victor:** fazer o frontend como uma **plataforma** (não um app), aberta no computador e no celular, com uma página inicial que apresente o produto e uma área de login para seguir com a plataforma funcional; buscar as skills de frontend e design, pegar referências na internet (nexunio.health), criar um prompt melhor do que o de exemplo e aplicá-lo na sessão, com agentes de revisão e de UX/UI, **sem interromper a sessão do banco de dados**.
+
+**Decisões**
+
+- **Isolamento:** o trabalho correu num worktree próprio (`C:\dev\plantaoseg-web`, branch `f3/web-plataforma`), sem trocar a branch do checkout da outra sessão. Os ADRs de web começaram em 0010 para não colidir com os do banco; em 04/11 foram renumerados para 0011 e 0014, porque a API (ADR 0010) e o n8n (ADR 0012 e 0013) entraram na `main` antes.
+- **Prompt v2** em [`docs/design/prompt-frontend.md`](design/prompt-frontend.md), no lugar do v1: corrige o segmento (pronto-socorro de hospital privado, não UPA), o formato do CRM sintético, a 2.462 suspensa e a ordem de autoridade.
+- **Metáfora de arte:** "rascunho a lápis, decisão a carimbo". A IA é tracejada, a pessoa é contínua com selo, a regra é cinza. A **voz segue a origem real**: como a leitura da vaga é por regras (o Gemini não foi testado), ela aparece em cinza, não como sugestão da IA.
+- **Web responsiva, sem PWA** ([ADR 0011](adr/0011-web-responsiva-sem-pwa.md)) e **estrutura da plataforma** ([ADR 0014](adr/0014-estrutura-da-plataforma-web.md)): rotas por papel, sessão por persona sem senha, `PlantaoApi` com adaptador `demo` (fixtures do pipeline real) e `live` (depois).
+- **Idioma do código:** domínio e tokens em português (glossário fixo), nomes técnicos genéricos em inglês (`Button`, `Dialog`), códigos do backend como estão. É uma exceção consciente à linha "identificadores em inglês" do prompt v1.
+
+**O que ficou pronto:** landing com demonstração viva (saída real da PoC), entrada por persona, cascas do coordenador e do médico, "Minha conta e transparência" do médico, tela de Vagas com indicadores simulados, telão provisório, testes de componente, jornada e `axe` nos temas claro e escuro, e script de contraste dos tokens. Tudo o que depende de fases seguintes diz "esta tela chega na fase UI-n".
+
+**Descobertas**
+
+- A skill do Vercel dizia que o `proxy.ts` exporta `proxyConfig`; a documentação que vem **dentro do pacote** do Next.js diz `config`. Valeu a do pacote.
+- Os cinco primeiros do ranking da demo real têm chances de 66% a 69%: a tela **diz** que a ordem entre eles é uma sugestão fraca, em vez de fingir precisão.
+- A Atkinson Hyperlegible Next tem numerais tabulares (medido no navegador).
+- Quatro subagentes em paralelo estouraram o limite de uso da API; a retomada foi um agente de cada vez.
+
+**Uso de IA:** o Claude Code escreveu o prompt v2, a direção de arte, os componentes e os testes; um subagente gerou as fixtures a partir do pipeline Python; três agentes (`designer-ui`, `revisor-frontend`, `acessibilidade`) revisam de olhos novos. O Victor aprova ou ajusta no PR.
+
+**Pendências para o Victor:** revisar texto e visual no PR; decidir se o prompt v2 substitui de vez o v1; combinar com a sessão do banco os contratos que a interface espera (campo `trecho` e o texto de `evidencia` das exclusões), registrados no ADR 0014.
 
 ## 03/11/2026 (terça): banco no Supabase
 

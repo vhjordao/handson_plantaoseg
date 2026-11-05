@@ -2,7 +2,7 @@
 
 20/10/2026 · Victor
 
-> **Atualizado em 04/11/2026:** a [API de matching](../services/matching-api/app/api/README.md) está no servidor, com as decisões no [ADR 0010](adr/0010-api-de-matching.md). Os pesos do modelo ficam em arquivo versionado, e a API acessa o banco pela API REST do Supabase, com a chave de serviço, sem carregar dado pessoal nem o valor do plantão.
+> **Atualizado em 04/11/2026:** a [API de matching](../services/matching-api/app/api/README.md) está no servidor, com as decisões no [ADR 0010](adr/0010-api-de-matching.md). Os pesos do modelo ficam em arquivo versionado, e a API acessa o banco pela API REST do Supabase, com a chave de serviço, sem carregar dado pessoal nem o valor do plantão. O [workflow da cascata](../n8n/README.md) está no n8n do servidor ([ADR 0013](adr/0013-aviso-da-api-inicia-a-cascata.md)), e a [web](../apps/web/README.md) tem a fundação, em modo de demonstração ([ADR 0014](adr/0014-estrutura-da-plataforma-web.md)).
 >
 > **Atualizado em 03/11/2026:** como cada dado seria coletado, atualizado e integrado em um ambiente real está em [dados em produção](dados/dados-em-producao.md).
 >
@@ -61,7 +61,7 @@ Cada etapa do fluxo tem uma ferramenta principal e uma alternativa; a escolha pr
 
 | Etapa | Recomendação | Alternativa | Observação |
 | --- | --- | --- | --- |
-| Interface (coordenador, médico e telão) | Next.js, Tailwind e shadcn/ui, como PWA | Vite com React | A plateia entra por QR code, sem instalar nada |
+| Interface (coordenador, médico e telão) | Next.js, Tailwind e shadcn/ui, web responsiva e sem PWA ([ADR 0011](adr/0011-web-responsiva-sem-pwa.md)) | Vite com React | A plateia entra por QR code, sem instalar nada |
 | Login e perfis | Supabase Auth, com login anônimo e persona para a plateia | Magic link por e-mail | O perfil guarda hospital e papel, que a RLS consulta ([ADR 0008](adr/0008-banco-no-supabase.md)) |
 | Entrada da vaga | Formulário no web app que chama a API ([ADR 0010](adr/0010-api-de-matching.md)) | Telegram | Texto livre, com campos opcionais |
 | Extração dos campos | Gemini 3.5 Flash-Lite (SDK `google-genai`) com saída estruturada (JSON Schema) e validação com Pydantic | Gemini 3.8 Flash nos casos ambíguos | Nome, CRM e telefone nunca vão ao modelo; na demo, camada paga (ADR 0003) |

@@ -13,6 +13,9 @@ Registro do que o Claude Code usa neste projeto, para o grupo saber o que roda e
 | `juridico-etica` | só leitura | Conformidade (CFM, LGPD, STF), viés, quatro perguntas; não é parecer jurídico |
 | `ux` | só leitura | Jornadas, explicação legível, contestação, estados de erro |
 | `revisor-professor` | só leitura | Avaliação de olho novo contra as exigências do professor, no fim de cada fase |
+| `designer-ui` | só leitura | Crítica de UX e UI com as capturas: as três vozes (IA, humano, regra), estados, responsividade e texto (03/11/2026) |
+| `revisor-frontend` | leitura e checagens | Revisão de código de `apps/web`: Next.js 16, tipos, segurança no navegador, desempenho e testes (03/11/2026) |
+| `acessibilidade` | leitura e checagens | Auditoria WCAG 2.2 AA: contraste, teclado, foco, alvos, reflow e movimento (03/11/2026) |
 
 Subagentes servem para trabalho independente em paralelo e para revisões de olho novo; não são usados para tarefas triviais.
 
@@ -26,13 +29,22 @@ Previstas para quando o procedimento se repetir: `fechar-etapa`, `revisao-confor
 
 ## Skills de terceiros
 
-Nenhuma adotada. A busca com `npx skills find` não rodou em 28/10 porque o Node não está instalado na máquina. Regras para quando rodar:
+Nenhuma instalada no repositório. A busca com `npx skills find` não rodou em 28/10 porque o Node não está instalado na máquina. Regras para quando rodar:
 
 1. Preferir publicadores oficiais (por exemplo `npx skills add supabase/agent-skills`).
 2. Ler o `SKILL.md` e todos os arquivos e scripts da skill **antes** de instalar (hooks podem executar código).
 3. Instalar só no escopo do projeto (`-a claude-code`), sem `-y` nem `--all`.
 4. Mostrar a lista de candidatas (nome, origem, o que faz, riscos) e esperar o "ok" do Victor antes de instalar qualquer uma que não seja oficial.
 5. Registrar aqui cada skill adotada (origem, data, motivo). Skills nunca leem `.env` nem enviam dados do projeto para fora.
+
+**Skills de plugins oficiais usadas no frontend (03/11/2026).** Vêm de plugins já instalados no Claude Code do usuário, de publicadores oficiais, e **não** foram adicionadas ao repositório. Foram lidas por inteiro antes do uso.
+
+| Skill | Publicador | Para quê |
+| --- | --- | --- |
+| `frontend-design` | Anthropic (plugin oficial) | Processo de duas passagens e lista de "tiques de página gerada" a evitar |
+| `vercel:nextjs` e `vercel:shadcn` | Vercel (plugin oficial) | Convenções do Next.js 16 (`proxy.ts`, parâmetros assíncronos) e do shadcn/ui |
+| `vercel:react-best-practices`, `vercel:verification`, `dataviz` | Vercel e Anthropic | Revisão de React, verificação de ponta a ponta e gráficos das fases seguintes |
+| `agent-architect` | Skill do usuário | Desenho dos três agentes de frontend |
 
 ## MCPs e CLIs
 

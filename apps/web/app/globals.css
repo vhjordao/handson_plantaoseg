@@ -1,44 +1,328 @@
 @import "tailwindcss";
 
-/* Parede de corredor de hospital: verde-claro em cima, barra escura embaixo. */
+/*
+ * Tokens do PlantãoSeguro (docs/design/direcao-de-arte.md).
+ * Fonte única das cores: `npm run check:contraste` lê este arquivo e confere os contrastes.
+ * As três vozes: ia (tracejado, cobalto), humano (contínuo, verde) e regra (cinza).
+ */
 :root {
-  --wall: #dcebe3;
-  --band: #0f5b50;
-  --ink: #0a332d;
-  --chalk: #f3f9f6;
-  --tape-light: #f0b429;
-  --tape-dark: #14201d;
+  --gaze: #f4f6f5;
+  --papel: #ffffff;
+  --tinta: #12202b;
+  --tinta-suave: #4a5967;
+  --ia: #2c4fd6;
+  --ia-tom: #eaeffd;
+  --ia-forte: #2340b0;
+  --humano: #0b6b4d;
+  --humano-tom: #e4f3ec;
+  --atencao: #8a5300;
+  --atencao-tom: #fff1d6;
+  --atencao-fundo: #f2b33d;
+  --erro: #b42318;
+  --erro-tom: #fdecea;
+  --campo: #76858f;
+  --divisor: #d5dce1;
+  --foco: #12202b;
+  --sobre-tinta: #ffffff;
+  --sobre-humano: #ffffff;
+  --sobre-atencao: #12202b;
+
+  /* Alvo mínimo de toque: 40 px com mouse, 44 px com o dedo (WCAG 2.5.8). */
+  --alvo-min: 2.5rem;
+  color-scheme: light;
 }
 
-@theme inline {
-  --color-wall: var(--wall);
-  --color-band: var(--band);
-  --color-ink: var(--ink);
-  --color-chalk: var(--chalk);
-  --color-tape: var(--tape-light);
-  --font-sans: var(--font-atkinson), ui-sans-serif, system-ui, sans-serif;
-}
-
-/* O mesmo corredor à noite, para quem usa o tema escuro. */
-@media (prefers-color-scheme: dark) {
+@media (pointer: coarse) {
   :root {
-    --wall: #16352f;
-    --band: #0a2420;
-    --ink: #e4f1eb;
-    --chalk: #e4f1eb;
+    --alvo-min: 2.75rem;
   }
 }
 
-body {
-  background: var(--wall);
-  color: var(--ink);
+/* Escuro: segue o sistema e é o padrão do telão (data-theme="dark"). */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --gaze: #0c141c;
+    --papel: #142230;
+    --tinta: #eaf0f5;
+    --tinta-suave: #9fb0bf;
+    --ia: #8ea6ff;
+    --ia-tom: #1a2547;
+    --ia-forte: #b6c4ff;
+    --humano: #5fd3a3;
+    --humano-tom: #12372b;
+    --atencao: #f2b33d;
+    --atencao-tom: #3a2c10;
+    --atencao-fundo: #f2b33d;
+    --erro: #ff8a80;
+    --erro-tom: #3d1a17;
+    --campo: #5c7186;
+    --divisor: #24384a;
+    --foco: #eaf0f5;
+    --sobre-tinta: #0c141c;
+    --sobre-humano: #0c141c;
+    --sobre-atencao: #12202b;
+    color-scheme: dark;
+  }
 }
 
-/* A fita de obra sai quando o protótipo ficar pronto. */
-.caution-tape {
-  background: repeating-linear-gradient(
-    -45deg,
-    var(--tape-light) 0 16px,
-    var(--tape-dark) 16px 32px
-  );
+:root[data-theme="dark"],
+[data-theme="dark"] {
+  --gaze: #0c141c;
+  --papel: #142230;
+  --tinta: #eaf0f5;
+  --tinta-suave: #9fb0bf;
+  --ia: #8ea6ff;
+  --ia-tom: #1a2547;
+  --ia-forte: #b6c4ff;
+  --humano: #5fd3a3;
+  --humano-tom: #12372b;
+  --atencao: #f2b33d;
+  --atencao-tom: #3a2c10;
+  --atencao-fundo: #f2b33d;
+  --erro: #ff8a80;
+  --erro-tom: #3d1a17;
+  --campo: #5c7186;
+  --divisor: #24384a;
+  --foco: #eaf0f5;
+  --sobre-tinta: #0c141c;
+  --sobre-humano: #0c141c;
+  --sobre-atencao: #12202b;
+  color-scheme: dark;
+}
+
+/* Só as cores do projeto: nada de paleta solta do Tailwind. */
+@theme {
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+}
+
+@theme inline {
+  --color-gaze: var(--gaze);
+  --color-papel: var(--papel);
+  --color-tinta: var(--tinta);
+  --color-tinta-suave: var(--tinta-suave);
+  --color-ia: var(--ia);
+  --color-ia-tom: var(--ia-tom);
+  --color-ia-forte: var(--ia-forte);
+  --color-humano: var(--humano);
+  --color-humano-tom: var(--humano-tom);
+  --color-atencao: var(--atencao);
+  --color-atencao-tom: var(--atencao-tom);
+  --color-atencao-fundo: var(--atencao-fundo);
+  --color-erro: var(--erro);
+  --color-erro-tom: var(--erro-tom);
+  --color-campo: var(--campo);
+  --color-divisor: var(--divisor);
+  --color-foco: var(--foco);
+  --color-sobre-tinta: var(--sobre-tinta);
+  --color-sobre-humano: var(--sobre-humano);
+  --color-sobre-atencao: var(--sobre-atencao);
+
+  /* As classes das fontes ficam no <html> (app/layout.tsx), então o var() resolve. */
+  --font-sans: var(--font-atkinson), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-source-serif), ui-serif, Georgia, serif;
+
+  /* Raios por hierarquia: campo e botão, cartão, diálogo. */
+  --radius-campo: 6px;
+  --radius-cartao: 10px;
+  --radius-dialogo: 16px;
+
+  /* Escala: 13, 14, 16, 18, 22, 28, 36, 48 (docs/design/direcao-de-arte.md). */
+  --text-xs: 0.8125rem;
+  --text-xs--line-height: 1.25rem;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.25rem;
+  --text-base: 1rem;
+  --text-base--line-height: 1.5rem;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.75rem;
+  --text-xl: 1.375rem;
+  --text-xl--line-height: 1.875rem;
+  --text-2xl: 1.75rem;
+  --text-2xl--line-height: 2.25rem;
+  --text-3xl: 2.25rem;
+  --text-3xl--line-height: 2.75rem;
+  --text-4xl: 3rem;
+  --text-4xl--line-height: 3.25rem;
+}
+
+@layer base {
+  html {
+    /*
+     * O cabeçalho fixo não pode esconder o elemento focado (WCAG 2.4.11). O mais alto é o do
+     * site público quando quebra em duas linhas (104 px) e o do médico com as abas (101 px).
+     */
+    scroll-padding-top: 7rem;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  /* A barra inferior do médico (celular) cobre o pé da tela: o foco também não pode ficar sob ela. */
+  @media (max-width: 47.99rem) {
+    html:has([data-barra-inferior]) {
+      scroll-padding-bottom: 5rem;
+    }
+  }
+
+  body {
+    background-color: var(--gaze);
+    color: var(--tinta);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.5rem;
+    -webkit-font-smoothing: antialiased;
+    overflow-wrap: break-word;
+  }
+
+  /* Foco forte, com recuo: 2 px na cor da tinta (WCAG 2.4.7). */
+  :focus-visible {
+    outline: 2px solid var(--foco);
+    outline-offset: 2px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    text-wrap: balance;
+    /*
+     * Com a letra muito ampliada, uma palavra longa de título ("transparência") quebra em vez de
+     * alargar a página inteira (WCAG 1.4.4 e 1.4.10). `anywhere`, e não `break-word`, porque só
+     * ele conta na largura mínima de grades e de flexbox.
+     */
+    overflow-wrap: anywhere;
+  }
+
+  p,
+  li {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: var(--ia-tom);
+    color: var(--tinta);
+  }
+
+  button {
+    touch-action: manipulation;
+  }
+}
+
+/* Números em colunas e contadores alinham pelo mesmo traço. */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/*
+ * O contorno das vozes. O traço da IA é tracejado e o da pessoa é contínuo; quando a pessoa
+ * decide (data-voz muda de "ia" para "humano"), as lacunas do traço se fecham. É o único
+ * movimento que a interface conta como seu.
+ */
+.contorno {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.contorno-rect {
+  fill: none;
+  stroke: var(--ia);
+  stroke-width: 2;
+  stroke-dasharray: 6 4;
+  transition:
+    stroke-dasharray 450ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    stroke 450ms ease-out;
+}
+
+[data-voz="humano"] > .contorno .contorno-rect {
+  stroke: var(--humano);
+  stroke-dasharray: 6 0;
+}
+
+[data-voz="ia"],
+[data-voz="humano"] {
+  transition: background-color 450ms ease-out;
+}
+
+/* A revelação da ordem sugerida: item a item, 60 ms entre um e outro. */
+@keyframes revelar {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.revelar {
+  animation: revelar 260ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: calc(var(--i, 0) * 60ms);
+}
+
+/*
+ * Etapa de uma demonstração que se revela aos poucos. O espaço fica reservado desde o início
+ * (visibility, não display), então nada na página pula quando o conteúdo aparece.
+ */
+.etapa-demo[data-visivel="false"] {
+  visibility: hidden;
+}
+
+.etapa-demo[data-visivel="true"] {
+  animation: revelar 260ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: calc(var(--i, 0) * 60ms);
+}
+
+/* O selo assenta quando alguém decide. */
+@keyframes assentar {
+  from {
+    opacity: 0;
+    transform: scale(1.08);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.assentar {
+  animation: assentar 220ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/*
+ * Modo de alto contraste do sistema: o traço usa as cores do sistema, não as nossas. E o item
+ * atual (menu, filtro, aba) ganha um sublinhado grosso, porque nesse modo o fundo e a borda de
+ * cor somem e o negrito sozinho quase não se vê (WCAG 1.4.1).
+ */
+@media (forced-colors: active) {
+  .contorno-rect {
+    stroke: CanvasText;
+  }
+
+  [aria-current="page"],
+  [aria-current="true"],
+  [role="tab"][aria-selected="true"] {
+    text-decoration: underline;
+    text-decoration-thickness: 0.2em;
+    text-underline-offset: 0.3em;
+  }
+}
+
+/* Quem pede menos movimento recebe o estado final, sem animação. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
