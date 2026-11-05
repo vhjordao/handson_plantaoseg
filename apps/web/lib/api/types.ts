@@ -59,7 +59,10 @@ export const CODIGOS_REGRA = [
 export const CodigoRegraSchema = z.enum(CODIGOS_REGRA);
 export type CodigoRegra = z.infer<typeof CodigoRegraSchema>;
 
-/** Ações que o backend já grava: `audit.py::ACTIONS`. */
+/**
+ * Ações que o backend grava: `audit.py::ACTIONS`. O teste `contrato-backend.test.ts` lê o
+ * Python e falha se esta lista e a do backend deixarem de ser iguais.
+ */
 export const ACOES_AUDITORIA_BACKEND = [
   "shift_published",
   "extraction_confirmed",
@@ -67,16 +70,14 @@ export const ACOES_AUDITORIA_BACKEND = [
   "explanation_generated",
   "recommendation_approved",
   "recommendation_rejected",
-] as const;
-/** Ações do desenho (cascata e contestação), ainda sem backend. */
-export const ACOES_AUDITORIA_DESENHO = [
   "offer_sent",
   "offer_accepted",
   "offer_declined",
   "offer_expired",
-  "contestation_opened",
-  "contestation_answered",
+  "shift_uncovered",
 ] as const;
+/** Ações do desenho (contestação), ainda sem backend. */
+export const ACOES_AUDITORIA_DESENHO = ["contestation_opened", "contestation_answered"] as const;
 export const AcaoAuditoriaSchema = z.enum([
   ...ACOES_AUDITORIA_BACKEND,
   ...ACOES_AUDITORIA_DESENHO,
@@ -105,7 +106,11 @@ export const MedicoSchema = z.object({
   crm: z.string(),
   especialidade: EspecialidadeSchema,
   especialidadeSecundaria: EspecialidadeSchema.nullable(),
-  zona: z.string(),
+  /**
+   * Zona de residência. A RLS não a libera ao navegador (`doctors.home_zone`), então no `live`
+   * ela não vem; nenhuma tela a lê (ADR 0012, divergência sobre o cadastro do médico).
+   */
+  zona: z.string().optional(),
 });
 export type Medico = z.infer<typeof MedicoSchema>;
 
@@ -272,7 +277,10 @@ export type Exclusao = z.infer<typeof ExclusaoSchema>;
 
 export const RecomendacaoSchema = z.object({
   vagaId: z.string(),
-  /** `pipeline.shift_key`: identificador estável da vaga ainda não publicada. */
+  /**
+   * `pipeline.shift_key`: identificador estável da vaga ainda não publicada. No `live` a API
+   * usa o id da vaga publicada, então ele passa a ser igual a `vagaId`.
+   */
   chave: z.string(),
   modeloVersao: z.string(),
   geradaEm: DataHoraSchema,
