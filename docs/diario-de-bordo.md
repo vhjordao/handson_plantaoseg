@@ -4,6 +4,24 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 04/11/2026 (quarta): editor do n8n na web
+
+**Pedido do Victor:** "verifique o n8n, não consigo acessá-lo via web. o que houve?". Depois escolheu "Abrir na web" e pediu ajuda para entrar com login.
+
+**O que foi feito**
+
+- O n8n não tinha caído: estava no ar e saudável. O endereço público devolvia 404 porque o [ADR 0009](adr/0009-servidor-so-para-a-apresentacao.md) tirou a rota do editor, e o editor só abria por túnel SSH. A decisão era nossa, e ele não a tinha presente.
+- O [ADR 0012](adr/0012-editor-do-n8n-na-web.md) abre o editor na web, só em HTTPS, e mantém webhook, formulário e MCP fora da internet. O login tem limite de tentativas por IP no Traefik, além do limite por e-mail que o próprio n8n já tem. O túnel SSH fica como reserva.
+- O teste de contrato trocou "editor fora do Traefik" por seis testes novos, e o Compose novo foi validado no servidor, com o `.env` real, antes de aplicar.
+
+**No servidor real:** só o n8n e o worker foram recriados (cerca de 12 s). De fora, a página abre por HTTPS, o cookie ficou seguro, os 7 caminhos de webhook, formulário e MCP respondem 404 e o limite barra a 6ª tentativa de login. O Victor relatou que conseguiu acessar.
+
+**A correção do dia:** eu havia escrito que, depois da rajada, o login voltava a uma tentativa a cada 12 segundos. Os cabeçalhos das respostas mostraram dois limites: o do Traefik, por IP, e o do próprio n8n, de 5 por minuto por e-mail, que li no código da imagem. O ADR foi corrigido.
+
+**Pendências:** o MFA do n8n (do Victor), a decisão de fechar `/api/v1` na rota pública e o workflow da cascata (`f3/cascata-n8n`), que depende de decidir como o n8n fica sabendo que uma oferta saiu.
+
+**Uso de IA:** o Victor decidiu abrir o editor na web. O Claude Code diagnosticou, escreveu o Compose, os testes e os documentos e aplicou no servidor a pedido dele. Errou ao descrever o limite do login, e a medição corrigiu. O certificado visto desta máquina é o do antivírus, que intercepta o HTTPS, então o real foi conferido de dentro do servidor.
+
 ## 04/11/2026 (quarta): API de matching no servidor
 
 **Pedido do Victor:** aprovou o plano da API com as decisões e os riscos ("Pode começar") e rodou o comando que cria os logins de teste.
