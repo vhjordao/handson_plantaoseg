@@ -402,6 +402,8 @@ Cada um com carregando (esqueleto), vazio (convite a agir), erro (o que houve e 
 | 07/11 | Entrega 3 | tag `etapa-3-ui` | Congelar a versão; atualizar README e a seção de protótipo e UX do documento |
 | 08 a 16/11 | **UI-4** | `f3/web-apresentacao` | Polimento, modo apresentação, ensaio, plano B; **congelar em 13/11** |
 
+As datas acima são as de 03/11. A ordem que vale desde 05/11 está no [plano da Etapa 3](../plano-etapa-3.md).
+
 Se o prazo apertar, corte de baixo para cima: modo apresentação, atalhos de teclado, tema escuro fora do telão, telão. **Nunca** corte a distinção IA × humano, a acessibilidade básica nem o modo `demo`.
 
 ## 17. Comece agora

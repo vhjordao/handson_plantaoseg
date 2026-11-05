@@ -1,7 +1,7 @@
 # Ficha do componente: interface web (plataforma)
 
-- **Responsável:** Victor Jordão, com o Claude Code · **Frente:** interface · **Branch:** `f3/web-plataforma` · **Atualizado em:** 04/11/2026
-- **Estado:** fase **UI-0 (fundação)**: site público (landing, entrada, ajuda), cascas dos três papéis, telão provisório e a camada de dados no modo `demo`. As telas do coordenador (UI-1), do médico (UI-2), o telão ao vivo e a auditoria (UI-3) seguem o [prompt de frontend](../../docs/design/prompt-frontend.md), seção 16. Decisões: [ADR 0011](../../docs/adr/0011-web-responsiva-sem-pwa.md) (web responsiva, sem PWA) e [ADR 0014](../../docs/adr/0014-estrutura-da-plataforma-web.md) (estrutura, sessão e camada de dados).
+- **Responsável:** Victor Jordão, com o Claude Code · **Frente:** interface · **Branch:** `f3/web-coordenador` · **Atualizado em:** 05/11/2026
+- **Estado:** fases **UI-0 (fundação)** e **UI-1 (coordenador)**: site público (landing, entrada, ajuda), cascas dos três papéis, telão provisório, a camada de dados no modo `demo` e a jornada do coordenador, do pedido em texto livre à decisão. As telas do médico (UI-2), o telão ao vivo e a auditoria (UI-3) seguem o [prompt de frontend](../../docs/design/prompt-frontend.md), seção 16. Decisões: [ADR 0011](../../docs/adr/0011-web-responsiva-sem-pwa.md) (web responsiva, sem PWA) e [ADR 0014](../../docs/adr/0014-estrutura-da-plataforma-web.md) (estrutura, sessão e camada de dados).
 
 ## 1. O que é e qual dor resolve
 
@@ -13,6 +13,8 @@
 - **Sessão sem senha:** `/entrar` grava um cookie com `{papel, personaId}`; o `proxy.ts` (Next.js 16) leva quem não tem a sessão certa de volta a `/entrar`. O cookie **não é assinado**: tudo é simulação e não há dado real a proteger. No modo `live`, a persona vira um login anônimo do Supabase.
 - **Camada de dados:** as telas falam só com a interface `PlantaoApi` (`lib/api`). O adaptador **`demo`** roda no navegador, com fixtures geradas do **pipeline real** (`scripts/exportar_fixtures_web.py`) e um relógio simulado (quinta, 01/10/2026, 9h); o `live` chama a `matching-api` e o Supabase e vem na UI-2. Escolha por `NEXT_PUBLIC_DATA_MODE=demo|live`.
 - **As três vozes:** `SuperficieVoz` desenha um contorno tracejado (IA), contínuo (pessoa) ou uma linha fina cinza (regra). Quando a voz muda de IA para pessoa, as lacunas do traço se fecham em cerca de 450 ms: é o único movimento da interface. A forma do traço, o rótulo e o ícone carregam o significado; a cor só reforça.
+- **Nova vaga (`/coordenador/vagas/nova`):** a pessoa escreve o pedido ou clica num exemplo, e "Ler a vaga" mostra os cinco campos para conferir, cada um com a origem ("Está no texto", "Calculado do texto" ou "Não está no texto") e o trecho do texto. O campo que falta vira pergunta, e a tela não deixa seguir sem resposta. Texto com tentativa de injeção é sinalizado. Se a leitura falhar, aparece o formulário rápido; "Simular falha da leitura" mostra esse caminho na demonstração. Sem "Confirmar e ver as sugestões", nada é publicado.
+- **Sugestões (`/coordenador/vagas/[id]`):** a ordem sugerida fica num contorno tracejado, com uma frase de motivo, a faixa de chance e os alertas de jornada. "Ver motivos" abre o número, as barras do que pesou, o que não entra na ordem, a ficha do modelo e "Esta explicação ajudou?". "Quem ficou de fora" mostra a regra e a evidência, com pseudônimo. Nenhum nome vem marcado: a pessoa marca, "Aprovar e oferecer" abre o diálogo de conferência, e quem tem alerta exige justificativa. Ao confirmar, o tracejado fecha e o selo assenta. "Pular" é reversível enquanto a vaga espera a decisão, e a trilha guarda as duas linhas.
 - **Honestidade:** a leitura da vaga nesta demonstração é feita **por regras** (o Gemini ainda não foi testado com chave), e por isso aparece em cinza e como "Leitura por regras", não como sugestão da IA. Os motivos dizem se foram "montados pelo sistema a partir dos fatores" ou "reescritos pela IA".
 
 ## 3. Como foi feito
@@ -23,6 +25,7 @@
 4. Landing com o hero vivo (saída real da PoC), entrada por persona e cascas por papel.
 5. Fixtures e adaptador `demo` (subagente, a partir do pipeline Python real) e testes.
 6. Revisão de olhos novos pelos agentes `designer-ui`, `revisor-frontend` e `acessibilidade` ([`.claude/agents/`](../../.claude/agents/)).
+7. Tela do coordenador (UI-1): novos métodos no contrato, componentes de domínio, as duas telas, os testes e a revisão visual em capturas de 1440 e 390 px, claro e escuro.
 
 ## 4. Código-chave
 
@@ -35,6 +38,11 @@
 | `lib/api/demo/adaptador.ts` | O adaptador `demo` de `PlantaoApi` | `operacao` e `aplicar`: uma escrita por vez, gravada de uma vez e descartada se a demonstração foi reiniciada no meio; aprovar a mesma lista de novo devolve a decisão já tomada |
 | `lib/api/demo/privacidade.ts` | Tira nome, CRM, telefone, e-mail e número de documento dos textos livres | É de melhor esforço: reduz o risco, não o elimina |
 | `proxy.ts` e `lib/session/` | Sessão por persona e proteção das rotas | `destinoSeguro`: o parâmetro `de` só aceita rota do mesmo papel |
+| `components/coordenador/nova-vaga.tsx` | Escrever, ler, conferir e publicar a vaga | `propsDoCampo`: o campo que falta vira pergunta; `textoMudou`: o texto alterado depois da leitura barra a publicação |
+| `components/coordenador/ordem-sugerida.tsx` | A lista, a seleção e a decisão | `voz={decisao ? "humano" : "ia"}` fecha o tracejado; a região de status existe antes de o selo entrar, para o anúncio não se perder |
+| `components/coordenador/dialogo-de-decisao.tsx` | Conferir antes de aprovar | `onOpenAutoFocus`: o foco vai ao título, nunca ao botão de confirmar |
+| `components/dominio/fatores-de-decisao.tsx` | As barras do que pesou | O sentido vem na posição, na cor e na palavra; o número da contribuição não aparece |
+| `lib/format/sugestoes.ts` | Faixa de chance e aviso de chances parecidas | Os cortes (0,5 e 0,7; 5 pontos) são da interface, não do modelo |
 | `lib/copy/` | Todos os textos, em português | Rótulos dos códigos do backend e as afirmações permitidas |
 | `scripts/check-contraste.mjs` | Confere os contrastes direto do CSS | Falha com código 1 se algum par ficar abaixo do mínimo |
 
@@ -78,10 +86,10 @@ A página não precisa de `.env`. O `.env` da raiz guarda só os tokens de acess
 
 ## 7. Testes e resultados
 
-Na máquina local, em 04/11/2026:
+Na máquina local, em 05/11/2026:
 
-- **Testes unitários e de componente (Vitest):** 141 passando em 10 arquivos: vozes, selo, botão, campos e resumo de erros; datas e números em português; contratos e fixtures; paridade das listas fechadas (ações da trilha, variáveis do ranking e códigos de exclusão) com o código Python do backend; extração por regras; trilha com hash; limpeza de dados pessoais; aprovação repetida, reinício no meio de uma operação e limites de texto; sessão e `destinoSeguro`; provedor da API (carregamento, falha com "Tentar de novo", armazenamento bloqueado); região de status do selo, marca compacta e título da 404.
-- **Jornada e acessibilidade (Playwright, Edge, sobre o build de produção como na CI):** 64 passando e 8 ignorados de propósito (o primeiro Tab não faz sentido no celular, e os testes que criam o próprio tamanho de tela rodam só no computador), em computador (1440 px) e celular (390 px). Cobre a demonstração do hero até o selo, "Pular para o conteúdo", **Ajuda** à direita no cabeçalho, sem rolagem horizontal em 320 px, estado final com movimento reduzido, as três portas de `/entrar` (inclusive `?papel=` pela posição visual), a sessão por persona, a tela de Vagas, Minha conta, Sair e o `axe` sem violação grave nos temas claro e escuro. A bateria `e2e/acessibilidade.spec.ts` confere o que o `axe` não pega: o foco voltando com Shift+Tab não fica sob o cabeçalho fixo (320, 360 e 375 px), sem rolagem horizontal a 320 px e, com a letra a 200% em 390 px, na landing, entrada, ajuda e nas áreas do médico e do coordenador; a ordem do HTML em `/entrar?papel=`; o aviso do filtro das vagas e o da decisão no hero; o sublinhado do item atual em alto contraste; a orientação das abas; a altura dos links soltos; e o `axe` com as regras de estrutura em `/ajuda`, `/telao`, na 404 e em `/entrar?papel=`. Contra o servidor de desenvolvimento, com os testes em paralelo, 5 testes do computador estouraram os 30 s (ele é bem mais lento que o build); por isso a medida vale só no build de produção.
+- **Testes unitários e de componente (Vitest):** 184 passando em 12 arquivos: vozes, selo, botão, campos e resumo de erros; datas e números em português; contratos e fixtures; paridade das listas fechadas (ações da trilha, variáveis do ranking e códigos de exclusão) com o código Python do backend; extração por regras; trilha com hash; limpeza de dados pessoais; aprovação repetida, reinício no meio de uma operação e limites de texto; sessão e `destinoSeguro`; provedor da API (carregamento, falha com "Tentar de novo", armazenamento bloqueado); região de status do selo, marca compacta e título da 404.
+- **Jornada e acessibilidade (Playwright, Edge, sobre o build de produção como na CI):** 123 passando e 11 ignorados de propósito (o primeiro Tab não faz sentido no celular, e os testes que criam o próprio tamanho de tela rodam só no computador), em computador (1440 px) e celular (390 px). Cobre a demonstração do hero até o selo, "Pular para o conteúdo", **Ajuda** à direita no cabeçalho, sem rolagem horizontal em 320 px, estado final com movimento reduzido, as três portas de `/entrar` (inclusive `?papel=` pela posição visual), a sessão por persona, a tela de Vagas, Minha conta, Sair e o `axe` sem violação grave nos temas claro e escuro. A bateria `e2e/acessibilidade.spec.ts` confere o que o `axe` não pega: o foco voltando com Shift+Tab não fica sob o cabeçalho fixo (320, 360 e 375 px), sem rolagem horizontal a 320 px e, com a letra a 200% em 390 px, na landing, entrada, ajuda e nas áreas do médico e do coordenador; a ordem do HTML em `/entrar?papel=`; o aviso do filtro das vagas e o da decisão no hero; o sublinhado do item atual em alto contraste; a orientação das abas; a altura dos links soltos; e o `axe` com as regras de estrutura em `/ajuda`, `/telao`, na 404 e em `/entrar?papel=`. Contra o servidor de desenvolvimento, com os testes em paralelo, 5 testes do computador estouraram os 30 s (ele é bem mais lento que o build); por isso a medida vale só no build de produção.
 - **Contraste:** todos os pares passam nos dois temas (texto principal de 14,1:1 a 16,6:1; contorno e campos de 3,2:1 a 10,0:1).
 - **Lighthouse (build de produção, Edge, medido em 03/11/2026, **antes** da revisão de 04/11 e não repetido depois), em `/` e em `/entrar`:** acessibilidade **100**, boas práticas **100**, desempenho 99 a 100 e SEO 60 (**esperado**: a página é `noindex` de propósito, ADR 0007). LCP de 0,9 s no celular simulado e de 0,3 s no computador; CLS de 0,009 na landing e 0 na entrada. Uma primeira medição saiu pior (acessibilidade 93, e `/entrar` com erro) por ter sido feita contra um servidor de produção velho que ficou na porta: o resultado acima é de um servidor novo.
 - **Build de produção:** `/`, `/telao` e `/_not-found` estáticas; `/ajuda`, `/entrar` e as áreas por papel dinâmicas (leem a sessão ou os parâmetros).
@@ -102,6 +110,9 @@ Na CI, o job `web` roda lint, tipos, contraste, testes e build, e o job `web-e2e
 ## 9. Limitações e honestidade
 
 - Hoje a leitura da vaga é por regras: o Gemini ainda não foi testado com chave, e a tela diz isso.
+- A tela do coordenador roda só no modo `demo`: não chama a API nem o n8n. Aprovar registra a decisão na trilha da sessão e deixa a vaga em "Oferta em andamento", e a tela diz que o acompanhamento da cascata chega na próxima entrega.
+- Uma vaga publicada não se edita; para corrigir, publique outra. "Pular" não pede motivo, embora o contrato aceite um. Pular e desfazer não existem na API ([ADR 0014](../../docs/adr/0014-estrutura-da-plataforma-web.md), divergência 4).
+- A faixa de chance e o aviso de chances parecidas usam cortes escolhidos pela interface. Não foram validados com coordenadores: é o que o teste de usabilidade precisa observar.
 - Cascata, aceite e contestação são **simulados**; o rastro de pagamentos e o check-in não existem (evolução futura, ADR 0002).
 - As recomendações da demonstração vêm de uma **grade pré-calculada** (12 h, próximos 8 dias), não de um cálculo em tempo real; fora dela, a tela explica o limite.
 - Os números de tempo e de concentração vêm de uma simulação com dados sintéticos e não são evidência real.
@@ -116,4 +127,4 @@ O Victor pediu a plataforma web, a landing e a área de entrada, a busca de skil
 
 ## 11. Próximos passos
 
-UI-1 (`f3/web-coordenador`): Vagas, Nova vaga com os campos lidos, Sugestões com motivos, o diálogo de decisão e o selo humano. UI-2 (`f3/web-medico`): ofertas, aceite, contestação, cascata e o adaptador `live`. UI-3: telão ao vivo, auditoria, equidade e a rodada de usabilidade. Antes de ligar o Supabase, entram os cabeçalhos de segurança.
+UI-2 (`f3/web-medico`): ofertas, aceite, contestação, cascata e o adaptador `live`. UI-3: telão ao vivo, auditoria, equidade e a rodada de usabilidade. Antes de ligar o Supabase, entram os cabeçalhos de segurança.

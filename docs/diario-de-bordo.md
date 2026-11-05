@@ -4,6 +4,31 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 05/11/2026 (quinta): tela do coordenador e a ordem das atividades
+
+**Pedido do Victor:** "Alinha o passo a passo e a ordem das atividades. E comece pela tela do coordenador." O merge da plataforma web (PR #13), que ele tinha autorizado, saiu antes, com a CI toda verde.
+
+**O que ficou pronto**
+
+- **A ordem das atividades até 17/11** está no [plano](plano-etapa-3.md), com quem faz cada uma, a data e o motivo. As datas das fases no prompt de frontend eram de 03/11 e ficaram para trás.
+- **Nova vaga:** escrever o pedido, ler, conferir campo a campo e publicar. O campo que falta vira pergunta, e a tentativa de injeção é sinalizada.
+- **Sugestões:** a ordem sugerida com motivo, faixa de chance e alertas; "Ver motivos" com as barras e a ficha do modelo; "Quem ficou de fora" com a regra e a evidência; o diálogo de conferência; a justificativa de exceção; e o tracejado que fecha com o selo.
+- **Os dois achados da revisão de ontem que eram desta tela foram corrigidos:** um nome pulado agora volta marcado e não pode ser aprovado, e entrada fora do contrato vira erro de domínio, com mensagem que a pessoa entende.
+
+**Decisões e correções desta rodada**
+
+- **Pular ficou reversível:** a trilha só cresce, então desfazer grava uma linha nova (`recommendation_restored`), em vez de apagar o pulo. O backend não tem essa ação: está nas divergências do [ADR 0014](adr/0014-estrutura-da-plataforma-web.md).
+- **Caixas em vez de um botão por nome:** a API recebe uma lista em ordem, e a cascata precisa de mais de um nome. Nenhuma caixa vem marcada.
+- **As barras de "Ver motivos" ganharam duas cores próprias:** o validador de paleta reprovou o cinza com o azul da IA no tema escuro.
+- **Os testes acharam um erro de layout real:** com a letra a 200%, a tela passava 51 px da largura. A coluna do número apertava o texto, e o alerta não deixava a palavra longa quebrar.
+- **A revisão visual nas capturas** corrigiu o botão "Pular" sozinho numa linha no celular, os links recuados e o nome aprovado, que não se destacava dos outros.
+
+**O que falta, e o documento precisa dizer:** a tela roda no modo de demonstração e não chama a API nem o n8n. O adaptador `live` vem com a tela do médico. Por isso, o teste de usabilidade da Entrega 3 cobre só a tarefa do coordenador.
+
+**Conferido:** 184 testes de unidade e de componente; 123 de jornada e acessibilidade, em 1440 e 390 px, com o `axe` nos dois temas (11 ignorados de propósito); lint, tipos, contraste e build de produção. Não houve teste com pessoas nem com leitor de tela real.
+
+**Uso de IA:** o Claude Code propôs a ordem, escreveu as telas e os testes e revisou as capturas; o Victor definiu a prioridade e decide o merge.
+
 ## 05/11/2026 (quinta): revisão final antes do merge da plataforma web
 
 **Pedido do Victor:** revisar o que foi feito nesta e nas outras sessões e fazer o merge final.

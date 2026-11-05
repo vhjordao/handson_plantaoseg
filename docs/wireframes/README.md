@@ -9,6 +9,8 @@ Quatro telas desenhadas para a jornada do coordenador e do médico. **Não são 
 | [3. Excluídos](03-excluidos.svg) | Coordenador | Quantos foram barrados por regra e exemplos com a evidência | Explicabilidade: a regra que barrou, com números |
 | [4. Oferta e contestação](04-medico-oferta-e-contestacao.svg) | Médico | Oferta com o motivo, aceitar ou recusar e contestar | Contestabilidade e transparência para quem é ranqueado |
 
+**Atualização de 05/11/2026:** as telas 1 a 3 foram construídas em [`apps/web`](../../apps/web/README.md), no modo de demonstração. O que mudou em relação a estes esboços está na [direção de arte](../design/direcao-de-arte.md).
+
 ## Estados que a versão funcional precisa tratar
 
 Carregando; erro do LLM (cai nas regras, com aviso discreto); nenhum elegível; campo obrigatório em branco (a tela 1 não deixa seguir); texto com sinal de injeção; explicação em texto fixo (fallback); aprovação sem seleção (botão desabilitado).

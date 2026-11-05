@@ -1,7 +1,24 @@
 # Plano: protótipo e Etapa 3 (02/11 a 17/11)
 
-- **Status:** aprovado pelo Victor em 02/11/2026 e ajustado em 03/11 com a Aula 4 e o feedback da Etapa 2. **A construção começou em 03/11, só pela web** ([ADR 0007](adr/0007-web-sai-do-adiamento.md)): há uma página provisória em `apps/web`, e o banco está no projeto, com os dados sintéticos carregados, migrações, RLS e testes ([ADR 0008](adr/0008-banco-no-supabase.md)). O [servidor](../infra/README.md) está no ar desde 04/11, só para a apresentação ([ADR 0009](adr/0009-servidor-so-para-a-apresentacao.md)). A [API](../services/matching-api/app/api/README.md) entrou nele em 04/11, com o ok do Victor ([ADR 0010](adr/0010-api-de-matching.md)), e o [workflow da cascata](../n8n/README.md) também, conferido de ponta a ponta ([ADR 0013](adr/0013-aviso-da-api-inicia-a-cascata.md)). A [plataforma web](../apps/web/README.md) tem a fundação pronta, ainda em modo de demonstração ([ADR 0014](adr/0014-estrutura-da-plataforma-web.md)); faltam as telas do coordenador e do médico.
+- **Status:** aprovado pelo Victor em 02/11/2026 e ajustado em 03/11 com a Aula 4 e o feedback da Etapa 2. **A construção começou em 03/11, só pela web** ([ADR 0007](adr/0007-web-sai-do-adiamento.md)): há uma página provisória em `apps/web`, e o banco está no projeto, com os dados sintéticos carregados, migrações, RLS e testes ([ADR 0008](adr/0008-banco-no-supabase.md)). O [servidor](../infra/README.md) está no ar desde 04/11, só para a apresentação ([ADR 0009](adr/0009-servidor-so-para-a-apresentacao.md)). A [API](../services/matching-api/app/api/README.md) entrou nele em 04/11, com o ok do Victor ([ADR 0010](adr/0010-api-de-matching.md)), e o [workflow da cascata](../n8n/README.md) também, conferido de ponta a ponta ([ADR 0013](adr/0013-aviso-da-api-inicia-a-cascata.md)). A [plataforma web](../apps/web/README.md) tem a fundação e a tela do coordenador, ainda em modo de demonstração ([ADR 0014](adr/0014-estrutura-da-plataforma-web.md)); falta a tela do médico e ligar a web à API.
 - **Prazos:** aula e feedback da Etapa 2 em 03/11; **Entrega 3 em 07/11 (até 2,0)**; **apresentação final em 17/11 (até 4,0)**, com a plateia usando o sistema pelo celular.
+
+## Ordem das atividades (alinhada em 05/11)
+
+O que vem antes de quê, e por quê. As datas são metas. Esta tabela manda quando divergir dos marcos abaixo ou das datas das fases no [prompt de frontend](design/prompt-frontend.md), que foram escritas antes de a API, o servidor e a cascata tomarem o tempo de 04/11.
+
+| # | Atividade | Quem | Até | Por que nesta ordem |
+| --- | --- | --- | --- | --- |
+| 1 | Tela do coordenador: nova vaga, sugestões com motivo e decisão (`f3/web-coordenador`) | Claude Code; Victor aprova | 05/11 | O teste de usabilidade e a seção de experiência da Entrega 3 dependem dela |
+| 2 | Entrevistas com coordenadores e plantonistas | Colegas; Victor confirma com o professor | 06/11 | Os números calibram o simulador e entram no documento |
+| 3 | Teste de usabilidade da tarefa do coordenador, no link público | Colegas | 06/11 | Só existe com a tela pronta. As tarefas do médico ficam para depois da tela dele, e o documento diz isso |
+| 4 | Teste contra a concentração das ofertas e Gemini com a chave real | Claude Code; Victor gera a chave | 07/11 | O documento hoje declara os dois como pendentes; o que der tempo vira resultado, o resto continua declarado |
+| 5 | Corrigir e fechar a Entrega 3, com os resultados de 2 a 4 | Claude Code redige; Victor revisa e autoriza o PR | 07/11 | É a entrega de maior prazo imediato (até 2,0) |
+| 6 | Tela do médico e adaptador `live`, que liga a web à API e à cascata (`f3/web-medico`) | Claude Code; Victor decide as divergências do [ADR 0014](adr/0014-estrutura-da-plataforma-web.md) | 10/11 | Sem o `live`, a demonstração não chama a API nem o n8n |
+| 7 | Telão, QR code, contestação, plano B, teste de carga e reinício do servidor | Claude Code; Victor decide o prazo curto da cascata | 13/11 | É a experiência da plateia. **Código congelado em 13/11.** Ordem de corte em M4 |
+| 8 | Ensaio e pitch, com o roteiro da aula de 10/11 | Grupo | 17/11 | Apresentação final (até 4,0) |
+
+**Só o Victor pode fazer:** confirmar com o professor que as entrevistas seguem como atividade da disciplina; gerar a chave do Gemini; ligar o MFA do n8n e conferir que a renovação do servidor ficou desligada; decidir o prazo curto da demonstração (recomendação: 2 min; a rede simulada usa 60); rodar `usuarios-de-teste.py limpar` e `remover` antes de 17/11.
 
 ## Contexto
 
@@ -43,7 +60,7 @@ Uma branch e um PR por item, CI verde, e nenhum merge sem o ok do Victor. As dat
 ### M1, até 05/11: fluxo de ponta a ponta
 
 - **`f3/api-matching`, no servidor desde 04/11** ([ficha](../services/matching-api/app/api/README.md), [ADR 0010](adr/0010-api-de-matching.md)): FastAPI em `services/matching-api/app/api/`, com Pydantic, validação do JWT do Supabase e rotas internas protegidas por segredo. Uma camada de repositório monta o `Dataset` a partir do Postgres. A CLI e o núcleo continuam funcionando só com biblioteca padrão.
-- **`f3/web-coordenador`:** telas 1 a 3 dos [wireframes](wireframes/README.md) (vaga em texto livre e conferência; top 5 com motivo e alertas; excluídos com a regra), com os estados de erro já listados lá.
+- **`f3/web-coordenador`, em PR em 05/11** ([ficha](../apps/web/README.md)): telas 1 a 3 dos [wireframes](wireframes/README.md) (vaga em texto livre e conferência; top 5 com motivo e alertas; excluídos com a regra), com os estados de erro já listados lá. Roda no modo de demonstração; a ligação com a API vem no adaptador `live`.
 - **`f3/web-medico`:** tela 4 (oferta com motivo, aceitar ou recusar) e a trilha de auditoria.
 - **`f3/cascata-n8n`, publicado no servidor em 04/11** ([ficha](../n8n/README.md), [ADR 0013](adr/0013-aviso-da-api-inicia-a-cascata.md)): workflow em JSON que só espera e chama `POST /internal/cascade/{id}/advance`. A API avisa o n8n uma vez por vaga, no clique do coordenador.
 
