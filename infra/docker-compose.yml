@@ -134,7 +134,7 @@ services:
 
   matching-api:
     # A imagem é construída no próprio servidor, a partir da cópia da pasta (infra/README.md).
-    image: plantaoseguro-matching-api:0.1.0
+    image: plantaoseguro-matching-api:0.2.0
     build:
       context: ../services/matching-api
     restart: unless-stopped
@@ -146,6 +146,10 @@ services:
       # Onde a API avisa que a cascata de uma vaga começou (ADR 0013). É por dentro do servidor.
       N8N_CASCADE_URL: http://n8n:5678/webhook/cascata-ofertas
       API_CORS_ORIGINS: ${API_CORS_ORIGINS:-}
+      # Opcional: sem ela, a leitura e os motivos saem pelas regras (ADR 0003). Só a API a recebe.
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      LLM_MODEL_EXTRACAO: ${LLM_MODEL_EXTRACAO:-gemini-3.1-flash-lite}
+      LLM_REESCREVER_MOTIVOS: ${LLM_REESCREVER_MOTIVOS:-0}
     mem_limit: 512m
     read_only: true
     tmpfs:

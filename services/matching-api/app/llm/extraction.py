@@ -30,14 +30,19 @@ WEEKDAYS = {
 WEEKDAY_NAMES = ("segunda", "terça", "quarta", "quinta", "sexta", "sábado", "domingo")
 URGENCY_WORDS = {"alta": "high", "media": "medium", "baixa": "low"}
 
+# `nullable` não está entre as palavras que o Gemini aceita: nulo se escreve como um tipo.
 EXTRACTION_SCHEMA: dict[str, Any] = {
     "type": "object",
     "properties": {
-        "unit": {"type": "string", "nullable": True},
-        "specialty": {"type": "string", "enum": ["clinica_medica", "pediatria"], "nullable": True},
-        "starts_at": {"type": "string", "nullable": True},
-        "ends_at": {"type": "string", "nullable": True},
-        "urgency": {"type": "string", "enum": ["low", "medium", "high"], "nullable": True},
+        "unit": {"type": ["string", "null"]},
+        "specialty": {
+            "anyOf": [{"type": "string", "enum": ["clinica_medica", "pediatria"]}, {"type": "null"}]
+        },
+        "starts_at": {"type": ["string", "null"]},
+        "ends_at": {"type": ["string", "null"]},
+        "urgency": {
+            "anyOf": [{"type": "string", "enum": ["low", "medium", "high"]}, {"type": "null"}]
+        },
     },
     "required": ["unit", "specialty", "starts_at", "ends_at", "urgency"],
 }

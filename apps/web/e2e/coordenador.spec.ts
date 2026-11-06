@@ -206,7 +206,7 @@ test.describe("por que este nome, e por que os outros não", () => {
 
     await ana.getByRole("button", { name: "Ver a ficha do modelo" }).click();
     await expect(dialogo(page).getByRole("heading", { name: "Ficha do modelo" })).toBeVisible();
-    await expect(dialogo(page).getByText("O Gemini não foi exercitado.")).toBeVisible();
+    await expect(dialogo(page).getByText("O Gemini só foi testado à parte, com textos sintéticos.")).toBeVisible();
     await page.keyboard.press("Escape");
     await expect(dialogo(page)).toBeHidden();
   });

@@ -15,7 +15,7 @@
 - **As três vozes:** `SuperficieVoz` desenha um contorno tracejado (IA), contínuo (pessoa) ou uma linha fina cinza (regra). Quando a voz muda de IA para pessoa, as lacunas do traço se fecham em cerca de 450 ms: é o único movimento da interface. A forma do traço, o rótulo e o ícone carregam o significado; a cor só reforça.
 - **Nova vaga (`/coordenador/vagas/nova`):** a pessoa escreve o pedido ou clica num exemplo, e "Ler a vaga" mostra os cinco campos para conferir, cada um com a origem ("Está no texto", "Calculado do texto" ou "Não está no texto") e o trecho do texto. O campo que falta vira pergunta, e a tela não deixa seguir sem resposta. Texto com tentativa de injeção é sinalizado. Se a leitura falhar, aparece o formulário rápido; "Simular falha da leitura" mostra esse caminho na demonstração. Sem "Confirmar e ver as sugestões", nada é publicado.
 - **Sugestões (`/coordenador/vagas/[id]`):** a ordem sugerida fica num contorno tracejado, com uma frase de motivo, a faixa de chance e os alertas de jornada. "Ver motivos" abre o número, as barras do que pesou, o que não entra na ordem, a ficha do modelo e "Esta explicação ajudou?". "Quem ficou de fora" mostra a regra e a evidência, com pseudônimo. Nenhum nome vem marcado: a pessoa marca, "Aprovar e oferecer" abre o diálogo de conferência, e quem tem alerta exige justificativa. Ao confirmar, o tracejado fecha e o selo assenta. "Pular" é reversível enquanto a vaga espera a decisão, e a trilha guarda as duas linhas.
-- **Honestidade:** a leitura da vaga nesta demonstração é feita **por regras** (o Gemini ainda não foi testado com chave), e por isso aparece em cinza e como "Leitura por regras", não como sugestão da IA. Os motivos dizem se foram "montados pelo sistema a partir dos fatores" ou "reescritos pela IA".
+- **Honestidade:** a leitura da vaga nesta demonstração é feita **por regras** (o Gemini só foi testado à parte, com textos sintéticos), e por isso aparece em cinza e como "Leitura por regras", não como sugestão da IA. Os motivos dizem se foram "montados pelo sistema a partir dos fatores" ou "reescritos pela IA".
 
 ## 3. Como foi feito
 
@@ -109,7 +109,7 @@ Na CI, o job `web` roda lint, tipos, contraste, testes e build, e o job `web-e2e
 
 ## 9. Limitações e honestidade
 
-- Hoje a leitura da vaga é por regras: o Gemini ainda não foi testado com chave, e a tela diz isso.
+- Hoje a leitura da vaga é por regras: o Gemini só foi testado à parte, com textos sintéticos, e a tela diz isso.
 - A tela do coordenador roda só no modo `demo`: não chama a API nem o n8n. Aprovar registra a decisão na trilha da sessão e deixa a vaga em "Oferta em andamento", e a tela diz que o acompanhamento da cascata chega na próxima entrega.
 - Uma vaga publicada não se edita; para corrigir, publique outra. "Pular" não pede motivo, embora o contrato aceite um. Pular e desfazer não existem na API ([ADR 0014](../../docs/adr/0014-estrutura-da-plataforma-web.md), divergência 4).
 - A faixa de chance e o aviso de chances parecidas usam cortes escolhidos pela interface. Não foram validados com coordenadores: é o que o teste de usabilidade precisa observar.

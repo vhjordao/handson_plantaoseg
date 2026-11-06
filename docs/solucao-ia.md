@@ -8,11 +8,11 @@ Desenho da solução de IA do PlantãoSeguro para a Etapa 2: o que a IA faz, o q
 
 | Etapa | Entrada | Processamento | Saída | Usuário | Estado |
 | --- | --- | --- | --- | --- | --- |
-| 1-2 Extração | Texto livre da vaga | **NLP**: Gemini propõe os campos; regras são linha de base e fallback | Unidade, especialidade, início, fim, urgência | Coordenador | Regras rodam; Gemini **não testado** com chave |
+| 1-2 Extração | Texto livre da vaga | **NLP**: Gemini propõe os campos; regras são linha de base e fallback | Unidade, especialidade, início, fim, urgência | Coordenador | Regras rodam; Gemini testado à parte com chave, só em textos sintéticos, e ainda fora da demonstração |
 | 3 Conferência | Campos extraídos | Nenhum (decisão humana) | Campos confirmados | Coordenador | Na PoC, mostrado no terminal; a tela é evolução futura |
 | 4 Filtro | Campos + cadastro + agenda conhecida | **Regras em código**: CRM, especialidade, raio, disponibilidade, jornada | Elegíveis e, por excluído, a regra | Coordenador | Roda |
 | 5 Ranking | Elegíveis + histórico até o pedido | **ML**: regressão logística em 7 variáveis | Top 5 com score | Coordenador | Roda |
-| 6 Explicação | Fatores do modelo | Texto fixo; Gemini só **reescreve** com validação | Motivo e alertas por candidato | Coordenador | Template roda; Gemini não testado |
+| 6 Explicação | Fatores do modelo | Texto fixo; Gemini só **reescreve** com validação | Motivo e alertas por candidato | Coordenador | Template roda; reescrita pelo Gemini desligada por padrão |
 | 7 Aprovação | Top 5 | Nenhum (decisão humana) | Aprovados | Coordenador | Roda (registro) |
 | 8 Auditoria | Cada passo | Registro encadeado por hash | Trilha verificável | Comissão de IA, auditoria | Roda |
 | Oferta e contestação | Aprovados | Cascata no n8n; contestação do médico | Aceite, check-in, resposta | Médico | **Desenho**, evolução futura |
@@ -55,7 +55,7 @@ A diferença modelo menos baseline é de 3,5 pontos percentuais (erro-padrão 0,
 
 ## 4. LLM com Gemini
 
-**Onde entra:** só em duas etapas estreitas, **sem ferramentas e sem segredos**: extrair os campos e reescrever a explicação. Modelos (ADR 0003): `gemini-3.5-flash-lite` (extração e explicação) e `gemini-3.8-flash` (casos ambíguos). A interface fica atrás de `LLMClient`, para o resto do sistema funcionar sem LLM.
+**Onde entra:** só em duas etapas estreitas, **sem ferramentas e sem segredos**: extrair os campos e reescrever a explicação. Modelo (ADR 0003): `gemini-3.1-flash-lite`, escolhido pela medição de 05/11/2026. A interface fica atrás de `LLMClient`, para o resto do sistema funcionar sem LLM. **Desde 05/11/2026, por decisão do Victor, o projeto usa só a camada gratuita**, e por isso só texto sintético vai ao modelo; a reescrita da explicação fica desligada por padrão ([ADR 0003](adr/0003-llm-do-produto-gemini.md)). O primeiro teste real está em [teste-manual-gemini.md](teste-manual-gemini.md).
 
 **Prompt** versionado (`extracao-v1`): trata o texto entre `<pedido>` e `</pedido>` como **dado não confiável**, pede JSON com 5 chaves e informa unidades e datas válidas. A cópia exata está em [teste-manual-gemini.md](teste-manual-gemini.md).
 
@@ -117,4 +117,4 @@ A diferença modelo menos baseline é de 3,5 pontos percentuais (erro-padrão 0,
 
 ## 8. Limites
 
-O modelo aprende o simulador; o Gemini não foi exercitado; a distância cria viés geográfico; a extração por regras é otimista; contestação e avaliação de impacto não estão construídas; os limites de jornada são configuração do projeto, não norma verificada.
+O modelo aprende o simulador; o Gemini só foi testado à parte, com textos sintéticos; a distância cria viés geográfico; a extração por regras é otimista; contestação e avaliação de impacto não estão construídas; os limites de jornada são configuração do projeto, não norma verificada.

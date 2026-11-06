@@ -79,6 +79,31 @@ ssh -i ~/.ssh/<chave> root@<ip do servidor> "cd /docker/n8n && docker compose bu
 
 Depois de mudar o banco por fora, a API precisa reler os dados: reinicie o serviço ou chame `POST /internal/reload` de dentro do servidor.
 
+**Gemini: ligado só para a demonstração, em custo zero.** O servidor fica **sem a chave** até o dia. Sem ela, a API lê a vaga pelas regras, e nada vai ao Google. A chave é de um projeto sem faturamento, na camada gratuita: não clique em "Set up billing" nesse projeto ([ADR 0003](../docs/adr/0003-llm-do-produto-gemini.md)). Para aparecer na tela, a web precisa estar chamando a API (adaptador `live`).
+
+No ensaio e no dia, em `/docker/n8n`, no servidor:
+
+1. Acrescente `GEMINI_API_KEY=` com a chave ao `.env` do servidor.
+2. Religue a API:
+
+   ```
+   docker compose up -d --no-deps matching-api
+   ```
+
+3. Faça uma chamada de conferência. Se disser `certo`, o serviço está respondendo:
+
+   ```
+   docker compose exec matching-api python -m app.llm.avaliacao --rapido
+   ```
+
+4. No ensaio, meça a memória, porque o limite é de 512 MB e o pacote do Gemini só carrega com a chave:
+
+   ```
+   docker stats --no-stream $(docker compose ps -q matching-api)
+   ```
+
+Se a conferência falhar, tente de novo em um minuto. Se continuar, tire a chave e religue a API: a leitura segue pelas regras, e a demonstração não depende do Gemini. **Depois da apresentação,** apague a linha do `.env`, religue a API e apague a chave no AI Studio.
+
 O IP, a chave e o `.env` do servidor ficam fora do Git. O `.env` segue os blocos de n8n e da API do [`.env.example`](../.env.example). Para conferir o que está rodando, entre no servidor e use `docker compose ps` e `docker compose logs` em `/docker/n8n`.
 
 **Para publicar o workflow da cascata,** veja a [ficha dele](../n8n/README.md).
@@ -134,7 +159,7 @@ Depois de fechar a API pública do n8n, no mesmo dia:
 
 - **Dados:** os dados sintéticos do motor ficam só na memória da API, sem nome, CRM, telefone nem valor do plantão. O único dado real é o e-mail do Victor, na conta de administrador do n8n e no certificado HTTPS.
 - **Ameaças consideradas:** adivinhar a senha do root, invadir pelo editor do n8n (agora na internet, com login, limite de tentativas e os webhooks de fora, [ADR 0012](../docs/adr/0012-editor-do-n8n-na-web.md)), abrir porta sem querer e publicar um segredo no repositório público.
-- **Segredos:** senha do banco, chave de criptografia do n8n, e-mail, **chave de serviço do Supabase** e segredo do n8n ficam no `.env` do servidor, só legível pelo root. A cópia do modelo também. Só a API recebe a chave de serviço, que ignora a RLS: quem controla este servidor lê e grava tudo no banco.
+- **Segredos:** senha do banco, chave de criptografia do n8n, e-mail, **chave de serviço do Supabase**, segredo do n8n e **chave do Gemini** (opcional; só a API a recebe) ficam no `.env` do servidor, só legível pelo root. A cópia do modelo também. Só a API recebe a chave de serviço, que ignora a RLS: quem controla este servidor lê e grava tudo no banco.
 - **Firewall:** o Docker publica portas por fora do `ufw`. Por isso o teste de contrato só aceita 80, 443 e o que estiver em `127.0.0.1`.
 
 ## 9. Limitações e honestidade

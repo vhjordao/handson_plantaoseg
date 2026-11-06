@@ -7,3 +7,5 @@ pydantic==2.14.1
 httpx==0.28.1
 PyJWT==2.15.1
 cryptography==50.0.2
+# O LLM do produto (ADR 0003). O núcleo e a CLI continuam sem ele: a importação é tardia.
+google-genai==2.32.0

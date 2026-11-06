@@ -19,7 +19,7 @@ from app.api.routes import router
 from app.api.service import MatchingService
 from app.api.settings import Settings
 from app.api.world import WorldCache
-from app.llm.client import LLMClient, NullClient, client_from_env
+from app.llm.client import GeminiClient, LLMClient, LLMUnavailableError, NullClient, client_from_env
 
 logger = logging.getLogger("matching_api")
 
@@ -105,7 +105,17 @@ def create_app(
 def _llm_from_env() -> LLMClient | None:
     """Sem chave do Gemini, o motor nem tenta o LLM: tudo sai pela reserva em regras."""
     client = client_from_env()
-    return None if isinstance(client, NullClient) else client
+    if isinstance(client, NullClient):
+        logger.info("LLM: sem chave do Gemini, a leitura e os motivos saem pelas regras")
+        return None
+    if isinstance(client, GeminiClient):
+        try:
+            client.preparar()
+        except LLMUnavailableError as exc:
+            logger.warning("LLM: %s, a leitura e os motivos saem pelas regras", exc)
+            return None
+        logger.info("LLM: Gemini ligado, modelo %s", client.model)
+    return client
 
 
 def notifier_from(settings: Settings) -> CascadeNotifier | None:
@@ -121,6 +131,7 @@ def create_app_from_env() -> FastAPI:
     logging.basicConfig(level=logging.INFO)
     # O httpx registraria cada chamada ao banco, com a URL e os filtros: fica só o que importa.
     logging.getLogger("httpx").setLevel(logging.WARNING)
+    logging.getLogger("google_genai").setLevel(logging.WARNING)
     settings = Settings.from_env()
     repository = Repository(SupabaseRest(f"{settings.supabase_url}/rest/v1", settings.service_key))
     world = WorldCache(repository)
@@ -134,7 +145,13 @@ def create_app_from_env() -> FastAPI:
         logger.info("dados carregados: %s; modelo %s", world.counts(), model.version)
 
     return create_app(
-        service=MatchingService(repository, world, model, llm=_llm_from_env()),
+        service=MatchingService(
+            repository,
+            world,
+            model,
+            llm=_llm_from_env(),
+            reescrever_motivos=settings.reescrever_motivos,
+        ),
         repository=repository,
         world=world,
         verifier=TokenVerifier(settings.supabase_url, keys),

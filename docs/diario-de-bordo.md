@@ -4,6 +4,30 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 05/11/2026 (quinta): API pronta para o Gemini, sem gastos, e o primeiro teste real
+
+**Pedido do Victor:** preparar a API para receber a chave do Gemini. Ele colocou a chave no `.env`, conferiu que o projeto está sem faturamento e decidiu: "Não quero ter gastos, use o que for free", e "vou usar só para demonstração no dia".
+
+**O que o teste real mostrou, e os testes com clientes falsos não mostravam**
+
+- **O limite de tempo de 8 s derrubava todas as chamadas.** O serviço recusa menos de 10 s ("Minimum allowed deadline is 10s"). A tela agora desiste em 6 s, e o pedido declara 10 s ao serviço.
+- **O modelo que o ADR tinha escolhido quase não respondia:** o `gemini-3.5-flash-lite` acertou 3 de 12 pedidos, mesmo com 15 s entre eles. Medidos em revezamento, o `gemini-3.1-flash-lite` acertou 6 de 6, e os outros, de 0 a 1. É uma manhã só, mas a diferença decidiu a troca, e os dois são gratuitos.
+- **Quando respondeu, respondeu bem:** no modelo escolhido, 14 de 16 chamadas tiveram resposta, com mediana abaixo de 1 s, e nenhum dos 10 ataques foi obedecido.
+
+**Decisões**
+
+- **Custo zero: camada gratuita, sem faturamento, e a chave no servidor só para o ensaio e o dia** (Victor). Isso substitui "camada paga na demo" do ADR 0003. Como o Google pode usar o conteúdo nessa camada, só texto sintético vai ao modelo: a plateia não alcança a leitura da vaga, que exige login de coordenador. O cliente também nunca vai ao Google Cloud, o caminho que cobra.
+- **Uma chamada de conferência para o dia** (`--rapido`), porque uma manhã de medição não garante o dia 17/11.
+- **Os motivos continuam no texto montado por regra**, salvo pedido explícito: cinco chamadas em fila atrasariam a tela e gastariam a cota.
+- **Fica a `generateContent`, não a Interactions**, que o Google recomenda para projetos novos: ela segue com suporte total, e a outra guarda a conversa no servidor por padrão.
+- **`nullable` saiu do esquema**, porque não está na lista de palavras que o SDK documenta.
+
+**Ainda não feito:** publicar no servidor. A web também não chama a API, então nada disso aparece na demonstração até o adaptador `live`.
+
+**Conferido:** testes da API, inclusive contra o SDK real com a rede trocada por um transporte falso, lint e a configuração final contra o serviço real. A memória da API com o pacote carregado só se mede no servidor, no ensaio.
+
+**Uso de IA:** o Claude Code rodou o teste com a chave do `.env`, sem ler nem imprimir o valor, achou os problemas, comparou os modelos gratuitos e fez as correções; o Victor decidiu pelo custo zero e conferiu o faturamento.
+
 ## 05/11/2026 (quinta): tela do coordenador e a ordem das atividades
 
 **Pedido do Victor:** "Alinha o passo a passo e a ordem das atividades. E comece pela tela do coordenador." O merge da plataforma web (PR #13), que ele tinha autorizado, saiu antes, com a CI toda verde.
