@@ -6,13 +6,15 @@ O mapa de tudo o que falta para o PlantãoSeguro funcionar de ponta a ponta, do 
 
 **A apresentação é uma demonstração guiada** (decisão do Victor em 06/11/2026). Ele conduz sozinho, ao vivo, fazendo o papel do coordenador e o do médico. A plateia assiste e não usa o sistema. Por isso, QR code, persona sorteada, login anônimo, telão ao vivo e carga com muita gente saíram do MVP.
 
+**Sem entrevistas** (decisão do Victor em 06/11/2026). Tudo segue com dados sintéticos, o mais realistas possível: cada premissa do simulador é comparada a uma fonte pública quando ela existe, e declarada como premissa quando não existe, com a análise de sensibilidade mostrando o quanto ela pesa.
+
 ## 1. Próximo passo
 
 Três coisas podem andar ao mesmo tempo, porque não dependem uma da outra:
 
 1. **Victor:** responder às decisões da [seção 6](#6-decisões-que-destravam-o-caminho). Dá para aceitar as recomendações de uma vez. Elas destravam a ligação da web com a API, que é o caminho crítico do produto.
-2. **Claude Code:** o experimento contra a concentração das ofertas ([fase 7](#fase-7-concentração-das-ofertas)). Ele não depende das decisões e serve ao produto e à Entrega 3.
-3. **Colegas:** as entrevistas e o teste de usabilidade da tarefa do coordenador, que já está no link público ([trilha da Entrega 3](#5-trilha-da-entrega-3-em-paralelo)).
+2. **Claude Code:** o experimento contra a concentração das ofertas ([fase 7](#fase-7-concentração-das-ofertas)) e, em seguida, a busca de fontes públicas sobre o comportamento dos plantonistas ([E.1](#5-trilha-da-entrega-3-em-paralelo)). Nenhum dos dois depende das decisões, e os dois servem à Entrega 3.
+3. **Colegas:** o teste de usabilidade da tarefa do coordenador, que já está no link público, se o grupo puder fazer ([E.2](#5-trilha-da-entrega-3-em-paralelo)).
 
 ## 2. Onde estamos
 
@@ -143,13 +145,13 @@ Esta fase **não depende das anteriores** e pode começar já.
 
 O documento acadêmico anda junto com o produto e usa o que ele mede.
 
-- [ ] **E.1** Entrevistas com 3 a 5 coordenadores e 3 a 5 plantonistas ([kit](entrevistas/LEIAME.md)), depois de o Victor confirmar com o professor.
-- [ ] **E.2** Teste de usabilidade da tarefa do coordenador ([roteiro](ux/teste-de-usabilidade.md)). As tarefas do médico ficam para depois da fase 4, e o documento diz isso.
+- [ ] **E.1** Realismo sem entrevistas: buscar números publicados sobre o comportamento dos plantonistas (aceite e recusa de convites, tempo até preencher, antecedência, distância aceita, carga de plantões) e compará-los às premissas do simulador, como a [comparação com dados públicos](resultados/metricas-robustez.md#comparação-com-dados-públicos) já faz para a composição. Onde não houver fonte, a premissa fica declarada e a análise de sensibilidade mostra o quanto ela pesa. O [kit de entrevistas](entrevistas/LEIAME.md) fica para um piloto futuro.
+- [ ] **E.2** Teste de usabilidade da tarefa do coordenador ([roteiro](ux/teste-de-usabilidade.md)), se o grupo puder fazer. Se não, uma avaliação pelas diretrizes de interação humano-IA, com a limitação dita no documento. As tarefas do médico ficam para depois da fase 4.
 - [ ] **E.3** Resultado do experimento da concentração (7.1).
 - [ ] **E.4** Comparar a regressão logística com o LightGBM, como a Etapa 2 prometeu.
 - [ ] **E.5** Previsão de vagas, se sobrar tempo: um baseline com resultado honesto, mesmo abaixo da meta.
-- [ ] **E.6** Corrigir o documento: a tela do coordenador já existe, a do médico não; o domínio público já tem a plataforma; o Gemini foi testado; o teste de usabilidade cobre só o coordenador; a apresentação é guiada, sem a plateia usando o sistema.
-- [ ] **E.7** Caso de negócio e critérios de sucesso com os números das entrevistas.
+- [ ] **E.6** Corrigir o documento: a tela do coordenador já existe, a do médico não; o domínio público já tem a plataforma; o Gemini foi testado; o teste de usabilidade cobre só o coordenador; a apresentação é guiada, sem a plateia usando o sistema; não houve entrevistas.
+- [ ] **E.7** Caso de negócio e critérios de sucesso com números de fontes públicas e da simulação, sempre em faixas e com o rótulo de simulação.
 - [ ] **E.8** Gerar o PDF, atualizar a rastreabilidade (A4-1 a A4-11) e abrir o PR, com o ok do Victor.
 - [ ] **E.9** Aplicar o retorno da aula de storytelling e preparar os slides e o pitch com o grupo.
 
@@ -169,11 +171,11 @@ Todas são do Victor. A recomendação é a escolha mais simples que cumpre as r
 | D8 | Contestação | Tabela própria, com RLS, e rotas na API | Hoje ela só existe no desenho. É o que o professor destacou como diferencial |
 | D9 | O que a equidade mostra | As medidas da simulação, rotuladas, mais a contagem das ofertas feitas no sistema | Dados reais não existem, e um número sem rótulo seria falso |
 | D10 | Urgência | A tela passa a exigir, perguntando quando falta | A API e o banco a exigem, e a tela já pergunta pelos outros campos |
+| D11 | Corrigir no gerador o que a fonte pública já mostrou errado: há mais mulheres na pediatria (76,8%, e não 50%) e mais médicos com 55 anos ou mais (26,8%, e não 15%) | Manter a base atual e mostrar o cenário "calibrado com dados públicos" ao lado, no documento e na equidade. Trocar a base só depois da Entrega 3, se houver tempo | Trocar a base refaz a carga do banco, as fixtures da web e todos os números já publicados. Gênero e idade não entram na ordem sugerida, só na auditoria de equidade, e o cenário calibrado já mostra o efeito: a redução contra o manual vai de 57% para 55% |
 
 ## 7. O que só o Victor faz
 
 - Responder às decisões da seção 6.
-- Confirmar com o professor que as entrevistas seguem como atividade da disciplina.
 - Criar os logins da demonstração, com o comando preparado, e guardar as senhas.
 - Ligar o MFA do n8n e conferir no painel que a renovação do servidor está desligada.
 - Rodar `usuarios-de-teste.py limpar` antes do ensaio e `remover` depois da apresentação.
@@ -185,6 +187,7 @@ Todas são do Victor. A recomendação é a escolha mais simples que cumpre as r
 - **O telão ao vivo.** A página provisória do telão continua no site, sem dados ao vivo.
 - Telegram, check-in, pagamento, kit da Comissão de IA e Langfuse ficam como evolução futura ([ADR 0002](adr/0002-escopo-da-poc.md)).
 - A previsão de vagas só entra se sobrar tempo, e só no documento.
+- As entrevistas com coordenadores e plantonistas e a revisão às cegas das recomendações. O kit fica para um piloto futuro.
 
 ## 9. Riscos e o que cortar primeiro
 
@@ -195,4 +198,4 @@ Todas são do Victor. A recomendação é a escolha mais simples que cumpre as r
 | Conduzir sozinho e errar um passo ao vivo | Roteiro escrito, ensaio cronometrado e o estado de partida conferido antes de começar |
 | A cascata andar fora do tempo da fala | Prazo curto (D6) e o roteiro dizendo em que momento esperar e em que momento recusar |
 | Supabase gratuito pausar depois de uma semana parado | O ensaio e os testes mantêm o projeto ativo; conferir antes do ensaio |
-| Entrevistas não acontecerem | Teste com colegas, com a limitação dita no documento |
+| Sem dados reais nem entrevistas, a simulação parecer inventada (o retorno FB2-1 do professor) | Fonte pública para cada premissa que tiver uma, premissa declarada onde não tiver, análise de sensibilidade e o piloto em modo sombra como o jeito de validar com um hospital de verdade |

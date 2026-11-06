@@ -113,6 +113,6 @@ Victor Jordão, Roberval Silva, Guilherme Tarrago, Sergio Freitas, Lucas Barbosa
 
 ## Avisos
 
-- Os números de mercado da Flexzo são alegações da própria empresa, não auditadas; as metas dos indicadores são hipóteses a validar nas entrevistas.
+- Os números de mercado da Flexzo são alegações da própria empresa, não auditadas; as metas dos indicadores são hipóteses a validar num piloto; não houve entrevistas.
 - Os textos oficiais das Res. CFM 2.454, 2.460 e 2.462 foram lidos em 30/10/2026 ([conformidade](docs/conformidade/README.md)); a 2.462 traz aviso de suspensão judicial e o enquadramento da plataforma depende de jurídico. A Entrega 1, já entregue, não foi alterada e ainda cita a 2.462 como em vigor.
 - Este material não é aconselhamento jurídico, médico ou financeiro.

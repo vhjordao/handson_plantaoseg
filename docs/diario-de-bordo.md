@@ -4,6 +4,19 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 06/11/2026 (sexta): sem entrevistas, dados sintéticos o mais realistas possível
+
+**Decisão do Victor:** "As entrevistas reais não irão acontecer no momento. Vamos ficar com dados sintéticos mesmo, tente ser o mais realista possível."
+
+**O que muda**
+
+- **A evidência do mundo real (FB2-1)** fica com fontes públicas. A composição dos médicos já foi comparada ao estudo Demografia Médica 2025. Falta o comportamento, que o estudo quase não cobre: aceite e recusa de convites, tempo até preencher, antecedência e distância. Onde não houver fonte, a premissa fica declarada, e a análise de sensibilidade mostra o quanto ela pesa.
+- **O caso de negócio e os critérios de sucesso** usam números públicos e da simulação, em faixas, e não números de entrevista.
+- **A promessa da Entrega 1** (3 a 5 coordenadores e 3 a 5 plantonistas) fica declarada como não cumprida. O kit de entrevistas fica para um piloto futuro.
+- **Uma decisão nova (D11) no roteiro:** a fonte pública já mostrou dois erros do gerador, gênero na pediatria e médicos com 55 anos ou mais. A recomendação é manter a base e mostrar o cenário calibrado ao lado, porque trocar a base refaz o banco, as fixtures e todos os números.
+
+**Uso de IA:** o Claude Code ajustou o roteiro, o plano e a rastreabilidade; o Victor decidiu.
+
 ## 05/11/2026 (quinta): roteiro até o MVP e a API 0.2.0 no servidor
 
 **Pedido do Victor:** "monte um documento completo com tudo que ainda falta para o MVP final", e depois: "pode deixar sem datas. Quero só ter um documento para entender o todo e saber sempre o próximo passo."

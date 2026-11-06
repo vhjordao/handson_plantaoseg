@@ -12,7 +12,7 @@ O que vem antes de quê, e por quê. As datas são metas. Esta tabela manda quan
 | # | Atividade | Quem | Até | Por que nesta ordem |
 | --- | --- | --- | --- | --- |
 | 1 | Tela do coordenador: nova vaga, sugestões com motivo e decisão (`f3/web-coordenador`) | Claude Code; Victor aprova | 05/11 | O teste de usabilidade e a seção de experiência da Entrega 3 dependem dela |
-| 2 | Entrevistas com coordenadores e plantonistas | Colegas; Victor confirma com o professor | 06/11 | Os números calibram o simulador e entram no documento |
+| 2 | Sem entrevistas (decisão do Victor em 06/11): fontes públicas para o comportamento dos plantonistas, comparadas às premissas do simulador | Claude Code | 06/11 | Os números entram no documento no lugar dos das entrevistas, e o que não tiver fonte fica declarado como premissa |
 | 3 | Teste de usabilidade da tarefa do coordenador, no link público | Colegas | 06/11 | Só existe com a tela pronta. As tarefas do médico ficam para depois da tela dele, e o documento diz isso |
 | 4 | Teste contra a concentração das ofertas e Gemini com a chave real (Gemini medido em 05/11, com o modelo escolhido) | Claude Code; chave do Victor, na camada gratuita | 07/11 | O documento hoje declara os dois como pendentes; o que der tempo vira resultado, o resto continua declarado |
 | 5 | Corrigir e fechar a Entrega 3, com os resultados de 2 a 4 | Claude Code redige; Victor revisa e autoriza o PR | 07/11 | É a entrega de maior prazo imediato (até 2,0) |
@@ -20,7 +20,7 @@ O que vem antes de quê, e por quê. As datas são metas. Esta tabela manda quan
 | 7 | Contestação, auditoria, equidade, roteiro da demonstração guiada, plano B, teste do caminho completo e reinício do servidor | Claude Code; Victor decide o prazo curto da cascata | 13/11 | É o que a apresentação mostra. **Código congelado em 13/11.** Ordem de corte no [roteiro](roteiro-ate-o-mvp.md) |
 | 8 | Ensaio e pitch, com o roteiro da aula de 10/11. A chave do Gemini só entra no servidor aqui ([passo a passo](../infra/README.md)) | Grupo | 17/11 | Apresentação final (até 4,0) |
 
-**Só o Victor pode fazer:** confirmar com o professor que as entrevistas seguem como atividade da disciplina; ligar o MFA do n8n e conferir que a renovação do servidor ficou desligada; decidir o prazo curto da demonstração (recomendação: 2 min; a rede simulada usa 60); rodar `usuarios-de-teste.py limpar` e `remover` antes de 17/11.
+**Só o Victor pode fazer:** ligar o MFA do n8n e conferir que a renovação do servidor ficou desligada; decidir o prazo curto da demonstração (recomendação: 2 min; a rede simulada usa 60); rodar `usuarios-de-teste.py limpar` e `remover` antes de 17/11.
 
 ## Contexto
 
@@ -30,7 +30,7 @@ A Etapa 2 foi entregue com uma PoC por linha de comando. Em 02/11 não havia int
 
 **A Hostinger é necessária?** Sim. O n8n e a API precisam de um servidor ligado o tempo todo, e a Vercel não atende bem nenhum dos dois. Em 04/11 o Victor pediu para tirar tudo da máquina local, então o servidor já existe, e a API e o n8n nascem nele. Ele vale só para a apresentação; depois, o Victor para tudo ([ADR 0009](adr/0009-servidor-so-para-a-apresentacao.md)).
 
-**Divisão de trabalho (proposta; o Victor pode ajustar):** Victor e Claude Code constroem; os colegas ficam com entrevistas, teste de usabilidade e pitch.
+**Divisão de trabalho (proposta; o Victor pode ajustar):** Victor e Claude Code constroem; os colegas ficam com o teste de usabilidade e o pitch. Não haverá entrevistas (decisão de 06/11).
 
 ## Arquitetura
 
@@ -89,19 +89,19 @@ Ensaio completo com o roteiro da aula de 10/11. Se o prazo apertar, a ordem de c
 | --- | --- | --- |
 | **Critérios de sucesso (o centro)** | Como saberemos, depois de 6 meses, se o projeto deu certo? | Metas numéricas com linha de base e limiar de decisão aos 6 meses |
 | Resultado técnico | O que foi desenvolvido, como funciona, resultados, métricas e limitações | Motor e protótipo, métricas contra o baseline, análise de sensibilidade e curva de aprendizado |
-| Resultado para o negócio | Problema, benefício, KPI impactado e como medir o ROI | Caso de negócio com ROI em faixa, a partir de números das entrevistas |
+| Resultado para o negócio | Problema, benefício, KPI impactado e como medir o ROI | Caso de negócio com ROI em faixa, a partir de fontes públicas e da simulação |
 | Experiência | Como o usuário utilizará, jornada e protótipo ou interface | Jornadas do coordenador e do médico, protótipo e teste de usabilidade |
 | Segurança e ética | Riscos, privacidade, segurança, vieses, aspectos legais e responsabilidades | Matriz de riscos, mitigação da concentração medida e pendências jurídicas |
 | Implantação | Arquitetura, infraestrutura, integração, roadmap, recursos, custos e próximos passos | Como os dados são coletados, atualizados e integrados; piloto em modo sombra; roadmap e custos |
 
 | Frente | O que sai | Quem | Meta |
 | --- | --- | --- | --- |
-| Evidência do mundo real (FB2-1) | Agregados públicos comparados às premissas do simulador; tabela "premissa contra entrevistas"; análise de sensibilidade; desenho do piloto em modo sombra | Claude Code prepara; colegas coletam | Agregados públicos, sensibilidade e piloto prontos em 03/11 ([resultado](resultados/metricas-robustez.md)); a tabela com as entrevistas fica para 06/11 |
+| Evidência do mundo real (FB2-1) | Agregados públicos comparados às premissas do simulador; tabela "premissa contra fonte pública" também para o comportamento; análise de sensibilidade; desenho do piloto em modo sombra | Claude Code | Agregados públicos, sensibilidade e piloto prontos em 03/11 ([resultado](resultados/metricas-robustez.md)); o comportamento fica para 06/11, sem entrevistas |
 | Dicionário concreto (FB2-2) | Tabela com nome, tipo, descrição e valores possíveis, gerada dos dados e com teste de sincronia | Claude Code | Feito em 03/11 ([exemplo](dados/dicionario-exemplo.md)) |
 | Dados em produção (FB2-3) | Como cada dado é coletado, atualizado e integrado, com responsável e regra de qualidade | Claude Code; Victor revisa | Feito em 03/11 ([documento](dados/dados-em-producao.md)) |
-| Caso de negócio (A4-3) | KPI impactado e ROI em faixa, a partir das entrevistas | Claude Code; Victor revisa | 06/11 |
+| Caso de negócio (A4-3) | KPI impactado e ROI em faixa, a partir de fontes públicas e da simulação | Claude Code; Victor revisa | 06/11 |
 | Critérios de sucesso (A4-7) | Metas numéricas e limiar de decisão aos 6 meses | Victor e Claude Code | 06/11 |
-| Entrevistas | Roteiro com os números que calibram o simulador, revisão de recomendações por coordenadores, consentimento e registro anonimizado; 3 a 5 coordenadores e 3 a 5 plantonistas (promessa da Entrega 1) | Claude Code prepara; colegas entrevistam | Roteiro pronto em 03/11 ([kit](entrevistas/LEIAME.md)); entrevistas até 06/11 |
+| Entrevistas | Canceladas por decisão do Victor em 06/11. A promessa da Entrega 1 (3 a 5 coordenadores e 3 a 5 plantonistas) fica declarada como não cumprida, e o kit fica para um piloto futuro | | Roteiro pronto em 03/11 ([kit](entrevistas/LEIAME.md)); sem entrevistas |
 | Concentração | Experimento com rodízio e limite de ofertas em `app/flow.py`, medindo o custo em tempo e na chance de sucesso; a política escolhida vai para a API | Claude Code | 05/11 |
 | Gemini real | Executar o [teste manual](teste-manual-gemini.md) com chave | Claude Code, com a chave do Victor | 05/11 |
 | Modelo | Comparar a regressão logística com LightGBM, como o documento da Etapa 2 prometeu | Claude Code | 06/11 |
@@ -117,7 +117,7 @@ Quando as contas existirem, o Victor avisa; o clone novo e um `.env` vazio são 
   - Chave do Gemini no Google AI Studio.
   - Slides e feedback da aula; convite aos colegas (hoje só o Victor tem acesso ao repositório).
 - **Feito em 03/11:** conta Vercel. O GitHub do projeto se ligou direto a ela, então a publicação sai pela integração da Vercel, sem precisar do GitHub Actions.
-- **Até 04/11, antes da primeira entrevista:** confirmar com o professor que as conversas podem seguir como atividade da disciplina ([kit](entrevistas/kit-do-entrevistador.md), seção 3).
+- **Não se aplica desde 06/11, sem entrevistas:** confirmar com o professor que as conversas podem seguir como atividade da disciplina ([kit](entrevistas/kit-do-entrevistador.md), seção 3).
 - **Feito em 04/11:** Hostinger KVM 1, por 1 mês, com acesso SSH por chave ([ADR 0009](adr/0009-servidor-so-para-a-apresentacao.md)). O script de proteção já rodou. Falta o Victor conferir no painel que a renovação ficou desligada.
 
 **Custo estimado em novembro:** Supabase e Vercel gratuitos (o Supabase Free aceita 200 conexões em tempo real e pausa após 1 semana parado), KVM 1 por R$ 52,99 no mês (carrinho de 04/11; sem desligar a renovação, passa a R$ 87,99 por mês) e Gemini de graça, na camada gratuita e sem faturamento (decisão do Victor em 05/11).
@@ -149,8 +149,7 @@ Só dados sintéticos; sem o clique do coordenador não sai oferta; nome, CRM e 
 | --- | --- |
 | Prazo curto para web, API, banco, n8n e documento | Ordem de corte definida; a tela do coordenador vem antes de tudo |
 | Contas chegarem depois de 04/11 | O M1 encurta; a área Experiência da Etapa 3, que pede protótipo ou interface, e o teste de usabilidade passam a usar os wireframes |
-| Entrevistas não acontecerem até 07/11 | Teste de usabilidade com colegas e conhecidos, com a limitação dita no documento |
-| Entrevistas dependerem de comitê de ética | O Victor confirma com o professor antes da primeira; se não puderem seguir no prazo, ficam os agregados públicos e a análise de sensibilidade, com a limitação dita no documento |
+| Sem entrevistas (decisão de 06/11) | Agregados públicos, fontes publicadas sobre o comportamento, premissas declaradas onde não houver fonte, análise de sensibilidade e o piloto em modo sombra como validação futura, com a limitação dita no documento |
 | Serviço externo cair ao vivo | Fallback em regras, respostas pré-carregadas e vídeo |
 | Dado real chegar ao Gemini | Só o Victor escreve, na demonstração guiada, com pedidos sintéticos; aviso na tela |
 | Disco apertado na máquina local | Sem Docker local; imagens só na VPS e na CI |

@@ -75,7 +75,7 @@ Cada etapa do fluxo tem uma ferramenta principal e uma alternativa; a escolha pr
 | Equidade | Fairlearn e métricas próprias de concentração | AIF360 | Relatório semanal salvo em tabela |
 | Observabilidade da IA | Langfuse Cloud, só com dados sintéticos | Phoenix; Langfuse self-host depois | [Self-host exige Postgres, ClickHouse, Redis e S3](https://langfuse.com/self-hosting.md) |
 | Erros e disponibilidade | Sentry e Uptime Kuma | Grafana | A Hostinger tem template do Uptime Kuma |
-| Dados sintéticos | Python com Faker e simulador próprio | SDV | Parâmetros calibrados nas entrevistas |
+| Dados sintéticos | Python com Faker e simulador próprio | SDV | Parâmetros comparados a fontes públicas onde houver; o resto declarado como premissa (sem entrevistas, decisão de 06/11) |
 | Infra e deploy | Docker Compose e Traefik na Hostinger KVM 2 (no protótipo, KVM 1 só para a apresentação, [ADR 0009](adr/0009-servidor-so-para-a-apresentacao.md)), GitHub Actions por SSH e Supabase CLI para migrações | Railway ou Render | A Hostinger tem template Docker com Traefik |
 | Testes | pytest, Playwright, k6 e testes de injeção de prompt | Nenhuma | Carga: 100 vagas simultâneas |
 
