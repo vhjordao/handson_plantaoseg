@@ -1,7 +1,7 @@
 # Ficha do componente: API de matching
 
 - **Responsável:** Victor Jordão · **Frente:** motor e infraestrutura · **Branch:** `f3/api-matching` · **Atualizado em:** 06/11/2026
-- **Estado:** no ar no servidor, por HTTPS, desde 04/11/2026, com os dados sintéticos do projeto `plantaoseguro`. **Tudo é simulação.** A [cascata no n8n](../../../../n8n/README.md) pergunta a ela quanto esperar. As telas ainda não usam a API.
+- **Estado:** no ar no servidor, por HTTPS, desde 04/11/2026, com os dados sintéticos do projeto `plantaoseguro`. **Tudo é simulação.** A [cascata no n8n](../../../../n8n/README.md) pergunta a ela quanto esperar. Imagem 0.3.0, com a fase 2, desde 06/11. As telas ainda não usam a API (fase 3).
 
 ## 1. O que é e qual dor resolve
 
@@ -155,5 +155,5 @@ Com o ok do Victor:
 
 1. Os logins da demonstração (2.6) e a publicação no servidor (2.8). O contrato da tela e a contestação entraram em 06/11 (passos 2.1 a 2.5 do [roteiro](../../../../docs/roteiro-ate-o-mvp.md)).
 2. As telas do coordenador e do médico chamam esta API e leem o resto sob RLS (adaptador `live`).
-3. Gemini: a imagem está no servidor sem a chave (0.2.0 desde 05/11; 0.3.0, com a fase 2, no passo 2.8). A chave só entra no ensaio e no dia ([passo a passo](../../../../infra/README.md)), e no ensaio se confere a memória com `docker stats` (o limite é de 512 MB). Sem a chave, ela usa 60 MiB.
+3. Gemini: a imagem 0.3.0 está no servidor sem a chave. A chave só entra no ensaio e no dia ([passo a passo](../../../../infra/README.md)), e no ensaio se confere a memória com `docker stats` (o limite é de 512 MB). Sem a chave, ela usa 60 MiB.
 4. Repetir a medição antes de 13/11, já com as telas, e reiniciar o servidor.

@@ -12,8 +12,8 @@ O mapa de tudo o que falta para o PlantãoSeguro funcionar de ponta a ponta, do 
 
 **A fase 1 terminou em 06/11:** o Victor aprovou as onze decisões como recomendadas ([ADR 0015](adr/0015-decisoes-que-destravam-o-mvp.md)). Agora podem andar ao mesmo tempo:
 
-1. **Claude Code: o resto da [fase 2](#fase-2-banco-e-api-completam-o-contrato).** A API já tem o contrato da tela do coordenador e a contestação (2.1 a 2.5), e o prazo de 2 minutos está em migração (2.7); faltam os logins (2.6) e publicar no servidor (2.8).
-2. **Victor:** quando o passo 2.6 estiver pronto, rodar o comando que cria os logins da demonstração e guardar as senhas. É a parte dele na fase 2.
+1. **Claude Code: a [fase 3](#fase-3-a-web-passa-a-usar-a-api-e-o-banco),** a web passa a usar a API e o banco (adaptador `live`). A fase 2 está no servidor desde 06/11: contrato da tela, contestação e prazo de 2 minutos.
+2. **Victor:** rodar o comando que cria os logins da demonstração (2.6) e guardar as senhas ([seção 7](#7-o-que-só-o-victor-faz)). A fase 3 precisa deles para o login real.
 3. **Entrega 3, o prazo mais próximo e a prioridade escolhida pelo Victor em 06/11:** o documento está corrigido, com o experimento da concentração e as fontes públicas, e o PDF tem 12 páginas ([E.1 a E.8](#5-trilha-da-entrega-3-em-paralelo)). Falta o Victor revisar e autorizar o merge. Depois, a fase 2.
 4. **Colegas:** o teste de usabilidade da tarefa do coordenador, que já está no link público, se o grupo puder fazer ([E.2](#5-trilha-da-entrega-3-em-paralelo)).
 
@@ -23,7 +23,7 @@ O mapa de tudo o que falta para o PlantãoSeguro funcionar de ponta a ponta, do 
 | --- | --- | --- |
 | Motor (leitura, regras, ordem, motivos, trilha) | Pronto e testado | [ficha](../services/matching-api/README.md) |
 | Banco (tabelas, RLS, trilha só de inserção, dados sintéticos) | No Supabase | [ficha](../supabase/README.md) |
-| API de matching, com HTTPS | No servidor, imagem 0.2.0 | [ficha](../services/matching-api/app/api/README.md) |
+| API de matching, com HTTPS | No servidor, imagem 0.3.0 (fase 2: contrato da tela e contestação) | [ficha](../services/matching-api/app/api/README.md) |
 | n8n e a cascata de ofertas | No servidor, conferida de ponta a ponta pela API | [ficha](../n8n/README.md) |
 | Gemini | Pronto em custo zero; a chave só entra no ensaio e no dia | [ADR 0003](adr/0003-llm-do-produto-gemini.md) |
 | Decisões D1 a D11 | Aprovadas pelo Victor em 06/11 | [ADR 0015](adr/0015-decisoes-que-destravam-o-mvp.md) |
@@ -68,7 +68,7 @@ A API hoje faz o fluxo principal, mas a tela pede coisas que ela ainda não tem 
 - [x] **2.5** *Feito em 06/11.* Contestação: tabela, RLS e rotas para o médico abrir e o coordenador responder, com as ações `contestation_opened` e `contestation_answered` na trilha (D8).
 - [ ] **2.6** Os logins da demonstração na rede simulada, com e-mail e senha: um coordenador e três médicos que a vaga do roteiro recomenda (D1). O script fica pronto, e quem roda o comando é o Victor. *Script pronto em 06/11 (`usuarios-de-teste.py demonstracao`); falta o Victor rodar. Sem `--medicos`, usa os três primeiros médicos das personas da demonstração; o roteiro (5.2) pode trocar.*
 - [x] **2.7** Prazo de 2 minutos por oferta na organização da demonstração (D6). *Feito em 06/11, por migração: vale quando ela for aplicada no 2.8.*
-- [ ] **2.8** Publicar no servidor e conferir com `conferir-api.py`.
+- [x] **2.8** Publicar no servidor e conferir com `conferir-api.py`. *Feito em 06/11: migrações no banco real e imagem 0.3.0 no servidor; 33 de 33 conferências do `conferir-api.py verificar` passaram, `/health` responde de fora, a rota interna segue fechada, as rotas novas pedem login e a API usa 59 MiB.*
 
 **Pronto quando:** cada rota nova tem teste, a neutralidade continua passando e a ficha da API mostra o contrato novo.
 
