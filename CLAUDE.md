@@ -17,7 +17,7 @@ Repositório: https://github.com/vhjordao/handson_plantaoseg (branch `main`). Eq
 | 03/11 | Aula presencial com feedback da Entrega 2 | |
 | 07/11 | Entrega 3, validação, resultados, riscos e plano de implementação | até 2,0 |
 | 10/11 | Aula de storytelling e pitch | |
-| 17/11 | Apresentação final presencial, com a plateia usando o sistema | até 4,0 |
+| 17/11 | Apresentação final presencial, com demonstração guiada pelo Victor (a plateia assiste e não usa o sistema; decisão de 06/11) | até 4,0 |
 
 ## Ordem de autoridade
 

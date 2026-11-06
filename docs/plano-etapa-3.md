@@ -1,7 +1,7 @@
 # Plano: protótipo e Etapa 3 (02/11 a 17/11)
 
 - **Status:** aprovado pelo Victor em 02/11/2026 e ajustado em 03/11 com a Aula 4 e o feedback da Etapa 2. **A construção começou em 03/11, só pela web** ([ADR 0007](adr/0007-web-sai-do-adiamento.md)): há uma página provisória em `apps/web`, e o banco está no projeto, com os dados sintéticos carregados, migrações, RLS e testes ([ADR 0008](adr/0008-banco-no-supabase.md)). O [servidor](../infra/README.md) está no ar desde 04/11, só para a apresentação ([ADR 0009](adr/0009-servidor-so-para-a-apresentacao.md)). A [API](../services/matching-api/app/api/README.md) entrou nele em 04/11, com o ok do Victor ([ADR 0010](adr/0010-api-de-matching.md)), e o [workflow da cascata](../n8n/README.md) também, conferido de ponta a ponta ([ADR 0013](adr/0013-aviso-da-api-inicia-a-cascata.md)). A [plataforma web](../apps/web/README.md) tem a fundação e a tela do coordenador, ainda em modo de demonstração ([ADR 0014](adr/0014-estrutura-da-plataforma-web.md)); falta a tela do médico e ligar a web à API.
-- **Prazos:** aula e feedback da Etapa 2 em 03/11; **Entrega 3 em 07/11 (até 2,0)**; **apresentação final em 17/11 (até 4,0)**, com a plateia usando o sistema pelo celular.
+- **Prazos:** aula e feedback da Etapa 2 em 03/11; **Entrega 3 em 07/11 (até 2,0)**; **apresentação final em 17/11 (até 4,0)**, com **demonstração guiada**: o Victor conduz sozinho, como coordenador e como médico, e a plateia assiste (decisão de 06/11; antes, a plateia usaria o sistema pelo celular).
 
 ## Ordem das atividades (alinhada em 05/11)
 
@@ -17,7 +17,7 @@ O que vem antes de quê, e por quê. As datas são metas. Esta tabela manda quan
 | 4 | Teste contra a concentração das ofertas e Gemini com a chave real (Gemini medido em 05/11, com o modelo escolhido) | Claude Code; chave do Victor, na camada gratuita | 07/11 | O documento hoje declara os dois como pendentes; o que der tempo vira resultado, o resto continua declarado |
 | 5 | Corrigir e fechar a Entrega 3, com os resultados de 2 a 4 | Claude Code redige; Victor revisa e autoriza o PR | 07/11 | É a entrega de maior prazo imediato (até 2,0) |
 | 6 | Tela do médico e adaptador `live`, que liga a web à API e à cascata (`f3/web-medico`) | Claude Code; Victor decide as divergências do [ADR 0014](adr/0014-estrutura-da-plataforma-web.md) | 10/11 | Sem o `live`, a demonstração não chama a API nem o n8n |
-| 7 | Telão, QR code, contestação, plano B, teste de carga e reinício do servidor | Claude Code; Victor decide o prazo curto da cascata | 13/11 | É a experiência da plateia. **Código congelado em 13/11.** Ordem de corte em M4 |
+| 7 | Contestação, auditoria, equidade, roteiro da demonstração guiada, plano B, teste do caminho completo e reinício do servidor | Claude Code; Victor decide o prazo curto da cascata | 13/11 | É o que a apresentação mostra. **Código congelado em 13/11.** Ordem de corte no [roteiro](roteiro-ate-o-mvp.md) |
 | 8 | Ensaio e pitch, com o roteiro da aula de 10/11. A chave do Gemini só entra no servidor aqui ([passo a passo](../infra/README.md)) | Grupo | 17/11 | Apresentação final (até 4,0) |
 
 **Só o Victor pode fazer:** confirmar com o professor que as entrevistas seguem como atividade da disciplina; ligar o MFA do n8n e conferir que a renovação do servidor ficou desligada; decidir o prazo curto da demonstração (recomendação: 2 min; a rede simulada usa 60); rodar `usuarios-de-teste.py limpar` e `remover` antes de 17/11.
@@ -37,7 +37,7 @@ A Etapa 2 foi entregue com uma PoC por linha de comando. Em 02/11 não havia int
 | Camada | Tecnologia | Onde | O que faz |
 | --- | --- | --- | --- |
 | Web | Next.js 16, Tailwind, shadcn/ui | Vercel | Telas do coordenador e do médico, trilha e telão |
-| Dados | Postgres, Auth, RLS, Realtime | Supabase (São Paulo) | Fonte da verdade; login anônimo da plateia |
+| Dados | Postgres, Auth, RLS | Supabase (São Paulo) | Fonte da verdade; logins da demonstração |
 | Motor | FastAPI sobre o motor atual | VPS Hostinger (Compose e Traefik) | Extrai, filtra, ranqueia, explica, aprova |
 | Orquestração | n8n | Mesma VPS | Só espera e chama a API; não decide |
 | LLM | Gemini, com reserva em regras | Google | Só extrai e reescreve; sem ferramentas nem segredos |
@@ -71,13 +71,13 @@ Uma branch e um PR por item, CI verde, e nenhum merge sem o ok do Victor. As dat
 - **`f3/deploy`:** web na Vercel (projeto já criado em 03/11). O n8n já está no servidor, com versão fixada (`f3/servidor-hostinger`). A API entra com HTTPS pelo Traefik, no PR dela.
 - Teste de usabilidade com 3 a 5 pessoas no link real, e a Entrega 3 (abaixo).
 
-### M3, de 08 a 13/11: demo com a plateia
+### M3, de 08 a 13/11: demonstração guiada
 
-QR code com login anônimo e persona sorteada, telão em tempo real, contestação completa, limite de requisições, aviso "não digite dados reais", plano B (respostas pré-carregadas e vídeo) e teste de carga. **Código congelado em 13/11.**
+Contestação completa, auditoria, equidade, o roteiro da demonstração guiada, plano B (modo de demonstração e vídeo) e o caminho completo testado no servidor. **Código congelado em 13/11.** Desde 06/11, sem a plateia usando o sistema: QR code, persona sorteada, login anônimo, telão ao vivo e carga com muita gente saíram ([roteiro](roteiro-ate-o-mvp.md), seção 8).
 
 ### M4, de 14 a 17/11: ensaio e pitch
 
-Ensaio completo com o roteiro da aula de 10/11. Se o prazo apertar, a ordem de corte é: telão, contestação, persona sorteada. Segurança e regras nunca entram no corte.
+Ensaio completo com o roteiro da aula de 10/11. Se o prazo apertar, a ordem de corte está no [roteiro](roteiro-ate-o-mvp.md), seção 9. Segurança e regras nunca entram no corte.
 
 **Fora do plano, salvo se sobrar tempo:** Telegram, check-in e pagamento, kit da Comissão de IA e Langfuse.
 
@@ -152,5 +152,5 @@ Só dados sintéticos; sem o clique do coordenador não sai oferta; nome, CRM e 
 | Entrevistas não acontecerem até 07/11 | Teste de usabilidade com colegas e conhecidos, com a limitação dita no documento |
 | Entrevistas dependerem de comitê de ética | O Victor confirma com o professor antes da primeira; se não puderem seguir no prazo, ficam os agregados públicos e a análise de sensibilidade, com a limitação dita no documento |
 | Serviço externo cair ao vivo | Fallback em regras, respostas pré-carregadas e vídeo |
-| Plateia digitar dado real | Aviso na tela; a plateia não alcança a leitura da vaga, a única etapa que vai ao Gemini, e a chave sai do servidor se isso mudar |
+| Dado real chegar ao Gemini | Só o Victor escreve, na demonstração guiada, com pedidos sintéticos; aviso na tela |
 | Disco apertado na máquina local | Sem Docker local; imagens só na VPS e na CI |

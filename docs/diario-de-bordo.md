@@ -13,7 +13,9 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 - **O [roteiro até o MVP](roteiro-ate-o-mvp.md):** onde estamos, o que é o MVP pronto, as dez fases em ordem, a trilha da Entrega 3, as onze decisões que destravam o caminho (cada uma com recomendação), o que só o Victor faz, o que fica fora e o que cortar primeiro. O próximo passo fica sempre na seção 1, e todo PR o atualiza.
 - **A imagem 0.2.0 da API foi publicada no servidor, sem a chave do Gemini,** com o ok dele. Ela subiu saudável, `/health` responde de fora, a rota interna continua fechada e a memória ficou em 60 MiB. Ficaram cópias do Compose, do código e da imagem anteriores para voltar atrás.
 
-**O que o levantamento mostrou:** as partes existem, mas ainda não conversam. A web roda só no navegador; a contestação não tem tabela nem rota; o banco não publica nada em tempo real; e a plateia não tem como entrar no sistema real sem uma decisão de segurança (D1).
+**O que o levantamento mostrou:** as partes existem, mas ainda não conversam. A web roda só no navegador, a contestação não tem tabela nem rota, e o banco não publica nada em tempo real.
+
+**Mudança de rumo (06/11):** "não vou fazer um teste com a plateia, vou fazer um teste guiado na apresentação. [...] Eu irei simular ao vivo sozinho." O roteiro foi refeito antes do merge: QR code, persona sorteada, login anônimo, telão ao vivo e carga com muita gente saíram do MVP. A entrada no sistema real passa a ser por logins da demonstração, um coordenador e três médicos, sem mudança de segurança no Supabase (D1). Ganharam lugar o roteiro da demonstração guiada e o risco de errar um passo conduzindo sozinho.
 
 **Uso de IA:** o Claude Code leu as fichas, os ADRs, o plano e a rastreabilidade e montou o roteiro; o Victor decide as recomendações.
 
