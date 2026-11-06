@@ -14,7 +14,7 @@ O mapa de tudo o que falta para o PlantãoSeguro funcionar de ponta a ponta, do 
 
 1. **Claude Code: a [fase 2](#fase-2-banco-e-api-completam-o-contrato),** banco e API completam o contrato. É o caminho crítico do produto: sem ela, a web não tem o que chamar. Cada passo vira um PR.
 2. **Victor:** quando o passo 2.6 estiver pronto, rodar o comando que cria os logins da demonstração e guardar as senhas. É a parte dele na fase 2.
-3. **Entrega 3, o prazo mais próximo e a prioridade escolhida pelo Victor em 06/11:** o experimento da concentração já tem resultado ([7.1](#fase-7-concentração-das-ofertas)); seguem a busca de fontes públicas sobre o comportamento ([E.1](#5-trilha-da-entrega-3-em-paralelo)), as correções do documento (E.6) e o PDF com o PR (E.8).
+3. **Entrega 3, o prazo mais próximo e a prioridade escolhida pelo Victor em 06/11:** o documento está corrigido, com o experimento da concentração e as fontes públicas, e o PDF tem 12 páginas ([E.1 a E.8](#5-trilha-da-entrega-3-em-paralelo)). Falta o Victor revisar e autorizar o merge. Depois, a fase 2.
 4. **Colegas:** o teste de usabilidade da tarefa do coordenador, que já está no link público, se o grupo puder fazer ([E.2](#5-trilha-da-entrega-3-em-paralelo)).
 
 ## 2. Onde estamos
@@ -29,7 +29,7 @@ O mapa de tudo o que falta para o PlantãoSeguro funcionar de ponta a ponta, do 
 | Decisões D1 a D11 | Aprovadas pelo Victor em 06/11 | [ADR 0015](adr/0015-decisoes-que-destravam-o-mvp.md) |
 | Web: página inicial, entrada sem senha, lista de vagas, nova vaga, sugestões e decisão | No link público, **só no modo de demonstração** | [ficha](../apps/web/README.md) |
 | Web: médico, auditoria, contestações e equidade | Ainda "em construção" | |
-| Documento da Entrega 3 | Rascunho pronto, fora do Git, com frases a corrigir | trilha da seção 5 |
+| Documento da Entrega 3 | Corrigido em 06/11, com PDF de 12 páginas, esperando o ok do Victor | [documento](04-entrega-3-validacao.md) |
 
 **O que falta, em uma frase:** as partes existem, mas ainda não conversam. A web roda sozinha no navegador e não chama a API nem o banco. Por isso o médico não recebe oferta e a cascata não aparece.
 
@@ -147,14 +147,14 @@ Esta fase **não depende das anteriores** e pode começar já.
 
 O documento acadêmico anda junto com o produto e usa o que ele mede.
 
-- [ ] **E.1** Realismo sem entrevistas: buscar números publicados sobre o comportamento dos plantonistas (aceite e recusa de convites, tempo até preencher, antecedência, distância aceita, carga de plantões) e compará-los às premissas do simulador, como a [comparação com dados públicos](resultados/metricas-robustez.md#comparação-com-dados-públicos) já faz para a composição. Onde não houver fonte, a premissa fica declarada e a análise de sensibilidade mostra o quanto ela pesa. O [kit de entrevistas](entrevistas/LEIAME.md) fica para um piloto futuro.
+- [x] **E.1** *Feito em 06/11 ([premissas contra fontes públicas](resultados/premissas-comportamento.md)).* Realismo sem entrevistas: buscar números publicados sobre o comportamento dos plantonistas (aceite e recusa de convites, tempo até preencher, antecedência, distância aceita, carga de plantões) e compará-los às premissas do simulador, como a [comparação com dados públicos](resultados/metricas-robustez.md#comparação-com-dados-públicos) já faz para a composição. Onde não houver fonte, a premissa fica declarada e a análise de sensibilidade mostra o quanto ela pesa. O [kit de entrevistas](entrevistas/LEIAME.md) fica para um piloto futuro.
 - [ ] **E.2** Teste de usabilidade da tarefa do coordenador ([roteiro](ux/teste-de-usabilidade.md)), se o grupo puder fazer. Se não, uma avaliação pelas diretrizes de interação humano-IA, com a limitação dita no documento. As tarefas do médico ficam para depois da fase 4.
-- [ ] **E.3** Resultado do experimento da concentração (7.1).
+- [x] **E.3** Resultado do experimento da concentração (7.1). *No documento em 06/11.*
 - [ ] **E.4** Comparar a regressão logística com o LightGBM, como a Etapa 2 prometeu.
 - [ ] **E.5** Previsão de vagas, se sobrar tempo: um baseline com resultado honesto, mesmo abaixo da meta.
-- [ ] **E.6** Corrigir o documento: a tela do coordenador já existe, a do médico não; o domínio público já tem a plataforma; o Gemini foi testado; o teste de usabilidade cobre só o coordenador; a apresentação é guiada, sem a plateia usando o sistema; não houve entrevistas.
-- [ ] **E.7** Caso de negócio e critérios de sucesso com números de fontes públicas e da simulação, sempre em faixas e com o rótulo de simulação.
-- [ ] **E.8** Gerar o PDF, atualizar a rastreabilidade (A4-1 a A4-11) e abrir o PR, com o ok do Victor.
+- [x] **E.6** *Feito em 06/11.* Corrigir o documento: a tela do coordenador já existe, a do médico não; o domínio público já tem a plataforma; o Gemini foi testado; o teste de usabilidade cobre só o coordenador; a apresentação é guiada, sem a plateia usando o sistema; não houve entrevistas.
+- [x] **E.7** *Feito em 06/11, com a referência pública do plantão e a taxa de vagas descobertas da referência acadêmica.* Caso de negócio e critérios de sucesso com números de fontes públicas e da simulação, sempre em faixas e com o rótulo de simulação.
+- [ ] **E.8** Gerar o PDF, atualizar a rastreabilidade (A4-1 a A4-11) e abrir o PR, com o ok do Victor. *PDF de 12 páginas e rastreabilidade prontos em 06/11; falta o merge do PR.*
 - [ ] **E.9** Aplicar o retorno da aula de storytelling e preparar os slides e o pitch com o grupo.
 
 ## 6. Decisões que destravam o caminho

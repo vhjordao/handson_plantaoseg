@@ -26,8 +26,19 @@ else
   RAIZ="$(pwd)"
 fi
 mkdir -p "$(dirname "$SAIDA")"
-"$NAVEGADOR" --headless=new --disable-gpu --no-pdf-header-footer \
+# Perfil próprio e temporário: com o navegador já aberto, o modo headless entregava o pedido
+# à janela aberta e não gravava nada, e o script anunciava o PDF antigo como novo.
+PERFIL="$(mktemp -d)"
+trap 'rm -rf "$PERFIL"' EXIT
+if command -v cygpath >/dev/null 2>&1; then PERFIL_NAV="$(cygpath -m "$PERFIL")"; else PERFIL_NAV="$PERFIL"; fi
+rm -f "$SAIDA"
+"$NAVEGADOR" --headless=new --disable-gpu --no-pdf-header-footer --user-data-dir="$PERFIL_NAV" \
   --print-to-pdf="$RAIZ/$SAIDA" "file:///$RAIZ/$ENTRADA" >/dev/null 2>&1
+# No Windows o navegador pode terminar antes de o arquivo aparecer.
+for _ in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do
+  [ -s "$SAIDA" ] && break
+  sleep 1
+done
 
 if [ ! -s "$SAIDA" ]; then
   echo "ERRO: o PDF não foi gerado." >&2

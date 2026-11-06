@@ -4,6 +4,24 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 06/11/2026 (sexta): Entrega 3 corrigida, com fontes públicas e o experimento da concentração
+
+**Pedido do Victor:** "Entrega 3 primeiro".
+
+**O que mudou no documento** (`docs/04-entrega-3-validacao.md`, PDF de 12 páginas):
+
+- **Estado real em 06/11:** a interface está no ar só em modo de demonstração, com a tela completa do coordenador; o Gemini foi testado com o serviço real (6 de 6 leituras certas na comparação; nenhum dos 10 ataques obedecido); a apresentação é guiada; não houve entrevistas.
+- **Concentração:** o resultado do experimento entra no resumo, no C5, na robustez, na matriz de riscos e nos vieses, com a figura nova. A exclusão por zona fica dita como aberta.
+- **Fontes públicas (E.1):** `docs/resultados/premissas-comportamento.md` compara as premissas de comportamento com o que foi publicado. O único número acadêmico encontrado (BMJ Open, 2023) mostra 11,3% de turnos de médicos substitutos sem cobertura nos hospitais públicos ingleses, contra 5,4% no processo manual simulado. O plantão público de 12 h tem referência de R$ 1.500 (Fhemig, 2024). Distância e ofertas até o aceite seguem sem fonte. Cada número foi conferido na página original; o que não se confirmou (um percentual de vínculos de 2019 e uma reportagem de Goiânia, que não abriu) ficou de fora.
+- **Caso de negócio (E.7):** V passa a ter a referência pública do plantão como ordem de grandeza, e o ROI ganha o cenário da taxa inglesa: cerca de 92 vagas descobertas por ano, e evitar metade delas pagaria o custo com V de R$ 1.000.
+- **Experiência:** as três primeiras imagens da seção 4.2 passam a ser capturas da tela real; a do médico continua como wireframe.
+- **Rastreabilidade:** A4-1 a A4-11 apontam a seção do documento que responde a cada exigência.
+- **Script do PDF:** `scripts/gerar-pdf.sh` passou a usar um perfil próprio do navegador e a esperar o arquivo. Com o Edge aberto, ele anunciava o PDF antigo como novo.
+
+**O que fica para o Victor:** revisar o documento e o PDF e autorizar o merge. O teste de usabilidade (E.2) e a comparação com o LightGBM (E.4) não foram feitos, e o documento diz isso.
+
+**Uso de IA:** o Claude Code fez a busca das fontes, conferiu cada número na página original, redigiu as correções e gerou o PDF; o Victor revisa.
+
 ## 06/11/2026 (sexta): experimento contra a concentração das ofertas
 
 **Pedido do Victor:** "Entrega 3 primeiro". O experimento da concentração (roteiro, passo 7.1) vem antes porque o documento o declarava não implementado e é o maior risco ético medido.
