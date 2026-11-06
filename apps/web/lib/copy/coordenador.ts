@@ -124,7 +124,7 @@ export const ORDEM = {
   acaoFalhou: "Esta ação não foi registrada. Tente de novo.",
   ofertaEmAndamentoTitulo: "Oferta em andamento",
   ofertaEmAndamento:
-    "A decisão está na trilha de auditoria. O acompanhamento da cascata chega na próxima entrega, com a tela do médico.",
+    "A decisão está na trilha de auditoria. O acompanhamento da cascata chega com a tela do médico, que está em construção.",
   preenchida: (nome: string, minutos: number | null) =>
     `Aceita por ${nome}${minutos ? ` em ${minutos} min` : ""} (simulado).`,
 } as const;
@@ -147,7 +147,7 @@ export const DIALOGO_DE_DECISAO = {
   variosNomes: (nome: string, ttl: number) =>
     `A oferta vai primeiro a ${nome}, com ${ttl} min para responder. Se a pessoa recusar ou o prazo passar, ela segue para o próximo nome.`,
   trilha: "Sua decisão fica na trilha de auditoria, com o seu nome e a versão do modelo.",
-  simulacao: "Na demonstração, a cascata é simulada e o acompanhamento chega na próxima entrega.",
+  simulacao: "Na demonstração, a cascata é simulada, e o acompanhamento chega com a tela do médico.",
   confirmar: "Aprovar e oferecer",
   voltar: "Voltar sem aprovar",
   erroGeral: "A decisão não foi registrada. Tente de novo.",

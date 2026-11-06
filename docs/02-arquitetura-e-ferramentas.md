@@ -62,7 +62,7 @@ Cada etapa do fluxo tem uma ferramenta principal e uma alternativa; a escolha pr
 | Etapa | Recomendação | Alternativa | Observação |
 | --- | --- | --- | --- |
 | Interface (coordenador, médico e telão) | Next.js, Tailwind e shadcn/ui, web responsiva e sem PWA ([ADR 0011](adr/0011-web-responsiva-sem-pwa.md)) | Vite com React | Abre no computador e no celular, sem instalar nada |
-| Login e perfis | Supabase Auth; como o Victor entra na demonstração é a decisão D1 do [roteiro](roteiro-ate-o-mvp.md) | Magic link por e-mail | O perfil guarda hospital e papel, que a RLS consulta ([ADR 0008](adr/0008-banco-no-supabase.md)) |
+| Login e perfis | Supabase Auth, com logins da demonstração por e-mail e senha ([ADR 0015](adr/0015-decisoes-que-destravam-o-mvp.md)) | Magic link por e-mail | O perfil guarda hospital e papel, que a RLS consulta ([ADR 0008](adr/0008-banco-no-supabase.md)) |
 | Entrada da vaga | Formulário no web app que chama a API ([ADR 0010](adr/0010-api-de-matching.md)) | Telegram | Texto livre, com campos opcionais |
 | Extração dos campos | Gemini 3.1 Flash-Lite (SDK `google-genai`) com saída estruturada (JSON Schema) e validação com Pydantic | As regras, quando o Gemini falha ou demora | Nome, CRM e telefone nunca vão ao modelo; só a camada gratuita, sem gastos, e só texto sintético (ADR 0003) |
 | Filtro de regras | Regras em Python, na API, com a política por hospital em tabela ([ADR 0008](adr/0008-banco-no-supabase.md)) | Funções SQL no Postgres | Determinístico, testável e auditável |
@@ -120,18 +120,18 @@ Cada resolução e cada risco de segurança vira um controle técnico que pode s
 
 ## Infraestrutura e custo
 
-O mês da apresentação custa entre US$ 34 e US$ 41 (VPS, Supabase Pro e LLM), e o resto é gratuito. Preços de VPS e Supabase lidos nas páginas oficiais em 20/10/2026 e os do Gemini em 28/10/2026, em dólar e sem impostos.
+**Estimativa de 20/10, revista em 06/11.** O custo real de novembro é só o servidor: a KVM 1 por R$ 52,99 no mês. Supabase, Vercel e Gemini ficam no plano gratuito, porque a apresentação é guiada e o Gemini não gasta (ADR 0003). A estimativa original, de US$ 34 a US$ 41 (KVM 2, Supabase Pro e LLM pago), fica abaixo como registro. Preços de VPS e Supabase lidos nas páginas oficiais em 20/10/2026 e os do Gemini em 28/10/2026, em dólar e sem impostos.
 
 | Item | Escolha | Custo | O que observar |
 | --- | --- | --- | --- |
 | VPS | [Hostinger KVM 2](https://www.hostinger.com/vps-hosting): 2 vCPU, 8 GB de RAM, 100 GB NVMe | US$ 8,79 por mês no preço promocional, pago adiantado; renova a US$ 14,99 por mês | A própria página indica o KVM 2 para apps de médio porte como o n8n. Há [datacenter no Brasil](https://www.hostinger.com/support/1583267-where-are-hostinger-servers-located/), e a localização fica fixa após a configuração, então escolha o Brasil na compra. O protótipo usa a KVM 1 por 1 mês, R$ 52,99 no carrinho de 04/11/2026 ([ADR 0009](adr/0009-servidor-so-para-a-apresentacao.md)) |
 | n8n | Community, auto-hospedado | US$ 0 | A [licença](https://docs.n8n.io/n8n-community-license/community-license/license-faq.md) cobre uso interno do negócio; se virar produto vendido a hospitais, falar antes com a n8n |
-| Supabase | Free para desenvolver; Pro no mês da apresentação | US$ 0 e US$ 25 por mês | No [plano Free](https://supabase.com/pricing) o projeto pausa após 1 semana sem atividade e o Realtime aceita 200 conexões simultâneas; o Pro aceita 500 e inclui US$ 10 de crédito, que cobrem uma instância Micro |
+| Supabase | Free (com a demonstração guiada, o Pro deixou de ser preciso) | US$ 0 | No [plano Free](https://supabase.com/pricing) o projeto pausa após 1 semana sem atividade e o Realtime aceita 200 conexões simultâneas; o Pro aceita 500 e inclui US$ 10 de crédito, que cobrem uma instância Micro |
 | LLM | [Gemini 3.1 Flash-Lite](https://ai.google.dev/gemini-api/docs/models), só na leitura da vaga (ADR 0003) | Gratuito: camada gratuita, em projeto sem faturamento | Custo zero, por decisão do Victor; a chave só entra no servidor para o ensaio e o dia |
 | Observabilidade de IA | Langfuse Cloud | Plano gratuito | Confirmar os limites do plano gratuito na criação da conta |
 | Mensagens | Bot do Telegram | Sem custo por mensagem | O WhatsApp cobra por template entregue |
 
-O total de US$ 34 a US$ 41 soma VPS (promocional ou na renovação), Supabase Pro e 200 chamadas do Gemini 3.8 Flash (cerca de US$ 0,68); com o Flash-Lite o LLM praticamente some da conta. Com a demonstração guiada (06/11), não há plateia conectada, e o plano gratuito do Supabase basta.
+A estimativa de US$ 34 a US$ 41 somava VPS (promocional ou na renovação), Supabase Pro e 200 chamadas do Gemini 3.8 Flash (cerca de US$ 0,68); com o Flash-Lite o LLM praticamente some da conta. Com a demonstração guiada (06/11), não há plateia conectada, e o plano gratuito do Supabase basta.
 
 ## Plano de construção até a Etapa 2
 
@@ -151,7 +151,7 @@ Cinco decisões precisam do grupo até a Etapa 2, e quatro riscos pedem plano B 
 **Decisões para o grupo**
 
 - **Quanto vai no n8n:** só orquestração. No primeiro fluxo, ele só espera o prazo e pede para a API avançar, e um teste barra nó de código, de LLM ou de banco ([ADR 0013](adr/0013-aviso-da-api-inicia-a-cascata.md)).
-- **Login da plateia e plano do Supabase:** deixaram de valer em 06/11. A apresentação é guiada, a plateia não usa o sistema e o plano gratuito basta. Como o Victor entra no sistema real é a decisão D1 do [roteiro](roteiro-ate-o-mvp.md).
+- **Login da plateia e plano do Supabase:** deixaram de valer em 06/11. A apresentação é guiada, a plateia não usa o sistema e o plano gratuito basta. O Victor entra no sistema real com logins da demonstração ([ADR 0015](adr/0015-decisoes-que-destravam-o-mvp.md)).
 - **Região do Supabase:** confirmar São Paulo na criação do projeto, porque a região não se troca depois sem migrar.
 - **Licença do n8n:** se o produto for oferecido a hospitais, [confirmar a arquitetura com a n8n](https://docs.n8n.io/n8n-community-license/community-license/license-faq.md) antes de qualquer piloto.
 

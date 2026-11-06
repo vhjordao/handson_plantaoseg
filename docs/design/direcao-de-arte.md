@@ -247,7 +247,7 @@ O divisor (1,28:1 no claro, 1,54:1 no escuro) é decorativo, não carrega inform
 
 | Mudança | Por quê |
 | --- | --- |
-| A leitura da vaga passou de "sugestão da IA" para **regra do sistema** (cinza, "Leitura por regras") | O backend lê por regras; o Gemini ainda não foi testado. A voz segue a origem real, e só a ordem e os motivos do modelo são tracejados |
+| A leitura da vaga passou de "sugestão da IA" para **regra do sistema** (cinza, "Leitura por regras") | Sem a chave do Gemini, que só entra no servidor no ensaio e no dia, o backend lê por regras (o Gemini foi testado à parte em 05/11). A voz segue a origem real, e só a ordem e os motivos do modelo são tracejados |
 | No celular, a legenda das vozes desceu para **depois** da demonstração | Ela empurrava o hero para baixo; título, ação e demonstração ficam juntos |
 | Etapa 6 como o único bloco **cheio** | Entre cartões tracejados, contínuos e cinzas, o bloco cheio é a "decisão carimbada" e a única exceção de forma |
 | Mensagem "Chances parecidas (66% a 69%)" no hero | Vem da demonstração real e mostra, em vez de dizer, que o sistema não finge precisão |

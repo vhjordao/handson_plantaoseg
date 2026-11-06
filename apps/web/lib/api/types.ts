@@ -501,7 +501,7 @@ export const IndicadoresSchema = z.object({
 export type Indicadores = z.infer<typeof IndicadoresSchema>;
 
 // ---------------------------------------------------------------------------
-// Eventos em tempo real (barramento do `demo`; Supabase Realtime no `live`)
+// Eventos (barramento do `demo`; no `live`, consulta a cada 3 s, ADR 0015, D7)
 // ---------------------------------------------------------------------------
 
 export type EventoPlantao =

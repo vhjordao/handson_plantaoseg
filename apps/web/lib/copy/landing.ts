@@ -113,7 +113,7 @@ export const ETAPAS: EtapaDoFluxo[] = [
     texto:
       "O sistema oferece ao primeiro aprovado. Se ele recusar ou o prazo acabar, passa ao próximo.",
     voz: "regra",
-    nota: "Simulada nesta demonstração. A cascata automática ainda será construída.",
+    nota: "Simulada nesta demonstração. A cascata automática já roda no servidor, com o n8n, e chega à tela com a tela do médico.",
   },
   {
     numero: 8,
@@ -122,7 +122,7 @@ export const ETAPAS: EtapaDoFluxo[] = [
       "O médico aceita ou recusa e pode contestar a recomendação. Tudo fica na trilha de auditoria.",
     voz: "humano",
     quem: "O médico decide",
-    nota: "Simulado nesta demonstração.",
+    nota: "Em construção: chega com a tela do médico.",
   },
 ];
 
@@ -282,7 +282,7 @@ export const PERGUNTAS: TemaDePerguntas[] = [
       {
         pergunta: "E se o sistema ler a vaga errado?",
         resposta:
-          "Você confere cada campo antes de seguir e pode corrigi-lo. Campo ambíguo vira pergunta, não palpite, e, se a leitura falhar, aparece um formulário para preencher. Hoje a leitura é feita por regras; o modelo de linguagem (Gemini) está desenhado e ainda não foi testado com chave.",
+          "Você confere cada campo antes de seguir e pode corrigi-lo. Campo ambíguo vira pergunta, não palpite, e, se a leitura falhar, aparece um formulário para preencher. Nesta demonstração, a leitura é feita por regras. O modelo de linguagem (Gemini) foi testado à parte, com textos sintéticos.",
       },
     ],
   },
@@ -329,7 +329,7 @@ export const PERGUNTAS: TemaDePerguntas[] = [
       {
         pergunta: "Posso contestar uma recomendação?",
         resposta:
-          "Sim, no desenho: o médico contesta e vê a resposta do coordenador. Nesta demonstração a contestação é simulada; a versão completa ainda não está construída.",
+          "Sim, no desenho: o médico contesta e vê a resposta do coordenador. Ela ainda está em construção e entra no produto com registro no banco e na trilha de auditoria.",
       },
     ],
   },

@@ -101,8 +101,7 @@ export default async function MinhaConta() {
         </h2>
         <p className="mt-2 max-w-[62ch]">
           Em cada oferta você poderá contestar a recomendação. O coordenador responde por escrito, e
-          a resposta fica na trilha de auditoria. Na demonstração, a contestação chega na próxima
-          entrega e será simulada.
+          a resposta fica na trilha de auditoria. A contestação ainda está em construção.
         </p>
         <p className="mt-3">
           <Link href="/ajuda" className="font-semibold underline underline-offset-4 hover:no-underline">

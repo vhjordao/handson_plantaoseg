@@ -1,7 +1,7 @@
 # Roteiro do teste de usabilidade da plataforma
 
 - **Para quê:** a área "Experiência" da Etapa 3 pede jornada e interface com evidência ([A4-4](../rastreabilidade-professor.md)). Este roteiro mede se coordenadores e médicos conseguem usar a plataforma e entender **por que** a IA sugeriu cada nome.
-- **Quem aplica:** os colegas do grupo, com o Claude Code só na preparação. **Quando:** com as telas das fases UI-1 e UI-2 no ar, até 06/11.
+- **Quem aplica:** os colegas do grupo, com o Claude Code só na preparação. **Quando:** a tarefa 1 (coordenador) já pode ser aplicada no link público; as tarefas do médico ficam para depois da fase 4 do [roteiro](../roteiro-ate-o-mvp.md). É opcional (passo E.2): se o grupo não puder aplicar, o documento usa uma avaliação pelas diretrizes de interação humano-IA e diz isso.
 - **O que não se conclui:** com 3 a 5 pessoas e dados sintéticos, os números abaixo são **indicativos**. Não generalize, não compare com outros produtos e não chame de "resultado real". As metas são hipóteses a testar, não resultados.
 
 ## 1. Metas a testar

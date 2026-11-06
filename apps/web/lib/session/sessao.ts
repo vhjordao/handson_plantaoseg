@@ -3,7 +3,7 @@
  *
  * O cookie guarda só `{papel, personaId}`: nada pessoal. Na demonstração ele **não é assinado**,
  * porque tudo é simulação e não há dado real a proteger. No modo `live`, o login vem do Supabase
- * (decisão D1 do roteiro até o MVP) e este cookie deixa de ser a fonte da verdade.
+ * (logins da demonstração, ADR 0015) e este cookie deixa de ser a fonte da verdade.
  */
 import { SessaoSchema, type Papel, type Sessao } from "@/lib/api/types";
 
