@@ -21,12 +21,13 @@ const REAL = [
 const SIMULADO = [
   "Todos os dados: hospitais, médicos, CRMs e telefones são gerados.",
   "O relógio: hoje é sempre quinta-feira, 01/10, às 9h.",
-  "A oferta em cascata, o aceite e a contestação.",
+  "A oferta: aprovar deixa a vaga em \"Oferta em andamento\", sem enviar nada a ninguém.",
   "Os números de tempo e de concentração, que vêm de uma simulação.",
 ];
 
 const AINDA_NAO = [
   "O modelo de linguagem (Gemini) foi testado à parte, com textos sintéticos: nesta demonstração, a leitura da vaga é por regras.",
+  "A tela do médico (aceite, recusa e contestação) e o acompanhamento da cascata estão em construção. A cascata automática já roda no servidor, com o n8n, fora desta demonstração.",
   "O rastro de pagamentos e o check-in ficam para uma versão futura.",
 ];
 
