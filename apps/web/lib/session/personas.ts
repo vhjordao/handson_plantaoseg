@@ -23,6 +23,38 @@ export function listarPersonasDemo(): {
   };
 }
 
+/**
+ * Quem entrou com o login da demonstração (modo `live`). O coordenador vale para a rede inteira;
+ * o médico é o do login, e usa a persona de mesmo id quando ela existe.
+ */
+export function personaDoLogin(papel: "coordenador" | "medico", id: string | null): Persona {
+  if (papel === "coordenador") {
+    return {
+      papel: "coordenador",
+      id: "login",
+      pseudoId: "login",
+      nome: "Coordenação (login da demonstração)",
+      cargo: "Coordenação de escala",
+      unidade: { id: "rede", nome: "Rede simulada, três hospitais", zona: "rede" },
+    };
+  }
+  const persona = id ? encontrarPersona("medico", id) : null;
+  if (persona) return persona;
+  const pseudonimo = (id ?? "login").slice(0, 8);
+  return {
+    papel: "medico",
+    id: id ?? "login",
+    medico: {
+      id: id ?? "login",
+      pseudonimo,
+      nome: `Médico ${pseudonimo}`,
+      crm: "Login da demonstração",
+      especialidade: "clinica_medica",
+      especialidadeSecundaria: null,
+    },
+  };
+}
+
 /** Confere se a persona existe e é do papel pedido: o cookie nunca vale sem isso. */
 export function encontrarPersona(papel: Papel, id: string | null | undefined): Persona | null {
   if (!id) return null;

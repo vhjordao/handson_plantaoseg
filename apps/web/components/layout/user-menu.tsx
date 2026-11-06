@@ -10,6 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { limparLogin } from "@/lib/api/live/autenticacao";
 import { sair } from "@/lib/session/acoes";
 
 /** O menu da persona: quem sou, trocar de persona e sair. Fica sempre no canto direito. */
@@ -49,6 +50,7 @@ export function UserMenu({
         </DropdownMenuItem>
         <DropdownMenuItem
           onSelect={() => {
+            limparLogin();
             void sair();
           }}
         >

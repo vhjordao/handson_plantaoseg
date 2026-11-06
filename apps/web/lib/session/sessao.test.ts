@@ -7,14 +7,17 @@ describe("lerSessaoDoValor", () => {
     expect(lerSessaoDoValor('{"papel":"coordenador","personaId":"coord-1"}')).toEqual({
       papel: "coordenador",
       personaId: "coord-1",
+      modo: "demo",
     });
     expect(lerSessaoDoValor('{"papel":"medico","personaId":"med-7"}')).toEqual({
       papel: "medico",
       personaId: "med-7",
+      modo: "demo",
     });
     expect(lerSessaoDoValor('{"papel":"telao","personaId":null}')).toEqual({
       papel: "telao",
       personaId: null,
+      modo: "demo",
     });
   });
 
@@ -37,7 +40,14 @@ describe("lerSessaoDoValor", () => {
 
   it("descarta campos que não são da sessão", () => {
     const sessao = lerSessaoDoValor('{"papel":"medico","personaId":"med-7","admin":true}');
-    expect(sessao).toEqual({ papel: "medico", personaId: "med-7" });
+    expect(sessao).toEqual({ papel: "medico", personaId: "med-7", modo: "demo" });
+  });
+
+  it("lê o modo do login real e recusa um modo desconhecido", () => {
+    expect(lerSessaoDoValor('{"papel":"coordenador","personaId":null,"modo":"live"}')?.modo).toBe(
+      "live",
+    );
+    expect(lerSessaoDoValor('{"papel":"coordenador","personaId":null,"modo":"admin"}')).toBeNull();
   });
 });
 

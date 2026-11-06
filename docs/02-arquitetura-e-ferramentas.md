@@ -61,7 +61,7 @@ Cada etapa do fluxo tem uma ferramenta principal e uma alternativa; a escolha pr
 
 | Etapa | Recomendação | Alternativa | Observação |
 | --- | --- | --- | --- |
-| Interface (coordenador, médico e telão) | Next.js, Tailwind e shadcn/ui, web responsiva e sem PWA ([ADR 0011](adr/0011-web-responsiva-sem-pwa.md)) | Vite com React | Abre no computador e no celular, sem instalar nada |
+| Interface (coordenador, médico e telão) | Next.js, Tailwind e shadcn/ui, web responsiva e sem PWA ([ADR 0011](adr/0011-web-responsiva-sem-pwa.md)) | Vite com React | Abre no computador e no celular, sem instalar nada. No modo real, o navegador fala só com o próprio site, que repassa à API e ao banco ([ADR 0016](adr/0016-modo-real-pela-rota-do-site.md)) |
 | Login e perfis | Supabase Auth, com logins da demonstração por e-mail e senha ([ADR 0015](adr/0015-decisoes-que-destravam-o-mvp.md)) | Magic link por e-mail | O perfil guarda hospital e papel, que a RLS consulta ([ADR 0008](adr/0008-banco-no-supabase.md)) |
 | Entrada da vaga | Formulário no web app que chama a API ([ADR 0010](adr/0010-api-de-matching.md)) | Telegram | Texto livre, com campos opcionais |
 | Extração dos campos | Gemini 3.1 Flash-Lite (SDK `google-genai`) com saída estruturada (JSON Schema) e validação com Pydantic | As regras, quando o Gemini falha ou demora | Nome, CRM e telefone nunca vão ao modelo; só a camada gratuita, sem gastos, e só texto sintético (ADR 0003) |

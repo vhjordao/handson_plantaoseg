@@ -67,7 +67,16 @@ export class EntradaInvalidaError extends Error {
   }
 }
 
+/** Sem login válido nesta aba (modo `live`): a pessoa precisa entrar de novo. */
+export class SessaoExpiradaError extends Error {
+  constructor() {
+    super("Sua sessão expirou. Saia e entre de novo.");
+    this.name = "SessaoExpiradaError";
+  }
+}
+
 const ERROS_DE_DOMINIO = [
+  SessaoExpiradaError,
   ForaDaGradeError,
   JustificativaObrigatoriaError,
   CandidatoInvalidoError,

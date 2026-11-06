@@ -50,6 +50,7 @@ export const ERROS_DA_VAGA = {
   inicio: "Informe quando o plantão começa.",
   fim: "Informe quando o plantão termina.",
   fimAntesDoInicio: "O fim do plantão precisa ser depois do início.",
+  urgencia: "Escolha a urgência.",
   publicarFalhou: "Não foi possível publicar a vaga. Tente de novo.",
 } as const;
 

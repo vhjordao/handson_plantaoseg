@@ -19,9 +19,11 @@ type PersonaMedico = Extract<Persona, { papel: "medico" }>;
  */
 export function CascaMedico({
   persona,
+  modo = "demo",
   children,
 }: {
   persona: PersonaMedico;
+  modo?: "demo" | "live";
   children: React.ReactNode;
 }) {
   return (
@@ -64,7 +66,9 @@ export function CascaMedico({
         tabIndex={-1}
         className="mx-auto w-full max-w-[640px] flex-1 p-4 pb-28 outline-none md:pb-10"
       >
-        <ApiProvider>{children}</ApiProvider>
+        <ApiProvider modo={modo} papel="medico">
+          {children}
+        </ApiProvider>
       </main>
 
       <nav

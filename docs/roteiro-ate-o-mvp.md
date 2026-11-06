@@ -12,8 +12,8 @@ O mapa de tudo o que falta para o PlantãoSeguro funcionar de ponta a ponta, do 
 
 **A fase 1 terminou em 06/11:** o Victor aprovou as onze decisões como recomendadas ([ADR 0015](adr/0015-decisoes-que-destravam-o-mvp.md)). Agora podem andar ao mesmo tempo:
 
-1. **Claude Code: a [fase 3](#fase-3-a-web-passa-a-usar-a-api-e-o-banco),** a web passa a usar a API e o banco (adaptador `live`). A fase 2 está no servidor desde 06/11: contrato da tela, contestação e prazo de 2 minutos.
-2. **Victor:** rodar o comando que cria os logins da demonstração (2.6) e guardar as senhas ([seção 7](#7-o-que-só-o-victor-faz)). A fase 3 precisa deles para o login real.
+1. **Victor: conferir a jornada do coordenador no sistema real (3.6).** Em `/entrar`, "Entrar no sistema real" com `coordenador.demo`: escrever um pedido, conferir os campos, ver as sugestões e aprovar. A vaga precisa aparecer na lista e, no banco, com a trilha. É o "pronto quando" da fase 3, e só ele tem as senhas.
+2. **Claude Code: a [fase 4](#fase-4-a-tela-do-médico-e-a-cascata-na-tela),** a tela do médico e a cascata na tela, assim que a 3.6 estiver conferida.
 3. **Entrega 3, o prazo mais próximo e a prioridade escolhida pelo Victor em 06/11:** o documento está corrigido, com o experimento da concentração e as fontes públicas, e o PDF tem 12 páginas ([E.1 a E.8](#5-trilha-da-entrega-3-em-paralelo)). Falta o Victor revisar e autorizar o merge. Depois, a fase 2.
 4. **Colegas:** o teste de usabilidade da tarefa do coordenador, que já está no link público, se o grupo puder fazer ([E.2](#5-trilha-da-entrega-3-em-paralelo)).
 
@@ -27,7 +27,7 @@ O mapa de tudo o que falta para o PlantãoSeguro funcionar de ponta a ponta, do 
 | n8n e a cascata de ofertas | No servidor, conferida de ponta a ponta pela API | [ficha](../n8n/README.md) |
 | Gemini | Pronto em custo zero; a chave só entra no ensaio e no dia | [ADR 0003](adr/0003-llm-do-produto-gemini.md) |
 | Decisões D1 a D11 | Aprovadas pelo Victor em 06/11 | [ADR 0015](adr/0015-decisoes-que-destravam-o-mvp.md) |
-| Web: página inicial, entrada sem senha, lista de vagas, nova vaga, sugestões e decisão | No link público, **só no modo de demonstração** | [ficha](../apps/web/README.md) |
+| Web: página inicial, entrada sem senha, lista de vagas, nova vaga, sugestões e decisão | No link público, no modo de demonstração e, com o login da demonstração, no sistema real | [ficha](../apps/web/README.md) |
 | Web: médico, auditoria, contestações e equidade | Ainda "em construção" | |
 | Documento da Entrega 3 | Corrigido em 06/11, com PDF de 12 páginas, esperando o ok do Victor | [documento](04-entrega-3-validacao.md) |
 
@@ -66,7 +66,7 @@ A API hoje faz o fluxo principal, mas a tela pede coisas que ela ainda não tem 
 - [x] **2.3** *Feito em 06/11.* A leitura devolve, para cada campo, se está no texto ou foi deduzida, e o trecho. As sugestões devolvem a contribuição de cada variável e a evidência de quem ficou de fora.
 - [x] **2.4** O coordenador lê a política e a ficha do modelo. *Feito em 06/11.*
 - [x] **2.5** *Feito em 06/11.* Contestação: tabela, RLS e rotas para o médico abrir e o coordenador responder, com as ações `contestation_opened` e `contestation_answered` na trilha (D8).
-- [ ] **2.6** Os logins da demonstração na rede simulada, com e-mail e senha: um coordenador e três médicos que a vaga do roteiro recomenda (D1). O script fica pronto, e quem roda o comando é o Victor. *Script pronto em 06/11 (`usuarios-de-teste.py demonstracao`); falta o Victor rodar. Sem `--medicos`, usa os três primeiros médicos das personas da demonstração; o roteiro (5.2) pode trocar.*
+- [x] **2.6** Os logins da demonstração na rede simulada, com e-mail e senha: um coordenador e três médicos que a vaga do roteiro recomenda (D1). O script fica pronto, e quem roda o comando é o Victor. *Script pronto em 06/11 (`usuarios-de-teste.py demonstracao`); falta o Victor rodar. Sem `--medicos`, usa os três primeiros médicos das personas da demonstração; o roteiro (5.2) pode trocar.* *Feito em 06/11: o Victor criou os quatro logins, conferidos no banco sem ler as senhas.*
 - [x] **2.7** Prazo de 2 minutos por oferta na organização da demonstração (D6). *Feito em 06/11, por migração: vale quando ela for aplicada no 2.8.*
 - [x] **2.8** Publicar no servidor e conferir com `conferir-api.py`. *Feito em 06/11: migrações no banco real e imagem 0.3.0 no servidor; 33 de 33 conferências do `conferir-api.py verificar` passaram, `/health` responde de fora, a rota interna segue fechada, as rotas novas pedem login e a API usa 59 MiB.*
 
@@ -76,11 +76,11 @@ A API hoje faz o fluxo principal, mas a tela pede coisas que ela ainda não tem 
 
 O adaptador `live` liga a web ao sistema real.
 
-- [ ] **3.1** Login com e-mail e senha, com os logins da fase 2, na tela de entrada (D1). A entrada por persona continua no modo de demonstração.
-- [ ] **3.2** Leituras sob RLS, direto do banco: vagas, sugestões, ofertas, trilha. Escritas pela API: publicar, aprovar, pular, responder e contestar.
-- [ ] **3.3** Erros da API viram mensagens da tela, e depois de um `429` a tela tenta de novo.
-- [ ] **3.4** Se a API não responder, a tela oferece o modo de demonstração.
-- [ ] **3.5** O relógio do cabeçalho vem do sistema, não de um valor fixo.
+- [x] **3.1** Login com e-mail e senha, com os logins da fase 2, na tela de entrada (D1). A entrada por persona continua no modo de demonstração. *Feito em 06/11: "Entrar no sistema real" em `/entrar` ([ADR 0016](adr/0016-modo-real-pela-rota-do-site.md)).*
+- [x] **3.2** Leituras sob RLS, direto do banco: vagas, sugestões, ofertas, trilha. Escritas pela API: publicar, aprovar, pular, responder e contestar. *Feito em 06/11 para a jornada do coordenador; ofertas e contestações na tela vêm nas fases 4 e 6.*
+- [x] **3.3** Erros da API viram mensagens da tela, e depois de um `429` a tela tenta de novo. *Feito em 06/11.*
+- [x] **3.4** Se a API não responder, a tela oferece o modo de demonstração. *Feito em 06/11: um aviso leva ao modo de demonstração com um clique.*
+- [x] **3.5** O relógio do cabeçalho vem do sistema, não de um valor fixo. *Feito em 06/11.*
 - [ ] **3.6** A jornada do coordenador, que hoje roda na demonstração, passa a rodar no `live`, com a urgência exigida no pedido (D10).
 
 **Pronto quando:** a mesma jornada do coordenador passa nos dois modos, e uma vaga criada pela web aparece no banco e na trilha.

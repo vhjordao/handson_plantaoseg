@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CartaoPersona, Porta } from "@/components/entrar/porta";
+import { EntrarComLogin } from "@/components/entrar/entrar-com-login";
 import { EscolherMedico } from "@/components/entrar/escolher-medico";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -95,6 +96,8 @@ export default async function Entrar({ searchParams }: PageProps<"/entrar">) {
       ) : null}
 
       <div className="mt-10 grid gap-4 lg:grid-cols-3">{ordem.map((id) => portas[id])}</div>
+
+      <EntrarComLogin de={origem} />
     </div>
   );
 }
