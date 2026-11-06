@@ -4,6 +4,24 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 06/11/2026 (sexta): fase 3, a web usa o sistema real
+
+**Pedido do Victor:** "Pode seguir" (fase 3), depois de criar os logins da demonstração.
+
+**O que ficou pronto:**
+
+- **Login real (3.1):** "Entrar no sistema real" em `/entrar`, com e-mail e senha, ao lado das portas por persona. O papel não vem do navegador: o servidor pergunta à API quem é o dono do token.
+- **Adaptador `live` (3.2):** a jornada do coordenador lê vagas, sugestões e decisões do banco sob RLS e escreve pela API (publicar, recomendar, aprovar com justificativa, pular, desfazer e feedback). A recomendação gerada fica guardada na aba, e depois de recarregar é refeita do banco e da trilha.
+- **Erros, 429 e plano B (3.3 e 3.4):** os códigos da API viram as mensagens da tela; depois de um 429 a chamada espera e tenta de novo; sem resposta, um aviso leva ao modo de demonstração com um clique.
+- **Relógio do sistema (3.5)** no modo real, e a **urgência exigida** na nova vaga (D10).
+- **Uma mudança de desenho, registrada no [ADR 0016](adr/0016-modo-real-pela-rota-do-site.md):** chamar a API direto do navegador poria o endereço do servidor no JavaScript público. O navegador passou a falar só com o próprio site, em `/api/sistema`, que repassa à API e ao banco com endereços só do servidor e uma lista fechada de rotas (nunca `/internal`; no banco, só leitura).
+
+**Testes:** 203 testes de unidade e componente na web (19 novos do modo real e da rota) e 123 de jornada e acessibilidade, com os três que publicavam sem urgência ajustados. A ponte foi testada contra o servidor e o banco reais sem login: rota interna recusada, 401 sem login, tabela fora da lista recusada e senha errada com a mensagem certa.
+
+**O que não foi conferido:** a jornada com o login de verdade. As senhas estão só com o Victor, e o Claude Code não digita senhas. Ela é o passo 3.6.
+
+**Uso de IA:** o Claude Code escreveu o adaptador, a rota, o login e os testes, e mudou o desenho para não expor o servidor; o Victor confere a jornada.
+
 ## 06/11/2026 (sexta): fase 2 no servidor
 
 **O que foi feito (passo 2.8), com o ok do Victor para a fase 2:**

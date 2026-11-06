@@ -150,10 +150,15 @@ export const PersonaSchema = z.discriminatedUnion("papel", [
 ]);
 export type Persona = z.infer<typeof PersonaSchema>;
 
-/** O que o cookie de sessão guarda: só o papel e a persona. Nada pessoal. */
+/**
+ * O que o cookie de sessão guarda: o papel, a persona e o modo. Nada pessoal. Em `live` (login da
+ * demonstração, D1 do ADR 0015), `personaId` é o médico do login, ou nulo para o coordenador; o
+ * cookie só guia as rotas, e a API e a RLS conferem o login em toda leitura e escrita.
+ */
 export const SessaoSchema = z.object({
   papel: PapelSchema,
   personaId: z.string().nullable(),
+  modo: z.enum(["demo", "live"]).default("demo"),
 });
 export type Sessao = z.infer<typeof SessaoSchema>;
 

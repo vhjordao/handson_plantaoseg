@@ -128,6 +128,8 @@ export function NovaVaga({ rascunhoId }: { rascunhoId: string | null }) {
     if (!valores.especialidade) novos.push({ id: "campo-especialidade", mensagem: ERROS_DA_VAGA.especialidade });
     if (!valores.inicio) novos.push({ id: "campo-inicio", mensagem: ERROS_DA_VAGA.inicio });
     if (!valores.fim) novos.push({ id: "campo-fim", mensagem: ERROS_DA_VAGA.fim });
+    // A urgência é exigida (D10 do ADR 0015): a API e o banco não aceitam vaga sem ela.
+    if (!valores.urgencia) novos.push({ id: "campo-urgencia", mensagem: ERROS_DA_VAGA.urgencia });
     if (valores.inicio && valores.fim && valores.fim <= valores.inicio) {
       novos.push({ id: "campo-fim", mensagem: ERROS_DA_VAGA.fimAntesDoInicio });
     }

@@ -10,6 +10,7 @@ import { ApiProvider } from "@/lib/api/provider";
 import { ACOES } from "@/lib/copy/comum";
 import { AGORA_DEMO } from "@/lib/demo-ancora";
 import { formatarAgora } from "@/lib/format/datas";
+import { agoraLocal } from "@/lib/api/live/tempo";
 import { itensDaArea } from "@/lib/nav";
 import type { Persona } from "@/lib/api/types";
 
@@ -22,13 +23,19 @@ type PersonaCoordenador = Extract<Persona, { papel: "coordenador" }>;
  */
 export function CascaCoordenador({
   persona,
+  modo = "demo",
   children,
 }: {
   persona: PersonaCoordenador;
+  modo?: "demo" | "live";
   children: React.ReactNode;
 }) {
   const hospital = `${persona.unidade.nome} (fictício)`;
-  const agora = `Hoje (simulado): ${formatarAgora(AGORA_DEMO)}`;
+  // No sistema real, o relógio é o de São Paulo agora; na demonstração, a âncora fixa.
+  const agora =
+    modo === "live"
+      ? `Agora: ${formatarAgora(agoraLocal())}`
+      : `Hoje (simulado): ${formatarAgora(AGORA_DEMO)}`;
 
   return (
     <>
@@ -89,7 +96,9 @@ export function CascaCoordenador({
             <p className="mb-4 text-sm text-tinta-suave sm:hidden">
               {hospital}. {agora}.
             </p>
-            <ApiProvider coordenadorId={persona.id}>{children}</ApiProvider>
+            <ApiProvider coordenadorId={persona.id} modo={modo} papel="coordenador">
+              {children}
+            </ApiProvider>
           </main>
         </div>
       </div>

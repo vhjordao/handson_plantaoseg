@@ -257,7 +257,9 @@ test.describe("os estados da leitura", () => {
     await page.getByRole("link", { name: "Escolha a especialidade." }).click();
     await expect(pergunta).toBeFocused();
     await pergunta.selectOption("pediatria");
-    await expect(page.getByText("Preenchido por você")).toBeVisible();
+    await expect(page.getByText("Preenchido por você").first()).toBeVisible();
+    // A urgência que falta também vira pergunta, e é exigida (D10 do ADR 0015).
+    await page.getByLabel("Qual é a urgência?").selectOption("medium");
     await page.getByRole("button", { name: "Confirmar e ver as sugestões" }).click();
     await expect(page.getByRole("heading", { level: 1, name: "Pediatria" })).toBeVisible();
   });
@@ -273,6 +275,10 @@ test.describe("os estados da leitura", () => {
     await page.getByLabel("Especialidade", { exact: true }).selectOption("clinica_medica");
     await page.getByLabel("Início", { exact: true }).fill("2026-10-03T19:00");
     await page.getByLabel("Fim", { exact: true }).fill("2026-10-04T07:00");
+    // A urgência é exigida (D10 do ADR 0015): sem ela, a tela pede antes de publicar.
+    await page.getByRole("button", { name: "Confirmar e ver as sugestões" }).click();
+    await expect(page.getByRole("link", { name: "Escolha a urgência." })).toBeVisible();
+    await page.getByLabel("Urgência", { exact: true }).selectOption("high");
     await page.getByRole("button", { name: "Confirmar e ver as sugestões" }).click();
     await expect(page.getByRole("heading", { level: 1, name: "Clínica médica" })).toBeVisible();
   });
@@ -369,6 +375,7 @@ test.describe("os outros estados da vaga", () => {
     await page.getByLabel("Especialidade", { exact: true }).selectOption("pediatria");
     await page.getByLabel("Início", { exact: true }).fill("2026-10-02T07:00");
     await page.getByLabel("Fim", { exact: true }).fill("2026-10-02T19:00");
+    await page.getByLabel("Urgência", { exact: true }).selectOption("low");
     await page.getByRole("button", { name: "Confirmar e ver as sugestões" }).click();
     await expect(page.getByRole("heading", { name: "Nenhum médico passou nas regras" })).toBeVisible({ timeout: 10_000 });
     await expect(page.getByRole("region", { name: "Quem ficou de fora" })).toBeVisible();

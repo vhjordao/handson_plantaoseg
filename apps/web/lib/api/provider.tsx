@@ -2,7 +2,9 @@
 
 import * as React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AvisoSistemaIndisponivel } from "@/components/dominio/aviso-sistema-indisponivel";
 import type { PlantaoApi } from "./plantao-api";
+import type { Papel } from "./types";
 
 interface EstadoDaApi {
   /** A API da sessão, ou `null` enquanto o adaptador ainda está sendo carregado. */
@@ -28,13 +30,20 @@ const ApiContext = React.createContext<EstadoDaApi>({
 export function ApiProvider({
   children,
   coordenadorId,
+  modo = "demo",
+  papel = "coordenador",
 }: {
   children: React.ReactNode;
   /** A persona de coordenador que decide nesta sessão: é quem aparece no selo "Decidido por". */
   coordenadorId?: string;
+  /** `live`: o sistema real, com o login da demonstração (fase 3 do roteiro). */
+  modo?: "demo" | "live";
+  /** Para onde a troca para a demonstração leva, se o sistema real não responder. */
+  papel?: Exclude<Papel, "telao">;
 }) {
   const [api, setApi] = React.useState<PlantaoApi | null>(null);
   const [falhou, setFalhou] = React.useState(false);
+  const [indisponivel, setIndisponivel] = React.useState(false);
   const [tentativa, setTentativa] = React.useState(0);
   const [clienteDeConsultas] = React.useState(
     () =>
@@ -47,6 +56,25 @@ export function ApiProvider({
 
   React.useEffect(() => {
     let ativo = true;
+    if (modo === "live") {
+      import("./live")
+        .then(({ criarApiLive, lerConfigLive }) => {
+          if (!ativo) return;
+          const config = lerConfigLive();
+          if (!config) {
+            setFalhou(true);
+            return;
+          }
+          setApi(criarApiLive({ ...config, aoFicarIndisponivel: () => setIndisponivel(true) }));
+          setFalhou(false);
+        })
+        .catch(() => {
+          if (ativo) setFalhou(true);
+        });
+      return () => {
+        ativo = false;
+      };
+    }
     import("./demo")
       .then(({ criarApiDemo }) => {
         if (!ativo) return;
@@ -67,7 +95,7 @@ export function ApiProvider({
     return () => {
       ativo = false;
     };
-  }, [coordenadorId, tentativa]);
+  }, [coordenadorId, modo, tentativa]);
 
   const tentarDeNovo = React.useCallback(() => {
     setFalhou(false);
@@ -78,7 +106,10 @@ export function ApiProvider({
 
   return (
     <QueryClientProvider client={clienteDeConsultas}>
-      <ApiContext.Provider value={valor}>{children}</ApiContext.Provider>
+      <ApiContext.Provider value={valor}>
+        {indisponivel || (modo === "live" && falhou) ? <AvisoSistemaIndisponivel papel={papel} /> : null}
+        {children}
+      </ApiContext.Provider>
     </QueryClientProvider>
   );
 }
