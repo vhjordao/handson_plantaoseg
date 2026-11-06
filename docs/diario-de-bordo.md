@@ -4,6 +4,18 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 06/11/2026 (sexta): o rodízio no servidor (imagem 0.4.0)
+
+**Pedido do Victor:** "Merge e publicar", para o PR #32.
+
+**O que foi feito:**
+
+- **Merge** do #32 com a CI verde.
+- **Publicação:** o Compose do servidor só diferia da `main` na tag da imagem. Antes, cópias para voltar atrás (`docker-compose.yml.antes-rodizio` e `services/matching-api.antes-rodizio`); a imagem 0.3.0 continua no servidor. O código foi copiado da `main`, a imagem 0.4.0 foi construída lá, e só a API foi trocada. Sem migração.
+- **Conferência:** 33 de 33 do `conferir-api.py verificar`, API saudável e sem erro no log. No banco, a primeira recomendação da 0.4.0 gravou na trilha a política `rodizio`, com margem 0,1 e janela de 7 dias.
+
+**Uso de IA:** o Claude Code fez o merge, publicou e conferiu; nenhum segredo, IP ou endereço foi impresso.
+
 ## 06/11/2026 (sexta): o rodízio contra a concentração entra na API (7.2)
 
 **Pedido do Victor:** "Sim, fazer a 7.2", enquanto a conferência da 3.6 não sai.
@@ -17,7 +29,7 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 **Testes:** 560 testes do motor e da API (10 novos do rodízio) e 204 de unidade e componente na web. O banco falso dos testes aprendeu `gte` e `lte` e passou a gravar `created_at`, como o banco real.
 
-**O que ainda não vale:** o servidor roda a imagem 0.3.0. O rodízio só entra no sistema real com a publicação da 0.4.0, que espera o ok do Victor. Ensaios na mesma semana mudam a ordem da vaga do roteiro; o `limpar-demonstracao` antes do dia zera a contagem.
+**Depois:** publicado no mesmo dia (entrada acima). Ensaios na mesma semana mudam a ordem da vaga do roteiro; o `limpar-demonstracao` antes do dia zera a contagem.
 
 **Uso de IA:** o Claude Code levou a política ao motor e à API, escreveu os testes e a documentação; a escolha da política seguiu o critério do grupo no experimento.
 
