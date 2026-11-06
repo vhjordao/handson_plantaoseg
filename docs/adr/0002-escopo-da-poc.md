@@ -1,6 +1,7 @@
 # ADR 0002: Escopo da PoC, funcionalidades centrais e complementares
 
 - **Status:** aceita pelo Victor em 28/10/2026 (G0); o grupo pode pedir revisão. **Atualização de 28/10 (noite):** a construção do protótipo foi adiada ([ADR 0004](0004-prototipo-adiado.md)); a divisão abaixo vale para o que for construído depois do portão G-P.
+- **Atualização de 06/11/2026:** a apresentação passou a ser uma demonstração guiada pelo Victor, e a plateia não usa o sistema. O argumento contra "só o núcleo" muda de "a plateia usar o sistema" para "mostrar ao vivo o caminho do coordenador e do médico", e a divisão continua valendo. O que entra no MVP está no [roteiro até o MVP](../roteiro-ate-o-mvp.md).
 - **Origem:** feedback do professor sobre a Entrega 1 (FB-2) em [docs/rastreabilidade-professor.md](../rastreabilidade-professor.md).
 
 ## Contexto

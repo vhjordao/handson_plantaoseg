@@ -508,8 +508,8 @@ def write_analysis(dataset: Dataset, params: dict[str, Any], out_dir: Path) -> N
         "",
         "## 6. Limites",
         "",
-        "- Tudo descreve o simulador; nenhum número é evidência de mercado nem substitui as "
-        "entrevistas planejadas.",
+        "- Tudo descreve o simulador; nenhum número é evidência de mercado nem substitui "
+        "dado real.",
         "- Só se observa a resposta de quem foi chamado (viés de seleção).",
         "- Os textos de vaga são gerados de modelos; a extração em texto real é uma incógnita.",
         "- As figuras são estáticas; cada uma tem a tabela com os mesmos números logo abaixo.",

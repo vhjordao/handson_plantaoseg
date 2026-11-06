@@ -411,7 +411,7 @@ def render_flow(metrics: dict[str, Any]) -> str:
         "## Limites",
         "",
         "- O processo manual simulado é uma premissa do grupo e não checa disponibilidade; "
-        "um coordenador real pode ser melhor ou pior, e só as entrevistas dirão.",
+        "um coordenador real pode ser melhor ou pior, e só dado real dirá.",
         "- A chance de aceite dos elegíveis é a verdadeira do simulador; no mundo real ela é "
         "desconhecida, e o modelo a estima com erro.",
         "- Vagas sem cobertura próximas de zero no fluxo recomendado dependem dessa premissa e "

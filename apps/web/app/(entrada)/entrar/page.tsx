@@ -16,8 +16,8 @@ type IdDaPorta = (typeof ORDEM_PADRAO)[number];
 
 /**
  * As três portas. Sem senha, sem quebra-cabeça e sem digitar nada (WCAG 3.3.8): a pessoa entra
- * como uma persona fictícia. Quem veio de um link para uma área específica (`?papel=`, como o
- * QR do telão) vê aquela porta primeiro, e primeiro também para o teclado e o leitor de tela:
+ * como uma persona fictícia. Quem veio de um link para uma área específica (`?papel=`, como um
+ * link direto) vê aquela porta primeiro, e primeiro também para o teclado e o leitor de tela:
  * a ordem muda no próprio HTML, não só na tela (WCAG 1.3.2 e 2.4.3).
  */
 export default async function Entrar({ searchParams }: PageProps<"/entrar">) {

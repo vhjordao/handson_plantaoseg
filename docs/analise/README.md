@@ -168,7 +168,7 @@ Detecção de injeção de prompt: 60 de 60 pedidos adversariais sinalizados; 0 
 
 ## 6. Limites
 
-- Tudo descreve o simulador; nenhum número é evidência de mercado nem substitui as entrevistas planejadas.
+- Tudo descreve o simulador; nenhum número é evidência de mercado nem substitui dado real.
 - Só se observa a resposta de quem foi chamado (viés de seleção).
 - Os textos de vaga são gerados de modelos; a extração em texto real é uma incógnita.
 - As figuras são estáticas; cada uma tem a tabela com os mesmos números logo abaixo.

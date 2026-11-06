@@ -1,6 +1,6 @@
 # Teste de premissas e simulação de lançamento (simulação)
 
-> **Simulação.** Os dados são sintéticos. Este teste não substitui dado real: refaz o mundo simulado com outras premissas e mostra quais conclusões dependem de quais delas. É o que define o que perguntar nas [entrevistas](../entrevistas/LEIAME.md).
+> **Simulação.** Os dados são sintéticos. Este teste não substitui dado real: refaz o mundo simulado com outras premissas e mostra quais conclusões dependem de quais delas. Sem entrevistas (decisão de 06/11), é o que mostra o peso de cada premissa declarada.
 
 ## O que resiste e o que não resiste
 
@@ -30,7 +30,7 @@ O simulador assume que o coordenador chama sem conferir a agenda. Se o real já 
 
 ![Ganho de tempo conforme o coordenador real](fig-robustez-coordenador.svg)
 
-É a premissa que mais pesa, e só as entrevistas a resolvem: quantos médicos o coordenador chama até alguém aceitar.
+É a premissa que mais pesa, e só dado real a resolve: quantos médicos o coordenador chama até alguém aceitar. Sem entrevistas, ela fica declarada como premissa do grupo.
 
 ## Cenários
 
@@ -69,7 +69,7 @@ Fonte: [Demografia Médica no Brasil 2025](https://bvsms.saude.gov.br/bvs/public
 | Mais jovens (simulador: 25 a 34; estudo: até 35 anos) | 25,0% | 23,0% | 21,9% | Perto da premissa; os recortes não são idênticos |
 | Com 55 anos ou mais | 15,0% | 14,0% | 26,8% | O simulador erra: há quase o dobro de médicos nessa faixa |
 
-No cenário "Calibrado com dados públicos", essas parcelas seguem o estudo, com o meio das faixas etárias dividido em partes iguais (premissa do grupo). O modelo continua à frente do baseline (+2,1 pontos no top-5, contra +3,5 na base) e a redução contra o manual fica em 55%. Era esperado: gênero não entra na fórmula de aceite, e a idade só muda a exposição histórica. Por isso os agregados públicos corrigem a composição da população, não o comportamento. O estudo quase não traz números sobre plantão: o comportamento precisa vir das entrevistas. Os erros de gênero e idade pesam na auditoria de equidade, não no ranking, que não usa essas variáveis.
+No cenário "Calibrado com dados públicos", essas parcelas seguem o estudo, com o meio das faixas etárias dividido em partes iguais (premissa do grupo). O modelo continua à frente do baseline (+2,1 pontos no top-5, contra +3,5 na base) e a redução contra o manual fica em 55%. Era esperado: gênero não entra na fórmula de aceite, e a idade só muda a exposição histórica. Por isso os agregados públicos corrigem a composição da população, não o comportamento. O estudo quase não traz números sobre plantão: o comportamento precisa de outras fontes publicadas ou de um piloto. Os erros de gênero e idade pesam na auditoria de equidade, não no ranking, que não usa essas variáveis.
 
 ## Simulação de lançamento
 

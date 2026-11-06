@@ -17,7 +17,7 @@ A versão 1 do documento da Entrega 2 declarava a meta de reduzir 50% o tempo de
 
 ## Consequências
 
-- A meta de -50% no tempo passa a ter um resultado em simulação (110 para 47 min, 57% a menos), com a ressalva de que **72% do ganho vem do filtro de regras** e de que o processo manual simulado é premissa do grupo; a linha de base real continua dependendo das entrevistas (Etapa 3).
+- A meta de -50% no tempo passa a ter um resultado em simulação (110 para 47 min, 57% a menos), com a ressalva de que **72% do ganho vem do filtro de regras** e de que o processo manual simulado é premissa do grupo; a linha de base real depende de dado real, e, sem entrevistas (decisão de 06/11), fica como premissa declarada.
 - A meta de +20 pontos de antecedência fica demonstrada como inalcançável só com a recomendação (teto de 76,0% das vagas já publicadas com 24 h ou mais): depende da previsão de vagas, que é evolução futura.
 - A concentração aparece como **risco medido**: o fluxo recomendado concentra mais que o processo manual (31,1% para 50,7% nos lugares do top-5), o que vira prioridade de mitigação na Etapa 3.
 - O recall de 0,7 e a aceitação pelo coordenador continuam sem resultado, e o documento diz por quê (módulo de previsão adiado; não há coordenador simulado).

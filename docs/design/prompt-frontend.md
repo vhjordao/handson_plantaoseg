@@ -1,5 +1,7 @@
 # Prompt de frontend da plataforma PlantãoSeguro (v2)
 
+> **Atualização de 06/11/2026.** A apresentação passou a ser uma demonstração guiada pelo Victor, e a plateia não usa o sistema. O que este prompt diz sobre QR code, persona sorteada, login anônimo e telão ao vivo saiu do MVP. A ordem que vale é a do [roteiro até o MVP](../roteiro-ate-o-mvp.md).
+
 > **Como usar (Victor e colegas).** Abra o Claude Code num **worktree** do repositório (nunca no checkout em que outra sessão está trabalhando) e cole:
 >
 > ```

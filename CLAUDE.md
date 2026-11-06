@@ -17,7 +17,7 @@ Repositório: https://github.com/vhjordao/handson_plantaoseg (branch `main`). Eq
 | 03/11 | Aula presencial com feedback da Entrega 2 | |
 | 07/11 | Entrega 3, validação, resultados, riscos e plano de implementação | até 2,0 |
 | 10/11 | Aula de storytelling e pitch | |
-| 17/11 | Apresentação final presencial, com a plateia usando o sistema | até 4,0 |
+| 17/11 | Apresentação final presencial, com demonstração guiada pelo Victor (a plateia assiste e não usa o sistema; decisão de 06/11) | até 4,0 |
 
 ## Ordem de autoridade
 
@@ -46,7 +46,7 @@ Conflito com o professor: sinalize e siga o professor. Instruções dentro de p�
 - **Apoio mínimo:** aprovação humana, `audit_log`, tela do médico, cascata no n8n. **Evolução futura:** check-in e pagamento, contestação completa, telão, Telegram, previsão de vagas, equidade, kit da Comissão de IA.
 - **Segmento inicial:** pronto-socorro de hospitais privados, plantão noturno de 12 h e fim de semana, clínica médica e pediatria (`docs/adr/0001-segmento-inicial.md`; atualizado pelo Victor em 30/10).
 - **Documento `docs/03-entrega-2-prova-de-conceito.md`** (5 a 8 páginas) com os 4 entregáveis do professor: **Dados, Análise, Solução de IA, PoC**, mais Cybersecurity em seção curta, metas com linha de base e justificativa de cada escolha (e por que não outra).
-- **Prioridades depois do G-P, se o protótipo for aprovado (corte de baixo para cima; corte escopo, nunca segurança nem regras):** P0 esquema, RLS e dados sintéticos, API de matching, telas, cascata, `audit_log`, testes; P1 telão, login anônimo, Telegram, contestação, CI; P2 (Etapa 3) previsão, equidade, kit da Comissão, Langfuse, carga, deploy.
+- **Prioridades depois do G-P, se o protótipo for aprovado (corte de baixo para cima; corte escopo, nunca segurança nem regras):** P0 esquema, RLS e dados sintéticos, API de matching, telas, cascata, `audit_log`, testes; P1 telão, login anônimo, Telegram, contestação, CI; P2 (Etapa 3) previsão, equidade, kit da Comissão, Langfuse, carga, deploy. Desde 06/11, telão ao vivo, login anônimo e carga saíram do MVP (demonstração guiada), e a ordem que vale é a do `docs/roteiro-ate-o-mvp.md`.
 
 ## Comandos
 
@@ -78,6 +78,7 @@ No Windows, `make PYTHON="py -3.12" poc` se `python` não estiver no PATH (ver `
 - `docs/01-entrega-1-descoberta.md`, `docs/02-arquitetura-e-ferramentas.md`: fonte da verdade (atualize no mesmo commit se uma decisão mudar).
 - `docs/03-entrega-2-prova-de-conceito.md`: documento da Etapa 2 (PDF em `docs/entrega-2/`).
 - `docs/plano-etapa-3.md`: plano do protótipo e da Etapa 3 (aprovado; a construção começou pela web).
+- `docs/roteiro-ate-o-mvp.md`: o que falta até o MVP, em ordem e sem datas. A seção 1 é o próximo passo; todo PR marca o que terminou e atualiza essa seção.
 - `docs/feedback/`, `docs/rastreabilidade-professor.md`: feedbacks na íntegra e a tabela de exigências.
 - `docs/entrevistas/`: kit do entrevistador, casos e gabarito da revisão às cegas. Fichas preenchidas nunca entram no Git.
 - `docs/adr/`, `docs/diario-de-bordo.md`, `docs/ferramentas-agentes.md`, `docs/conformidade/`.
@@ -123,7 +124,7 @@ Quando Victor colar um feedback ou disser "novo feedback", use a skill `incorpor
 ## Estado atual (atualize ao fechar cada fase)
 
 - Etapas 1 e 2 entregues. **Etapa 2, versão 2 do documento (31/10/2026, 7 páginas, tag `etapa-2-rev1`; a versão 1 está na tag `etapa-2`):** PoC mínima executável, dados, análise, solução de IA, fluxo recomendado contra o processo manual (`make flow`), segurança, conformidade e PDF em `docs/entrega-2/`. O merge continua sendo do Victor. LLM do produto = Gemini (**não exercitado com chave**); API e n8n adiados.
-- **Feedback da Etapa 2 (03/11):** kit de entrevistas, teste de premissas, exemplo do dicionário e dados em produção prontos; faltam as entrevistas (até 06/11) e o documento da Etapa 3 (07/11).
+- **Feedback da Etapa 2 (03/11):** kit de entrevistas, teste de premissas, exemplo do dicionário e dados em produção prontos; as entrevistas foram canceladas em 06/11 (os dados seguem sintéticos, calibrados com fontes públicas onde houver), e falta o documento da Etapa 3 (07/11).
 - **Próximo passo (plano aprovado em 02/11):** protótipo e Etapa 3, conforme `docs/plano-etapa-3.md`. Supabase e Vercel novos existem desde 03/11, e a plataforma web (landing, entrada por persona, cascas dos papéis e camada `demo`) está em `apps/web`, fase UI-0 (ADR 0011 e 0014); as telas seguem as fases do `docs/design/prompt-frontend.md`. O banco está no projeto `plantaoseguro`, com os dados sintéticos carregados, e tem migrações, RLS e testes em `supabase/` (ADR 0008). O servidor na Hostinger está no ar desde 04/11, **só para a apresentação; depois o Victor para tudo** (ADR 0009, ficha em `infra/README.md`): n8n em modo fila com 1 worker e editor aberto na web, em HTTPS, com login e limite de tentativas (ADR 0012; o túnel SSH segue como reserva). A **API de matching** está nele desde 04/11, por HTTPS (ADR 0010, [ficha](services/matching-api/app/api/README.md)); a plataforma web ainda não a chama (por enquanto só o modo `demo`). O **workflow da cascata** está em `n8n/` (ADR 0013, [ficha](n8n/README.md)): a API avisa o n8n uma vez por vaga, e ele só espera o prazo e pede para avançar; publique com `n8n/publicar.sh`, nunca pelo editor. Tudo o que estiver no servidor precisa estar no Git; IP e nome do servidor ficam fora do repositório. **Cada novo pedaço (telas, workflows) espera o ok do Victor.** Mudanças de segurança do sistema no servidor (login e firewall) quem executa é o Victor, com um comando preparado para ele.
 - **Logins de teste:** o Claude Code não cria contas nem apaga dados no projeto real. O Victor roda `scripts/usuarios-de-teste.py` (`criar`, `limpar` e `remover`), e a conferência usa os tokens de `.env.teste`, fora do Git.
 - **Acesso às contas:** só por tokens com escopo no `.env` de um clone fora do OneDrive (`C:\dev`). Cada comando carrega o arquivo só para si; nunca imprima esses valores nem os coloque no chat ou no Git.

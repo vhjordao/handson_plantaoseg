@@ -4,6 +4,44 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 06/11/2026 (sexta): o repositório inteiro alinhado às decisões do dia, e o início da fase 1
+
+**Pedido do Victor:** "faça o merge final e atualize todo o GitHub com as novas decisões", e "vamos iniciar a fase 1".
+
+**O que mudou:** cerca de 40 trechos ainda falavam da plateia usando o sistema, do QR code, do login anônimo ou das entrevistas como coisa por fazer. Os ADRs 0002, 0003, 0008, 0009, 0011 e 0014 ganharam uma nota de 06/11 no cabeçalho, e o corpo ficou como registro. A arquitetura, as fichas (servidor, n8n, banco, API, motor e web), segurança, dados em produção, o dicionário, o prompt e a direção de arte foram corrigidos. A página do telão deixou de prometer números ao vivo e QR code. Os textos gerados pela análise, pelo fluxo e pelo teste de premissas trocaram "só as entrevistas dirão" por "só dado real dirá", no código e no documento. A frase de custo da solução de IA ainda dizia que a demonstração usaria a camada paga do Gemini; agora diz que o projeto fica só na gratuita.
+
+**Fase 1:** o Victor responde às decisões D1 a D11 do [roteiro](roteiro-ate-o-mvp.md#6-decisões-que-destravam-o-caminho).
+
+**Uso de IA:** o Claude Code procurou e corrigiu as menções antigas; o Victor decidiu o rumo.
+
+## 06/11/2026 (sexta): sem entrevistas, dados sintéticos o mais realistas possível
+
+**Decisão do Victor:** "As entrevistas reais não irão acontecer no momento. Vamos ficar com dados sintéticos mesmo, tente ser o mais realista possível."
+
+**O que muda**
+
+- **A evidência do mundo real (FB2-1)** fica com fontes públicas. A composição dos médicos já foi comparada ao estudo Demografia Médica 2025. Falta o comportamento, que o estudo quase não cobre: aceite e recusa de convites, tempo até preencher, antecedência e distância. Onde não houver fonte, a premissa fica declarada, e a análise de sensibilidade mostra o quanto ela pesa.
+- **O caso de negócio e os critérios de sucesso** usam números públicos e da simulação, em faixas, e não números de entrevista.
+- **A promessa da Entrega 1** (3 a 5 coordenadores e 3 a 5 plantonistas) fica declarada como não cumprida. O kit de entrevistas fica para um piloto futuro.
+- **Uma decisão nova (D11) no roteiro:** a fonte pública já mostrou dois erros do gerador, gênero na pediatria e médicos com 55 anos ou mais. A recomendação é manter a base e mostrar o cenário calibrado ao lado, porque trocar a base refaz o banco, as fixtures e todos os números.
+
+**Uso de IA:** o Claude Code ajustou o roteiro, o plano e a rastreabilidade; o Victor decidiu.
+
+## 05/11/2026 (quinta): roteiro até o MVP e a API 0.2.0 no servidor
+
+**Pedido do Victor:** "monte um documento completo com tudo que ainda falta para o MVP final", e depois: "pode deixar sem datas. Quero só ter um documento para entender o todo e saber sempre o próximo passo."
+
+**O que ficou pronto**
+
+- **O [roteiro até o MVP](roteiro-ate-o-mvp.md):** onde estamos, o que é o MVP pronto, as dez fases em ordem, a trilha da Entrega 3, as onze decisões que destravam o caminho (cada uma com recomendação), o que só o Victor faz, o que fica fora e o que cortar primeiro. O próximo passo fica sempre na seção 1, e todo PR o atualiza.
+- **A imagem 0.2.0 da API foi publicada no servidor, sem a chave do Gemini,** com o ok dele. Ela subiu saudável, `/health` responde de fora, a rota interna continua fechada e a memória ficou em 60 MiB. Ficaram cópias do Compose, do código e da imagem anteriores para voltar atrás.
+
+**O que o levantamento mostrou:** as partes existem, mas ainda não conversam. A web roda só no navegador, a contestação não tem tabela nem rota, e o banco não publica nada em tempo real.
+
+**Mudança de rumo (06/11):** "não vou fazer um teste com a plateia, vou fazer um teste guiado na apresentação. [...] Eu irei simular ao vivo sozinho." O roteiro foi refeito antes do merge: QR code, persona sorteada, login anônimo, telão ao vivo e carga com muita gente saíram do MVP. A entrada no sistema real passa a ser por logins da demonstração, um coordenador e três médicos, sem mudança de segurança no Supabase (D1). Ganharam lugar o roteiro da demonstração guiada e o risco de errar um passo conduzindo sozinho.
+
+**Uso de IA:** o Claude Code leu as fichas, os ADRs, o plano e a rastreabilidade e montou o roteiro; o Victor decide as recomendações.
+
 ## 05/11/2026 (quinta): API pronta para o Gemini, sem gastos, e o primeiro teste real
 
 **Pedido do Victor:** preparar a API para receber a chave do Gemini. Ele colocou a chave no `.env`, conferiu que o projeto está sem faturamento e decidiu: "Não quero ter gastos, use o que for free", e "vou usar só para demonstração no dia".

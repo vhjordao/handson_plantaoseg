@@ -92,7 +92,7 @@ Mediana por etapa:
 
 O Traefik limita a 30 chamadas por segundo por IP, com rajada de 60. Com 20 chamadas simultâneas por 15 segundos, em um total de 1.018,1 por segundo, ele aceitou 33,5 por segundo (503 respostas `200`) e recusou 14.786 com `429`. Um corpo de 70 KB recebe `413`.
 
-**Risco:** a plateia no mesmo Wi-Fi pode sair toda por um único IP e dividir as 30 por segundo. Com 100 pessoas, seria 0,3 chamada por segundo para cada uma. Isso cobre o uso normal, mas todo mundo entrando ao mesmo tempo pode receber `429` por alguns segundos, e a tela precisa tentar de novo. O valor se ajusta por `API_RATE_AVERAGE` e `API_RATE_BURST`, no `.env` do servidor.
+**Risco (de 04/11, quando a plateia ia usar o sistema; desde 06/11 a apresentação é guiada):** a plateia no mesmo Wi-Fi pode sair toda por um único IP e dividir as 30 por segundo. Com 100 pessoas, seria 0,3 chamada por segundo para cada uma. Isso cobre o uso normal, mas todo mundo entrando ao mesmo tempo pode receber `429` por alguns segundos, e a tela precisa tentar de novo. O valor se ajusta por `API_RATE_AVERAGE` e `API_RATE_BURST`, no `.env` do servidor.
 
 ## O que esta medição não cobre
 

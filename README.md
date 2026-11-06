@@ -79,6 +79,7 @@ Custo estimado do mês da apresentação: US$ 34 a US$ 41 (VPS e Supabase lidos 
 | [docs/adr/](docs/adr) | Decisões: [segmento inicial](docs/adr/0001-segmento-inicial.md), [escopo da PoC](docs/adr/0002-escopo-da-poc.md), [LLM do produto: Gemini](docs/adr/0003-llm-do-produto-gemini.md), [protótipo adiado](docs/adr/0004-prototipo-adiado.md), [PoC mínima e especificação](docs/adr/0005-gp-poc-minima-e-especificacao.md), [metas medidas por simulação do fluxo](docs/adr/0006-fluxo-recomendado-medido-por-simulacao.md), [web fora do adiamento](docs/adr/0007-web-sai-do-adiamento.md) e [banco no Supabase](docs/adr/0008-banco-no-supabase.md) |
 | [docs/conformidade/](docs/conformidade/README.md) | O que os textos oficiais das Res. CFM 2.454, 2.460 e 2.462 dizem, lidos em 30/10/2026, e o que depende de jurídico (não é parecer jurídico) |
 | [docs/plano-etapa-2.md](docs/plano-etapa-2.md) | Plano da Etapa 2: escopo, frentes, cronograma com portões de aprovação, contratos e metas com linha de base (proposta) |
+| [docs/roteiro-ate-o-mvp.md](docs/roteiro-ate-o-mvp.md) | O que falta até o MVP, em ordem e sem datas, com o próximo passo sempre no topo |
 | [docs/plano-etapa-3.md](docs/plano-etapa-3.md) | Plano do protótipo e da Etapa 3: arquitetura, marcos, o que depende do Victor, verificação e riscos (aprovado; a construção começou pela web) |
 | [apps/web/](apps/web/README.md) | Ficha da plataforma web: como funciona, como rodar, testes e limites |
 | [n8n/](n8n/README.md) | Ficha do workflow da cascata: como funciona, como publicar, testes e limites |
@@ -112,6 +113,6 @@ Victor Jordão, Roberval Silva, Guilherme Tarrago, Sergio Freitas, Lucas Barbosa
 
 ## Avisos
 
-- Os números de mercado da Flexzo são alegações da própria empresa, não auditadas; as metas dos indicadores são hipóteses a validar nas entrevistas.
+- Os números de mercado da Flexzo são alegações da própria empresa, não auditadas; as metas dos indicadores são hipóteses a validar num piloto; não houve entrevistas.
 - Os textos oficiais das Res. CFM 2.454, 2.460 e 2.462 foram lidos em 30/10/2026 ([conformidade](docs/conformidade/README.md)); a 2.462 traz aviso de suspensão judicial e o enquadramento da plataforma depende de jurídico. A Entrega 1, já entregue, não foi alterada e ainda cita a 2.462 como em vigor.
 - Este material não é aconselhamento jurídico, médico ou financeiro.

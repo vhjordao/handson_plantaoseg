@@ -2,8 +2,8 @@
  * Sessão por persona, sem senha (WCAG 3.3.8; ADR 0014).
  *
  * O cookie guarda só `{papel, personaId}`: nada pessoal. Na demonstração ele **não é assinado**,
- * porque tudo é simulação e não há dado real a proteger. No modo `live`, a persona passa a ser
- * um login anônimo do Supabase e este cookie deixa de ser a fonte da verdade.
+ * porque tudo é simulação e não há dado real a proteger. No modo `live`, o login vem do Supabase
+ * (decisão D1 do roteiro até o MVP) e este cookie deixa de ser a fonte da verdade.
  */
 import { SessaoSchema, type Papel, type Sessao } from "@/lib/api/types";
 

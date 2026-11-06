@@ -322,7 +322,7 @@ Mesmo sendo sintéticos, os dados são tratados como se fossem reais, para ensai
 
 - **Circularidade:** os rótulos nascem do simulador; um modelo bom aqui mostra que aprendeu o simulador, não que funciona no mundo real. Toda métrica sai com o rótulo "simulação" e ao lado do baseline heurístico.
 - **Viés de seleção:** só se observa a resposta de quem foi chamado; o histórico manual simulado carrega esse viés de propósito (`HISTORICAL_BIAS_SCENARIO`).
-- **Premissas sem fonte:** os parâmetros da seção 6 são nossos; as entrevistas planejadas na Entrega 1 ainda não aconteceram.
+- **Premissas sem fonte:** os parâmetros da seção 6 são nossos. As entrevistas planejadas na Entrega 1 foram canceladas em 06/11: a composição é comparada a fontes públicas, e o comportamento fica declarado como premissa onde não houver fonte.
 - **Proxies:** `distance_km`, `home_zone` e `offers_received_30d` podem carregar viés mesmo sem atributos protegidos no modelo.
 - **Não é evidência de mercado:** nenhum número deste dicionário descreve hospitais ou médicos reais.
 

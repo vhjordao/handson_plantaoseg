@@ -1,6 +1,7 @@
 # ADR 0008: Banco no Supabase: o navegador só lê e as regras ficam em Python
 
 - **Status:** aceita pelo Victor em 03/11/2026, com as migrações aplicadas no projeto `plantaoseguro`. Substitui, para o banco, o [ADR 0004](0004-prototipo-adiado.md).
+- **Atualização de 06/11/2026:** sem login anônimo. A apresentação passou a ser guiada pelo Victor, e a plateia não usa o sistema. Como ele entra no sistema real é a decisão D1 do [roteiro até o MVP](../roteiro-ate-o-mvp.md).
 - **Origem:** o [plano da Etapa 3](../plano-etapa-3.md), item M0, e o ok do Victor para começar o banco em 03/11/2026.
 
 ## Contexto
