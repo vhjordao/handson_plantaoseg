@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 
 /**
  * Uma das três portas de `/entrar`. As três têm o mesmo peso: a pessoa escolhe quem quer ser,
- * e a que veio de um link para uma área específica (`?papel=`, como o QR do telão) recebe só um
+ * e a que veio de um link para uma área específica (`?papel=`, como um link direto) recebe só um
  * contorno mais forte. Sem ícone: o título e a frase já dizem quem é quem. As ações ficam
  * sempre no pé do cartão, na mesma altura nas três portas.
  */

@@ -2,7 +2,7 @@
 
 São só totais nacionais, sem nenhum registro individual. Os dados de dezembro de 2024 contam títulos
 de especialista, não pessoas nem plantonistas. O estudo quase não traz números sobre plantão: esses
-vêm das entrevistas.
+precisam de outras fontes publicadas ou de um piloto.
 """
 
 from typing import Any

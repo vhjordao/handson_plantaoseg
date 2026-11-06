@@ -9,8 +9,8 @@ import { ETAPAS } from "@/lib/copy/landing";
 
 /**
  * Telão provisório: o título, as 8 etapas e a legenda das vozes, em escala de sala (corpo de 28 px
- * ou mais, para ler a 15 m). Os números ao vivo, o QR code e o cenário roteirizado chegam numa
- * próxima entrega, e esta página diz isso com franqueza.
+ * ou mais, para ler a 15 m). Desde 06/11 a apresentação é uma demonstração guiada, e a plateia não
+ * usa o sistema: os números ao vivo e o QR code saíram do MVP, e esta página diz isso com franqueza.
  *
  * Cada etapa leva o ícone da sua voz, além da forma do contorno: de longe, a espessura de 1 ou
  * 2 px não distingue "regra" de "decisão". O título encolhe com a altura da tela, para a legenda
@@ -72,7 +72,7 @@ export default function Telao() {
 
       <footer className="flex flex-wrap items-center justify-between gap-4">
         <Badge tone="neutro" className="px-4 py-2 text-[1.75rem] leading-9">
-          Em construção: números ao vivo e QR code chegam na próxima entrega
+          Página de apoio: sem números ao vivo nesta versão
         </Badge>
         <Link
           href="/"

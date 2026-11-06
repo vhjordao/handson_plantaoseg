@@ -127,4 +127,4 @@ O Victor pediu a plataforma web, a landing e a área de entrada, a busca de skil
 
 ## 11. Próximos passos
 
-UI-2 (`f3/web-medico`): ofertas, aceite, contestação, cascata e o adaptador `live`. UI-3: telão ao vivo, auditoria, equidade e a rodada de usabilidade. Antes de ligar o Supabase, entram os cabeçalhos de segurança.
+A ordem está no [roteiro até o MVP](../../docs/roteiro-ate-o-mvp.md): o adaptador `live` (fase 3), a tela do médico com a cascata (fase 4), a demonstração guiada (fase 5) e auditoria, contestações e equidade (fase 6). O telão ao vivo saiu do MVP em 06/11: a apresentação é guiada, e a plateia não usa o sistema. Antes de ligar o Supabase, entram os cabeçalhos de segurança.

@@ -14,7 +14,7 @@ A arquitetura tem quatro camadas: usuários, aplicação na VPS, dados e IA, e u
 
 ```mermaid
 flowchart TB
-    U["Usuários: coordenadores e médicos (web),<br/>médicos (Telegram) e plateia (QR code)"]
+    U["Usuários: coordenadores e médicos (web)<br/>e médicos (Telegram)"]
     subgraph APP["Aplicação na VPS"]
         W["Web app (Next.js)<br/>coordenador, médico e telão"]
         N["n8n (orquestração)<br/>cascata, lembretes, rotinas"]
@@ -50,7 +50,7 @@ O que precisa ser exato e testável fica em código, o n8n só orquestra e o Sup
 
 1. **O n8n orquestra, não decide.** Esperas, cascata de ofertas, lembretes e rotinas agendadas são o forte do n8n. O filtro de jornada e o ranking ficam numa API em Python, com testes automatizados e versão, chamada por HTTP.
 2. **n8n em modo fila desde o início.** O processo principal recebe gatilhos e webhooks e passa as execuções ao Redis, e os workers as executam; o modo fila exige Redis e um banco de dados, e [o SQLite não é suportado nesse modo](https://docs.n8n.io/deploy/host-n8n/configure-n8n/scaling/enable-queue-mode/). Use um Postgres próprio do n8n na VPS, separado do Supabase. No protótipo, 1 worker basta ([ADR 0009](adr/0009-servidor-so-para-a-apresentacao.md)).
-3. **Supabase como fonte da verdade.** A RLS isola os hospitais, o Realtime alimenta o telão e a Auth cria as sessões da plateia, inclusive com [login anônimo, que o plano gratuito inclui](https://supabase.com/pricing). A chave de serviço só existe no servidor.
+3. **Supabase como fonte da verdade.** A RLS isola os hospitais, e a Auth cria as sessões de coordenadores e médicos. Desde 06/11 a apresentação é guiada pelo Victor: sem login anônimo e sem telão ao vivo no MVP ([roteiro](roteiro-ate-o-mvp.md)). A chave de serviço só existe no servidor.
 4. **LLM só onde há texto livre e sem ferramentas.** Extração da vaga e redação da explicação, com saída em JSON Schema validada em código. O texto da vaga é tratado como dado hostil.
 5. **Ranking com baseline e modelo.** Com dados sintéticos, o modelo aprende as regras do próprio simulador; por isso compare sempre com um baseline heurístico e não apresente a acurácia como evidência real.
 6. **Telegram na prova de conceito, WhatsApp no roadmap.** O WhatsApp [cobra por mensagem de template entregue](https://developers.facebook.com/documentation/business-messaging/whatsapp/pricing) e exige conta Meta verificada e número dedicado; [um guia de mercado](https://qualimero.com/en/blog/whatsapp-business) fala em 2 a 5 dias úteis de verificação, e vale confirmar com a Meta.
@@ -61,8 +61,8 @@ Cada etapa do fluxo tem uma ferramenta principal e uma alternativa; a escolha pr
 
 | Etapa | Recomendação | Alternativa | Observação |
 | --- | --- | --- | --- |
-| Interface (coordenador, médico e telão) | Next.js, Tailwind e shadcn/ui, web responsiva e sem PWA ([ADR 0011](adr/0011-web-responsiva-sem-pwa.md)) | Vite com React | A plateia entra por QR code, sem instalar nada |
-| Login e perfis | Supabase Auth, com login anônimo e persona para a plateia | Magic link por e-mail | O perfil guarda hospital e papel, que a RLS consulta ([ADR 0008](adr/0008-banco-no-supabase.md)) |
+| Interface (coordenador, médico e telão) | Next.js, Tailwind e shadcn/ui, web responsiva e sem PWA ([ADR 0011](adr/0011-web-responsiva-sem-pwa.md)) | Vite com React | Abre no computador e no celular, sem instalar nada |
+| Login e perfis | Supabase Auth; como o Victor entra na demonstração é a decisão D1 do [roteiro](roteiro-ate-o-mvp.md) | Magic link por e-mail | O perfil guarda hospital e papel, que a RLS consulta ([ADR 0008](adr/0008-banco-no-supabase.md)) |
 | Entrada da vaga | Formulário no web app que chama a API ([ADR 0010](adr/0010-api-de-matching.md)) | Telegram | Texto livre, com campos opcionais |
 | Extração dos campos | Gemini 3.1 Flash-Lite (SDK `google-genai`) com saída estruturada (JSON Schema) e validação com Pydantic | As regras, quando o Gemini falha ou demora | Nome, CRM e telefone nunca vão ao modelo; só a camada gratuita, sem gastos, e só texto sintético (ADR 0003) |
 | Filtro de regras | Regras em Python, na API, com a política por hospital em tabela ([ADR 0008](adr/0008-banco-no-supabase.md)) | Funções SQL no Postgres | Determinístico, testável e auditável |
@@ -131,7 +131,7 @@ O mês da apresentação custa entre US$ 34 e US$ 41 (VPS, Supabase Pro e LLM), 
 | Observabilidade de IA | Langfuse Cloud | Plano gratuito | Confirmar os limites do plano gratuito na criação da conta |
 | Mensagens | Bot do Telegram | Sem custo por mensagem | O WhatsApp cobra por template entregue |
 
-O total de US$ 34 a US$ 41 soma VPS (promocional ou na renovação), Supabase Pro e 200 chamadas do Gemini 3.8 Flash (cerca de US$ 0,68); com o Flash-Lite o LLM praticamente some da conta. Se a plateia passar de umas 150 pessoas conectadas ao telão, o Pro deixa de ser opcional por causa do limite de conexões do Realtime.
+O total de US$ 34 a US$ 41 soma VPS (promocional ou na renovação), Supabase Pro e 200 chamadas do Gemini 3.8 Flash (cerca de US$ 0,68); com o Flash-Lite o LLM praticamente some da conta. Com a demonstração guiada (06/11), não há plateia conectada, e o plano gratuito do Supabase basta.
 
 ## Plano de construção até a Etapa 2
 
@@ -151,8 +151,7 @@ Cinco decisões precisam do grupo até a Etapa 2, e quatro riscos pedem plano B 
 **Decisões para o grupo**
 
 - **Quanto vai no n8n:** só orquestração. No primeiro fluxo, ele só espera o prazo e pede para a API avançar, e um teste barra nó de código, de LLM ou de banco ([ADR 0013](adr/0013-aviso-da-api-inicia-a-cascata.md)).
-- **Login da plateia:** sessão anônima com persona sorteada é mais rápido, mas exige limite de requisições contra abuso.
-- **Plano do Supabase:** definir o tamanho da plateia; acima de umas 150 pessoas conectadas ao telão, usar o Pro.
+- **Login da plateia e plano do Supabase:** deixaram de valer em 06/11. A apresentação é guiada, a plateia não usa o sistema e o plano gratuito basta. Como o Victor entra no sistema real é a decisão D1 do [roteiro](roteiro-ate-o-mvp.md).
 - **Região do Supabase:** confirmar São Paulo na criação do projeto, porque a região não se troca depois sem migrar.
 - **Licença do n8n:** se o produto for oferecido a hospitais, [confirmar a arquitetura com a n8n](https://docs.n8n.io/n8n-community-license/community-license/license-faq.md) antes de qualquer piloto.
 
@@ -162,7 +161,7 @@ Cinco decisões precisam do grupo até a Etapa 2, e quatro riscos pedem plano B 
 - **Latência do LLM:** extração e explicação somam segundos por vaga. Mitigação: medir no ensaio e manter o template fixo como alternativa.
 - **Dependência de APIs externas:** LLM e Telegram podem falhar na hora. Mitigação: respostas pré-carregadas e vídeo gravado.
 - **Dados reais e LLM:** com dados reais, só com base legal, termo de uso e acordo de tratamento de dados com o provedor; na prova de conceito, nada real.
-- **Camada gratuita do Gemini:** o Google usa o conteúdo para melhorar produtos e revisores humanos podem lê-lo; por decisão do Victor, o projeto não gasta e fica nessa camada. Mitigação: só o login de coordenador chega ao LLM, e quem o usa é o grupo, com pedidos sintéticos; a plateia não alcança a leitura da vaga; aviso "não digite dados reais" na tela; se a plateia passar a escrever pedidos, a chave sai do servidor antes (ADR 0003).
+- **Camada gratuita do Gemini:** o Google usa o conteúdo para melhorar produtos e revisores humanos podem lê-lo; por decisão do Victor, o projeto não gasta e fica nessa camada. Mitigação: só o login de coordenador chega ao LLM, e quem o usa é o Victor, na demonstração guiada, com pedidos sintéticos; aviso "não digite dados reais" na tela; a chave só fica no servidor no ensaio e no dia (ADR 0003).
 
 ## Fontes consultadas
 

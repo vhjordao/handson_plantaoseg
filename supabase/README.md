@@ -145,4 +145,4 @@ O Victor aprovou começar o banco com a lista de itens. O Claude Code escreveu a
 
 Com o ok do Victor:
 
-1. Criar os perfis de coordenador e médico quando o login da plateia entrar. Até lá, só os logins de teste de `scripts/usuarios-de-teste.py` enxergam algo, na organização de teste.
+1. Criar os logins da demonstração na rede simulada, se o Victor aceitar a decisão D1 do [roteiro](../docs/roteiro-ate-o-mvp.md). Até lá, só os logins de teste de `scripts/usuarios-de-teste.py` enxergam algo, na organização de teste.

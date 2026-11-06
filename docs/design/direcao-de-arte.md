@@ -112,7 +112,7 @@ Escuro (telão e `prefers-color-scheme`): fundo `#0C141C`, papel `#142230`, tint
 └───────────────────────────────────────────────────────────────────────────────┘
 ```
 
-Com `?papel=medico` (o QR do telão) a porta do médico vem primeiro e em destaque.
+Com `?papel=medico` (um link direto) a porta do médico vem primeiro e em destaque.
 
 **Casca do coordenador e Sugestões, 1440 px**
 
@@ -161,7 +161,7 @@ Com `?papel=medico` (o QR do telão) a porta do médico vem primeiro e em destaq
 └──────────────────────────────┘
 ```
 
-**Telão, 1920 × 1080** (ver o desenho do [prompt](prompt-frontend.md), seção 9.5): escuro, tipo × 1,75, etapas em linha com a etapa "Você decide" em verde e contorno contínuo, números ao vivo, QR com `?papel=medico`.
+**Telão, 1920 × 1080** (ver o desenho do [prompt](prompt-frontend.md), seção 9.5): escuro, tipo × 1,75, etapas em linha com a etapa "Você decide" em verde e contorno contínuo, números ao vivo, QR com `?papel=medico`. *(Desde 06/11, números ao vivo e QR saíram do MVP: a apresentação é guiada, e a página do telão fica provisória.)*
 
 ### 2.5 Princípios
 

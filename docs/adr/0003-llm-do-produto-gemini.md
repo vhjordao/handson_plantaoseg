@@ -2,6 +2,7 @@
 
 - **Status:** aceita por decisão do Victor em 28/10/2026.
 - **Atualização de 05/11/2026:** por decisão do Victor, o projeto **não gasta** com o Gemini: fica na camada gratuita, o que substitui a consequência 1. Detalhes na seção "Atualização de 05/11/2026".
+- **Atualização de 06/11/2026:** a apresentação passou a ser guiada, e só o Victor escreve pedidos, sempre sintéticos. As menções à plateia na seção de 05/11 ficam como registro; as salvaguardas continuam valendo para quem tiver o link.
 - **Origem:** o Victor decidiu usar o Gemini, e não o Claude, como modelo de linguagem do produto. O Claude Code continua sendo apenas a ferramenta de desenvolvimento do grupo e não faz parte do produto.
 
 ## Contexto

@@ -29,7 +29,7 @@ O que a IA faz e o que o código faz está em [docs/solucao-ia.md](../../docs/so
 6. Explicação, extração e guardrails; depois a trilha de auditoria e a linha de comando.
 7. Análise exploratória, exemplo trabalhado e CI que roda a PoC inteira.
 8. Fluxo recomendado contra o processo manual (`app/flow.py`): mede tempo até preencher, ofertas por vaga, antecedência e concentração, com as mesmas premissas de tempo do gerador. É o que dá linha de base às metas da Entrega 1.
-9. Revisão às cegas para as entrevistas (`app/blind_review.py`): coordenadores comparam as listas do modelo e do baseline sem saber qual é qual, sobre vagas simuladas e sem dado pessoal.
+9. Revisão às cegas para um piloto futuro (`app/blind_review.py`; as entrevistas foram canceladas em 06/11): coordenadores comparam as listas do modelo e do baseline sem saber qual é qual, sobre vagas simuladas e sem dado pessoal.
 10. Teste de premissas e simulação de lançamento (`app/robustness.py`): refaz o mundo simulado com outras premissas, compara com agregados públicos (`app/public_data.py`) e mede quanto histórico o modelo precisa para superar o baseline.
 11. Exemplo concreto do dicionário (`app/datadict.py`): tabela com nome, tipo, descrição e valores possíveis, com os valores calculados dos dados gerados.
 

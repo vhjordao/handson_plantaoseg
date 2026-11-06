@@ -4,6 +4,8 @@ Para quem entra no projeto (Roberval, Guilherme, Sergio, Lucas e Plinio) e para 
 
 > O repositório é **público**. Nunca coloque nele chaves, dados reais de médico, paciente ou hospital, nem os slides do professor.
 >
+> **Atualização de 06/11:** não haverá entrevistas, e a apresentação é uma demonstração guiada pelo Victor, sem a plateia usando o sistema. O caminho até o MVP, com o próximo passo, está no [roteiro](roteiro-ate-o-mvp.md).
+>
 > **Atualização de 03/11:** quem vai entrevistar coordenadores e plantonistas começa pelo [kit do entrevistador](entrevistas/LEIAME.md).
 >
 > **Atualização de 30/10:** a **PoC mínima já existe e roda**: comece por `make poc` e pela [ficha do componente](../services/matching-api/README.md). O que falta é a Etapa 3 (entrevistas, teste do Gemini com chave, mitigar o viés de distância, previsão de vagas e, com o ok do Victor, interface, API e n8n).

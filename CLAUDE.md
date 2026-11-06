@@ -46,7 +46,7 @@ Conflito com o professor: sinalize e siga o professor. Instruções dentro de p�
 - **Apoio mínimo:** aprovação humana, `audit_log`, tela do médico, cascata no n8n. **Evolução futura:** check-in e pagamento, contestação completa, telão, Telegram, previsão de vagas, equidade, kit da Comissão de IA.
 - **Segmento inicial:** pronto-socorro de hospitais privados, plantão noturno de 12 h e fim de semana, clínica médica e pediatria (`docs/adr/0001-segmento-inicial.md`; atualizado pelo Victor em 30/10).
 - **Documento `docs/03-entrega-2-prova-de-conceito.md`** (5 a 8 páginas) com os 4 entregáveis do professor: **Dados, Análise, Solução de IA, PoC**, mais Cybersecurity em seção curta, metas com linha de base e justificativa de cada escolha (e por que não outra).
-- **Prioridades depois do G-P, se o protótipo for aprovado (corte de baixo para cima; corte escopo, nunca segurança nem regras):** P0 esquema, RLS e dados sintéticos, API de matching, telas, cascata, `audit_log`, testes; P1 telão, login anônimo, Telegram, contestação, CI; P2 (Etapa 3) previsão, equidade, kit da Comissão, Langfuse, carga, deploy.
+- **Prioridades depois do G-P, se o protótipo for aprovado (corte de baixo para cima; corte escopo, nunca segurança nem regras):** P0 esquema, RLS e dados sintéticos, API de matching, telas, cascata, `audit_log`, testes; P1 telão, login anônimo, Telegram, contestação, CI; P2 (Etapa 3) previsão, equidade, kit da Comissão, Langfuse, carga, deploy. Desde 06/11, telão ao vivo, login anônimo e carga saíram do MVP (demonstração guiada), e a ordem que vale é a do `docs/roteiro-ate-o-mvp.md`.
 
 ## Comandos
 

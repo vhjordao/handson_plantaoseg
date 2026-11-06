@@ -55,7 +55,7 @@ Recomendar por ordem **concentra mais** que o processo manual: quem lidera o ran
 
 ## Limites
 
-- O processo manual simulado é uma premissa do grupo e não checa disponibilidade; um coordenador real pode ser melhor ou pior, e só as entrevistas dirão.
+- O processo manual simulado é uma premissa do grupo e não checa disponibilidade; um coordenador real pode ser melhor ou pior, e só dado real dirá.
 - A chance de aceite dos elegíveis é a verdadeira do simulador; no mundo real ela é desconhecida, e o modelo a estima com erro.
 - Vagas sem cobertura próximas de zero no fluxo recomendado dependem dessa premissa e não devem ser lidas como promessa.
 - O tempo de resposta e de expiração das ofertas são parâmetros do gerador (`FIRST_OFFER_DELAY_MINUTES`, `RESPONSE_MEAN_MINUTES`, `DECLINE_SHARE` e `NEXT_OFFER_GAP_MINUTES`).

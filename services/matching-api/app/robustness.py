@@ -2,7 +2,7 @@
 
 Responde ao ponto do feedback da Etapa 2 sobre a falta de dados reais. Não substitui dado real:
 refaz o mundo simulado com outras premissas e mostra quais conclusões dependem de quais delas, o que
-define as perguntas das entrevistas. Tudo é simulação com dados sintéticos.
+mostra o peso de cada premissa sem dado real. Tudo é simulação com dados sintéticos.
 """
 
 from datetime import datetime, timedelta
@@ -355,7 +355,8 @@ def render_robustness(metrics: dict[str, Any]) -> str:
         "",
         "> **Simulação.** Os dados são sintéticos. Este teste não substitui dado real: refaz o "
         "mundo simulado com outras premissas e mostra quais conclusões dependem de quais delas. "
-        "É o que define o que perguntar nas [entrevistas](../entrevistas/LEIAME.md).",
+        "Sem entrevistas (decisão de 06/11), é o que mostra o peso de cada premissa "
+        "declarada.",
         "",
         "## O que resiste e o que não resiste",
         "",
@@ -396,8 +397,8 @@ def render_robustness(metrics: dict[str, Any]) -> str:
         "",
         "![Ganho de tempo conforme o coordenador real](fig-robustez-coordenador.svg)",
         "",
-        "É a premissa que mais pesa, e só as entrevistas a resolvem: quantos médicos o coordenador "
-        "chama até alguém aceitar.",
+        "É a premissa que mais pesa, e só dado real a resolve: quantos médicos o coordenador "
+        "chama até alguém aceitar. Sem entrevistas, ela fica declarada como premissa do grupo.",
         "",
         "## Cenários",
         "",
@@ -433,7 +434,8 @@ def render_robustness(metrics: dict[str, Any]) -> str:
         f"contra o manual fica em {pct(time_cut(calibrated, 'manual'), 0)}. Era esperado: gênero "
         "não entra na fórmula de aceite, e a idade só muda a exposição histórica. Por isso os "
         "agregados públicos corrigem a composição da população, não o comportamento. O estudo "
-        "quase não traz números sobre plantão: o comportamento precisa vir das entrevistas. Os "
+        "quase não traz números sobre plantão: o comportamento precisa de outras fontes "
+        "publicadas ou de um piloto. Os "
         "erros de gênero e idade pesam na auditoria de equidade, não no ranking, que não usa "
         "essas variáveis.",
         "",

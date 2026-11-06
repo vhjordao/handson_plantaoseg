@@ -12,7 +12,7 @@ A Entrega 1 cobre hospitais, várias especialidades, escalas, médicos e funçõ
 A PoC atende um segmento só:
 
 - **Tipo de unidade:** **pronto-socorro de hospitais privados**. Três hospitais privados fictícios de uma mesma rede, cada um com o seu pronto-socorro.
-- **Perfil de escala:** plantão noturno de 12 h (19h às 7h) e plantão de fim de semana. É um recorte de projeto: supomos que sejam perfis de cobertura mais difícil e de maior pressão sobre a regra de jornada, **hipótese a validar nas entrevistas** (não há dado nacional que a comprove).
+- **Perfil de escala:** plantão noturno de 12 h (19h às 7h) e plantão de fim de semana. É um recorte de projeto: supomos que sejam perfis de cobertura mais difícil e de maior pressão sobre a regra de jornada, **hipótese a validar num piloto** (não há dado nacional que a comprove, e as entrevistas foram canceladas em 06/11).
 - **Especialidades:** duas, **clínica médica** e **pediatria** (a vaga de exemplo da demo é um pediatra no pronto-socorro do Hospital Modelo Centro).
 - **Volume sintético:** cerca de 300 médicos, distribuídos nas duas especialidades, com raio e disponibilidade.
 
@@ -23,7 +23,7 @@ Fora do segmento (evolução futura): UPAs e unidades públicas, outras especial
 - O gerador sintético e a vaga de exemplo seguem este recorte.
 - Cada indicador é medido nesse segmento, o que dá a linha de base simulada comparável.
 - Ampliar o segmento é um parâmetro do gerador e uma linha no `policy_config`, não uma reescrita.
-- **Evidência:** o caso público citado na Entrega 1 (Canoas, RS, unidade municipal) não é do segmento privado. Para hospitais privados, a evidência disponível é a de mercado da Flexzo (alegação da própria empresa, não auditada) e as entrevistas planejadas, ainda por fazer. O `docs/03` deve dizer isso com clareza.
+- **Evidência:** o caso público citado na Entrega 1 (Canoas, RS, unidade municipal) não é do segmento privado. Para hospitais privados, a evidência disponível é a de mercado da Flexzo (alegação da própria empresa, não auditada) e as entrevistas planejadas, canceladas em 06/11. O `docs/03` deve dizer isso com clareza.
 - **Comprador:** o cliente é o hospital privado (gestão e financeiro). O desenho não trata de licitação nem de vínculo com o setor público.
 - **Contrato dos médicos:** a plataforma segue neutra quanto ao tipo de contrato (Tema 1.389 do STF pendente); como a forma de contratação em hospitais privados é ponto sensível, **validar com jurídico**.
 

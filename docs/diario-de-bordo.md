@@ -4,6 +4,16 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 06/11/2026 (sexta): o repositório inteiro alinhado às decisões do dia, e o início da fase 1
+
+**Pedido do Victor:** "faça o merge final e atualize todo o GitHub com as novas decisões", e "vamos iniciar a fase 1".
+
+**O que mudou:** cerca de 40 trechos ainda falavam da plateia usando o sistema, do QR code, do login anônimo ou das entrevistas como coisa por fazer. Os ADRs 0002, 0003, 0008, 0009, 0011 e 0014 ganharam uma nota de 06/11 no cabeçalho, e o corpo ficou como registro. A arquitetura, as fichas (servidor, n8n, banco, API, motor e web), segurança, dados em produção, o dicionário, o prompt e a direção de arte foram corrigidos. A página do telão deixou de prometer números ao vivo e QR code. Os textos gerados pela análise, pelo fluxo e pelo teste de premissas trocaram "só as entrevistas dirão" por "só dado real dirá", no código e no documento. A frase de custo da solução de IA ainda dizia que a demonstração usaria a camada paga do Gemini; agora diz que o projeto fica só na gratuita.
+
+**Fase 1:** o Victor responde às decisões D1 a D11 do [roteiro](roteiro-ate-o-mvp.md#6-decisões-que-destravam-o-caminho).
+
+**Uso de IA:** o Claude Code procurou e corrigiu as menções antigas; o Victor decidiu o rumo.
+
 ## 06/11/2026 (sexta): sem entrevistas, dados sintéticos o mais realistas possível
 
 **Decisão do Victor:** "As entrevistas reais não irão acontecer no momento. Vamos ficar com dados sintéticos mesmo, tente ser o mais realista possível."

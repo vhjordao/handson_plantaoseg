@@ -1,6 +1,7 @@
 # ADR 0009: Servidor só para a apresentação: KVM 1 e n8n em modo fila com 1 worker
 
 - **Status:** aceita pelo Victor em 04/11/2026, com o servidor no ar. Ajusta para o protótipo o desenho de infraestrutura do [`docs/02`](../02-arquitetura-e-ferramentas.md), e tira o n8n do adiamento do [ADR 0004](0004-prototipo-adiado.md). A API e os workflows continuam esperando o ok dele. **A decisão 4 foi revista em 04/11/2026 pelo [ADR 0012](0012-editor-do-n8n-na-web.md).**
+- **Atualização de 06/11/2026:** a plateia não usa o sistema (demonstração guiada). O limite de 1 vCPU deixa de ser risco ao vivo: só o Victor chama a API.
 - **Origem:** dois pedidos do Victor em 04/11/2026: "já quero usar a hostinger e tirar tudo da local" e "vou usar só para apresentar o protótipo. Depois vou parar tudo".
 
 ## Contexto

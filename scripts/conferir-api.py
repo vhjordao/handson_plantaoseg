@@ -12,7 +12,7 @@ prazo de teste longo, só confere o começo; com prazo curto (`usuarios-de-teste
 fim. Cada rodada aceita um plantão no dia `--dias` + 1: use outro número na rodada seguinte.
 `limite` confere, sem login, o limite de requisições e o de tamanho do corpo no Traefik.
 `medir` chama a API sem pausa, em níveis crescentes de chamadas simultâneas: é o pior caso, e não o
-uso normal de uma plateia. Sem `--com-escrita`, nada é gravado no banco.
+uso da demonstração guiada. Sem `--com-escrita`, nada é gravado no banco.
 
 Com `--ssh`, as rotas internas são chamadas de dentro do servidor, porque de fora elas nem existem.
 O endereço do servidor fica só na linha de comando, nunca no repositório. Precisa do `httpx`, que

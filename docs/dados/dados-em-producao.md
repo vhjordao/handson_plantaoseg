@@ -45,7 +45,7 @@ Antes de qualquer dado real: base legal, papéis de controlador e operador, term
 | --- | --- | --- | --- | --- |
 | [CFM, consulta de médicos](https://sis.cfm.org.br/listamedicos/informacoes) (Res. CFM 2.309/2022) | Nome, número do CRM, UF, tipo e situação da inscrição, especialidade registrada. Não traz CPF, endereço, telefone nem e-mail | Webservice ou arquivo em lote, com atualização diária | R$ 948 por ano para empresa particular; sem custo para entidade pública | O acesso é direto pelo usuário final, sem empresa intermediária: o contrato talvez precise ser do hospital. Validar com jurídico |
 | [CNES, dados abertos do Ministério da Saúde](https://apidadosabertos.saude.gov.br/cnes/estabelecimentos?limit=1) | Código CNES, tipo de unidade, natureza jurídica, coordenadas, turno e atendimento hospitalar | API pública em JSON | Sem custo | É cadastro de estabelecimentos; o hospital confere o resultado |
-| Sistema de escala do hospital | Vagas, escala fixa e ponto | API ou webhook, se houver; senão, planilha | Depende do fornecedor | As entrevistas dizem quais sistemas existem (pergunta 7 do coordenador) |
+| Sistema de escala do hospital | Vagas, escala fixa e ponto | API ou webhook, se houver; senão, planilha | Depende do fornecedor | O piloto diz quais sistemas existem (pergunta 7 do coordenador, no kit de entrevistas) |
 | Gemini | Extrai campos do texto da vaga e reescreve o motivo | API, com esquema fechado e sem ferramentas | Camada paga, porque a gratuita pode usar o conteúdo para melhorar produtos | Sem nome, CRM nem telefone; com falha, cai nas regras |
 
 Fontes lidas em 03/11/2026. Preços e condições podem mudar: reconferir na contratação.
@@ -66,7 +66,7 @@ Fontes lidas em 03/11/2026. Preços e condições podem mudar: reconferir na con
 
 | Fase | O que acontece | Dados reais? | Portão para avançar |
 | --- | --- | --- | --- |
-| 0. Hoje | Dados sintéticos e entrevistas | Não | Entrevistas e revisão às cegas confirmam a dor e as premissas |
+| 0. Hoje | Dados sintéticos, comparados a fontes públicas onde houver (sem entrevistas, decisão de 06/11) | Não | Entrevistas e revisão às cegas, com o kit pronto, confirmam a dor e as premissas antes do piloto |
 | 1. Piloto em paralelo, 90 dias | O coordenador trabalha como sempre e registra vagas e chamadas. O sistema calcula a recomendação, mas ninguém recebe oferta por ela | Sim, com a base legal da seção 2 | Ofertas por vaga e tempo reais medidos; recomendação melhor que o baseline no teste temporal |
 | 2. Uso assistido | O coordenador aprova as ofertas na ferramenta, com cascata e trilha | Sim | Metas de 6 meses da Etapa 3 |
 | 3. Integração | API ou webhook com escala, ponto e financeiro | Sim | Volume e hospital justificam o custo |
@@ -83,6 +83,6 @@ Fontes lidas em 03/11/2026. Preços e condições podem mudar: reconferir na con
 
 ## 7. Limites
 
-- É um desenho: nada foi validado com hospital, e as entrevistas podem mudar as fases, sobretudo a integração com sistemas de escala.
+- É um desenho: nada foi validado com hospital, e as entrevistas, quando houver, podem mudar as fases, sobretudo a integração com sistemas de escala.
 - Os responsáveis são os papéis prováveis; cada hospital define os seus.
 - As afirmações sobre CFM, CNES, LGPD e resoluções citam o que foi lido em 03/11/2026 e não substituem parecer jurídico.

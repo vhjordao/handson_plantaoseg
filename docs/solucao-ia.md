@@ -86,7 +86,7 @@ A diferença modelo menos baseline é de 3,5 pontos percentuais (erro-padrão 0,
 
 **Fallback:** sem chave, com falha do serviço ou com resposta inválida, a extração usa as regras e a explicação usa o texto fixo; a recomendação nunca depende do LLM.
 
-**Custo estimado:** 200 chamadas de 2.000 tokens de entrada e 500 de saída custam cerca de US$ 0,37 no Flash-Lite e US$ 0,68 no 3.8 Flash (preços do Google lidos em 28/10/2026; a saída inclui tokens de raciocínio e pode ser maior). A camada gratuita só recebe dado sintético; a demo com plateia usa a paga (ADR 0003).
+**Custo estimado:** 200 chamadas de 2.000 tokens de entrada e 500 de saída custam cerca de US$ 0,37 no Flash-Lite e US$ 0,68 no 3.8 Flash (preços do Google lidos em 28/10/2026; a saída inclui tokens de raciocínio e pode ser maior). O projeto fica só na camada gratuita, sem faturamento, e ela só recebe texto sintético (ADR 0003, atualização de 05/11).
 
 ## 5. Contestação e avaliação de impacto (desenho)
 

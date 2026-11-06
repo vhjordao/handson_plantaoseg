@@ -5,7 +5,7 @@
 
 ## 1. O que é e qual dor resolve
 
-É o computador que mantém ligados o n8n e a API, para a plateia usar o sistema pelo celular (**apoio**, [ADR 0002](../docs/adr/0002-escopo-da-poc.md)). Não ataca sozinho nenhuma dor: é onde a cascata de ofertas vai rodar sem depender da máquina de ninguém.
+É o computador que mantém ligados o n8n e a API, para a demonstração guiada da apresentação usar o sistema real (**apoio**, [ADR 0002](../docs/adr/0002-escopo-da-poc.md)). Não ataca sozinho nenhuma dor: é onde a cascata de ofertas vai rodar sem depender da máquina de ninguém.
 
 ## 2. Como funciona
 
@@ -165,7 +165,7 @@ Depois de fechar a API pública do n8n, no mesmo dia:
 ## 9. Limitações e honestidade
 
 - **Carga, primeira medição.** Nas rotas com login, a CPU limita em cerca de 270 chamadas por segundo. No fluxo que grava, chegamos a 31,9 por segundo com o servidor em 54%. Foi de uma máquina só, sem pausa e sem o n8n trabalhando ([resultado](../docs/resultados/metricas-carga-api.md)). Repetir antes de 13/11, com as telas e os celulares.
-- **Limite por IP.** A plateia no mesmo Wi-Fi pode sair por um único IP e dividir as 30 chamadas por segundo. O valor se ajusta por `API_RATE_AVERAGE` e `API_RATE_BURST`, no `.env`, seguidos de `docker compose up -d --no-deps matching-api`.
+- **Limite por IP.** Na demonstração guiada só o Victor chama a API, bem abaixo das 30 chamadas por segundo. O valor se ajusta por `API_RATE_AVERAGE` e `API_RATE_BURST`, no `.env`, seguidos de `docker compose up -d --no-deps matching-api`.
 - **Chave do Supabase.** O `.env` usa a `service_role`, que o Supabase marca como `legacy`, porque a `sb_secret` ficou em cerca de 50 chamadas por segundo ([ADR 0010](../docs/adr/0010-api-de-matching.md)).
 - **Editor do n8n na internet.** Antes do login, nada o protege além da versão fixa (2.46.5) e do limite de tentativas. Quem entrar no editor controla os workflows e as credenciais do n8n. O MFA e a senha longa são do Victor. O limite do próprio n8n é por e-mail: quem souber o e-mail do administrador pode mantê-lo travado, e uma senha extra no Traefik resolveria ([ADR 0012](../docs/adr/0012-editor-do-n8n-na-web.md)).
 - **A API pública do n8n (`/api/v1`) só responde por dentro.** O link da documentação dela, nas configurações do n8n, não abre pela web, e uma ferramenta externa com chave precisaria do túnel. Nenhuma chave foi criada.
