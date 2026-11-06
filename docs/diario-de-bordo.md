@@ -4,6 +4,18 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 06/11/2026 (sexta): três pedidos novos no roteiro
+
+**Pedidos do Victor:** melhorar o frontend por completo, da página inicial às telas de dentro; rever a entrada, que agora deve funcionar só com login; e deixar o Gemini ligado, sempre sem gerar custos.
+
+**Como entraram no [roteiro](roteiro-ate-o-mvp.md):**
+
+- **3.7, só login:** a entrada fica com e-mail e senha; saem as portas por persona e o cartão do telão. O modo de demonstração continua só como plano B, por um link discreto e pelo aviso de indisponível.
+- **3.8, Gemini ligado:** a chave vai para o `.env` do servidor e fica até o fim do projeto, com um teto diário de chamadas abaixo da cota gratuita. Antes, o Victor confirma que o projeto continua sem faturamento ([ADR 0003](adr/0003-llm-do-produto-gemini.md), atualização de 06/11). A chave não vai à Vercel, ao navegador nem ao Git.
+- **Trilha F, o frontend por completo:** começa por uma direção visual que o Victor aprova (F.1) e anda junto das fases 4 e 6, para as telas novas nascerem no visual novo.
+
+**Uso de IA:** o Claude Code encaixou os pedidos no roteiro e no ADR; nada foi executado ainda.
+
 ## 06/11/2026 (sexta): o rodízio no servidor (imagem 0.4.0)
 
 **Pedido do Victor:** "Merge e publicar", para o PR #32.

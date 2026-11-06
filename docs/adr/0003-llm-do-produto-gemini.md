@@ -76,6 +76,16 @@ Páginas do Google, com a data "Last updated 2026-10-28 UTC" nas de modelos e pr
 
 O resultado do teste está em [`docs/teste-manual-gemini.md`](../teste-manual-gemini.md). **O serviço pode falhar na hora da apresentação:** uma chamada de conferência (`--rapido`) diz como ele está. Se estiver fora, tira-se a chave do `.env` do servidor, e a API volta às regras.
 
+## Atualização de 06/11/2026: ligado no sistema real, ainda em custo zero
+
+**Decisão do Victor:** "Quero deixar o Gemini ligado na main, mas sempre sem gerar custos." A chave deixa de entrar só no ensaio e no dia: vai para o `.env` do servidor e fica até o fim do projeto (passo 3.8 do [roteiro](../roteiro-ate-o-mvp.md)). Tudo o que garante o custo zero acima continua valendo.
+
+- **Onde a chave fica:** só no `.env` do servidor, com permissão 600, lido pelo contêiner da API. Não vai para a Vercel, para o navegador, para o Git nem para a resposta da API. A web fala com a API pela rota do próprio site ([ADR 0016](0016-modo-real-pela-rota-do-site.md)), e o modo de demonstração nem chama a API.
+- **Quem alcança o Gemini:** só a leitura da vaga, que pede login de coordenador. Os logins da demonstração estão só com o Victor.
+- **Por que segue sem custo:** o projeto da chave não tem conta de faturamento, e o Victor confere isso antes de ligar e antes do ensaio. Passando da cota, o Gemini recusa, e a leitura segue pelas regras.
+- **O que muda no código:** um teto diário de chamadas na API, abaixo da cota gratuita, para um uso fora do roteiro não gastar a cota do dia da apresentação. A reescrita dos motivos continua desligada.
+- **Ao fim do projeto:** a linha sai do `.env` do servidor, e a chave é apagada no AI Studio (10.1).
+
 ## Pendências
 
 - ~~Confirmar a interface do SDK~~: conferida em 05/11, contra o SDK 2.32.0 e o serviço real.

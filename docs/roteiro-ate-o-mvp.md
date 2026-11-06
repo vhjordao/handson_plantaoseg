@@ -10,12 +10,14 @@ O mapa de tudo o que falta para o PlantãoSeguro funcionar de ponta a ponta, do 
 
 ## 1. Próximo passo
 
-**A fase 1 terminou em 06/11:** o Victor aprovou as onze decisões como recomendadas ([ADR 0015](adr/0015-decisoes-que-destravam-o-mvp.md)). Agora podem andar ao mesmo tempo:
+**Em 06/11 o Victor acrescentou três pedidos:** só login na entrada (3.7), o Gemini ligado no sistema real, sempre em custo zero (3.8), e o frontend revisto por completo, da página inicial às telas de dentro ([trilha F](#trilha-f-o-frontend-por-completo)). A ordem agora:
 
-1. **Victor: conferir a jornada do coordenador no sistema real (3.6).** Em `/entrar`, "Entrar no sistema real" com `coordenador.demo`: escrever um pedido, conferir os campos, ver as sugestões e aprovar. A vaga precisa aparecer na lista e, no banco, com a trilha. É o "pronto quando" da fase 3, e só ele tem as senhas.
-2. **Claude Code: a [fase 4](#fase-4-a-tela-do-médico-e-a-cascata-na-tela),** a tela do médico e a cascata na tela, assim que a 3.6 estiver conferida.
-3. **Victor: enviar a Entrega 3 (07/11).** O documento e o PDF de 12 páginas estão na `main` desde o PR #25 ([E.1 a E.8](#5-trilha-da-entrega-3-em-paralelo)); o envio é dele.
-4. **Colegas:** o teste de usabilidade da tarefa do coordenador, que já está no link público, se o grupo puder fazer ([E.2](#5-trilha-da-entrega-3-em-paralelo)).
+1. **Victor: enviar a Entrega 3 (07/11).** O documento e o PDF de 12 páginas estão na `main` desde o PR #25 ([E.1 a E.8](#5-trilha-da-entrega-3-em-paralelo)).
+2. **Victor: conferir a jornada do coordenador no sistema real (3.6).** Em `/entrar`, "Entrar no sistema real" com `coordenador.demo`: escrever um pedido, conferir os campos, ver as sugestões e aprovar. A vaga precisa aparecer na lista e na trilha. É o "pronto quando" da fase 3, e só ele tem as senhas.
+3. **Claude Code: a entrada só com login (3.7) e o Gemini ligado (3.8).** São pequenos e mudam o que se vê ao entrar. O 3.8 começa depois de o Victor confirmar no AI Studio que o projeto da chave continua sem faturamento.
+4. **Victor: aprovar a direção visual (F.1).** O Claude Code propõe a direção com a página inicial, a entrada e uma tela de dentro como amostra; o resto do frontend segue a direção aprovada.
+5. **Claude Code: a [fase 4](#fase-4-a-tela-do-médico-e-a-cascata-na-tela)** (tela do médico e cascata na tela), já no visual novo (F.6).
+6. **Colegas:** o teste de usabilidade da tarefa do coordenador, se o grupo puder fazer ([E.2](#5-trilha-da-entrega-3-em-paralelo)).
 
 ## 2. Onde estamos
 
@@ -25,7 +27,7 @@ O mapa de tudo o que falta para o PlantãoSeguro funcionar de ponta a ponta, do 
 | Banco (tabelas, RLS, trilha só de inserção, dados sintéticos) | No Supabase | [ficha](../supabase/README.md) |
 | API de matching, com HTTPS | No servidor, imagem 0.4.0 (fase 2 e o rodízio entre equivalentes da 7.2) | [ficha](../services/matching-api/app/api/README.md) |
 | n8n e a cascata de ofertas | No servidor, conferida de ponta a ponta pela API | [ficha](../n8n/README.md) |
-| Gemini | Pronto em custo zero; a chave só entra no ensaio e no dia | [ADR 0003](adr/0003-llm-do-produto-gemini.md) |
+| Gemini | Pronto em custo zero, ainda sem a chave no servidor; em 06/11 o Victor decidiu deixá-lo ligado, sempre sem custo (3.8) | [ADR 0003](adr/0003-llm-do-produto-gemini.md) |
 | Decisões D1 a D11 | Aprovadas pelo Victor em 06/11 | [ADR 0015](adr/0015-decisoes-que-destravam-o-mvp.md) |
 | Web: página inicial, entrada sem senha, lista de vagas, nova vaga, sugestões e decisão | No link público, no modo de demonstração e, com o login da demonstração, no sistema real | [ficha](../apps/web/README.md) |
 | Web: médico, auditoria, contestações e equidade | Ainda "em construção" | |
@@ -82,8 +84,10 @@ O adaptador `live` liga a web ao sistema real.
 - [x] **3.4** Se a API não responder, a tela oferece o modo de demonstração. *Feito em 06/11: um aviso leva ao modo de demonstração com um clique.*
 - [x] **3.5** O relógio do cabeçalho vem do sistema, não de um valor fixo. *Feito em 06/11.*
 - [ ] **3.6** A jornada do coordenador, que hoje roda na demonstração, passa a rodar no `live`, com a urgência exigida no pedido (D10).
+- [ ] **3.7** *Pedido do Victor em 06/11.* A entrada passa a ser só com login: e-mail e senha para o coordenador e para os médicos, e o papel vem do perfil. Saem da entrada as portas por persona e o cartão do telão. O modo de demonstração continua como plano B (3.4 e 5.4), por um link discreto na entrada ("O sistema não responde? Usar o modo de demonstração") e pelo aviso de indisponível. A página inicial e a ajuda passam a apontar para o login.
+- [ ] **3.8** *Pedido do Victor em 06/11: "Gemini ligado, mas sempre sem gerar custos".* A chave vai para o `.env` do servidor e fica lá até o fim do projeto (10.1). Antes, o Victor confirma no AI Studio que o projeto continua sem faturamento. A API ganha um teto diário de chamadas, abaixo da cota gratuita; passando dele, a leitura segue pelas regras, sem erro na tela. A reescrita dos motivos continua desligada. Conferir com uma chamada (`--rapido`), a memória com `docker stats` e um pedido de ponta a ponta pela tela.
 
-**Pronto quando:** a mesma jornada do coordenador passa nos dois modos, e uma vaga criada pela web aparece no banco e na trilha.
+**Pronto quando:** a mesma jornada do coordenador passa nos dois modos, e uma vaga criada pela web aparece no banco e na trilha. Com o 3.7 e o 3.8: a entrada só aceita login, e o pedido escrito na tela é lido pelo Gemini, ou pelas regras se ele falhar.
 
 ### Fase 4: a tela do médico e a cascata na tela
 
@@ -119,13 +123,28 @@ Esta fase **não depende das anteriores** e pode começar já.
 
 **Por que importa:** os 10% mais recomendados ocupam 50,7% do top-5, contra 31,1% no processo manual (simulação). É o maior risco ético medido. Com o rodízio de 10 pontos, os 10% mais expostos passam de 82,1% para 35,7% das ofertas e de 50,7% para 28,5% dos lugares do top-5, com 1,8 ponto a menos de chance de sucesso e 2 minutos a mais por vaga.
 
+### Trilha F: o frontend por completo
+
+*Pedido do Victor em 06/11: "melhorar o frontend por completo, desde a landing page até as páginas de dentro do produto".* Anda junto das fases 4 e 6: as telas novas já nascem no visual novo, e as que existem são refeitas por cima. Não muda regra nem dado: a decisão humana, os rótulos de simulação, a acessibilidade e o modo de demonstração continuam.
+
+- [ ] **F.1** Direção visual: o Claude Code propõe paleta, tipografia, componentes e o tom da marca, com a página inicial, a entrada e uma tela de dentro como amostra. O Victor aprova ou pede ajuste. Ele pode mandar referências e o que mais o incomoda hoje.
+- [ ] **F.2** A base: cores e espaços como variáveis, tipografia, componentes e as cascas do coordenador e do médico, nos temas claro e escuro.
+- [ ] **F.3** A página inicial e a ajuda, contando o produto como a apresentação conta.
+- [ ] **F.4** A entrada só com login (junto do 3.7).
+- [ ] **F.5** As telas do coordenador: lista de vagas, nova vaga, sugestões e decisão.
+- [ ] **F.6** As telas do médico (junto da fase 4).
+- [ ] **F.7** Auditoria, contestações e equidade (junto da fase 6).
+- [ ] **F.8** Celular, teclado, leitor de tela e Lighthouse em todas as telas (junto do 8.6).
+
+**Pronto quando:** todas as telas seguem a direção aprovada, nos dois temas e no celular, e os testes de jornada e de acessibilidade continuam passando.
+
 ### Fase 8: pronto para o palco
 
 - [ ] **8.1** Cabeçalhos de segurança na web e no Traefik, e o endereço do site no Supabase (`site_url`).
 - [ ] **8.2** MFA no n8n e a renovação do servidor desligada (Victor).
 - [ ] **8.3** O caminho completo testado no servidor, do jeito do roteiro, inclusive a cascata com o prazo curto.
 - [ ] **8.4** Reiniciar o servidor e conferir que tudo volta sozinho.
-- [ ] **8.5** Gemini no ensaio: chave no servidor, conferência de uma chamada e memória com `docker stats` ([passo a passo](../infra/README.md)).
+- [ ] **8.5** Gemini no ensaio: a chave já está no servidor desde o 3.8; conferir uma chamada, o teto do dia e a memória com `docker stats` ([passo a passo](../infra/README.md)), e o que fazer se ele cair (a leitura segue pelas regras).
 - [ ] **8.6** Acessibilidade e Lighthouse nas telas novas, e ensaio nos aparelhos da apresentação.
 - [ ] **8.7** Plano B: vídeo gravado do roteiro inteiro e o modo de demonstração pronto para trocar.
 - [ ] **8.8** Limpar os dados de teste do banco (Victor roda `usuarios-de-teste.py limpar`).
@@ -181,12 +200,14 @@ O documento acadêmico anda junto com o produto e usa o que ele mede.
 - Antes do ensaio, apagar o que o login da demonstração publicou: `limpar-demonstracao`; depois da apresentação, `remover-demonstracao`.
 - Ligar o MFA do n8n e conferir no painel que a renovação do servidor está desligada.
 - Rodar `usuarios-de-teste.py limpar` antes do ensaio e `remover` depois da apresentação.
+- Confirmar no AI Studio que o projeto da chave do Gemini continua sem faturamento, antes do 3.8 e antes do ensaio.
+- Aprovar a direção visual (F.1).
 - Dar o ok de cada merge e de cada publicação no servidor.
 
 ## 8. Fora do MVP
 
 - **A plateia usando o sistema:** QR code, persona sorteada, login anônimo e teste de carga com muita gente. A apresentação é guiada.
-- **O telão ao vivo.** A página provisória do telão continua no site, sem dados ao vivo.
+- **O telão ao vivo.** Com o 3.7, o cartão do telão sai da entrada.
 - Telegram, check-in, pagamento, kit da Comissão de IA e Langfuse ficam como evolução futura ([ADR 0002](adr/0002-escopo-da-poc.md)).
 - A previsão de vagas só entra se sobrar tempo, e só no documento.
 - As entrevistas com coordenadores e plantonistas e a revisão às cegas das recomendações. O kit fica para um piloto futuro.
@@ -196,6 +217,7 @@ O documento acadêmico anda junto com o produto e usa o que ele mede.
 | Risco | Resposta |
 | --- | --- |
 | Tempo curto para as fases 2 a 6 | Cortar nesta ordem: equidade com a contagem do sistema (fica só a simulação), resposta da contestação pelo coordenador (fica só a abertura), "Minha conta" do médico. **Nunca cortar:** a decisão humana, a cascata, a acessibilidade básica e o modo de demonstração |
+| O frontend novo competir com as fases 4 e 6 pelo mesmo tempo | A direção visual (F.1) sai antes, para as telas novas nascerem nela. Se apertar, as telas que menos aparecem na fala (auditoria e contestações) ficam só com a base nova (cores, tipografia e componentes), sem layout novo |
 | Servidor ou serviço externo cair ao vivo | Modo de demonstração na web, vídeo gravado e a leitura por regras no lugar do Gemini |
 | Conduzir sozinho e errar um passo ao vivo | Roteiro escrito, ensaio cronometrado e o estado de partida conferido antes de começar |
 | A cascata andar fora do tempo da fala | Prazo curto (D6) e o roteiro dizendo em que momento esperar e em que momento recusar |
