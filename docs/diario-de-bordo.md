@@ -4,6 +4,17 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 06/11/2026 (sexta): fase 2, a contestação e o prazo de 2 minutos
+
+**O que ficou pronto (passos 2.5 e 2.7):**
+
+- **Contestação (D8):** tabela `contestations` sob RLS. O médico lê as próprias, e o coordenador, as da organização; ninguém escreve pelo navegador. A API abre (`POST /offers/{id}/contest`, só o médico da oferta, uma por oferta) e responde (`POST /contestations/{id}/answer`, só o coordenador da organização, uma vez). O texto vai para a tabela sem CRM, telefone, e-mail nem documento; a trilha guarda só códigos e IDs (`contestation_opened` e `contestation_answered`). Com isso, a tela não tem mais nenhuma ação "só do desenho".
+- **Prazo de 2 minutos (D6):** uma migração muda o prazo da oferta só na rede simulada. A simulação e as métricas publicadas continuam com 60.
+
+**Testes:** 11 da contestação na API e um teste de banco novo (`03_contestacao_test.sql`, 11 casos: uma por oferta, regras da resposta, quem lê e quem não escreve).
+
+**Uso de IA:** o Claude Code escreveu a migração, as rotas e os testes a partir do contrato da tela; o Victor autorizou a fase.
+
 ## 06/11/2026 (sexta): fase 2, a API completa o contrato da tela do coordenador
 
 **Pedido do Victor:** "Todos os merges feitos, tem meu ok. Siga para a fase 2, está autorizado a já executar." Os PRs #24 e #25 entraram na `main` com a CI verde.

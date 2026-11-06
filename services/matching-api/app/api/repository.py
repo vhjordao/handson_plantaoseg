@@ -84,6 +84,21 @@ SHORTLIST_COLUMNS = ("doctor_id", "rank", "alerts")
 EXCLUSION_COLUMNS = ("id",)
 # Da trilha, a API lê a decisão do coordenador e os pulos: quem, quando e o quê.
 APPROVAL_COLUMNS = ("seq", "occurred_at", "actor_pseudo_id", "action", "entity_id", "details")
+CONTESTATION_COLUMNS = (
+    "id",
+    "protocol",
+    "organization_id",
+    "offer_id",
+    "shift_id",
+    "doctor_id",
+    "reason",
+    "text",
+    "status",
+    "answer_text",
+    "answered_by",
+    "created_at",
+    "answered_at",
+)
 
 # Tudo o que a API pode ler. Um teste confere com as migrações e com a neutralidade econômica.
 READ_COLUMNS: dict[str, tuple[str, ...]] = {
@@ -99,6 +114,7 @@ READ_COLUMNS: dict[str, tuple[str, ...]] = {
     "recommendations": SHORTLIST_COLUMNS,
     "recommendation_exclusions": EXCLUSION_COLUMNS,
     "audit_log": APPROVAL_COLUMNS,
+    "contestations": CONTESTATION_COLUMNS,
 }
 
 
@@ -252,8 +268,7 @@ class Repository:
             raise RuntimeError("o banco não tem política de jornada: a carga rodou?")
         dataset = Dataset(
             organizations=[
-                organization_from_row(row)
-                for row in select("organizations", ORGANIZATION_COLUMNS)
+                organization_from_row(row) for row in select("organizations", ORGANIZATION_COLUMNS)
             ],
             units={row["id"]: unit_from_row(row) for row in select("units", UNIT_COLUMNS)},
             doctors={row["id"]: doctor_from_row(row) for row in select("doctors", DOCTOR_COLUMNS)},
@@ -282,15 +297,11 @@ class Repository:
         return Profile(row["id"], row["role"], row["organization_id"], row["doctor_id"])
 
     def shift(self, shift_id: str) -> Shift | None:
-        rows = self._rest.select(
-            "shifts", SHIFT_COLUMNS, filters={"id": f"eq.{shift_id}"}, limit=1
-        )
+        rows = self._rest.select("shifts", SHIFT_COLUMNS, filters={"id": f"eq.{shift_id}"}, limit=1)
         return shift_from_row(rows[0]) if rows else None
 
     def offer(self, offer_id: str) -> Offer | None:
-        rows = self._rest.select(
-            "offers", OFFER_COLUMNS, filters={"id": f"eq.{offer_id}"}, limit=1
-        )
+        rows = self._rest.select("offers", OFFER_COLUMNS, filters={"id": f"eq.{offer_id}"}, limit=1)
         return offer_from_row(rows[0]) if rows else None
 
     def offers_of_shift(self, shift_id: str) -> list[Offer]:
@@ -423,6 +434,41 @@ class Repository:
             ],
         )
         self._rest.insert("recommendation_exclusions", exclusions)
+
+    def contestation(self, contestation_id: str) -> dict[str, Any] | None:
+        rows = self._rest.select(
+            "contestations",
+            CONTESTATION_COLUMNS,
+            filters={"id": f"eq.{contestation_id}"},
+            limit=1,
+        )
+        return rows[0] if rows else None
+
+    def contestation_of_offer(self, offer_id: str) -> dict[str, Any] | None:
+        rows = self._rest.select(
+            "contestations", CONTESTATION_COLUMNS, filters={"offer_id": f"eq.{offer_id}"}, limit=1
+        )
+        return rows[0] if rows else None
+
+    def add_contestation(self, row: dict[str, Any]) -> dict[str, Any]:
+        return self._rest.insert("contestations", [row], returning=CONTESTATION_COLUMNS)[0]
+
+    def answer_contestation(
+        self, contestation_id: str, *, text: str, answered_by: str, now: datetime
+    ) -> dict[str, Any] | None:
+        """Responde só se ainda estiver aberta: duas respostas ao mesmo tempo não se sobrepõem."""
+        rows = self._rest.update(
+            "contestations",
+            {
+                "status": "answered",
+                "answer_text": text,
+                "answered_by": answered_by,
+                "answered_at": db_from_local(now),
+            },
+            filters={"id": f"eq.{contestation_id}", "status": "eq.open"},
+            returning=CONTESTATION_COLUMNS,
+        )
+        return rows[0] if rows else None
 
     def add_audit(self, rows: Sequence[dict[str, Any]]) -> None:
         self._rest.insert("audit_log", rows)

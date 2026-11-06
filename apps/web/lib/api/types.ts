@@ -72,14 +72,16 @@ export const ACOES_AUDITORIA_BACKEND = [
   "recommendation_rejected",
   "recommendation_restored",
   "explanation_feedback",
+  "contestation_opened",
+  "contestation_answered",
   "offer_sent",
   "offer_accepted",
   "offer_declined",
   "offer_expired",
   "shift_uncovered",
 ] as const;
-/** Ações do desenho (a contestação), ainda sem backend. */
-export const ACOES_AUDITORIA_DESENHO = ["contestation_opened", "contestation_answered"] as const;
+/** Ações do desenho ainda sem backend. Desde a fase 2 (06/11), nenhuma. */
+export const ACOES_AUDITORIA_DESENHO = [] as const;
 export const AcaoAuditoriaSchema = z.enum([
   ...ACOES_AUDITORIA_BACKEND,
   ...ACOES_AUDITORIA_DESENHO,

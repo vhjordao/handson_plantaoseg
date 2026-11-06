@@ -24,6 +24,8 @@ ACTIONS = frozenset(
         "recommendation_rejected",
         "recommendation_restored",
         "explanation_feedback",
+        "contestation_opened",
+        "contestation_answered",
         "offer_sent",
         "offer_accepted",
         "offer_declined",

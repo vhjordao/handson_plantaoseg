@@ -16,8 +16,11 @@ from app.api.errors import ApiError
 from app.api.repository import Profile
 from app.api.schemas import (
     AdvanceOut,
+    AnswerIn,
     ApproveIn,
     CandidateOut,
+    ContestationOut,
+    ContestIn,
     DecisionOut,
     ExceptionOut,
     ExclusionOut,
@@ -52,6 +55,7 @@ from app.api.service import (
     ranking_features,
     rounded_contributions,
 )
+from app.api.tempo import local_from_db
 from app.llm.extraction import FIELD_KEYS
 from app.models import Offer, Shift
 from app.rules import RULE_TEXTS
@@ -359,6 +363,39 @@ def respond_offer(offer_id: UUID, body: RespondIn, profile: Doctor, service: Ser
     return RespondOut(
         offer=_offer_out(offer), shift_status=status, next=_step_out(step) if step else None
     )
+
+
+def _contestation_out(row: dict) -> ContestationOut:
+    return ContestationOut(
+        id=row["id"],
+        protocol=row["protocol"],
+        offer_id=row["offer_id"],
+        shift_id=row["shift_id"],
+        doctor_id=row["doctor_id"],
+        reason=row["reason"],
+        text=row["text"],
+        status=row["status"],
+        created_at=local_from_db(row["created_at"]),
+        answer_text=row["answer_text"],
+        answered_by=row["answered_by"],
+        answered_at=local_from_db(row["answered_at"]) if row["answered_at"] else None,
+    )
+
+
+@router.post("/offers/{offer_id}/contest", response_model=ContestationOut, status_code=201)
+def contest_offer(
+    offer_id: UUID, body: ContestIn, profile: Doctor, service: Service
+) -> ContestationOut:
+    """O médico contesta a recomendação da própria oferta (D8). Uma contestação por oferta."""
+    return _contestation_out(service.contest(profile, str(offer_id), body.reason, body.text))
+
+
+@router.post("/contestations/{contestation_id}/answer", response_model=ContestationOut)
+def answer_contestation(
+    contestation_id: UUID, body: AnswerIn, profile: Coordinator, service: Service
+) -> ContestationOut:
+    """O coordenador responde por escrito; a resposta e a trilha ficam para a auditoria."""
+    return _contestation_out(service.answer_contestation(profile, str(contestation_id), body.text))
 
 
 @router.post(

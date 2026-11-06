@@ -12,7 +12,7 @@ O mapa de tudo o que falta para o PlantãoSeguro funcionar de ponta a ponta, do 
 
 **A fase 1 terminou em 06/11:** o Victor aprovou as onze decisões como recomendadas ([ADR 0015](adr/0015-decisoes-que-destravam-o-mvp.md)). Agora podem andar ao mesmo tempo:
 
-1. **Claude Code: o resto da [fase 2](#fase-2-banco-e-api-completam-o-contrato).** A API já tem o contrato da tela do coordenador (2.1 a 2.4); falta a contestação (2.5), os logins (2.6), o prazo de 2 minutos (2.7) e publicar no servidor (2.8).
+1. **Claude Code: o resto da [fase 2](#fase-2-banco-e-api-completam-o-contrato).** A API já tem o contrato da tela do coordenador e a contestação (2.1 a 2.5), e o prazo de 2 minutos está em migração (2.7); faltam os logins (2.6) e publicar no servidor (2.8).
 2. **Victor:** quando o passo 2.6 estiver pronto, rodar o comando que cria os logins da demonstração e guardar as senhas. É a parte dele na fase 2.
 3. **Entrega 3, o prazo mais próximo e a prioridade escolhida pelo Victor em 06/11:** o documento está corrigido, com o experimento da concentração e as fontes públicas, e o PDF tem 12 páginas ([E.1 a E.8](#5-trilha-da-entrega-3-em-paralelo)). Falta o Victor revisar e autorizar o merge. Depois, a fase 2.
 4. **Colegas:** o teste de usabilidade da tarefa do coordenador, que já está no link público, se o grupo puder fazer ([E.2](#5-trilha-da-entrega-3-em-paralelo)).
@@ -65,9 +65,9 @@ A API hoje faz o fluxo principal, mas a tela pede coisas que ela ainda não tem 
 - [x] **2.2** Pular e desfazer o pulo, por nome, e o "Esta explicação ajudou?" (D3). *Feito em 06/11, com o estado da decisão para a tela voltar igual.*
 - [x] **2.3** *Feito em 06/11.* A leitura devolve, para cada campo, se está no texto ou foi deduzida, e o trecho. As sugestões devolvem a contribuição de cada variável e a evidência de quem ficou de fora.
 - [x] **2.4** O coordenador lê a política e a ficha do modelo. *Feito em 06/11.*
-- [ ] **2.5** Contestação: tabela, RLS e rotas para o médico abrir e o coordenador responder, com as ações `contestation_opened` e `contestation_answered` na trilha (D8).
+- [x] **2.5** *Feito em 06/11.* Contestação: tabela, RLS e rotas para o médico abrir e o coordenador responder, com as ações `contestation_opened` e `contestation_answered` na trilha (D8).
 - [ ] **2.6** Os logins da demonstração na rede simulada, com e-mail e senha: um coordenador e três médicos que a vaga do roteiro recomenda (D1). O script fica pronto, e quem roda o comando é o Victor.
-- [ ] **2.7** Prazo de 2 minutos por oferta na organização da demonstração (D6).
+- [x] **2.7** Prazo de 2 minutos por oferta na organização da demonstração (D6). *Feito em 06/11, por migração: vale quando ela for aplicada no 2.8.*
 - [ ] **2.8** Publicar no servidor e conferir com `conferir-api.py`.
 
 **Pronto quando:** cada rota nova tem teste, a neutralidade continua passando e a ficha da API mostra o contrato novo.

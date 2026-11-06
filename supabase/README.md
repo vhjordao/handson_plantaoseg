@@ -43,6 +43,8 @@ O navegador só lê, sob RLS. A API escreve, com a chave de serviço. As decisõ
 | `migrations/*_fecha_funcao_rls_auto_enable.sql` | Fecha a execução de uma função criada pelo painel | Só existe no projeto real: a CI não a vê, daí a condição |
 | `migrations/*_acoes_de_oferta.sql` | Põe a cascata na trilha: oferta enviada, aceita, recusada e expirada, e vaga descoberta | `ADD VALUE`: não muda nada do que já existe |
 | `migrations/*_contrato_da_tela.sql` | Pulo desfeito e feedback da explicação na trilha; contribuições gravadas com a recomendação e evidência com a exclusão (fase 2, 06/11) | `contributions` tem a mesma lista fechada de `features`: o valor do plantão não cabe |
+| `migrations/*_contestacao.sql` | A contestação do médico e a resposta do coordenador (D8): tabela, RLS e ações na trilha | Uma por oferta; o navegador só lê, e só a API abre e responde |
+| `migrations/*_prazo_da_demonstracao.sql` | Prazo de 2 minutos por oferta na rede simulada (D6) | Só o sistema no ar; a simulação continua com 60. Refazer a carga volta para 60 |
 | `tests/*.sql` | Testes em pgTAP | `02_rls_test.sql` descreve o cenário com dois hospitais e quatro médicos |
 | `../scripts/carregar-amostra-banco.sql` | Carrega a amostra e desfaz tudo no fim | Prova que os dados gerados cabem nas regras |
 | `../services/matching-api/app/seed_db.py` | Gera o arquivo da carga, com as datas deslocadas | `literal`: toda aspa é dobrada, porque os textos adversariais são entrada hostil |
@@ -147,4 +149,3 @@ O Victor aprovou começar o banco com a lista de itens. O Claude Code escreveu a
 Com o ok do Victor:
 
 1. Criar os logins da demonstração na rede simulada: um coordenador e três médicos, com e-mail e senha ([ADR 0015](../docs/adr/0015-decisoes-que-destravam-o-mvp.md), D1). O script fica pronto no passo 2.6 do [roteiro](../docs/roteiro-ate-o-mvp.md), e quem roda é o Victor. Até lá, só os logins de teste de `scripts/usuarios-de-teste.py` enxergam algo, na organização de teste.
-2. A tabela da contestação, com RLS e teste (D8), e o prazo de 2 minutos na organização da demonstração (D6).

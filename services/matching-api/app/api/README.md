@@ -23,6 +23,8 @@
 | `GET /policy` e `GET /model-card` | Coordenador | A política da organização e a ficha do modelo ativo | Nada |
 | `POST /shifts/{id}/reject` | Coordenador | Recusa a lista e cancela a vaga | Vaga e trilha |
 | `POST /offers/{id}/respond` | O médico da oferta | Tela 4: aceita, ou recusa e chama o próximo | Oferta, vaga e trilha |
+| `POST /offers/{id}/contest` | O médico da oferta | Contesta a recomendação, com um de quatro motivos e um texto (D8). Uma por oferta | Contestação e trilha (só códigos) |
+| `POST /contestations/{id}/answer` | Coordenador da organização | Responde por escrito; não se responde duas vezes | Contestação e trilha |
 | `POST /internal/cascade/{id}/advance` | n8n, por dentro do servidor | Se o prazo venceu, expira e chama o próximo aprovado | Oferta, vaga e trilha |
 | `POST /internal/reload` | Quem está no servidor | Relê os dados depois de mudança feita por fora | Nada |
 
@@ -151,7 +153,7 @@ O Victor aprovou o plano, com as decisões e os riscos, antes de começar, e cri
 
 Com o ok do Victor:
 
-1. A contestação (D8), com tabela, RLS e rotas; o resto do contrato da tela do coordenador entrou em 06/11 (passos 2.1 a 2.4 do [roteiro](../../../../docs/roteiro-ate-o-mvp.md)).
+1. Os logins da demonstração (2.6) e a publicação no servidor (2.8). O contrato da tela e a contestação entraram em 06/11 (passos 2.1 a 2.5 do [roteiro](../../../../docs/roteiro-ate-o-mvp.md)).
 2. As telas do coordenador e do médico chamam esta API e leem o resto sob RLS (adaptador `live`).
 3. Gemini: a imagem 0.2.0 já está no servidor, sem a chave. A chave só entra no ensaio e no dia ([passo a passo](../../../../infra/README.md)), e no ensaio se confere a memória com `docker stats` (o limite é de 512 MB). Sem a chave, ela usa 60 MiB.
 4. Repetir a medição antes de 13/11, já com as telas, e reiniciar o servidor.
