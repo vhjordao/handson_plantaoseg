@@ -78,6 +78,7 @@ No Windows, `make PYTHON="py -3.12" poc` se `python` não estiver no PATH (ver `
 - `docs/01-entrega-1-descoberta.md`, `docs/02-arquitetura-e-ferramentas.md`: fonte da verdade (atualize no mesmo commit se uma decisão mudar).
 - `docs/03-entrega-2-prova-de-conceito.md`: documento da Etapa 2 (PDF em `docs/entrega-2/`).
 - `docs/plano-etapa-3.md`: plano do protótipo e da Etapa 3 (aprovado; a construção começou pela web).
+- `docs/roteiro-ate-o-mvp.md`: o que falta até o MVP, em ordem e sem datas. A seção 1 é o próximo passo; todo PR marca o que terminou e atualiza essa seção.
 - `docs/feedback/`, `docs/rastreabilidade-professor.md`: feedbacks na íntegra e a tabela de exigências.
 - `docs/entrevistas/`: kit do entrevistador, casos e gabarito da revisão às cegas. Fichas preenchidas nunca entram no Git.
 - `docs/adr/`, `docs/diario-de-bordo.md`, `docs/ferramentas-agentes.md`, `docs/conformidade/`.

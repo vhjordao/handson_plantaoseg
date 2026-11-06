@@ -4,6 +4,19 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 05/11/2026 (quinta): roteiro até o MVP e a API 0.2.0 no servidor
+
+**Pedido do Victor:** "monte um documento completo com tudo que ainda falta para o MVP final", e depois: "pode deixar sem datas. Quero só ter um documento para entender o todo e saber sempre o próximo passo."
+
+**O que ficou pronto**
+
+- **O [roteiro até o MVP](roteiro-ate-o-mvp.md):** onde estamos, o que é o MVP pronto, as dez fases em ordem, a trilha da Entrega 3, as onze decisões que destravam o caminho (cada uma com recomendação), o que só o Victor faz, o que fica fora e o que cortar primeiro. O próximo passo fica sempre na seção 1, e todo PR o atualiza.
+- **A imagem 0.2.0 da API foi publicada no servidor, sem a chave do Gemini,** com o ok dele. Ela subiu saudável, `/health` responde de fora, a rota interna continua fechada e a memória ficou em 60 MiB. Ficaram cópias do Compose, do código e da imagem anteriores para voltar atrás.
+
+**O que o levantamento mostrou:** as partes existem, mas ainda não conversam. A web roda só no navegador; a contestação não tem tabela nem rota; o banco não publica nada em tempo real; e a plateia não tem como entrar no sistema real sem uma decisão de segurança (D1).
+
+**Uso de IA:** o Claude Code leu as fichas, os ADRs, o plano e a rastreabilidade e montou o roteiro; o Victor decide as recomendações.
+
 ## 05/11/2026 (quinta): API pronta para o Gemini, sem gastos, e o primeiro teste real
 
 **Pedido do Victor:** preparar a API para receber a chave do Gemini. Ele colocou a chave no `.env`, conferiu que o projeto está sem faturamento e decidiu: "Não quero ter gastos, use o que for free", e "vou usar só para demonstração no dia".

@@ -5,6 +5,8 @@
 
 ## Ordem das atividades (alinhada em 05/11)
 
+**O mapa completo, sem datas e com o próximo passo sempre no topo, está no [roteiro até o MVP](roteiro-ate-o-mvp.md).** Esta tabela fica com as datas.
+
 O que vem antes de quê, e por quê. As datas são metas. Esta tabela manda quando divergir dos marcos abaixo ou das datas das fases no [prompt de frontend](design/prompt-frontend.md), que foram escritas antes de a API, o servidor e a cascata tomarem o tempo de 04/11.
 
 | # | Atividade | Quem | Até | Por que nesta ordem |
