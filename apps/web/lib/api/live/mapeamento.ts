@@ -79,6 +79,9 @@ export interface CandidatoDaApi {
     source: "template" | "llm";
   };
   explanation_fallback: string | null;
+  /** Rodízio (passo 7.2): a posição só pelo modelo e as aparições no top-5 em 7 dias. */
+  model_rank?: number;
+  exposure_7d?: number;
 }
 
 export interface ExclusaoDaApi {
@@ -97,6 +100,7 @@ export interface RecomendacaoDaApi {
   candidates: CandidatoDaApi[];
   exclusions: ExclusaoDaApi[];
   excluded_by_rule: Record<string, number>;
+  rotation?: { delta: number; window_days: number } | null;
 }
 
 export interface DecisaoDaApi {
@@ -115,6 +119,8 @@ export interface PoliticaDaApi {
   offer_ttl_minutes: number;
   top_k: number;
   allow_secondary_specialty: boolean;
+  rotation_delta?: number;
+  rotation_window_days?: number;
 }
 
 export interface FichaDaApi {
@@ -284,6 +290,10 @@ function candidatoDaApi(item: CandidatoDaApi, medico: Medico): Candidato {
       fonte: item.explanation.source,
     },
     motivoFallback: item.explanation_fallback,
+    rodizio:
+      item.model_rank && item.model_rank !== item.rank
+        ? { posicaoDoModelo: item.model_rank, indicacoesNaSemana: item.exposure_7d ?? 0 }
+        : null,
   };
 }
 

@@ -129,6 +129,11 @@ export function SugestaoCard({
           {explicacao.fonte === "llm" ? ORDEM.motivoPelaIA : ORDEM.motivoPorRegra}.
           {candidato.motivoFallback ? ` ${ORDEM.motivoFallback}` : ""}
         </p>
+        {candidato.rodizio ? (
+          <p className="text-sm text-tinta-suave">
+            {ORDEM.rodizio(candidato.rodizio.posicaoDoModelo, candidato.rodizio.indicacoesNaSemana)}
+          </p>
+        ) : null}
 
         <AlertaJornada alertas={alertas} exigeJustificativa={estado.tipo === "decidindo"} />
 

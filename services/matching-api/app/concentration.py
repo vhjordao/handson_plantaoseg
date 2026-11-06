@@ -31,9 +31,10 @@ from app.ranking.compute import FeatureStore
 from app.ranking.evaluate import TOP_K, eligible_pool, truth_state
 from app.ranking.model import LogisticModel
 from app.ranking.report import pct
+from app.ranking.rotation import ROTATION_WINDOW, rotate
 from app.synthetic import truth
 
-WINDOW = timedelta(days=7)
+WINDOW = ROTATION_WINDOW
 REPS = 100
 ZONES_ATTRIBUTE = "home_zone"
 
@@ -71,15 +72,9 @@ class Candidate:
 
 def _rotate(block: list[Candidate], exposure: dict[str, int], delta: float) -> list[Candidate]:
     """Entre os que estão a até `delta` do melhor restante, chama primeiro o menos exposto."""
-    remaining = list(block)
-    ordered: list[Candidate] = []
-    while remaining:
-        best = remaining[0].score
-        equivalents = [c for c in remaining if c.score >= best - delta]
-        pick = min(equivalents, key=lambda c: (exposure.get(c.doctor_id, 0), -c.score, c.doctor_id))
-        ordered.append(pick)
-        remaining.remove(pick)
-    return ordered
+    return rotate(
+        block, score=lambda c: c.score, key=lambda c: c.doctor_id, exposure=exposure, delta=delta
+    )
 
 
 def rerank(
@@ -390,7 +385,8 @@ def render_concentration(metrics: dict[str, Any], manual_offers: float) -> str:
         "- A chance de aceite é a verdadeira do simulador, e o tempo vem das premissas do gerador.",
         "- A janela de 7 dias, as margens e os limites testados são escolhas do grupo, não valores "
         "ótimos.",
-        "- A política ainda não está na API; levá-la para lá é o passo 7.2 do roteiro.",
+        "- A API usa o rodízio com margem de 10 pontos desde o passo 7.2 do roteiro, contando a "
+        "exposição pelas recomendações gravadas no banco nos últimos 7 dias.",
         "",
     ]
     return "\n".join(lines)

@@ -56,7 +56,7 @@ make poc      # roda a PoC inteira: seed, evaluate, flow, demo, walkthrough e an
 make seed     # dados sintéticos, relatório de qualidade e amostra
 make evaluate # treina o modelo e compara com o baseline (simulação)
 make flow     # fluxo recomendado contra o processo manual: tempo, ofertas e concentração (simulação)
-make concentracao # rodízio e limite de exposição contra a concentração das ofertas (simulação)
+make concentracao # rodízio e limite de exposição contra a concentração das ofertas (simulação); a API usa o rodízio de 10 pontos (ADR 0017)
 make robustez # teste de premissas, dados públicos e simulação de lançamento (cerca de 2 min)
 make dicionario # exemplo concreto do dicionário, com os valores dos dados gerados
 make demo     # vaga em texto livre -> top 5 -> aprovação -> trilha de auditoria

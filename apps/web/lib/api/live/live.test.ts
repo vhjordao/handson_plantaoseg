@@ -173,6 +173,24 @@ describe("mapeamento", () => {
     expect(recomendacao.candidatos[0]?.medico.nome).toBe("Ana");
     expect(recomendacao.exemplosExcluidos).toHaveLength(4);
     expect(recomendacao.exemplosExcluidos[0]?.medico.crm).toBe("Cadastro restrito");
+    // Sem rodízio (a posição é a do modelo), a tela não mostra a nota.
+    expect(recomendacao.candidatos[0]?.rodizio).toBeNull();
+
+    const [primeiro] = resposta.candidates;
+    const comRodizio = recomendacaoDaApi(
+      {
+        ...resposta,
+        rotation: { delta: 0.1, window_days: 7 },
+        candidates: [{ ...primeiro!, model_rank: 3, exposure_7d: 0 }],
+      },
+      medicos,
+      "pediatria",
+    );
+    expect(RecomendacaoSchema.parse(comRodizio)).toBeTruthy();
+    expect(comRodizio.candidatos[0]?.rodizio).toEqual({
+      posicaoDoModelo: 3,
+      indicacoesNaSemana: 0,
+    });
   });
 
   it("a amostra de excluídos para em 12", () => {

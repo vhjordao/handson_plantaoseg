@@ -277,6 +277,11 @@ export const CandidatoSchema = z.object({
   explicacao: ExplicacaoSchema,
   /** Código do guardrail se a reescrita da IA foi tentada e não valeu. */
   motivoFallback: z.string().nullable(),
+  /**
+   * Rodízio entre equivalentes (passo 7.2): só quando o nome mudou de lugar em relação ao modelo.
+   * O modo de demonstração não tem histórico de indicações, então não usa.
+   */
+  rodizio: z.object({ posicaoDoModelo: z.number().int().min(1), indicacoesNaSemana: z.number().int().min(0) }).nullish(),
 });
 export type Candidato = z.infer<typeof CandidatoSchema>;
 

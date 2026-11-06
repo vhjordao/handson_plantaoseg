@@ -4,6 +4,23 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 06/11/2026 (sexta): o rodízio contra a concentração entra na API (7.2)
+
+**Pedido do Victor:** "Sim, fazer a 7.2", enquanto a conferência da 3.6 não sai.
+
+**O que ficou pronto ([ADR 0017](adr/0017-rodizio-entre-equivalentes-na-api.md)):**
+
+- **A regra num lugar só:** `app/ranking/rotation.py`. Entre os elegíveis com chance a até 10 pontos da melhor ainda disponível, vai primeiro quem apareceu menos no top-5 nos últimos 7 dias. O experimento da 7.1 passou a usar a mesma função, e o relatório não mudou.
+- **Na API:** a contagem vem das recomendações gravadas no banco (posição até 5, últimos 7 dias). A resposta traz, para cada nome, a posição só pelo modelo e a exposição; `GET /policy` traz a margem e a janela.
+- **Na trilha:** a `recommendation_generated` registra a política e quem mudou de lugar.
+- **Na tela do coordenador (modo real):** o nome que mudou de lugar diz por quê ("Rodízio: só pelo modelo, seria o 3º..."). O modo de demonstração não tem histórico e segue igual.
+
+**Testes:** 560 testes do motor e da API (10 novos do rodízio) e 204 de unidade e componente na web. O banco falso dos testes aprendeu `gte` e `lte` e passou a gravar `created_at`, como o banco real.
+
+**O que ainda não vale:** o servidor roda a imagem 0.3.0. O rodízio só entra no sistema real com a publicação da 0.4.0, que espera o ok do Victor. Ensaios na mesma semana mudam a ordem da vaga do roteiro; o `limpar-demonstracao` antes do dia zera a contagem.
+
+**Uso de IA:** o Claude Code levou a política ao motor e à API, escreveu os testes e a documentação; a escolha da política seguiu o critério do grupo no experimento.
+
 ## 06/11/2026 (sexta): fase 3, a web usa o sistema real
 
 **Pedido do Victor:** "Pode seguir" (fase 3), depois de criar os logins da demonstração.

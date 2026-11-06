@@ -138,6 +138,16 @@ class CandidateOut(ApiModel):
     explanation: ExplanationOut
     # Código do guardrail quando a reescrita da IA foi tentada e não valeu; senão, nulo.
     explanation_fallback: str | None
+    # Rodízio entre equivalentes: a posição só pelo modelo e as aparições no top-5 em 7 dias.
+    model_rank: int
+    exposure_7d: int
+
+
+class RotationOut(ApiModel):
+    """O rodízio aplicado: margem de chance e janela da contagem (passo 7.2 do roteiro)."""
+
+    delta: float
+    window_days: int
 
 
 class ExclusionOut(ApiModel):
@@ -159,6 +169,7 @@ class RecommendationOut(ApiModel):
     candidates: list[CandidateOut]
     exclusions: list[ExclusionOut]
     excluded_by_rule: dict[str, int]
+    rotation: RotationOut | None = None
     simulacao: Literal[True] = True
 
 
@@ -225,6 +236,9 @@ class PolicyOut(ApiModel):
     offer_ttl_minutes: int
     top_k: int
     allow_secondary_specialty: bool
+    # Rodízio entre equivalentes, igual para todas as organizações (`app/ranking/rotation.py`).
+    rotation_delta: float
+    rotation_window_days: int
     simulacao: Literal[True] = True
 
 

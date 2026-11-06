@@ -115,6 +115,8 @@ export const ORDEM = {
   motivoPorRegra: "Motivo montado por regra",
   motivoPelaIA: "Motivo reescrito pela IA",
   motivoFallback: "A reescrita da IA não passou na checagem, então vale o texto montado por regra.",
+  rodizio: (posicaoDoModelo: number, indicacoes: number) =>
+    `Rodízio: só pelo modelo, seria o ${posicaoDoModelo}º. Entre chances a até 10 pontos, vai antes quem foi menos indicado nos últimos 7 dias (${plural(indicacoes, "indicação", "indicações")}).`,
   aprovado: "Aprovado",
   aprovadoNaOrdem: (lugar: number) => `Aprovado, ${lugar}º a receber a oferta`,
   naoRecebe: "Não recebe a oferta",

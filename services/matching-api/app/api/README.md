@@ -1,7 +1,7 @@
 # Ficha do componente: API de matching
 
 - **Responsável:** Victor Jordão · **Frente:** motor e infraestrutura · **Branch:** `f3/api-matching` · **Atualizado em:** 06/11/2026
-- **Estado:** no ar no servidor, por HTTPS, desde 04/11/2026, com os dados sintéticos do projeto `plantaoseguro`. **Tudo é simulação.** A [cascata no n8n](../../../../n8n/README.md) pergunta a ela quanto esperar. Imagem 0.3.0, com a fase 2, desde 06/11. As telas ainda não usam a API (fase 3).
+- **Estado:** no ar no servidor, por HTTPS, desde 04/11/2026, com os dados sintéticos do projeto `plantaoseguro`. **Tudo é simulação.** A [cascata no n8n](../../../../n8n/README.md) pergunta a ela quanto esperar. Imagem 0.3.0, com a fase 2, desde 06/11. A tela do coordenador usa a API desde 06/11 (fase 3). A 0.4.0 traz o rodízio entre equivalentes (7.2) e espera a publicação.
 
 ## 1. O que é e qual dor resolve
 
@@ -15,12 +15,12 @@
 | `GET /me` | Quem tem login | Devolve o papel e a organização, lidos de `profiles` | Nada |
 | `POST /shifts/extract` | Coordenador | Tela 1: texto vira campos, com os sinais de texto suspeito e, para cada campo, se está escrito (`found`), foi deduzido (`inferred`) ou falta, com o trecho no texto | Nada |
 | `POST /shifts` | Coordenador | Publica a vaga com os campos conferidos | Pedido, vaga e trilha |
-| `POST /shifts/{id}/recommendations` | Coordenador | Telas 2 e 3: top 5 com motivo e a contribuição de cada variável, e excluídos com a regra e a evidência numérica | Recomendações (com as contribuições), explicações, exclusões (com a evidência) e trilha. **Nenhuma oferta** |
+| `POST /shifts/{id}/recommendations` | Coordenador | Telas 2 e 3: top 5 com motivo e a contribuição de cada variável, e excluídos com a regra e a evidência numérica. A ordem usa o rodízio entre equivalentes ([ADR 0017](../../../../docs/adr/0017-rodizio-entre-equivalentes-na-api.md)), e cada nome traz a posição só pelo modelo e as aparições no top-5 em 7 dias | Recomendações (com as contribuições), explicações, exclusões (com a evidência) e trilha. **Nenhuma oferta** |
 | `POST /shifts/{id}/approve` | Coordenador | **O clique.** Grava a decisão, chama o primeiro aprovado e, depois da resposta, avisa o n8n ([ADR 0013](../../../../docs/adr/0013-aviso-da-api-inicia-a-cascata.md)). Com alerta de jornada entre os aprovados, exige justificativa (D2); nome pulado não passa | Trilha (com a exceção) e primeira oferta |
 | `GET /shifts/{id}/decision` | Coordenador | A decisão gravada e quem está pulado agora, para a tela voltar igual | Nada |
 | `POST /shifts/{id}/skip` e `/unskip` | Coordenador | Pula um nome ou desfaz o pulo, sem cancelar a vaga (D3) | Trilha |
 | `POST /shifts/{id}/feedback` | Coordenador | "Esta explicação ajudou?" (D3); não treina nada | Trilha |
-| `GET /policy` e `GET /model-card` | Coordenador | A política da organização e a ficha do modelo ativo | Nada |
+| `GET /policy` e `GET /model-card` | Coordenador | A política da organização, com a margem e a janela do rodízio, e a ficha do modelo ativo | Nada |
 | `POST /shifts/{id}/reject` | Coordenador | Recusa a lista e cancela a vaga | Vaga e trilha |
 | `POST /offers/{id}/respond` | O médico da oferta | Tela 4: aceita, ou recusa e chama o próximo | Oferta, vaga e trilha |
 | `POST /offers/{id}/contest` | O médico da oferta | Contesta a recomendação, com um de quatro motivos e um texto (D8). Uma por oferta | Contestação e trilha (só códigos) |
@@ -58,6 +58,7 @@ Na resposta, a API só usa IDs pseudônimos: a web lê nome e CRM sob RLS, e só
 | `world.py` | Os dados do motor em memória | `engine`: a política da organização, com as variáveis recalculadas se algo mudou |
 | `model_store.py` | Pesos do modelo | `check_against_registry`: a API não sobe se o arquivo e o banco divergirem |
 | `schemas.py` | Contrato em Pydantic | `extra="forbid"`: campo a mais é recusado |
+| `../ranking/rotation.py` | O rodízio entre equivalentes (7.2) | `rotate`: a mesma função do experimento; ninguém passa à frente de alguém mais de 10 pontos melhor. `Repository.exposure` conta o top-5 dos últimos 7 dias |
 | `../../privacy.py` | Tira dado pessoal do texto livre que vai para a trilha | `remove_personal_data`: os mesmos padrões da tela |
 | `../../evidence.py` | A evidência numérica de cada exclusão | `exclusion_evidence`: a mesma frase da demonstração |
 | `ficha_do_modelo.json` | A ficha que `GET /model-card` devolve | Um teste a trava igual à da demonstração |
@@ -104,6 +105,7 @@ python scripts/conferir-api.py medir --url <url da api> --env-teste <.env.teste>
 - **458 testes** no total, contra 267 antes da API. Cobrem rotas e papéis, JWT forjado, cliente REST, paridade com os CSVs, cascata, aviso ao n8n, injeção de prompt pela API (os 10 tipos de ataque), neutralidade econômica no caminho da API e o contrato do Compose, da imagem e do workflow.
 - **Sem aprovação não há oferta:** a cascata recusa vaga publicada, recomendada e rejeitada. O segredo do n8n, o médico e o coordenador de outro hospital não aprovam, e não se aprova quem não foi recomendado.
 - **Os testes acusam mesmo?** Abrimos 22 falhas de propósito, como oferta sem aprovação, leitura da tabela do valor do plantão, `select=*` liberado e rota interna na internet. Os testes acusaram 21 de primeira. A outra era aceitar HS256, que não abria falha real, porque a biblioteca já recusa esse token com chave EC. Criamos um teste que fixa a lista de algoritmos, e agora as 22 são acusadas.
+- **Rodízio (7.2, `test_rotacao.py`):** sem exposição, vale a ordem do modelo; entre equivalentes, vai antes o menos exposto; em 300 listas sorteadas, ninguém passa à frente de alguém mais de 10 pontos melhor e ninguém sai da lista; a API roda a política do experimento; a contagem só pega o top-5 da última semana; a trilha registra quem mudou de lugar.
 - **O limite dos testes:** eles usam um banco falso. O PostgREST real e o login real só foram exercitados no projeto, com os passos abaixo.
 
 **No projeto real, em 04/11/2026 (simulação):**
@@ -139,6 +141,7 @@ Nenhuma chamada falhou na medição, e a memória da API chegou a 79 MB de 512 M
 - **A chave `service_role` é marcada como `legacy`** pelo Supabase. Se ela for desligada antes de 17/11, a saída é trocar pela `sb_secret`, com o teto de cerca de 50 chamadas por segundo que medimos. Não sabemos a causa desse teto.
 - **Se o aviso ao n8n se perder, oferta vencida fica pendente** até alguém chamar `advance` ou repetir o aviso, e o médico recebe `oferta_expirada` ao responder. A falha fica só no log ([ficha do workflow](../../../../n8n/README.md)).
 - **Gemini medido numa manhã só e em camada gratuita:** o `gemini-3.1-flash-lite` respondeu 14 de 16 chamadas, e outros modelos gratuitos quase não responderam no mesmo momento ([registro](../../../../docs/teste-manual-gemini.md)). O serviço pode mudar, e por isso há uma conferência de uma chamada para o dia. Só texto sintético pode ir ao modelo, e a cota é limitada: passando dela, a leitura cai nas regras. A imagem 0.2.0 está no servidor desde 05/11, sem a chave: a leitura segue pelas regras até o ensaio.
+- **O rodízio conta todas as recomendações gravadas,** inclusive as de testes e ensaios. Antes do dia, o `limpar-demonstracao` zera a contagem da demonstração. Ele também não resolve a exclusão por zona ([ADR 0017](../../../../docs/adr/0017-rodizio-entre-equivalentes-na-api.md)).
 - **O limite de requisições é por IP:** na demonstração guiada só o Victor chama a API, bem abaixo do limite. Mesmo assim, as telas precisam tentar de novo depois de um `429`.
 - **A carga é uma primeira medição,** de uma máquina só e com poucas conexões. Os limites estão no [resultado](../../../../docs/resultados/metricas-carga-api.md).
 - **A organização de teste:** os registros dela ficam para sempre na trilha, que é só de inserção, e ela fica no banco por causa disso. Até o `remover`, os 2 médicos de teste aparecem como excluídos por raio nas recomendações da rede simulada.
@@ -153,7 +156,7 @@ O Victor aprovou o plano, com as decisões e os riscos, antes de começar, e cri
 
 Com o ok do Victor:
 
-1. Os logins da demonstração (2.6) e a publicação no servidor (2.8). O contrato da tela e a contestação entraram em 06/11 (passos 2.1 a 2.5 do [roteiro](../../../../docs/roteiro-ate-o-mvp.md)).
-2. As telas do coordenador e do médico chamam esta API e leem o resto sob RLS (adaptador `live`).
+1. Publicar a imagem 0.4.0, com o rodízio (7.2 do [roteiro](../../../../docs/roteiro-ate-o-mvp.md)), e conferir com `conferir-api.py`.
+2. A tela do médico chama esta API (fase 4); a do coordenador já chama desde 06/11.
 3. Gemini: a imagem 0.3.0 está no servidor sem a chave. A chave só entra no ensaio e no dia ([passo a passo](../../../../infra/README.md)), e no ensaio se confere a memória com `docker stats` (o limite é de 512 MB). Sem a chave, ela usa 60 MiB.
 4. Repetir a medição antes de 13/11, já com as telas, e reiniciar o servidor.

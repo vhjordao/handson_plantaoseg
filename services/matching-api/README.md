@@ -47,6 +47,7 @@ Cada passo foi conferido com `ruff` e `pytest` antes do commit; a decisão sobre
 | `app/ranking/evaluate.py` | AUC, avaliação contrafactual e concentração | O simulador conhece a chance verdadeira (só vale em simulação) |
 | `app/flow.py` | Fluxo recomendado contra o processo manual (simulação) | `cascade_expectation`: a oferta `k` só existe se as `k - 1` anteriores falharam |
 | `app/concentration.py` | Rodízio e limite contra a concentração (simulação) | `rerank`: ninguém passa à frente de alguém melhor por mais que a margem; o limite só manda para o fim |
+| `app/ranking/rotation.py` | O rodízio que a API usa (7.2) | `rotate`: a mesma regra do experimento; `pipeline.recommend` só a liga quando recebe a exposição |
 | `app/robustness.py` | Teste de premissas, comparação com dados públicos e simulação de lançamento | `launch_curve`: treina só com ofertas de plantão já terminado, porque antes disso o rótulo não existe |
 | `app/public_data.py` | Totais públicos que conferem as premissas, com a fonte | Só agregados nacionais, sem registro individual |
 | `app/datadict.py` | Exemplo concreto do dicionário de dados | `dictionary_rows`: a última coluna sai dos dados, e um teste regenera o arquivo publicado |
@@ -121,4 +122,4 @@ O trabalho foi feito **em conjunto** pelo Victor Jordão e pelo Claude Code (Son
 
 ## 11. Próximos passos
 
-Levar o rodízio de 10 pontos para a API (passo 7.2 do [roteiro](../../docs/roteiro-ate-o-mvp.md)), uma medida contra a exclusão por zona, a comparação com o LightGBM (E.4) e a previsão de vagas descobertas (E.5).
+O rodízio de 10 pontos entrou na API em 06/11 (passo 7.2 do [roteiro](../../docs/roteiro-ate-o-mvp.md), [ADR 0017](../../docs/adr/0017-rodizio-entre-equivalentes-na-api.md)). Faltam uma medida contra a exclusão por zona, a comparação com o LightGBM (E.4) e a previsão de vagas descobertas (E.5).

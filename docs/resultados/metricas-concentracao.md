@@ -48,4 +48,4 @@ Vagas sem cobertura: no máximo 0,0% em qualquer política.
 - O experimento ordena; não muda quem é elegível. Regras e jornada continuam iguais.
 - A chance de aceite é a verdadeira do simulador, e o tempo vem das premissas do gerador.
 - A janela de 7 dias, as margens e os limites testados são escolhas do grupo, não valores ótimos.
-- A política ainda não está na API; levá-la para lá é o passo 7.2 do roteiro.
+- A API usa o rodízio com margem de 10 pontos desde o passo 7.2 do roteiro, contando a exposição pelas recomendações gravadas no banco nos últimos 7 dias.
