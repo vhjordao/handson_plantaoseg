@@ -240,7 +240,7 @@ export const EVIDENCIA = {
     {
       titulo: "A concentração piora.",
       texto:
-        "Os 10% de médicos mais recomendados ocupam 50,7% dos lugares entre os cinco primeiros, contra 31,1% das ofertas do processo manual simulado. Rodízio e limite de ofertas são as mitigações a estudar.",
+        "Os 10% de médicos mais recomendados ocupam 50,7% dos lugares entre os cinco primeiros, contra 31,1% das ofertas do processo manual simulado. Em simulação, o rodízio entre médicos de chance parecida baixa essa parcela para 28,5%, com 1,8 ponto a menos de chance de sucesso; ainda não está no sistema.",
       atencao: true,
     },
     {

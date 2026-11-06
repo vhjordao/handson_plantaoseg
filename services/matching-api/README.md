@@ -32,6 +32,7 @@ O que a IA faz e o que o código faz está em [docs/solucao-ia.md](../../docs/so
 9. Revisão às cegas para um piloto futuro (`app/blind_review.py`; as entrevistas foram canceladas em 06/11): coordenadores comparam as listas do modelo e do baseline sem saber qual é qual, sobre vagas simuladas e sem dado pessoal.
 10. Teste de premissas e simulação de lançamento (`app/robustness.py`): refaz o mundo simulado com outras premissas, compara com agregados públicos (`app/public_data.py`) e mede quanto histórico o modelo precisa para superar o baseline.
 11. Exemplo concreto do dicionário (`app/datadict.py`): tabela com nome, tipo, descrição e valores possíveis, com os valores calculados dos dados gerados.
+12. Experimento contra a concentração (`app/concentration.py`, 06/11): as vagas de teste em ordem de publicação, com memória de quem apareceu no top-5 na última semana, comparando a ordem de hoje com rodízio entre equivalentes e limite de exposição. Mede chance de sucesso, tempo, concentração e exposição por zona.
 
 Cada passo foi conferido com `ruff` e `pytest` antes do commit; a decisão sobre tirar carga recente do ranking veio de um experimento (71,2% sem a variável e 71,3% com ela) registrado em `app/ranking/features.py`.
 
@@ -45,6 +46,7 @@ Cada passo foi conferido com `ruff` e `pytest` antes do commit; a decisão sobre
 | `app/ranking/model.py` | Regressão logística (IRLS) e contribuições | `contributions(..., reference)`: o que diferencia o candidato da média |
 | `app/ranking/evaluate.py` | AUC, avaliação contrafactual e concentração | O simulador conhece a chance verdadeira (só vale em simulação) |
 | `app/flow.py` | Fluxo recomendado contra o processo manual (simulação) | `cascade_expectation`: a oferta `k` só existe se as `k - 1` anteriores falharam |
+| `app/concentration.py` | Rodízio e limite contra a concentração (simulação) | `rerank`: ninguém passa à frente de alguém melhor por mais que a margem; o limite só manda para o fim |
 | `app/robustness.py` | Teste de premissas, comparação com dados públicos e simulação de lançamento | `launch_curve`: treina só com ofertas de plantão já terminado, porque antes disso o rótulo não existe |
 | `app/public_data.py` | Totais públicos que conferem as premissas, com a fonte | Só agregados nacionais, sem registro individual |
 | `app/datadict.py` | Exemplo concreto do dicionário de dados | `dictionary_rows`: a última coluna sai dos dados, e um teste regenera o arquivo publicado |
@@ -62,7 +64,7 @@ Cada passo foi conferido com `ruff` e `pytest` antes do commit; a decisão sobre
 | Ferramenta | Versão | Para quê | Por que esta e não outra | Custo |
 | --- | --- | --- | --- | --- |
 | Python (biblioteca padrão) | 3.12.10 local; 3.12 na CI | Todo o motor | Roda na CI e em qualquer máquina sem instalar pacote; a máquina do autor não tinha pip até 30/10 | 0 |
-| pytest | 8.3.3 | Testes (421, inclusive os da API) | Padrão do ecossistema; os testes usam `unittest`, que o pytest também executa | 0 |
+| pytest | 8.3.3 | Testes (510, inclusive os da API) | Padrão do ecossistema; os testes usam `unittest`, que o pytest também executa | 0 |
 | ruff | 0.7.0 | Lint (E, F, I, UP, B) | Rápido e igual na CI e localmente | 0 |
 | GitHub Actions | checkout@v4, setup-python@v5, upload-artifact@v4 | CI com 5 jobs | Já era a escolha do `docs/02` | 0 |
 | Gemini (`google-genai`) | 2.32.0, só na API; testado à parte em 05/11 | Extração e reescrita, opcional | Decisão do Victor ([ADR 0003](../../docs/adr/0003-llm-do-produto-gemini.md)) | Estimado em menos de US$ 1 para 200 chamadas |
@@ -84,7 +86,7 @@ python -m app.cli demo --yes    # fluxo completo para uma vaga
 python -m app.cli blind-review  # casos e gabarito da revisão às cegas
 python -m app.cli robustness    # teste de premissas e lançamento (cerca de 2 min)
 python -m app.cli data-dictionary  # exemplo concreto do dicionário
-python -m pytest -q             # 421 testes (pede `pip install -r requirements-dev.txt`)
+python -m pytest -q             # 510 testes (pede `pip install -r requirements-dev.txt`)
 python -m ruff check .          # lint
 ```
 
@@ -92,11 +94,13 @@ Da raiz do repositório: `make poc` roda tudo na ordem; `make test` e `make lint
 
 ## 7. Testes e resultados
 
-- **421 testes** (`tests/`), contando os da API, que têm a [ficha própria](app/api/README.md): regras e jornada, dados sintéticos e reprodutibilidade, variáveis sem vazamento, modelo, AUC e avaliação, fluxo recomendado (matemática da cascata e coerência com o contrafactual), extração, 10 tipos de injeção de prompt, saídas maliciosas do LLM, explicação, auditoria, pipeline, análise, exemplo trabalhado, conversor do documento e sincronia dos números dos documentos com os arquivos gerados.
+- **510 testes** (`tests/`), contando os da API, que têm a [ficha própria](app/api/README.md): regras e jornada, dados sintéticos e reprodutibilidade, variáveis sem vazamento, modelo, AUC e avaliação, fluxo recomendado (matemática da cascata e coerência com o contrafactual), experimento da concentração (ordem de cada política e relatório publicado), extração, 10 tipos de injeção de prompt, saídas maliciosas do LLM, explicação, auditoria, pipeline, análise, exemplo trabalhado, conversor do documento e sincronia dos números dos documentos com os arquivos gerados.
 - **CI:** 7 jobs verdes (segredos, lint e testes, neutralidade econômica, PoC, Compose, banco e interface web). O job da PoC confere que a execução em Linux gera os **mesmos checksums** dos CSV da máquina do autor.
 - **Teste de premissas** ([docs/resultados](../../docs/resultados/metricas-robustez.md)): 17 cenários, comparação com dados públicos e simulação de lançamento. Roda na CI.
 - **Resultados em simulação** ([docs/resultados](../../docs/resultados/metricas-ranking.md)): AUC 0,762 (modelo) contra 0,702 (baseline); chance média de sucesso no top-5 de 71,2% contra 67,7% e 75,8% do oráculo, em 392 vagas de teste.
 - **Fluxo recomendado** ([docs/resultados](../../docs/resultados/metricas-fluxo.md)): tempo médio até preencher a vaga de 110 para 47 min (57% a menos) e ofertas por vaga de 3,31 para 1,32, contra o processo manual simulado; a concentração das ofertas piora (31,1% para 50,7% nos lugares do top-5).
+
+- **Concentração** ([docs/resultados](../../docs/resultados/metricas-concentracao.md)): em simulação, o rodízio entre elegíveis equivalentes (margem de 10 pontos) leva os 10% mais expostos de 82,1% para 35,7% das ofertas e de 50,7% para 28,5% dos lugares do top-5, com 1,8 ponto a menos de chance de sucesso e 2 minutos a mais por vaga. A exclusão por zona quase não muda (0,01 para 0,07).
 
 ## 8. Dados e segurança
 
@@ -108,7 +112,7 @@ Só dados sintéticos; nome, CRM e telefone são fictícios e **nunca** entram n
 - O fluxo recomendado avalia cada vaga isoladamente (sem ocupar a agenda de quem seria escalado), então a concentração das ofertas efetivas é estimativa superior; e o processo manual simulado é premissa do grupo (não checa disponibilidade), o que explica a maior parte do ganho de tempo.
 - O Gemini foi **medido contra o serviço real numa manhã só**, em 05/11 ([registro](../../docs/teste-manual-gemini.md)), na camada gratuita. Os testes automáticos cobrem validação, fallback e injeção com clientes falsos, não o comportamento do modelo.
 - Plantões de 12 h em horários fixos fazem o descanso de 11 h quase nunca ser a regra que barra; o limite de 24 h contínuas é o que aparece.
-- A distância funciona como proxy da zona de residência: zonas distantes quase não são recomendadas (ver a concentração em `docs/resultados`).
+- A distância funciona como proxy da zona de residência: zonas distantes quase não são recomendadas, e o rodízio não resolve isso ([experimento](../../docs/resultados/metricas-concentracao.md)).
 - Contestação e avaliação de impacto algorítmico estão desenhadas, não construídas.
 
 ## 10. Uso de IA no desenvolvimento
@@ -117,4 +121,4 @@ O trabalho foi feito **em conjunto** pelo Victor Jordão e pelo Claude Code (Son
 
 ## 11. Próximos passos
 
-Tela do coordenador, cascata no n8n, contestação, previsão de vagas descobertas, mitigação do viés de distância (por exemplo, rodízio) e teste do Gemini com chave (ver [docs/teste-manual-gemini.md](../../docs/teste-manual-gemini.md)).
+Levar o rodízio de 10 pontos para a API (passo 7.2 do [roteiro](../../docs/roteiro-ate-o-mvp.md)), uma medida contra a exclusão por zona, a comparação com o LightGBM (E.4) e a previsão de vagas descobertas (E.5).

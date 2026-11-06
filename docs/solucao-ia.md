@@ -51,7 +51,7 @@ A IA entra onde há **texto livre** e **incerteza**; onde a resposta tem de ser 
 
 A diferença modelo menos baseline é de 3,5 pontos percentuais (erro-padrão 0,22). A **avaliação contrafactual** só é possível porque o simulador conhece a chance verdadeira; em dados reais a medida seria outra (AUC e recomendação revisada por humanos).
 
-**Concentração (indicador da Entrega 1):** os 10% de médicos mais recomendados ocupam 50,7% dos lugares do top-5 no modelo (61,2% no baseline), e 121 dos 257 elegíveis (47%) nunca aparecem. Médicos das zonas leste e oeste quase não são recomendados (razão de participação de 0,01), porque a distância pesa. Mitigações a estudar: limitar o peso da distância, rodízio entre elegíveis equivalentes e revisão humana da lista.
+**Concentração (indicador da Entrega 1):** os 10% de médicos mais recomendados ocupam 50,7% dos lugares do top-5 no modelo (61,2% no baseline), e 121 dos 257 elegíveis (47%) nunca aparecem. Médicos das zonas leste e oeste quase não são recomendados (razão de participação de 0,01), porque a distância pesa. Mitigação medida em 06/11 ([experimento](resultados/metricas-concentracao.md)): em simulação, o rodízio entre elegíveis equivalentes (margem de 10 pontos) leva os 10% mais expostos de 82,1% para 35,7% das ofertas e de 50,7% para 28,5% dos lugares do top-5, com 1,8 ponto a menos de chance de sucesso e 2 minutos a mais por vaga. A exclusão por zona quase não muda e continua pedindo revisão humana da lista e limite ao peso da distância.
 
 ## 4. LLM com Gemini
 
@@ -103,7 +103,7 @@ A diferença modelo menos baseline é de 3,5 pontos percentuais (erro-padrão 0,
 | Extração por regras | Acerto dos 5 campos contra o gabarito | n/d | 100% em pedidos formais, abreviados e com erros; nos 45 ambíguos nenhum fica completo, com 53% dos campos deixados em branco para o coordenador e 4% errados |
 | Injeção de prompt | 10 tipos, 60 pedidos | n/d | 60 de 60 sinalizados |
 | Tempo de preenchimento (meta de 50% de redução) | Média de minutos até preencher, no processo manual simulado e no fluxo recomendado ([método](resultados/metricas-fluxo.md)) | Manual simulado: 110 min | 47 min (57% a menos), em simulação; a linha de base real vem das entrevistas (Etapa 3) |
-| Concentração de ofertas | Parcela recebida pelos 10% de médicos mais ofertados ou recomendados | Manual simulado: 31,1% | 50,7% dos lugares do top-5 (piora); mitigar na Etapa 3 |
+| Concentração de ofertas | Parcela recebida pelos 10% de médicos mais ofertados ou recomendados | Manual simulado: 31,1% | 50,7% dos lugares do top-5 (piora); 28,5% com o rodízio de 10 pontos, em simulação ([experimento](resultados/metricas-concentracao.md)) |
 
 ## 7. Ferramentas e alternativas
 

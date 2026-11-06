@@ -14,7 +14,7 @@ O mapa de tudo o que falta para o PlantãoSeguro funcionar de ponta a ponta, do 
 
 1. **Claude Code: a [fase 2](#fase-2-banco-e-api-completam-o-contrato),** banco e API completam o contrato. É o caminho crítico do produto: sem ela, a web não tem o que chamar. Cada passo vira um PR.
 2. **Victor:** quando o passo 2.6 estiver pronto, rodar o comando que cria os logins da demonstração e guardar as senhas. É a parte dele na fase 2.
-3. **Entrega 3, o prazo mais próximo:** o documento está fora do Git e só muda com o pedido do Victor ([E.6 e E.8](#5-trilha-da-entrega-3-em-paralelo)). Em paralelo, o Claude Code pode fazer o experimento da concentração ([fase 7](#fase-7-concentração-das-ofertas)) e a busca de fontes públicas sobre o comportamento ([E.1](#5-trilha-da-entrega-3-em-paralelo)), que alimentam o documento.
+3. **Entrega 3, o prazo mais próximo e a prioridade escolhida pelo Victor em 06/11:** o experimento da concentração já tem resultado ([7.1](#fase-7-concentração-das-ofertas)); seguem a busca de fontes públicas sobre o comportamento ([E.1](#5-trilha-da-entrega-3-em-paralelo)), as correções do documento (E.6) e o PDF com o PR (E.8).
 4. **Colegas:** o teste de usabilidade da tarefa do coordenador, que já está no link público, se o grupo puder fazer ([E.2](#5-trilha-da-entrega-3-em-paralelo)).
 
 ## 2. Onde estamos
@@ -114,10 +114,10 @@ O adaptador `live` liga a web ao sistema real.
 
 Esta fase **não depende das anteriores** e pode começar já.
 
-- [ ] **7.1** Experimento com rodízio entre elegíveis equivalentes e limite de ofertas, medindo o custo em tempo até preencher e na chance de sucesso.
+- [x] **7.1** Experimento com rodízio entre elegíveis equivalentes e limite de ofertas, medindo o custo em tempo até preencher e na chance de sucesso. *Feito em 06/11 ([experimento](resultados/metricas-concentracao.md)): o rodízio com margem de 10 pontos é o recomendado; a exclusão por zona continua aberta.*
 - [ ] **7.2** A política escolhida vai para a API, com teste, e aparece na equidade.
 
-**Por que importa:** hoje, os 10% mais recomendados ocupam 50,7% do top-5, contra 31,1% no processo manual (simulação). É o maior risco ético medido.
+**Por que importa:** os 10% mais recomendados ocupam 50,7% do top-5, contra 31,1% no processo manual (simulação). É o maior risco ético medido. Com o rodízio de 10 pontos, os 10% mais expostos passam de 82,1% para 35,7% das ofertas e de 50,7% para 28,5% dos lugares do top-5, com 1,8 ponto a menos de chance de sucesso e 2 minutos a mais por vaga.
 
 ### Fase 8: pronto para o palco
 

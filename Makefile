@@ -7,7 +7,7 @@ API := services/matching-api
 CLI := cd $(API) && $(PYTHON) -m app.cli
 SUPABASE := npx --yes supabase@3.0.0
 
-.PHONY: help doctor env seed evaluate flow demo walkthrough analyze robustez dicionario entrega kit-entrevistas poc api test lint
+.PHONY: help doctor env seed evaluate flow concentracao demo walkthrough analyze robustez dicionario entrega kit-entrevistas poc api test lint
 
 help: ## Lista os comandos
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | sed 's/:.*## /\t/'
@@ -36,6 +36,9 @@ analyze: ## Análise exploratória (figuras e tabelas em docs/analise)
 
 walkthrough: ## Exemplo trabalhado (docs/exemplo-trabalhado.md) com as contas à vista
 	$(CLI) walkthrough
+
+concentracao: ## Rodízio e limite de exposição contra a concentração das ofertas (simulação)
+	$(CLI) concentration --report-dir ../../docs/resultados
 
 robustez: ## Teste de premissas e simulação de lançamento (simulação; leva alguns minutos)
 	$(CLI) robustness --report-dir ../../docs/resultados
