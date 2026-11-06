@@ -127,4 +127,4 @@ O Victor pediu a plataforma web, a landing e a área de entrada, a busca de skil
 
 ## 11. Próximos passos
 
-A ordem está no [roteiro até o MVP](../../docs/roteiro-ate-o-mvp.md): o adaptador `live` (fase 3), a tela do médico com a cascata (fase 4), a demonstração guiada (fase 5) e auditoria, contestações e equidade (fase 6). O telão ao vivo saiu do MVP em 06/11: a apresentação é guiada, e a plateia não usa o sistema. Antes de ligar o Supabase, entram os cabeçalhos de segurança.
+A ordem está no [roteiro até o MVP](../../docs/roteiro-ate-o-mvp.md): o adaptador `live` (fase 3), a tela do médico com a cascata (fase 4), a demonstração guiada (fase 5) e auditoria, contestações e equidade (fase 6). O telão ao vivo saiu do MVP em 06/11: a apresentação é guiada, e a plateia não usa o sistema. As decisões que mexem na web estão no [ADR 0015](../../docs/adr/0015-decisoes-que-destravam-o-mvp.md): login com e-mail e senha no `live` (D1), consulta a cada 3 segundos (D7), recusa com um dos quatro motivos e confirmação antes (D4 e D5) e urgência exigida no pedido (D10). Antes de ligar o Supabase, entram os cabeçalhos de segurança.

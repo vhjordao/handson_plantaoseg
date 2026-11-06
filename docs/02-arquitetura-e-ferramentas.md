@@ -62,7 +62,7 @@ Cada etapa do fluxo tem uma ferramenta principal e uma alternativa; a escolha pr
 | Etapa | Recomendação | Alternativa | Observação |
 | --- | --- | --- | --- |
 | Interface (coordenador, médico e telão) | Next.js, Tailwind e shadcn/ui, web responsiva e sem PWA ([ADR 0011](adr/0011-web-responsiva-sem-pwa.md)) | Vite com React | Abre no computador e no celular, sem instalar nada |
-| Login e perfis | Supabase Auth; como o Victor entra na demonstração é a decisão D1 do [roteiro](roteiro-ate-o-mvp.md) | Magic link por e-mail | O perfil guarda hospital e papel, que a RLS consulta ([ADR 0008](adr/0008-banco-no-supabase.md)) |
+| Login e perfis | Supabase Auth, com logins da demonstração por e-mail e senha ([ADR 0015](adr/0015-decisoes-que-destravam-o-mvp.md)) | Magic link por e-mail | O perfil guarda hospital e papel, que a RLS consulta ([ADR 0008](adr/0008-banco-no-supabase.md)) |
 | Entrada da vaga | Formulário no web app que chama a API ([ADR 0010](adr/0010-api-de-matching.md)) | Telegram | Texto livre, com campos opcionais |
 | Extração dos campos | Gemini 3.1 Flash-Lite (SDK `google-genai`) com saída estruturada (JSON Schema) e validação com Pydantic | As regras, quando o Gemini falha ou demora | Nome, CRM e telefone nunca vão ao modelo; só a camada gratuita, sem gastos, e só texto sintético (ADR 0003) |
 | Filtro de regras | Regras em Python, na API, com a política por hospital em tabela ([ADR 0008](adr/0008-banco-no-supabase.md)) | Funções SQL no Postgres | Determinístico, testável e auditável |
@@ -151,7 +151,7 @@ Cinco decisões precisam do grupo até a Etapa 2, e quatro riscos pedem plano B 
 **Decisões para o grupo**
 
 - **Quanto vai no n8n:** só orquestração. No primeiro fluxo, ele só espera o prazo e pede para a API avançar, e um teste barra nó de código, de LLM ou de banco ([ADR 0013](adr/0013-aviso-da-api-inicia-a-cascata.md)).
-- **Login da plateia e plano do Supabase:** deixaram de valer em 06/11. A apresentação é guiada, a plateia não usa o sistema e o plano gratuito basta. Como o Victor entra no sistema real é a decisão D1 do [roteiro](roteiro-ate-o-mvp.md).
+- **Login da plateia e plano do Supabase:** deixaram de valer em 06/11. A apresentação é guiada, a plateia não usa o sistema e o plano gratuito basta. O Victor entra no sistema real com logins da demonstração ([ADR 0015](adr/0015-decisoes-que-destravam-o-mvp.md)).
 - **Região do Supabase:** confirmar São Paulo na criação do projeto, porque a região não se troca depois sem migrar.
 - **Licença do n8n:** se o produto for oferecido a hospitais, [confirmar a arquitetura com a n8n](https://docs.n8n.io/n8n-community-license/community-license/license-faq.md) antes de qualquer piloto.
 

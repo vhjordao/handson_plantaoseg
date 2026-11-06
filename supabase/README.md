@@ -145,4 +145,5 @@ O Victor aprovou começar o banco com a lista de itens. O Claude Code escreveu a
 
 Com o ok do Victor:
 
-1. Criar os logins da demonstração na rede simulada, se o Victor aceitar a decisão D1 do [roteiro](../docs/roteiro-ate-o-mvp.md). Até lá, só os logins de teste de `scripts/usuarios-de-teste.py` enxergam algo, na organização de teste.
+1. Criar os logins da demonstração na rede simulada: um coordenador e três médicos, com e-mail e senha ([ADR 0015](../docs/adr/0015-decisoes-que-destravam-o-mvp.md), D1). O script fica pronto no passo 2.6 do [roteiro](../docs/roteiro-ate-o-mvp.md), e quem roda é o Victor. Até lá, só os logins de teste de `scripts/usuarios-de-teste.py` enxergam algo, na organização de teste.
+2. A tabela da contestação, com RLS e teste (D8), e o prazo de 2 minutos na organização da demonstração (D6).

@@ -143,6 +143,7 @@ O Victor aprovou o plano, com as decisões e os riscos, antes de começar, e cri
 
 Com o ok do Victor:
 
-1. `f3/web-coordenador` e `f3/web-medico`: as telas chamam esta API e leem o resto sob RLS.
-2. Gemini: a imagem 0.2.0 já está no servidor, sem a chave. A chave só entra no ensaio e no dia ([passo a passo](../../../../infra/README.md)), e no ensaio se confere a memória com `docker stats` (o limite é de 512 MB). Sem a chave, ela usa 60 MiB.
-3. Repetir a medição antes de 13/11, já com as telas, e reiniciar o servidor.
+1. Completar o contrato (fase 2 do [roteiro](../../../../docs/roteiro-ate-o-mvp.md), decisões do [ADR 0015](../../../../docs/adr/0015-decisoes-que-destravam-o-mvp.md)): justificativa da exceção na trilha (D2), rotas de pular, desfazer o pulo e "Esta explicação ajudou?" (D3), a leitura com o trecho de cada campo, a contribuição de cada variável, a política e a ficha do modelo, e a contestação (D8).
+2. As telas do coordenador e do médico chamam esta API e leem o resto sob RLS (adaptador `live`).
+3. Gemini: a imagem 0.2.0 já está no servidor, sem a chave. A chave só entra no ensaio e no dia ([passo a passo](../../../../infra/README.md)), e no ensaio se confere a memória com `docker stats` (o limite é de 512 MB). Sem a chave, ela usa 60 MiB.
+4. Repetir a medição antes de 13/11, já com as telas, e reiniciar o servidor.

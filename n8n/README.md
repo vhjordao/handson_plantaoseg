@@ -99,7 +99,7 @@ cd /docker/n8n && S=$(grep '^N8N_WEBHOOK_SECRET=' .env | cut -d= -f2-) && printf
 - **Se o n8n estiver fora na hora do clique, a vaga não anda sozinha.** O aviso tenta 3 vezes em cerca de 4 s e desiste, e o reinício do n8n leva 12 s. A saída é repetir o aviso, como na seção 6. Esse caminho não foi provocado no servidor: só os testes automáticos cobrem a falha do aviso. Quem já está dormindo não é afetado por um reinício.
 - **Poucas vagas ao mesmo tempo.** O teste rodou com 2 execuções dormindo. Muitas vagas juntas não foram medidas; a demonstração guiada usa uma vaga por vez.
 - **Sem alerta:** uma execução com erro só aparece no editor, e um aviso perdido, só no log da API.
-- **O prazo da rede simulada é de 60 min.** Com esse valor, a cascata não anda durante a apresentação. O prazo curto é a decisão D6 do [roteiro](../docs/roteiro-ate-o-mvp.md), em `policy_config`.
+- **O prazo da rede simulada é de 60 min.** Com esse valor, a cascata não anda durante a apresentação. Na demonstração, o prazo será de 2 minutos ([ADR 0015](../docs/adr/0015-decisoes-que-destravam-o-mvp.md), D6), em `policy_config`.
 - **Mudança no editor some na próxima publicação.** O arquivo no Git é a fonte.
 - O n8n avisa no log que `WEBHOOK_URL` e `N8N_RUNNERS_ENABLED` estão obsoletas. As duas ainda funcionam na 2.46.5, que está fixa.
 
@@ -111,5 +111,5 @@ O Victor decidiu que a API avisa o n8n, entre as duas opções que o Claude Code
 
 Com o ok do Victor:
 
-1. Decidir o prazo curto da demonstração.
+1. Pôr o prazo de 2 minutos na organização da demonstração (decidido em 06/11, passo 2.7 do [roteiro](../docs/roteiro-ate-o-mvp.md)).
 2. As telas do coordenador e do médico, que disparam o clique e mostram a oferta.

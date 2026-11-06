@@ -10,11 +10,12 @@ O mapa de tudo o que falta para o PlantãoSeguro funcionar de ponta a ponta, do 
 
 ## 1. Próximo passo
 
-Três coisas podem andar ao mesmo tempo, porque não dependem uma da outra:
+**A fase 1 terminou em 06/11:** o Victor aprovou as onze decisões como recomendadas ([ADR 0015](adr/0015-decisoes-que-destravam-o-mvp.md)). Agora podem andar ao mesmo tempo:
 
-1. **Victor:** responder às decisões da [seção 6](#6-decisões-que-destravam-o-caminho). Dá para aceitar as recomendações de uma vez. Elas destravam a ligação da web com a API, que é o caminho crítico do produto.
-2. **Claude Code:** o experimento contra a concentração das ofertas ([fase 7](#fase-7-concentração-das-ofertas)) e, em seguida, a busca de fontes públicas sobre o comportamento dos plantonistas ([E.1](#5-trilha-da-entrega-3-em-paralelo)). Nenhum dos dois depende das decisões, e os dois servem à Entrega 3.
-3. **Colegas:** o teste de usabilidade da tarefa do coordenador, que já está no link público, se o grupo puder fazer ([E.2](#5-trilha-da-entrega-3-em-paralelo)).
+1. **Claude Code: a [fase 2](#fase-2-banco-e-api-completam-o-contrato),** banco e API completam o contrato. É o caminho crítico do produto: sem ela, a web não tem o que chamar. Cada passo vira um PR.
+2. **Victor:** quando o passo 2.6 estiver pronto, rodar o comando que cria os logins da demonstração e guardar as senhas. É a parte dele na fase 2.
+3. **Entrega 3, o prazo mais próximo:** o documento está fora do Git e só muda com o pedido do Victor ([E.6 e E.8](#5-trilha-da-entrega-3-em-paralelo)). Em paralelo, o Claude Code pode fazer o experimento da concentração ([fase 7](#fase-7-concentração-das-ofertas)) e a busca de fontes públicas sobre o comportamento ([E.1](#5-trilha-da-entrega-3-em-paralelo)), que alimentam o documento.
+4. **Colegas:** o teste de usabilidade da tarefa do coordenador, que já está no link público, se o grupo puder fazer ([E.2](#5-trilha-da-entrega-3-em-paralelo)).
 
 ## 2. Onde estamos
 
@@ -25,6 +26,7 @@ Três coisas podem andar ao mesmo tempo, porque não dependem uma da outra:
 | API de matching, com HTTPS | No servidor, imagem 0.2.0 | [ficha](../services/matching-api/app/api/README.md) |
 | n8n e a cascata de ofertas | No servidor, conferida de ponta a ponta pela API | [ficha](../n8n/README.md) |
 | Gemini | Pronto em custo zero; a chave só entra no ensaio e no dia | [ADR 0003](adr/0003-llm-do-produto-gemini.md) |
+| Decisões D1 a D11 | Aprovadas pelo Victor em 06/11 | [ADR 0015](adr/0015-decisoes-que-destravam-o-mvp.md) |
 | Web: página inicial, entrada sem senha, lista de vagas, nova vaga, sugestões e decisão | No link público, **só no modo de demonstração** | [ficha](../apps/web/README.md) |
 | Web: médico, auditoria, contestações e equidade | Ainda "em construção" | |
 | Documento da Entrega 3 | Rascunho pronto, fora do Git, com frases a corrigir | trilha da seção 5 |
@@ -51,7 +53,7 @@ Cada fase depende da anterior, salvo onde está escrito. Cada passo vira um PR c
 
 ### Fase 1: decisões que destravam
 
-- [ ] **1.1** Victor responde às decisões da [seção 6](#6-decisões-que-destravam-o-caminho).
+- [x] **1.1** Victor responde às decisões da [seção 6](#6-decisões-que-destravam-o-caminho). *Feito em 06/11: todas aprovadas como recomendadas ([ADR 0015](adr/0015-decisoes-que-destravam-o-mvp.md)).*
 
 **Por que primeiro:** o contrato da API, o banco e a entrada no sistema real dependem delas. Construir antes seria refazer.
 
@@ -64,8 +66,8 @@ A API hoje faz o fluxo principal, mas a tela pede coisas que ela ainda não tem 
 - [ ] **2.3** A leitura devolve, para cada campo, se está no texto ou foi deduzida, e o trecho. As sugestões devolvem a contribuição de cada variável e a evidência de quem ficou de fora.
 - [ ] **2.4** O coordenador lê a política e a ficha do modelo.
 - [ ] **2.5** Contestação: tabela, RLS e rotas para o médico abrir e o coordenador responder, com as ações `contestation_opened` e `contestation_answered` na trilha (D8).
-- [ ] **2.6** Os logins da demonstração na rede simulada: um coordenador e os médicos que o roteiro usa (D1). Quem roda o comando é o Victor.
-- [ ] **2.7** Prazo curto da oferta na organização da demonstração (D6).
+- [ ] **2.6** Os logins da demonstração na rede simulada, com e-mail e senha: um coordenador e três médicos que a vaga do roteiro recomenda (D1). O script fica pronto, e quem roda o comando é o Victor.
+- [ ] **2.7** Prazo de 2 minutos por oferta na organização da demonstração (D6).
 - [ ] **2.8** Publicar no servidor e conferir com `conferir-api.py`.
 
 **Pronto quando:** cada rota nova tem teste, a neutralidade continua passando e a ficha da API mostra o contrato novo.
@@ -74,22 +76,22 @@ A API hoje faz o fluxo principal, mas a tela pede coisas que ela ainda não tem 
 
 O adaptador `live` liga a web ao sistema real.
 
-- [ ] **3.1** Login real com os logins da fase 2, na tela de entrada (D1).
+- [ ] **3.1** Login com e-mail e senha, com os logins da fase 2, na tela de entrada (D1). A entrada por persona continua no modo de demonstração.
 - [ ] **3.2** Leituras sob RLS, direto do banco: vagas, sugestões, ofertas, trilha. Escritas pela API: publicar, aprovar, pular, responder e contestar.
 - [ ] **3.3** Erros da API viram mensagens da tela, e depois de um `429` a tela tenta de novo.
 - [ ] **3.4** Se a API não responder, a tela oferece o modo de demonstração.
 - [ ] **3.5** O relógio do cabeçalho vem do sistema, não de um valor fixo.
-- [ ] **3.6** A jornada do coordenador, que hoje roda na demonstração, passa a rodar no `live`.
+- [ ] **3.6** A jornada do coordenador, que hoje roda na demonstração, passa a rodar no `live`, com a urgência exigida no pedido (D10).
 
 **Pronto quando:** a mesma jornada do coordenador passa nos dois modos, e uma vaga criada pela web aparece no banco e na trilha.
 
 ### Fase 4: a tela do médico e a cascata na tela
 
 - [ ] **4.1** Ofertas, com plantão, local, horário, distância, prazo e "Por que você".
-- [ ] **4.2** Aceitar e recusar, com motivo (D4 e D5).
+- [ ] **4.2** Aceitar e recusar, com um dos quatro motivos (distância, cansaço, agenda ou outro) e confirmação antes, porque não se desfaz (D4 e D5).
 - [ ] **4.3** Contestar uma recomendação e ver a resposta.
 - [ ] **4.4** "Minha conta": o que o sistema usa e não usa sobre o médico, e como pedir revisão humana.
-- [ ] **4.5** Na tela da vaga, o coordenador acompanha a cascata: quem recebeu, quem recusou, quem deixou o prazo passar e o tempo que falta (D7 decide como a tela se atualiza).
+- [ ] **4.5** Na tela da vaga, o coordenador acompanha a cascata: quem recebeu, quem recusou, quem deixou o prazo passar e o tempo que falta (a tela consulta o sistema a cada 3 segundos, D7).
 
 **Pronto quando:** o cenário "o 1º recusa, o 2º deixa passar, o 3º aceita" acontece de verdade, com o n8n, e aparece nas duas telas.
 
@@ -106,7 +108,7 @@ O adaptador `live` liga a web ao sistema real.
 
 - [ ] **6.1** Auditoria: tabela da trilha, filtro por vaga, exportação CSV e verificação da cadeia no navegador.
 - [ ] **6.2** Contestações: a caixa do coordenador, com a resposta registrada.
-- [ ] **6.3** Equidade: concentração das ofertas e disparidade, com "medidas em dados sintéticos" (D9).
+- [ ] **6.3** Equidade: concentração das ofertas e disparidade, com "medidas em dados sintéticos", mais a contagem das ofertas feitas no sistema e o cenário calibrado com dados públicos ao lado (D9 e D11).
 
 ### Fase 7: concentração das ofertas
 
@@ -157,9 +159,9 @@ O documento acadêmico anda junto com o produto e usa o que ele mede.
 
 ## 6. Decisões que destravam o caminho
 
-Todas são do Victor. A recomendação é a escolha mais simples que cumpre as regras do projeto.
+**Aprovadas pelo Victor em 06/11/2026, todas como recomendadas** ("Aceito todas as recomendações"). O registro, com as alternativas descartadas, está no [ADR 0015](adr/0015-decisoes-que-destravam-o-mvp.md). A recomendação era a escolha mais simples que cumpre as regras do projeto.
 
-| # | Decisão | Recomendação | Por quê |
+| # | Decisão | O que ficou decidido | Por quê |
 | --- | --- | --- | --- |
 | D1 | Como o Victor entra no sistema real | Logins com e-mail e senha na rede simulada: um coordenador e três médicos que a vaga do roteiro recomenda. O script dos logins de teste cria, e as senhas aparecem só no terminal dele | Sem login anônimo e sem mudança de segurança no Supabase. Os logins de teste atuais pertencem a outra organização e não veem os 300 médicos |
 | D2 | Justificativa da exceção | A API aceita a justificativa e a grava na trilha, junto da aprovação | Hoje a tela exige a justificativa, mas a API a recusa |
@@ -175,8 +177,8 @@ Todas são do Victor. A recomendação é a escolha mais simples que cumpre as r
 
 ## 7. O que só o Victor faz
 
-- Responder às decisões da seção 6.
-- Criar os logins da demonstração, com o comando preparado, e guardar as senhas.
+- Criar os logins da demonstração (D1), com o comando preparado no passo 2.6, e guardar as senhas fora do Git.
+- Pedir as correções do documento da Entrega 3 (E.6), que está fora do Git.
 - Ligar o MFA do n8n e conferir no painel que a renovação do servidor está desligada.
 - Rodar `usuarios-de-teste.py limpar` antes do ensaio e `remover` depois da apresentação.
 - Dar o ok de cada merge e de cada publicação no servidor.

@@ -4,6 +4,16 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 06/11/2026 (sexta): fase 1 fechada, com as onze decisões aprovadas
+
+**Decisão do Victor:** "Aceito todas as recomendações e faça toda a fase 1."
+
+**O que ficou decidido** ([ADR 0015](adr/0015-decisoes-que-destravam-o-mvp.md)): logins da demonstração com e-mail e senha, um coordenador e três médicos (D1); a API grava a justificativa da exceção (D2); pular, desfazer o pulo e "Esta explicação ajudou?" ganham rotas (D3); recusa com um dos quatro motivos, sem texto livre (D4), e sem desfazer, com confirmação antes (D5); prazo de 2 minutos por oferta na demonstração (D6); as telas consultam a cada 3 segundos (D7); a contestação ganha tabela, RLS e rotas (D8); a equidade mostra a simulação rotulada e a contagem do sistema (D9); a urgência passa a ser exigida (D10); e a base sintética fica como está, com o cenário calibrado ao lado (D11).
+
+**O que mudou nos documentos:** o roteiro marca a fase 1 como feita e põe a fase 2 como próximo passo; o plano, os ADRs 0008, 0013 e 0014, a arquitetura, as fichas do banco, do n8n, da API e da web, a rastreabilidade (FB-5, A3-5 e A4-4), o README e o `CLAUDE.md` deixaram de tratar as decisões como pendentes. O PR #22, com o roteiro, entrou na `main` antes, com a CI verde.
+
+**Uso de IA:** o Claude Code propôs as recomendações em 05/11 e registrou a decisão; o Victor decidiu.
+
 ## 06/11/2026 (sexta): o repositório inteiro alinhado às decisões do dia, e o início da fase 1
 
 **Pedido do Victor:** "faça o merge final e atualize todo o GitHub com as novas decisões", e "vamos iniciar a fase 1".

@@ -8,7 +8,7 @@ export function TelaEmConstrucao({ titulo, descricao }: { titulo: string; descri
   return (
     <div className="mx-auto w-full max-w-[720px]">
       <h1 className="font-serif text-3xl font-semibold">{titulo}</h1>
-      <Alert tone="info" title="Esta tela chega na próxima entrega" className="mt-5">
+      <Alert tone="info" title="Esta tela ainda está em construção" className="mt-5">
         {descricao}
       </Alert>
     </div>

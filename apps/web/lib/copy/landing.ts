@@ -282,7 +282,7 @@ export const PERGUNTAS: TemaDePerguntas[] = [
       {
         pergunta: "E se o sistema ler a vaga errado?",
         resposta:
-          "Você confere cada campo antes de seguir e pode corrigi-lo. Campo ambíguo vira pergunta, não palpite, e, se a leitura falhar, aparece um formulário para preencher. Hoje a leitura é feita por regras; o modelo de linguagem (Gemini) está desenhado e ainda não foi testado com chave.",
+          "Você confere cada campo antes de seguir e pode corrigi-lo. Campo ambíguo vira pergunta, não palpite, e, se a leitura falhar, aparece um formulário para preencher. Nesta demonstração, a leitura é feita por regras. O modelo de linguagem (Gemini) foi testado à parte, com textos sintéticos.",
       },
     ],
   },
