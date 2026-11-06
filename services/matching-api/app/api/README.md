@@ -155,5 +155,5 @@ Com o ok do Victor:
 
 1. Os logins da demonstração (2.6) e a publicação no servidor (2.8). O contrato da tela e a contestação entraram em 06/11 (passos 2.1 a 2.5 do [roteiro](../../../../docs/roteiro-ate-o-mvp.md)).
 2. As telas do coordenador e do médico chamam esta API e leem o resto sob RLS (adaptador `live`).
-3. Gemini: a imagem 0.2.0 já está no servidor, sem a chave. A chave só entra no ensaio e no dia ([passo a passo](../../../../infra/README.md)), e no ensaio se confere a memória com `docker stats` (o limite é de 512 MB). Sem a chave, ela usa 60 MiB.
+3. Gemini: a imagem está no servidor sem a chave (0.2.0 desde 05/11; 0.3.0, com a fase 2, no passo 2.8). A chave só entra no ensaio e no dia ([passo a passo](../../../../infra/README.md)), e no ensaio se confere a memória com `docker stats` (o limite é de 512 MB). Sem a chave, ela usa 60 MiB.
 4. Repetir a medição antes de 13/11, já com as telas, e reiniciar o servidor.

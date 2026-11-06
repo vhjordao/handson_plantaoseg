@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Usuários e organização de teste para conferir a API no projeto real. Quem roda é o Victor.
+"""Logins de teste e logins da demonstração no projeto real. Quem roda é o Victor.
 
 Tudo é sintético: uma organização, um hospital longe dos demais, dois médicos fictícios e três
 logins. Os dados de teste ficam separados dos da rede simulada: o coordenador da rede não vê a
@@ -9,6 +9,21 @@ trilha desta organização, e o hospital fica fora do raio dos outros médicos.
     py -3.12 scripts/usuarios-de-teste.py limpar  --env C:\\dev\\handson_plantaoseg\\.env
     py -3.12 scripts/usuarios-de-teste.py remover --env C:\\dev\\handson_plantaoseg\\.env
     py -3.12 scripts/usuarios-de-teste.py prazo --minutos 2 --env C:\\dev\\handson_plantaoseg\\.env
+
+Logins da demonstração (D1 do ADR 0015): um coordenador da rede simulada e três médicos dela, com
+e-mail e senha para entrar na tela. As senhas aparecem só no terminal de quem roda; guarde-as e
+não as coloque no Git nem no chat.
+
+    py -3.12 scripts/usuarios-de-teste.py demonstracao [--medicos id1,id2,id3] --env ...
+    py -3.12 scripts/usuarios-de-teste.py limpar-demonstracao --env ...
+    py -3.12 scripts/usuarios-de-teste.py remover-demonstracao --env ...
+
+`demonstracao`: cria os quatro logins (ou troca as senhas, se já existem). Sem `--medicos`, usa os
+três primeiros médicos das personas da demonstração (`apps/web/lib/demo/mundo.json`), que existem
+no banco com os mesmos IDs; o roteiro da apresentação pode trocar por outros.
+`limpar-demonstracao`: apaga as vagas que o coordenador da demonstração publicou, com as
+recomendações, ofertas e contestações delas. A trilha fica.
+`remover-demonstracao`: faz a limpeza e apaga os quatro logins.
 
 `prazo`: muda o prazo da oferta só na organização de teste. Serve para ver a cascata do n8n andar
 sem esperar 1 hora; no fim, volte para 60. Depois de mudar, a API precisa reler os dados.
@@ -29,6 +44,7 @@ import sys
 import urllib.error
 import urllib.parse
 import urllib.request
+import uuid
 from pathlib import Path
 from typing import Any
 
@@ -52,6 +68,17 @@ LOGINS = {
 # Nenhum e-mail é enviado. Domínios reservados, para o endereço não ser de ninguém: o segundo só
 # entra se o Supabase recusar o primeiro.
 EMAIL_DOMAINS = ("plantaoseguro.invalid", "example.org")
+
+DEMO_LOGINS = {
+    "COORDENADOR": "coordenador.demo",
+    "MEDICO_1": "medico1.demo",
+    "MEDICO_2": "medico2.demo",
+    "MEDICO_3": "medico3.demo",
+}
+DEMO_WORLD = (
+    Path(__file__).resolve().parents[1] / "apps" / "web" / "lib" / "demo" / "mundo.json"
+)
+NETWORK_KIND = "rede_hospitais_privados"
 
 ORGANIZATION = {
     "id": ORGANIZATION_ID,
@@ -152,7 +179,9 @@ def call(
         except ValueError:
             detail = ""
         path = urllib.parse.urlparse(url).path
-        raise SystemExit(f"Falhou: {method} {path} respondeu {error.code} {detail}") from error
+        raise SystemExit(
+            f"Falhou: {method} {path} respondeu {error.code} {detail}"
+        ) from error
     return json.loads(raw) if raw else None
 
 
@@ -175,24 +204,38 @@ class Project:
             "Authorization": f"Bearer {self.service}",
         }
 
-    def rest(self, method: str, path: str, body: Any = None, *, prefer: str = "") -> Any:
+    def rest(
+        self, method: str, path: str, body: Any = None, *, prefer: str = ""
+    ) -> Any:
         headers = dict(self._service_headers)
         if prefer:
             headers["Prefer"] = prefer
         return call(method, f"{self.url}/rest/v1/{path}", headers=headers, body=body)
 
-    def upsert(self, table: str, rows: Any, conflict: str = "id") -> None:
+    def upsert(
+        self, table: str, rows: Any, conflict: str = "id", *, replace: bool = False
+    ) -> None:
+        resolution = "merge-duplicates" if replace else "ignore-duplicates"
         self.rest(
             "POST",
             f"{table}?on_conflict={conflict}",
             rows,
-            prefer="resolution=ignore-duplicates,return=minimal",
+            prefer=f"resolution={resolution},return=minimal",
         )
 
     def delete_in(self, table: str, column: str, values: list[str]) -> None:
         for start in range(0, len(values), CHUNK):
             chunk = ",".join(values[start : start + CHUNK])
-            self.rest("DELETE", f"{table}?{column}=in.({chunk})", prefer="return=minimal")
+            self.rest(
+                "DELETE", f"{table}?{column}=in.({chunk})", prefer="return=minimal"
+            )
+
+    def delete_user(self, user_id: str) -> None:
+        call(
+            "DELETE",
+            f"{self.url}/auth/v1/admin/users/{user_id}",
+            headers=self._service_headers,
+        )
 
     def ids(self, table: str, column: str, query: str) -> list[str]:
         rows = self.rest("GET", f"{table}?select={column}&{query}") or []
@@ -206,7 +249,9 @@ class Project:
         )
         return {user["email"]: user["id"] for user in result.get("users", [])}
 
-    def set_user(self, name: str, password: str, existing: dict[str, str]) -> tuple[str, str]:
+    def set_user(
+        self, name: str, password: str, existing: dict[str, str]
+    ) -> tuple[str, str]:
         """Cria o login ou troca a senha. Devolve o ID e o e-mail. A senha só vive neste comando."""
         for domain in EMAIL_DOMAINS:
             email = f"{name}@{domain}"
@@ -246,8 +291,12 @@ def create(project: Project, env_path: Path) -> None:
     project.upsert("units", [UNIT])
     project.upsert("policy_config", [POLICY], conflict="organization_id,effective_from")
     project.upsert("doctors", doctor_rows())
-    if not project.ids("doctor_availability", "id", f"doctor_id=eq.{DOCTOR_IDS[0]}&limit=1"):
-        project.rest("POST", "doctor_availability", availability_rows(), prefer="return=minimal")
+    if not project.ids(
+        "doctor_availability", "id", f"doctor_id=eq.{DOCTOR_IDS[0]}&limit=1"
+    ):
+        project.rest(
+            "POST", "doctor_availability", availability_rows(), prefer="return=minimal"
+        )
 
     existing = project.users_by_email()
     lines = [
@@ -265,7 +314,11 @@ def create(project: Project, env_path: Path) -> None:
         lines.append(f"TESTE_{name}_REFRESH={project.refresh_token(email, password)}")
         if name == "COORDENADOR":
             profiles.append(
-                {"id": user_id, "role": "coordinator", "organization_id": ORGANIZATION_ID}
+                {
+                    "id": user_id,
+                    "role": "coordinator",
+                    "organization_id": ORGANIZATION_ID,
+                }
             )
         else:
             doctor_id = DOCTOR_IDS[0] if name == "MEDICO_1" else DOCTOR_IDS[1]
@@ -277,30 +330,148 @@ def create(project: Project, env_path: Path) -> None:
     project.upsert("profiles", profiles)
 
     # Referências da outra organização, para a API provar que recusa. Só IDs sintéticos.
-    other_unit = project.ids("units", "id", f"organization_id=neq.{ORGANIZATION_ID}&limit=1")
+    other_unit = project.ids(
+        "units", "id", f"organization_id=neq.{ORGANIZATION_ID}&limit=1"
+    )
     other_shift = project.ids("shifts", "id", f"unit_id=eq.{other_unit[0]}&limit=1")
-    lines += [f"TESTE_OUTRA_UNIDADE={other_unit[0]}", f"TESTE_OUTRA_VAGA={other_shift[0]}"]
+    lines += [
+        f"TESTE_OUTRA_UNIDADE={other_unit[0]}",
+        f"TESTE_OUTRA_VAGA={other_shift[0]}",
+    ]
 
     target = env_path.with_name(".env.teste")
     target.write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(f"Pronto: organização, 2 médicos e 3 logins de teste. Tokens em {target}.")
 
 
-def clean(project: Project) -> None:
-    shifts = project.ids("shifts", "id", f"unit_id=eq.{UNIT_ID}")
-    requests = project.ids("shift_requests", "id", f"unit_id=eq.{UNIT_ID}")
+def delete_shifts(project: Project, shifts: list[str], requests: list[str]) -> int:
+    """Apaga as vagas e tudo o que depende delas. Devolve quantas recomendações saíram."""
     recommendations = []
     for start in range(0, len(shifts), CHUNK):
         chunk = ",".join(shifts[start : start + CHUNK])
-        recommendations += project.ids("recommendations", "id", f"shift_id=in.({chunk})")
+        recommendations += project.ids(
+            "recommendations", "id", f"shift_id=in.({chunk})"
+        )
+    project.delete_in("contestations", "shift_id", shifts)
     project.delete_in("explanations", "recommendation_id", recommendations)
     project.delete_in("recommendations", "id", recommendations)
     project.delete_in("recommendation_exclusions", "shift_id", shifts)
     project.delete_in("offers", "shift_id", shifts)
     project.delete_in("shifts", "id", shifts)
     project.delete_in("shift_requests", "id", requests)
-    print(f"Limpeza: {len(shifts)} vagas, {len(recommendations)} recomendações e as ofertas delas.")
+    return len(recommendations)
+
+
+def clean(project: Project) -> None:
+    shifts = project.ids("shifts", "id", f"unit_id=eq.{UNIT_ID}")
+    requests = project.ids("shift_requests", "id", f"unit_id=eq.{UNIT_ID}")
+    recommendations = delete_shifts(project, shifts, requests)
+    print(
+        f"Limpeza: {len(shifts)} vagas, {recommendations} recomendações e as ofertas delas."
+    )
     print("A trilha de auditoria não muda: ela é só de inserção.")
+
+
+def demo_doctor_ids(option: str | None) -> list[str]:
+    """Os três médicos dos logins: os pedidos em `--medicos` ou as personas da demonstração."""
+    if option:
+        ids = [value.strip() for value in option.split(",") if value.strip()]
+    else:
+        personas = json.loads(DEMO_WORLD.read_text(encoding="utf-8"))["personas"]
+        ids = [p["medico"]["id"] for p in personas if p.get("papel") == "medico"][:3]
+    if len(ids) != 3 or len(set(ids)) != 3:
+        raise SystemExit("Informe três médicos diferentes em --medicos.")
+    try:
+        return [str(uuid.UUID(value)) for value in ids]
+    except ValueError as error:
+        raise SystemExit("Cada médico em --medicos precisa ser um UUID.") from error
+
+
+def network_id(project: Project) -> str:
+    found = project.ids("organizations", "id", f"kind=eq.{NETWORK_KIND}")
+    if len(found) != 1:
+        raise SystemExit(f"Esperada uma rede simulada no banco; há {len(found)}.")
+    return found[0]
+
+
+def create_demo(project: Project, doctor_ids: list[str]) -> None:
+    """Os logins da demonstração na rede simulada. Senhas novas a cada vez, só no terminal."""
+    organization_id = network_id(project)
+    chunk = ",".join(doctor_ids)
+    found = set(project.ids("doctors", "id", f"id=in.({chunk})&crm_status=eq.active"))
+    missing = [doctor_id for doctor_id in doctor_ids if doctor_id not in found]
+    if missing:
+        raise SystemExit(
+            f"Médicos que não existem ou não estão ativos: {', '.join(missing)}"
+        )
+    existing = project.users_by_email()
+    accounts = []
+    profiles = []
+    for name, login in DEMO_LOGINS.items():
+        password = secrets.token_urlsafe(12)
+        user_id, email = project.set_user(login, password, existing)
+        accounts.append((name, email, password))
+        if name == "COORDENADOR":
+            profiles.append(
+                {
+                    "id": user_id,
+                    "role": "coordinator",
+                    "organization_id": organization_id,
+                }
+            )
+        else:
+            doctor_id = doctor_ids[int(name[-1]) - 1]
+            profiles.append({"id": user_id, "role": "doctor", "doctor_id": doctor_id})
+    for profile in profiles:
+        profile.setdefault("organization_id", None)
+        profile.setdefault("doctor_id", None)
+    # Rodar de novo com outros médicos troca o vínculo: o perfil é sobrescrito.
+    project.upsert("profiles", profiles, replace=True)
+    print(
+        "Logins da demonstração na rede simulada (simulação; nenhum e-mail é enviado):"
+    )
+    for name, email, password in accounts:
+        print(f"  {name:<12} {email:<36} senha: {password}")
+    print(
+        "Guarde as senhas agora: elas não ficam em nenhum arquivo. Rodar de novo troca todas."
+    )
+    print(f"Médicos: {', '.join(doctor_ids)}")
+
+
+def demo_coordinator_ids(project: Project) -> list[str]:
+    users = project.users_by_email()
+    login = DEMO_LOGINS["COORDENADOR"]
+    return [users[f"{login}@{d}"] for d in EMAIL_DOMAINS if f"{login}@{d}" in users]
+
+
+def clean_demo(project: Project) -> None:
+    """Só o que o coordenador da demonstração publicou. O resto da rede simulada não muda."""
+    shifts: list[str] = []
+    requests: list[str] = []
+    for coordinator_id in demo_coordinator_ids(project):
+        found = project.ids(
+            "shift_requests", "id", f"coordinator_pseudo_id=eq.{coordinator_id}"
+        )
+        requests += found
+        for start in range(0, len(found), CHUNK):
+            chunk = ",".join(found[start : start + CHUNK])
+            shifts += project.ids("shifts", "id", f"source_request_id=in.({chunk})")
+    recommendations = delete_shifts(project, shifts, requests)
+    print(
+        f"Limpeza da demonstração: {len(shifts)} vagas e {recommendations} recomendações."
+    )
+    print("A trilha de auditoria não muda: ela é só de inserção.")
+
+
+def remove_demo(project: Project) -> None:
+    clean_demo(project)
+    users = project.users_by_email()
+    for login in DEMO_LOGINS.values():
+        for domain in EMAIL_DOMAINS:
+            user_id = users.get(f"{login}@{domain}")
+            if user_id:
+                project.delete_user(user_id)
+    print("Logins da demonstração removidos (os perfis saem junto).")
 
 
 def remove(project: Project) -> None:
@@ -319,7 +490,9 @@ def remove(project: Project) -> None:
     project.delete_in("doctor_availability", "doctor_id", list(DOCTOR_IDS))
     project.delete_in("doctors", "id", list(DOCTOR_IDS))
     project.rest(
-        "DELETE", f"policy_config?organization_id=eq.{ORGANIZATION_ID}", prefer="return=minimal"
+        "DELETE",
+        f"policy_config?organization_id=eq.{ORGANIZATION_ID}",
+        prefer="return=minimal",
     )
     project.delete_in("units", "id", [UNIT_ID])
     print("Logins, médicos, política e unidade de teste removidos.")
@@ -339,9 +512,27 @@ def set_offer_ttl(project: Project, minutes: int) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("comando", choices=("criar", "limpar", "remover", "prazo"))
-    parser.add_argument("--env", default=".env", help="caminho do .env com os tokens do projeto")
-    parser.add_argument("--minutos", type=int, default=60, help="prazo da oferta, no comando prazo")
+    parser.add_argument(
+        "comando",
+        choices=(
+            "criar",
+            "limpar",
+            "remover",
+            "prazo",
+            "demonstracao",
+            "limpar-demonstracao",
+            "remover-demonstracao",
+        ),
+    )
+    parser.add_argument(
+        "--env", default=".env", help="caminho do .env com os tokens do projeto"
+    )
+    parser.add_argument(
+        "--minutos", type=int, default=60, help="prazo da oferta, no comando prazo"
+    )
+    parser.add_argument(
+        "--medicos", help="três IDs de médico, separados por vírgula (demonstracao)"
+    )
     args = parser.parse_args()
     if not 1 <= args.minutos <= 1440:
         print("--minutos precisa ficar entre 1 e 1440", file=sys.stderr)
@@ -349,7 +540,10 @@ def main() -> int:
     env_path = Path(args.env).resolve()
     env = read_env(env_path)
     if not env.get("SUPABASE_PROJECT_REF") or not env.get("SUPABASE_ACCESS_TOKEN"):
-        print(f"Faltam SUPABASE_PROJECT_REF e SUPABASE_ACCESS_TOKEN em {env_path}", file=sys.stderr)
+        print(
+            f"Faltam SUPABASE_PROJECT_REF e SUPABASE_ACCESS_TOKEN em {env_path}",
+            file=sys.stderr,
+        )
         return 2
     project = Project(env)
     if args.comando == "criar":
@@ -358,6 +552,12 @@ def main() -> int:
         clean(project)
     elif args.comando == "prazo":
         set_offer_ttl(project, args.minutos)
+    elif args.comando == "demonstracao":
+        create_demo(project, demo_doctor_ids(args.medicos))
+    elif args.comando == "limpar-demonstracao":
+        clean_demo(project)
+    elif args.comando == "remover-demonstracao":
+        remove_demo(project)
     else:
         remove(project)
     print("Lembrete: depois de mudar o banco por aqui, a API precisa reler os dados.")

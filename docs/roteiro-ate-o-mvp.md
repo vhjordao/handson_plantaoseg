@@ -66,7 +66,7 @@ A API hoje faz o fluxo principal, mas a tela pede coisas que ela ainda não tem 
 - [x] **2.3** *Feito em 06/11.* A leitura devolve, para cada campo, se está no texto ou foi deduzida, e o trecho. As sugestões devolvem a contribuição de cada variável e a evidência de quem ficou de fora.
 - [x] **2.4** O coordenador lê a política e a ficha do modelo. *Feito em 06/11.*
 - [x] **2.5** *Feito em 06/11.* Contestação: tabela, RLS e rotas para o médico abrir e o coordenador responder, com as ações `contestation_opened` e `contestation_answered` na trilha (D8).
-- [ ] **2.6** Os logins da demonstração na rede simulada, com e-mail e senha: um coordenador e três médicos que a vaga do roteiro recomenda (D1). O script fica pronto, e quem roda o comando é o Victor.
+- [ ] **2.6** Os logins da demonstração na rede simulada, com e-mail e senha: um coordenador e três médicos que a vaga do roteiro recomenda (D1). O script fica pronto, e quem roda o comando é o Victor. *Script pronto em 06/11 (`usuarios-de-teste.py demonstracao`); falta o Victor rodar. Sem `--medicos`, usa os três primeiros médicos das personas da demonstração; o roteiro (5.2) pode trocar.*
 - [x] **2.7** Prazo de 2 minutos por oferta na organização da demonstração (D6). *Feito em 06/11, por migração: vale quando ela for aplicada no 2.8.*
 - [ ] **2.8** Publicar no servidor e conferir com `conferir-api.py`.
 
@@ -177,7 +177,8 @@ O documento acadêmico anda junto com o produto e usa o que ele mede.
 
 ## 7. O que só o Victor faz
 
-- Criar os logins da demonstração (D1), com o comando preparado no passo 2.6, e guardar as senhas fora do Git.
+- Criar os logins da demonstração (D1) e guardar as senhas fora do Git, num gerenciador de senhas: `py -3.12 scripts/usuarios-de-teste.py demonstracao --env C:\dev\handson_plantaoseg\.env`. Rodar de novo troca as senhas; `--medicos id1,id2,id3` troca os médicos.
+- Antes do ensaio, apagar o que o login da demonstração publicou: `limpar-demonstracao`; depois da apresentação, `remover-demonstracao`.
 - Pedir as correções do documento da Entrega 3 (E.6), que está fora do Git.
 - Ligar o MFA do n8n e conferir no painel que a renovação do servidor está desligada.
 - Rodar `usuarios-de-teste.py limpar` antes do ensaio e `remover` depois da apresentação.

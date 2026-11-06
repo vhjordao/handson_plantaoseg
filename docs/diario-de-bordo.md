@@ -4,6 +4,14 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 06/11/2026 (sexta): fase 2, o comando dos logins da demonstração
+
+**O que ficou pronto (passo 2.6, D1):** `scripts/usuarios-de-teste.py` ganhou três comandos. `demonstracao` cria um coordenador da rede simulada e três médicos dela, com e-mail em domínio reservado (nenhum e-mail é enviado) e senha sorteada, que aparece só no terminal de quem roda. Sem `--medicos`, usa os três primeiros médicos das personas da demonstração, que existem no banco com os mesmos IDs; rodar de novo troca as senhas e, com `--medicos`, os médicos. `limpar-demonstracao` apaga só o que o coordenador da demonstração publicou (vagas, recomendações, ofertas e contestações), e `remover-demonstracao` apaga também os logins. A trilha fica.
+
+**Falta:** o Victor rodar o comando. O Claude Code não cria contas no projeto real nem vê as senhas.
+
+**Uso de IA:** o Claude Code escreveu os comandos sobre o script que já existia; nada foi executado contra o projeto real.
+
 ## 06/11/2026 (sexta): fase 2, a contestação e o prazo de 2 minutos
 
 **O que ficou pronto (passos 2.5 e 2.7):**
