@@ -1,0 +1,166 @@
+{
+  "label": "simulacao",
+  "test_start": "2026-08-01",
+  "n_shifts": 392,
+  "manual_offers": 0.3109567901234568,
+  "span_days": 60,
+  "mean_pool": 49.892857142857146,
+  "window_days": 7,
+  "repetitions": 100,
+  "policies": {
+    "hoje": {
+      "label": "Hoje: só a ordem do modelo",
+      "delta": null,
+      "limit": null,
+      "top5_success": 0.7123466334164845,
+      "offers_per_shift": 1.3167446217014092,
+      "uncovered_share": 5.0292187849536374e-05,
+      "time_mean": 47.45909125698395,
+      "filled_share": 0.9999234693877551,
+      "top10_top5_slots": 0.5066326530612245,
+      "top10_effective_offers": 0.8208055175318629,
+      "top10_first_offer": 0.923469387755102,
+      "never_recommended_share": 0.4708171206225681,
+      "zone_participation": {
+        "centro": 0.8680470570405592,
+        "leste": 0.007801854127108233,
+        "norte": 1.664542666500891,
+        "oeste": 0.009754224270353303,
+        "sul": 1.824121100785246
+      },
+      "worst_zone": 0.007801854127108233
+    },
+    "rodizio5": {
+      "label": "Rodízio entre equivalentes, margem de 5 pontos",
+      "delta": 0.05,
+      "limit": null,
+      "top5_success": 0.7078683522983426,
+      "offers_per_shift": 1.3444574273847092,
+      "uncovered_share": 4.9663933019076437e-05,
+      "time_mean": 48.51408235114037,
+      "filled_share": 0.9999489795918367,
+      "top10_top5_slots": 0.38979591836734695,
+      "top10_effective_offers": 0.5423164945763765,
+      "top10_first_offer": 0.6198979591836735,
+      "never_recommended_share": 0.377431906614786,
+      "zone_participation": {
+        "centro": 0.9209767556405932,
+        "leste": 0.015603708254216466,
+        "norte": 1.664542666500891,
+        "oeste": 0.04877112135176651,
+        "sul": 1.6983196455586773
+      },
+      "worst_zone": 0.015603708254216466
+    },
+    "rodizio10": {
+      "label": "Rodízio entre equivalentes, margem de 10 pontos",
+      "delta": 0.1,
+      "limit": null,
+      "top5_success": 0.6944445509407718,
+      "offers_per_shift": 1.3694268354698937,
+      "uncovered_share": 6.543083718458888e-05,
+      "time_mean": 49.368089394596524,
+      "filled_share": 0.9999234693877551,
+      "top10_top5_slots": 0.28520408163265304,
+      "top10_effective_offers": 0.3574304708218539,
+      "top10_first_offer": 0.40816326530612246,
+      "never_recommended_share": 0.26459143968871596,
+      "zone_participation": {
+        "centro": 0.9844923939606341,
+        "leste": 0.0702166871439741,
+        "norte": 1.6008558166521611,
+        "oeste": 0.08778801843317974,
+        "sul": 1.5775502485411714
+      },
+      "worst_zone": 0.0702166871439741
+    },
+    "rodizio15": {
+      "label": "Rodízio entre equivalentes, margem de 15 pontos",
+      "delta": 0.15,
+      "limit": null,
+      "top5_success": 0.6780562405945669,
+      "offers_per_shift": 1.406137912584121,
+      "uncovered_share": 9.986901081222682e-05,
+      "time_mean": 50.60106640814348,
+      "filled_share": 0.9999234693877551,
+      "top10_top5_slots": 0.22959183673469388,
+      "top10_effective_offers": 0.2965162358908685,
+      "top10_first_offer": 0.3494897959183674,
+      "never_recommended_share": 0.17898832684824903,
+      "zone_participation": {
+        "centro": 1.0043410309356469,
+        "leste": 0.1716407907963811,
+        "norte": 1.4879564010112312,
+        "oeste": 0.30238095238095236,
+        "sul": 1.4618129097327281
+      },
+      "worst_zone": 0.1716407907963811
+    },
+    "limite2": {
+      "label": "Limite de 2 aparições por semana",
+      "delta": null,
+      "limit": 2,
+      "top5_success": 0.6795649885506445,
+      "offers_per_shift": 1.3593689956391513,
+      "uncovered_share": 0.00017813629498715186,
+      "time_mean": 48.821753884622254,
+      "filled_share": 0.9998214285714285,
+      "top10_top5_slots": 0.22857142857142856,
+      "top10_effective_offers": 0.44148905131743316,
+      "top10_first_offer": 0.5357142857142857,
+      "never_recommended_share": 0.21011673151750973,
+      "zone_participation": {
+        "centro": 1.038745335025669,
+        "leste": 0.1443343013515023,
+        "norte": 1.4474284056529487,
+        "oeste": 0.2536098310291859,
+        "sul": 1.474393055255385
+      },
+      "worst_zone": 0.1443343013515023
+    },
+    "limite4": {
+      "label": "Limite de 4 aparições por semana",
+      "delta": null,
+      "limit": 4,
+      "top5_success": 0.7069115587714183,
+      "offers_per_shift": 1.3229675347786163,
+      "uncovered_share": 5.958872842553285e-05,
+      "time_mean": 47.60798020256652,
+      "filled_share": 0.9999234693877551,
+      "top10_top5_slots": 0.3836734693877551,
+      "top10_effective_offers": 0.6974049733070316,
+      "top10_first_offer": 0.798469387755102,
+      "never_recommended_share": 0.4085603112840467,
+      "zone_participation": {
+        "centro": 0.91568378578059,
+        "leste": 0.015603708254216466,
+        "norte": 1.635594098387832,
+        "oeste": 0.03901689708141321,
+        "sul": 1.7385761112311793
+      },
+      "worst_zone": 0.015603708254216466
+    },
+    "rodizio10_limite4": {
+      "label": "Rodízio de 10 pontos e limite de 4",
+      "delta": 0.1,
+      "limit": 4,
+      "top5_success": 0.6934752743875416,
+      "offers_per_shift": 1.3708998443109948,
+      "uncovered_share": 6.588273996703817e-05,
+      "time_mean": 49.29701252646886,
+      "filled_share": 0.9999234693877551,
+      "top10_top5_slots": 0.27908163265306124,
+      "top10_effective_offers": 0.3622838151420729,
+      "top10_first_offer": 0.40561224489795916,
+      "never_recommended_share": 0.2529182879377432,
+      "zone_participation": {
+        "centro": 0.9844923939606341,
+        "leste": 0.0741176142075282,
+        "norte": 1.5950661030295494,
+        "oeste": 0.11705069124423963,
+        "sul": 1.5649701030185144
+      },
+      "worst_zone": 0.0741176142075282
+    }
+  }
+}

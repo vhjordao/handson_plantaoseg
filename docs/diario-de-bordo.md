@@ -4,6 +4,18 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 06/11/2026 (sexta): experimento contra a concentração das ofertas
+
+**Pedido do Victor:** "Entrega 3 primeiro". O experimento da concentração (roteiro, passo 7.1) vem antes porque o documento o declarava não implementado e é o maior risco ético medido.
+
+**O que foi feito:** `app/concentration.py` passa pelas 392 vagas de teste em ordem de publicação, com memória de quem apareceu no top-5 na última semana, e compara sete políticas: a ordem de hoje, rodízio entre equivalentes com margens de 5, 10 e 15 pontos, limite de 2 e de 4 aparições por semana e rodízio com limite. Todas usam os mesmos sorteios por vaga.
+
+**Resultado (simulação):** em simulação, o rodízio entre elegíveis equivalentes (margem de 10 pontos) leva os 10% mais expostos de 82,1% para 35,7% das ofertas e de 50,7% para 28,5% dos lugares do top-5, com 1,8 ponto a menos de chance de sucesso e 2 minutos a mais por vaga. O critério de escolha, do grupo, é a maior redução perdendo até 2 pontos de chance. O limite sozinho perde mais chance para cortar menos, e somado ao rodízio acrescenta pouco. **A exclusão por zona quase não muda** (0,01 para 0,07): quem mora longe quase nunca fica perto da melhor chance, então segue aberta a medida contra ela.
+
+**O que ainda não está feito:** a política não está na API (passo 7.2).
+
+**Uso de IA:** o Claude Code desenhou e rodou o experimento e escreveu os testes; a margem de 5 pontos veio da regra de "chances parecidas" da tela do coordenador, e o critério dos 2 pontos fica para o Victor confirmar.
+
 ## 06/11/2026 (sexta): fase 1 fechada, com as onze decisões aprovadas
 
 **Decisão do Victor:** "Aceito todas as recomendações e faça toda a fase 1."

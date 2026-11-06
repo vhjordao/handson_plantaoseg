@@ -5,6 +5,7 @@ Uso, a partir de `services/matching-api`:
     python -m app.cli seed        # gera os dados sintéticos e o relatório de qualidade
     python -m app.cli evaluate    # treina o modelo e compara com o baseline (simulação)
     python -m app.cli flow        # fluxo recomendado contra o processo manual (simulação)
+    python -m app.cli concentration # rodízio e limite contra a concentração (simulação)
     python -m app.cli demo --yes  # vaga em texto livre -> top 5 -> aprovação -> auditoria
     python -m app.cli blind-review  # casos da revisão às cegas para as entrevistas
     python -m app.cli robustness    # teste de premissas e simulação de lançamento
@@ -278,6 +279,42 @@ def cmd_flow(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_concentration(args: argparse.Namespace) -> int:
+    from app.concentration import (
+        concentration_policy_chart,
+        evaluate_concentration,
+        recommended_key,
+        render_concentration,
+    )
+
+    data_dir = Path(args.data)
+    dataset, params = _load(data_dir)
+    model = _load_model(data_dir, dataset, params)
+    metrics = evaluate_concentration(dataset, params, model)
+    manual = metrics["manual_offers"]
+    if args.report_dir:
+        report_dir = Path(args.report_dir)
+        report_dir.mkdir(parents=True, exist_ok=True)
+        (report_dir / "metricas-concentracao.md").write_text(
+            render_concentration(metrics, manual), encoding="utf-8"
+        )
+        (report_dir / "metricas-concentracao.json").write_text(
+            json.dumps(metrics, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+        (report_dir / "fig-concentracao-politicas.svg").write_text(
+            concentration_policy_chart(metrics, manual), encoding="utf-8"
+        )
+    print("Concentração das ofertas por política (SIMULAÇÃO, dados sintéticos)")
+    for key, r in metrics["policies"].items():
+        print(
+            f"  {key}: sucesso do top-5 {_pt(r['top5_success'] * 100)}% | "
+            f"tempo {r['time_mean']:.0f} min | ofertas com os 10% mais expostos "
+            f"{_pt(r['top10_effective_offers'] * 100)}%"
+        )
+    print(f"  Recomendada: {recommended_key(metrics)}")
+    return 0
+
+
 def cmd_walkthrough(args: argparse.Namespace) -> int:
     from app.walkthrough import render_walkthrough
 
@@ -445,6 +482,11 @@ def build_parser() -> argparse.ArgumentParser:
     flow.add_argument("--data", default=str(DEFAULT_DATA))
     flow.add_argument("--report-dir", default=None)
     flow.set_defaults(func=cmd_flow)
+
+    conc = sub.add_parser("concentration", help="rodízio e limite contra a concentração")
+    conc.add_argument("--data", default=str(DEFAULT_DATA))
+    conc.add_argument("--report-dir", default=None)
+    conc.set_defaults(func=cmd_concentration)
 
     demo = sub.add_parser("demo", help="fluxo completo para uma vaga em texto livre")
     demo.add_argument("--data", default=str(DEFAULT_DATA))

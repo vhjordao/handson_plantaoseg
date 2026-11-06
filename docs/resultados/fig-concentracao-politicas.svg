@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 300" role="img" aria-labelledby="t d" font-family='system-ui, -apple-system, "Segoe UI", sans-serif'>
+<title id="t">Ofertas com os 10% mais expostos</title><desc id="d">Colunas com a parcela das ofertas recebida pelos 10% de médicos mais expostos: processo manual simulado, a ordem de hoje, rodízio com margens de 5, 10 e 15 pontos e limite de 2 aparições por semana.</desc>
+<rect width="440" height="300" fill="#fcfcfb"/>
+<text x="56" y="28" font-size="16" font-weight="600" fill="#0b0b0b">Ofertas com os 10% mais expostos</text>
+<text x="56" y="48" font-size="12" fill="#52514e">Parcela em %; igualdade seria 10%; estimativa superior</text>
+<line x1="56" x2="416" y1="236.0" y2="236.0" stroke="#c3c2b7" stroke-width="1"/><text x="48" y="240.0" font-size="11" text-anchor="end" fill="#898781">0%</text>
+<line x1="56" x2="416" y1="208.0" y2="208.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="212.0" font-size="11" text-anchor="end" fill="#898781">20%</text>
+<line x1="56" x2="416" y1="180.0" y2="180.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="184.0" font-size="11" text-anchor="end" fill="#898781">40%</text>
+<line x1="56" x2="416" y1="152.0" y2="152.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="156.0" font-size="11" text-anchor="end" fill="#898781">60%</text>
+<line x1="56" x2="416" y1="124.0" y2="124.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="128.0" font-size="11" text-anchor="end" fill="#898781">80%</text>
+<line x1="56" x2="416" y1="96.0" y2="96.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="100.0" font-size="11" text-anchor="end" fill="#898781">100%</text>
+<path d="M74.0,236.0 L74.0,196.5 Q74.0,192.5 78.0,192.5 L94.0,192.5 Q98.0,192.5 98.0,196.5 L98.0,236.0 Z" fill="#2a78d6"/>
+<text x="86.0" y="186.5" font-size="11" text-anchor="middle" fill="#52514e">31%</text>
+<text x="86.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">Manual</text>
+<path d="M134.0,236.0 L134.0,125.1 Q134.0,121.1 138.0,121.1 L154.0,121.1 Q158.0,121.1 158.0,125.1 L158.0,236.0 Z" fill="#2a78d6"/>
+<text x="146.0" y="115.1" font-size="11" text-anchor="middle" fill="#52514e">82%</text>
+<text x="146.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">Hoje</text>
+<path d="M194.0,236.0 L194.0,164.1 Q194.0,160.1 198.0,160.1 L214.0,160.1 Q218.0,160.1 218.0,164.1 L218.0,236.0 Z" fill="#2a78d6"/>
+<text x="206.0" y="154.1" font-size="11" text-anchor="middle" fill="#52514e">54%</text>
+<text x="206.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">Rodízio 5</text>
+<path d="M254.0,236.0 L254.0,190.0 Q254.0,186.0 258.0,186.0 L274.0,186.0 Q278.0,186.0 278.0,190.0 L278.0,236.0 Z" fill="#2a78d6"/>
+<text x="266.0" y="180.0" font-size="11" text-anchor="middle" fill="#52514e">36%</text>
+<text x="266.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">Rodízio</text>
+<text x="266.0" y="268.0" font-size="11" text-anchor="middle" fill="#52514e">10</text>
+<path d="M314.0,236.0 L314.0,198.5 Q314.0,194.5 318.0,194.5 L334.0,194.5 Q338.0,194.5 338.0,198.5 L338.0,236.0 Z" fill="#2a78d6"/>
+<text x="326.0" y="188.5" font-size="11" text-anchor="middle" fill="#52514e">30%</text>
+<text x="326.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">Rodízio</text>
+<text x="326.0" y="268.0" font-size="11" text-anchor="middle" fill="#52514e">15</text>
+<path d="M374.0,236.0 L374.0,178.2 Q374.0,174.2 378.0,174.2 L394.0,174.2 Q398.0,174.2 398.0,178.2 L398.0,236.0 Z" fill="#2a78d6"/>
+<text x="386.0" y="168.2" font-size="11" text-anchor="middle" fill="#52514e">44%</text>
+<text x="386.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">Limite 2</text>
+</svg>
