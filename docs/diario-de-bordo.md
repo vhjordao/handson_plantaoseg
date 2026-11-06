@@ -4,6 +4,40 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 06/11/2026 (sexta): o plano por fases
+
+**Pedido do Victor:** "Não quero execução agora. Quero planejar. Divida em fases", e depois "Sim, no roteiro".
+
+**Decisões dele:** o projeto do Gemini continua sem faturamento; a página do telão sai do site; a direção visual fica para depois, porque ele já tem um modelo em mente.
+
+**O que mudou no [roteiro](roteiro-ate-o-mvp.md):** a seção 1 virou o plano por fases A a I, com quem faz e o pronto quando de cada uma. Como o modelo visual vem depois, as telas do médico e da auditoria são feitas no visual de hoje, e o visual novo entra pela base, de uma vez (fase E). O modelo precisa chegar até cerca de 10/11 para caber antes de congelar o código.
+
+**Uso de IA:** o Claude Code organizou as fases e escreveu o plano; nada foi executado.
+
+## 06/11/2026 (sexta): três pedidos novos no roteiro
+
+**Pedidos do Victor:** melhorar o frontend por completo, da página inicial às telas de dentro; rever a entrada, que agora deve funcionar só com login; e deixar o Gemini ligado, sempre sem gerar custos.
+
+**Como entraram no [roteiro](roteiro-ate-o-mvp.md):**
+
+- **3.7, só login:** a entrada fica com e-mail e senha; saem as portas por persona e o cartão do telão. O modo de demonstração continua só como plano B, por um link discreto e pelo aviso de indisponível.
+- **3.8, Gemini ligado:** a chave vai para o `.env` do servidor e fica até o fim do projeto, com um teto diário de chamadas abaixo da cota gratuita. Antes, o Victor confirma que o projeto continua sem faturamento ([ADR 0003](adr/0003-llm-do-produto-gemini.md), atualização de 06/11). A chave não vai à Vercel, ao navegador nem ao Git.
+- **Trilha F, o frontend por completo:** começa por uma direção visual que o Victor aprova (F.1) e anda junto das fases 4 e 6, para as telas novas nascerem no visual novo.
+
+**Uso de IA:** o Claude Code encaixou os pedidos no roteiro e no ADR; nada foi executado ainda.
+
+## 06/11/2026 (sexta): o rodízio no servidor (imagem 0.4.0)
+
+**Pedido do Victor:** "Merge e publicar", para o PR #32.
+
+**O que foi feito:**
+
+- **Merge** do #32 com a CI verde.
+- **Publicação:** o Compose do servidor só diferia da `main` na tag da imagem. Antes, cópias para voltar atrás (`docker-compose.yml.antes-rodizio` e `services/matching-api.antes-rodizio`); a imagem 0.3.0 continua no servidor. O código foi copiado da `main`, a imagem 0.4.0 foi construída lá, e só a API foi trocada. Sem migração.
+- **Conferência:** 33 de 33 do `conferir-api.py verificar`, API saudável e sem erro no log. No banco, a primeira recomendação da 0.4.0 gravou na trilha a política `rodizio`, com margem 0,1 e janela de 7 dias.
+
+**Uso de IA:** o Claude Code fez o merge, publicou e conferiu; nenhum segredo, IP ou endereço foi impresso.
+
 ## 06/11/2026 (sexta): o rodízio contra a concentração entra na API (7.2)
 
 **Pedido do Victor:** "Sim, fazer a 7.2", enquanto a conferência da 3.6 não sai.
@@ -17,7 +51,7 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 **Testes:** 560 testes do motor e da API (10 novos do rodízio) e 204 de unidade e componente na web. O banco falso dos testes aprendeu `gte` e `lte` e passou a gravar `created_at`, como o banco real.
 
-**O que ainda não vale:** o servidor roda a imagem 0.3.0. O rodízio só entra no sistema real com a publicação da 0.4.0, que espera o ok do Victor. Ensaios na mesma semana mudam a ordem da vaga do roteiro; o `limpar-demonstracao` antes do dia zera a contagem.
+**Depois:** publicado no mesmo dia (entrada acima). Ensaios na mesma semana mudam a ordem da vaga do roteiro; o `limpar-demonstracao` antes do dia zera a contagem.
 
 **Uso de IA:** o Claude Code levou a política ao motor e à API, escreveu os testes e a documentação; a escolha da política seguiu o critério do grupo no experimento.
 

@@ -1,7 +1,7 @@
 # Ficha do componente: API de matching
 
 - **Responsável:** Victor Jordão · **Frente:** motor e infraestrutura · **Branch:** `f3/api-matching` · **Atualizado em:** 06/11/2026
-- **Estado:** no ar no servidor, por HTTPS, desde 04/11/2026, com os dados sintéticos do projeto `plantaoseguro`. **Tudo é simulação.** A [cascata no n8n](../../../../n8n/README.md) pergunta a ela quanto esperar. Imagem 0.3.0, com a fase 2, desde 06/11. A tela do coordenador usa a API desde 06/11 (fase 3). A 0.4.0 traz o rodízio entre equivalentes (7.2) e espera a publicação.
+- **Estado:** no ar no servidor, por HTTPS, desde 04/11/2026, com os dados sintéticos do projeto `plantaoseguro`. **Tudo é simulação.** A [cascata no n8n](../../../../n8n/README.md) pergunta a ela quanto esperar. A fase 2 entrou em 06/11. A tela do coordenador usa a API desde 06/11 (fase 3). Imagem 0.4.0, com o rodízio entre equivalentes (7.2), desde 06/11.
 
 ## 1. O que é e qual dor resolve
 
@@ -156,7 +156,6 @@ O Victor aprovou o plano, com as decisões e os riscos, antes de começar, e cri
 
 Com o ok do Victor:
 
-1. Publicar a imagem 0.4.0, com o rodízio (7.2 do [roteiro](../../../../docs/roteiro-ate-o-mvp.md)), e conferir com `conferir-api.py`.
-2. A tela do médico chama esta API (fase 4); a do coordenador já chama desde 06/11.
-3. Gemini: a imagem 0.3.0 está no servidor sem a chave. A chave só entra no ensaio e no dia ([passo a passo](../../../../infra/README.md)), e no ensaio se confere a memória com `docker stats` (o limite é de 512 MB). Sem a chave, ela usa 60 MiB.
-4. Repetir a medição antes de 13/11, já com as telas, e reiniciar o servidor.
+1. A tela do médico chama esta API (fase 4 do [roteiro](../../../../docs/roteiro-ate-o-mvp.md)); a do coordenador já chama desde 06/11.
+2. Gemini: a imagem 0.4.0 está no servidor sem a chave. A chave só entra no ensaio e no dia ([passo a passo](../../../../infra/README.md)), e no ensaio se confere a memória com `docker stats` (o limite é de 512 MB). Sem a chave, ela usa 60 MiB.
+3. Repetir a medição antes de 13/11, já com as telas, e reiniciar o servidor.
