@@ -264,6 +264,10 @@ export class AdaptadorLive implements PlantaoApi {
       porRegra[exclusao.rule_code] = (porRegra[exclusao.rule_code] ?? 0) + 1;
     }
     const elegiveis = Number(gerada.eligible ?? linhas.length);
+    // O rodízio guarda na trilha quem mudou de lugar em relação ao modelo (passo 7.2).
+    const ordenacao = gerada.ordering as
+      { moved?: { doctor_id: string; model_rank: number; exposure: number }[] } | undefined;
+    const movidos = new Map((ordenacao?.moved ?? []).map((m) => [m.doctor_id, m]));
     const candidatos: CandidatoDaApi[] = linhas.map((linha) => {
       const explicacao = explicacoes.find((e) => e.recommendation_id === linha.id);
       return {
@@ -279,6 +283,8 @@ export class AdaptadorLive implements PlantaoApi {
           source: explicacao?.source ?? "template",
         },
         explanation_fallback: reserva.get(linha.doctor_id) ?? null,
+        model_rank: movidos.get(linha.doctor_id)?.model_rank ?? linha.rank,
+        exposure_7d: movidos.get(linha.doctor_id)?.exposure ?? 0,
       };
     });
     return {

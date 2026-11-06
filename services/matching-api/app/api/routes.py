@@ -42,6 +42,7 @@ from app.api.schemas import (
     ReloadOut,
     RespondIn,
     RespondOut,
+    RotationOut,
     ShiftOut,
     SkipIn,
     SpanOut,
@@ -58,6 +59,7 @@ from app.api.service import (
 from app.api.tempo import local_from_db
 from app.llm.extraction import FIELD_KEYS
 from app.models import Offer, Shift
+from app.ranking.rotation import ROTATION_DELTA, ROTATION_WINDOW
 from app.rules import RULE_TEXTS
 
 router = APIRouter()
@@ -240,6 +242,8 @@ def recommend_shift(shift_id: UUID, profile: Coordinator, service: Service) -> R
                     source=candidate.explanation.source,
                 ),
                 explanation_fallback=candidate.explanation_fallback,
+                model_rank=candidate.model_rank,
+                exposure_7d=candidate.exposure,
             )
             for candidate in result.candidates
         ],
@@ -253,6 +257,11 @@ def recommend_shift(shift_id: UUID, profile: Coordinator, service: Service) -> R
             for exclusion in result.exclusions
         ],
         excluded_by_rule=excluded_by_rule(result),
+        rotation=(
+            RotationOut(delta=result.rotation_delta, window_days=ROTATION_WINDOW.days)
+            if result.rotation_delta is not None
+            else None
+        ),
     )
 
 
@@ -339,6 +348,8 @@ def organization_policy(profile: Coordinator, service: Service) -> PolicyOut:
         offer_ttl_minutes=policy.offer_ttl_minutes,
         top_k=policy.top_k,
         allow_secondary_specialty=policy.allow_secondary_specialty,
+        rotation_delta=ROTATION_DELTA,
+        rotation_window_days=ROTATION_WINDOW.days,
     )
 
 

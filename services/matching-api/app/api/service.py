@@ -34,6 +34,7 @@ from app.privacy import MAX_FREE_TEXT, MIN_JUSTIFICATION, remove_personal_data, 
 from app.ranking.compute import FeatureStore
 from app.ranking.features import RANKING_FEATURES
 from app.ranking.model import LogisticModel
+from app.ranking.rotation import EXPOSURE_TOP, ROTATION_WINDOW
 from app.rules import RULE_TEXTS, evaluate_candidate, schedule_check, shift_period
 
 FINAL_STATUSES = ("filled", "cancelled", "uncovered")
@@ -256,6 +257,10 @@ class MatchingService:
                 raise ApiError(409, "ja_recomendada", "Esta vaga já tem recomendação.")
             dataset, store = self._world.engine(unit.organization_id)
             audit = RestAudit(self._repository, unit.organization_id, buffered=True)
+            now = self._clock()
+            # Rodízio entre equivalentes (passo 7.2): quem apareceu menos no top-5 na semana vai
+            # antes, entre chances a até 10 pontos. A contagem vem das recomendações gravadas.
+            exposure = self._repository.exposure(now - ROTATION_WINDOW, EXPOSURE_TOP)
             result = recommend(
                 dataset,
                 store,
@@ -263,10 +268,11 @@ class MatchingService:
                 ShiftFields(
                     shift.unit_id, shift.specialty, shift.starts_at, shift.ends_at, shift.urgency
                 ),
-                self._clock(),
+                now,
                 client=self._llm_dos_motivos,
                 audit=audit,
                 key=shift_id,
+                exposure=exposure,
             )
             evidence = _exclusion_evidence(result, dataset, store)
             self._repository.save_recommendations(
@@ -472,7 +478,10 @@ class MatchingService:
         )
 
     def policy(self, profile: Profile) -> Policy:
-        """A política da organização de quem pede: limites de jornada, raio, prazo e top-k."""
+        """A política da organização de quem pede: limites de jornada, raio, prazo e top-k.
+
+        O rodízio é o mesmo para todas as organizações e vem de `app/ranking/rotation.py`.
+        """
         dataset, _ = self._world.engine(profile.organization_id or "")
         return dataset.policy
 

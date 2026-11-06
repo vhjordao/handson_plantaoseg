@@ -163,11 +163,25 @@ def seed_tables(dataset: Dataset | None = None) -> dict[str, list[dict[str, Any]
     return copy.deepcopy(tables)
 
 
+def _comparable(value: Any) -> Any:
+    """Número ou instante, para `gte` e `lte` compararem como o Postgres, e não como texto."""
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return datetime.fromisoformat(str(value))
+
+
 def _matches(row: dict[str, Any], filters: dict[str, str] | None) -> bool:
     for column, condition in (filters or {}).items():
         operator, _, value = condition.partition(".")
-        assert operator in ("eq", "like"), f"o banco falso só conhece eq e like: {condition}"
-        if operator == "like":
+        assert operator in ("eq", "like", "gte", "lte"), f"operador desconhecido: {condition}"
+        if operator in ("gte", "lte"):
+            if row.get(column) is None:
+                return False
+            left, right = _comparable(row[column]), _comparable(value)
+            if (left < right) if operator == "gte" else (left > right):
+                return False
+        elif operator == "like":
             if not fnmatch.fnmatchcase(str(row.get(column)), value):
                 return False
         elif str(row.get(column)) != value:
@@ -213,6 +227,8 @@ class FakeRest:
 
     def _insert_one(self, table: str, row: dict[str, Any]) -> dict[str, Any]:
         row.setdefault("id", str(uuid4()))
+        if "created_at" in _columns(table):
+            row.setdefault("created_at", datetime.now(UTC).isoformat())
         for column in _columns(table):
             row.setdefault(column, None)
         if table == "offers":

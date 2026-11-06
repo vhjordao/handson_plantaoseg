@@ -6,6 +6,7 @@ campos de gabarito. Dado que não entrou na memória não tem como vazar para o 
 LLM. `tests/test_contrato_banco.py` confere as listas com as migrações.
 """
 
+from collections import Counter
 from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import date, datetime, time
@@ -328,6 +329,15 @@ class Repository:
             filters={"shift_id": f"eq.{shift_id}"},
             order="rank",
         )
+
+    def exposure(self, since: datetime, top: int) -> dict[str, int]:
+        """Quantas vezes cada médico apareceu entre os `top` primeiros desde `since` (rodízio)."""
+        rows = self._rest.select(
+            "recommendations",
+            ("doctor_id",),
+            filters={"rank": f"lte.{top}", "created_at": f"gte.{db_from_local(since)}"},
+        )
+        return dict(Counter(row["doctor_id"] for row in rows))
 
     def has_exclusions(self, shift_id: str) -> bool:
         rows = self._rest.select(

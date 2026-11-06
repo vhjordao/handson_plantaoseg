@@ -37,6 +37,24 @@ describe("SugestaoCard", () => {
     expect(screen.getByRole("checkbox", { name: "Incluir na oferta" })).not.toBeChecked();
   });
 
+  it("no modo de demonstração não há rodízio; no real, o nome que mudou de lugar diz por quê", () => {
+    const { rerender } = render(cartao({ tipo: "decidindo", selecionado: false }));
+    expect(screen.queryByText(/Rodízio:/)).toBeNull();
+    rerender(
+      <ol>
+        <SugestaoCard
+          candidato={{ ...primeiro, rodizio: { posicaoDoModelo: 3, indicacoesNaSemana: 0 } }}
+          estado={{ tipo: "decidindo", selecionado: false }}
+        />
+      </ol>,
+    );
+    expect(
+      screen.getByText(
+        "Rodízio: só pelo modelo, seria o 3º. Entre chances a até 10 pontos, vai antes quem foi menos indicado nos últimos 7 dias (0 indicações).",
+      ),
+    ).toBeInTheDocument();
+  });
+
   it("marcar um nome é um gesto da pessoa e diz de quem é", () => {
     const aoMarcar = vi.fn();
     render(cartao({ tipo: "decidindo", selecionado: false }, { aoMarcar }));

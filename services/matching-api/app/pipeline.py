@@ -6,6 +6,7 @@ A IA recomenda, o humano decide: `recommend` só devolve candidatos; a oferta de
 
 import hashlib
 from collections import Counter
+from collections.abc import Mapping
 from dataclasses import dataclass
 from datetime import datetime
 
@@ -17,6 +18,7 @@ from app.models import Dataset, Unit
 from app.ranking.compute import FeatureStore
 from app.ranking.features import RANKING_FEATURES
 from app.ranking.model import LogisticModel
+from app.ranking.rotation import ROTATION_DELTA, ROTATION_WINDOW, rotate
 from app.rules import evaluate_candidate
 
 # A partir desta carga (plantões atendidos em 30 dias) o candidato recebe um alerta de jornada.
@@ -33,6 +35,10 @@ class Candidate:
     alerts: tuple[str, ...]
     explanation: Explanation
     explanation_fallback: str | None
+    # Posição só pelo modelo e aparições no top-5 nos últimos 7 dias. Sem rodízio, a posição do
+    # modelo é a própria posição e a exposição é zero.
+    model_rank: int
+    exposure: int
 
 
 @dataclass(frozen=True, slots=True)
@@ -55,6 +61,8 @@ class Recommendation:
     exclusions: list[Exclusion]
     # Todos os elegíveis, na ordem do ranking: (id do médico, score, variáveis).
     scored: list[tuple[str, float, dict[str, float]]]
+    # Margem do rodízio entre equivalentes, ou nulo quando a ordem é só a do modelo.
+    rotation_delta: float | None = None
 
     def exclusion_counts(self) -> dict[str, int]:
         return dict(Counter(e.rule_code for e in self.exclusions).most_common())
@@ -77,11 +85,16 @@ def recommend(
     client: LLMClient | None = None,
     audit: AuditLog | None = None,
     key: str | None = None,
+    exposure: Mapping[str, int] | None = None,
 ) -> Recommendation:
     """Filtra os elegíveis, ranqueia, explica e registra. Não envia nenhuma oferta.
 
     `key` identifica a vaga na trilha. A API passa o ID da vaga já publicada; sem ele, vale o
     identificador derivado dos campos, como na PoC.
+
+    `exposure` liga o rodízio entre equivalentes (`app/ranking/rotation.py`): quantas vezes cada
+    médico apareceu no top-5 nos últimos 7 dias. A API passa a contagem do banco; sem ela, a ordem
+    é só a do modelo, como na PoC e no modo de demonstração.
     """
     unit_id, specialty = fields.unit_id, fields.specialty
     starts_at, ends_at = fields.starts_at, fields.ends_at
@@ -121,6 +134,11 @@ def recommend(
             alerts = (*alerts, f"carga recente alta: {load:.0f} plantões nos últimos 30 dias")
         scored.append((model.probability(features), doctor.id, features, alerts))
     scored.sort(key=lambda row: (-row[0], row[1]))
+    model_rank = {row[1]: position for position, row in enumerate(scored, start=1)}
+    rotating = exposure is not None
+    if exposure is not None:
+        scored = rotate(scored, score=lambda row: row[0], key=lambda row: row[1], exposure=exposure)
+    exposure = exposure or {}
     reference = (
         {name: sum(row[2][name] for row in scored) / len(scored) for name in RANKING_FEATURES}
         if scored
@@ -132,7 +150,16 @@ def recommend(
         explanation, fallback = explain(features, contributions, client)
         candidates.append(
             Candidate(
-                rank, doctor_id, score, features, contributions, alerts, explanation, fallback
+                rank,
+                doctor_id,
+                score,
+                features,
+                contributions,
+                alerts,
+                explanation,
+                fallback,
+                model_rank[doctor_id],
+                exposure.get(doctor_id, 0),
             )
         )
     result = Recommendation(
@@ -146,6 +173,7 @@ def recommend(
         candidates=candidates,
         exclusions=exclusions,
         scored=[(doctor_id, score, features) for score, doctor_id, features, _ in scored],
+        rotation_delta=ROTATION_DELTA if rotating else None,
     )
     if audit is not None:
         audit.append(
@@ -161,6 +189,7 @@ def recommend(
                 "excluded": len(exclusions),
                 "excluded_by_rule": result.exclusion_counts(),
                 "top_doctor_ids": [c.doctor_id for c in candidates],
+                **({"ordering": _ordering(candidates)} if rotating else {}),
             },
         )
         for candidate in candidates:
@@ -180,6 +209,25 @@ def recommend(
                 },
             )
     return result
+
+
+def _ordering(candidates: list[Candidate]) -> dict:
+    """O rodízio na trilha: a margem, a janela e quem mudou de lugar em relação ao modelo."""
+    return {
+        "policy": "rodizio",
+        "delta": ROTATION_DELTA,
+        "window_days": ROTATION_WINDOW.days,
+        "moved": [
+            {
+                "doctor_id": c.doctor_id,
+                "rank": c.rank,
+                "model_rank": c.model_rank,
+                "exposure": c.exposure,
+            }
+            for c in candidates
+            if c.rank != c.model_rank
+        ],
+    }
 
 
 def approve(

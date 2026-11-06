@@ -16,6 +16,7 @@ O mapa de tudo o que falta para o PlantãoSeguro funcionar de ponta a ponta, do 
 2. **Claude Code: a [fase 4](#fase-4-a-tela-do-médico-e-a-cascata-na-tela),** a tela do médico e a cascata na tela, assim que a 3.6 estiver conferida.
 3. **Victor: enviar a Entrega 3 (07/11).** O documento e o PDF de 12 páginas estão na `main` desde o PR #25 ([E.1 a E.8](#5-trilha-da-entrega-3-em-paralelo)); o envio é dele.
 4. **Colegas:** o teste de usabilidade da tarefa do coordenador, que já está no link público, se o grupo puder fazer ([E.2](#5-trilha-da-entrega-3-em-paralelo)).
+5. **Victor: o ok para publicar a imagem 0.4.0 da API**, com o rodízio entre equivalentes (7.2, [ADR 0017](adr/0017-rodizio-entre-equivalentes-na-api.md)). Até lá, o servidor ordena só pelo modelo.
 
 ## 2. Onde estamos
 
@@ -23,15 +24,15 @@ O mapa de tudo o que falta para o PlantãoSeguro funcionar de ponta a ponta, do 
 | --- | --- | --- |
 | Motor (leitura, regras, ordem, motivos, trilha) | Pronto e testado | [ficha](../services/matching-api/README.md) |
 | Banco (tabelas, RLS, trilha só de inserção, dados sintéticos) | No Supabase | [ficha](../supabase/README.md) |
-| API de matching, com HTTPS | No servidor, imagem 0.3.0 (fase 2: contrato da tela e contestação) | [ficha](../services/matching-api/app/api/README.md) |
+| API de matching, com HTTPS | No servidor, imagem 0.3.0 (fase 2: contrato da tela e contestação); a 0.4.0, com o rodízio (7.2), espera a publicação | [ficha](../services/matching-api/app/api/README.md) |
 | n8n e a cascata de ofertas | No servidor, conferida de ponta a ponta pela API | [ficha](../n8n/README.md) |
 | Gemini | Pronto em custo zero; a chave só entra no ensaio e no dia | [ADR 0003](adr/0003-llm-do-produto-gemini.md) |
 | Decisões D1 a D11 | Aprovadas pelo Victor em 06/11 | [ADR 0015](adr/0015-decisoes-que-destravam-o-mvp.md) |
 | Web: página inicial, entrada sem senha, lista de vagas, nova vaga, sugestões e decisão | No link público, no modo de demonstração e, com o login da demonstração, no sistema real | [ficha](../apps/web/README.md) |
 | Web: médico, auditoria, contestações e equidade | Ainda "em construção" | |
-| Documento da Entrega 3 | Corrigido em 06/11, com PDF de 12 páginas, esperando o ok do Victor | [documento](04-entrega-3-validacao.md) |
+| Documento da Entrega 3 | Na `main` desde 06/11, com PDF de 12 páginas; o envio é do Victor | [documento](04-entrega-3-validacao.md) |
 
-**O que falta, em uma frase:** as partes existem, mas ainda não conversam. A web roda sozinha no navegador e não chama a API nem o banco. Por isso o médico não recebe oferta e a cascata não aparece.
+**O que falta, em uma frase:** a jornada do coordenador já passa pela API e pelo banco, mas a tela do médico e a cascata na tela ainda não existem. Por isso, na tela, o médico não recebe oferta e a cascata não aparece.
 
 ## 3. O que é o MVP pronto
 
@@ -98,7 +99,7 @@ O adaptador `live` liga a web ao sistema real.
 ### Fase 5: a demonstração guiada
 
 - [ ] **5.1** O roteiro: qual pedido digitar, quais médicos aprovar e em que ordem, quem recusa, quem deixa passar e quem aceita, e o que mostrar em cada tela.
-- [ ] **5.2** O estado de partida: a vaga do roteiro recomenda os médicos que têm login, e o banco começa limpo de testes anteriores.
+- [ ] **5.2** O estado de partida: a vaga do roteiro recomenda os médicos que têm login, e o banco começa limpo de testes anteriores. Com o rodízio ([ADR 0017](adr/0017-rodizio-entre-equivalentes-na-api.md)), as recomendações dos ensaios na mesma semana mudam a ordem: rodar o `limpar-demonstracao` antes do dia zera essa contagem.
 - [ ] **5.3** As janelas: coordenador e médico lado a lado, ou o médico no celular, com a tela do celular projetada.
 - [ ] **5.4** O que fazer se algo falhar no meio: em que momento trocar para o modo de demonstração, que faz o mesmo caminho sem o servidor.
 
@@ -115,7 +116,7 @@ O adaptador `live` liga a web ao sistema real.
 Esta fase **não depende das anteriores** e pode começar já.
 
 - [x] **7.1** Experimento com rodízio entre elegíveis equivalentes e limite de ofertas, medindo o custo em tempo até preencher e na chance de sucesso. *Feito em 06/11 ([experimento](resultados/metricas-concentracao.md)): o rodízio com margem de 10 pontos é o recomendado; a exclusão por zona continua aberta.*
-- [ ] **7.2** A política escolhida vai para a API, com teste, e aparece na equidade.
+- [x] **7.2** A política escolhida vai para a API, com teste, e aparece na equidade. *Feito em 06/11 ([ADR 0017](adr/0017-rodizio-entre-equivalentes-na-api.md)): a API ordena com o rodízio de 10 pontos, a trilha registra quem mudou de lugar, `GET /policy` traz a margem e a janela, e a tela do coordenador diz por que um nome mudou de lugar. O painel da equidade (6.3) mostra a política ao lado da concentração. Vale no servidor depois da publicação da imagem 0.4.0.*
 
 **Por que importa:** os 10% mais recomendados ocupam 50,7% do top-5, contra 31,1% no processo manual (simulação). É o maior risco ético medido. Com o rodízio de 10 pontos, os 10% mais expostos passam de 82,1% para 35,7% das ofertas e de 50,7% para 28,5% dos lugares do top-5, com 1,8 ponto a menos de chance de sucesso e 2 minutos a mais por vaga.
 
