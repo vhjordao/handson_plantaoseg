@@ -120,18 +120,18 @@ Cada resolução e cada risco de segurança vira um controle técnico que pode s
 
 ## Infraestrutura e custo
 
-O mês da apresentação custa entre US$ 34 e US$ 41 (VPS, Supabase Pro e LLM), e o resto é gratuito. Preços de VPS e Supabase lidos nas páginas oficiais em 20/10/2026 e os do Gemini em 28/10/2026, em dólar e sem impostos.
+**Estimativa de 20/10, revista em 06/11.** O custo real de novembro é só o servidor: a KVM 1 por R$ 52,99 no mês. Supabase, Vercel e Gemini ficam no plano gratuito, porque a apresentação é guiada e o Gemini não gasta (ADR 0003). A estimativa original, de US$ 34 a US$ 41 (KVM 2, Supabase Pro e LLM pago), fica abaixo como registro. Preços de VPS e Supabase lidos nas páginas oficiais em 20/10/2026 e os do Gemini em 28/10/2026, em dólar e sem impostos.
 
 | Item | Escolha | Custo | O que observar |
 | --- | --- | --- | --- |
 | VPS | [Hostinger KVM 2](https://www.hostinger.com/vps-hosting): 2 vCPU, 8 GB de RAM, 100 GB NVMe | US$ 8,79 por mês no preço promocional, pago adiantado; renova a US$ 14,99 por mês | A própria página indica o KVM 2 para apps de médio porte como o n8n. Há [datacenter no Brasil](https://www.hostinger.com/support/1583267-where-are-hostinger-servers-located/), e a localização fica fixa após a configuração, então escolha o Brasil na compra. O protótipo usa a KVM 1 por 1 mês, R$ 52,99 no carrinho de 04/11/2026 ([ADR 0009](adr/0009-servidor-so-para-a-apresentacao.md)) |
 | n8n | Community, auto-hospedado | US$ 0 | A [licença](https://docs.n8n.io/n8n-community-license/community-license/license-faq.md) cobre uso interno do negócio; se virar produto vendido a hospitais, falar antes com a n8n |
-| Supabase | Free para desenvolver; Pro no mês da apresentação | US$ 0 e US$ 25 por mês | No [plano Free](https://supabase.com/pricing) o projeto pausa após 1 semana sem atividade e o Realtime aceita 200 conexões simultâneas; o Pro aceita 500 e inclui US$ 10 de crédito, que cobrem uma instância Micro |
+| Supabase | Free (com a demonstração guiada, o Pro deixou de ser preciso) | US$ 0 | No [plano Free](https://supabase.com/pricing) o projeto pausa após 1 semana sem atividade e o Realtime aceita 200 conexões simultâneas; o Pro aceita 500 e inclui US$ 10 de crédito, que cobrem uma instância Micro |
 | LLM | [Gemini 3.1 Flash-Lite](https://ai.google.dev/gemini-api/docs/models), só na leitura da vaga (ADR 0003) | Gratuito: camada gratuita, em projeto sem faturamento | Custo zero, por decisão do Victor; a chave só entra no servidor para o ensaio e o dia |
 | Observabilidade de IA | Langfuse Cloud | Plano gratuito | Confirmar os limites do plano gratuito na criação da conta |
 | Mensagens | Bot do Telegram | Sem custo por mensagem | O WhatsApp cobra por template entregue |
 
-O total de US$ 34 a US$ 41 soma VPS (promocional ou na renovação), Supabase Pro e 200 chamadas do Gemini 3.8 Flash (cerca de US$ 0,68); com o Flash-Lite o LLM praticamente some da conta. Com a demonstração guiada (06/11), não há plateia conectada, e o plano gratuito do Supabase basta.
+A estimativa de US$ 34 a US$ 41 somava VPS (promocional ou na renovação), Supabase Pro e 200 chamadas do Gemini 3.8 Flash (cerca de US$ 0,68); com o Flash-Lite o LLM praticamente some da conta. Com a demonstração guiada (06/11), não há plateia conectada, e o plano gratuito do Supabase basta.
 
 ## Plano de construção até a Etapa 2
 

@@ -1,5 +1,5 @@
 /**
- * O barramento de eventos em memória do modo `demo` (no `live` seria o Supabase Realtime).
+ * O barramento de eventos em memória do modo `demo` (no `live`, a tela consulta a cada 3 s: ADR 0015, D7).
  * Cada ouvinte recebe uma cópia do evento, e um ouvinte com defeito não derruba os outros.
  */
 import type { EventoPlantao } from "../types";
