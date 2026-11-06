@@ -12,6 +12,7 @@ from uuid import UUID
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from app.api.tempo import local_input
+from app.privacy import MAX_FREE_TEXT
 
 # O mesmo limite de `shift_requests.raw_text`. O motor só usa os primeiros 500 caracteres.
 MAX_RAW_TEXT = 5000
@@ -21,6 +22,7 @@ MAX_APPROVED = 20
 Specialty = Literal["clinica_medica", "pediatria"]
 Urgency = Literal["low", "medium", "high"]
 DeclineReason = Literal["distance", "fatigue", "schedule", "other"]
+FieldKey = Literal["unit_id", "specialty", "starts_at", "ends_at", "urgency"]
 
 
 class ApiModel(BaseModel):
@@ -52,10 +54,26 @@ class ExtractedFields(ApiModel):
     urgency: str | None
 
 
+class SpanOut(ApiModel):
+    """Posição no texto original, em unidades UTF-16 (como `String.slice` na tela)."""
+
+    start: int
+    end: int
+
+
+class FieldReadingOut(ApiModel):
+    """De onde veio cada campo: escrito no texto, deduzido ou ausente. Sem percentual."""
+
+    key: FieldKey
+    origin: Literal["found", "inferred", "missing"]
+    span: SpanOut | None
+
+
 class ExtractOut(ApiModel):
     """O que a máquina entendeu do texto. O coordenador confere antes de publicar."""
 
     extracted: ExtractedFields
+    readings: list[FieldReadingOut]
     missing_required: list[str]
     source: Literal["regras", "llm"]
     flags: list[str]
@@ -113,14 +131,20 @@ class CandidateOut(ApiModel):
     doctor_id: str
     score: float
     features: dict[str, float]
+    # Contribuição de cada variável em relação à média dos elegíveis: o "Ver motivos" da tela.
+    contributions: dict[str, float]
     alerts: list[str]
     explanation: ExplanationOut
+    # Código do guardrail quando a reescrita da IA foi tentada e não valeu; senão, nulo.
+    explanation_fallback: str | None
 
 
 class ExclusionOut(ApiModel):
     doctor_id: str
     rule_code: str
     rule_text: str
+    # A evidência numérica ("Mora a 18,2 km; o raio declarado é 15 km."), quando calculável.
+    evidence: str | None = None
 
 
 class RecommendationOut(ApiModel):
@@ -128,6 +152,7 @@ class RecommendationOut(ApiModel):
 
     shift_id: str
     model_version: str
+    generated_at: datetime
     pool_size: int
     eligible_count: int
     candidates: list[CandidateOut]
@@ -140,6 +165,8 @@ class ApproveIn(ApiModel):
     """Quem o coordenador aprovou, na ordem em que devem ser chamados."""
 
     doctor_ids: list[UUID] = Field(min_length=1, max_length=MAX_APPROVED)
+    # Obrigatória quando algum aprovado tem alerta de jornada (exceção humana, D2).
+    justification: str | None = Field(default=None, max_length=MAX_FREE_TEXT)
 
     @field_validator("doctor_ids")
     @classmethod
@@ -147,6 +174,91 @@ class ApproveIn(ApiModel):
         if len(set(value)) != len(value):
             raise ValueError("o mesmo médico aparece mais de uma vez")
         return value
+
+
+class SkipIn(ApiModel):
+    """Tirar um nome desta decisão. O motivo é opcional e vai para a trilha sem dado pessoal."""
+
+    doctor_id: UUID
+    reason: str | None = Field(default=None, max_length=MAX_FREE_TEXT)
+
+
+class UnskipIn(ApiModel):
+    doctor_id: UUID
+
+
+class FeedbackIn(ApiModel):
+    """ "Esta explicação ajudou?". Fica na trilha e não treina nada."""
+
+    doctor_id: UUID
+    helpful: bool
+    comment: str | None = Field(default=None, max_length=MAX_FREE_TEXT)
+
+
+class FeedbackOut(ApiModel):
+    recorded: Literal[True] = True
+
+
+class ExceptionOut(ApiModel):
+    alerts: list[str]
+    justification: str
+
+
+class DecisionOut(ApiModel):
+    """A decisão gravada na trilha (ou nenhuma ainda) e quem está pulado agora."""
+
+    shift_id: str
+    approved_doctor_ids: list[str] | None
+    decided_by: str | None
+    decided_at: datetime | None
+    exception: ExceptionOut | None
+    skipped: list[str]
+
+
+class PolicyOut(ApiModel):
+    """`policy_config` da organização: configuração do projeto, não norma verificada."""
+
+    max_continuous_hours: float
+    min_rest_hours: float
+    default_radius_km: float
+    offer_ttl_minutes: int
+    top_k: int
+    allow_secondary_specialty: bool
+    simulacao: Literal[True] = True
+
+
+class FeatureWeightOut(ApiModel):
+    feature: str
+    weight: float
+
+
+class FeatureNotUsedOut(ApiModel):
+    name: str
+    reason: str
+
+
+class MetricOut(ApiModel):
+    name: str
+    value: str
+
+
+class RiskClassOut(ApiModel):
+    preliminary: str
+    note: str
+
+
+class ModelCardOut(ApiModel):
+    """A ficha do modelo ativo. Os textos ficam em português, como a tela os mostra."""
+
+    version: str
+    type: str
+    trained_on: str
+    features_used: list[FeatureWeightOut]
+    features_not_used: list[FeatureNotUsedOut]
+    metrics: list[MetricOut]
+    risk_class: RiskClassOut
+    limits: list[str]
+    simulacao: Literal[True] = True
 
 
 class OfferOut(ApiModel):

@@ -1,6 +1,6 @@
 # Ficha do componente: API de matching
 
-- **Responsável:** Victor Jordão · **Frente:** motor e infraestrutura · **Branch:** `f3/api-matching` · **Atualizado em:** 04/11/2026
+- **Responsável:** Victor Jordão · **Frente:** motor e infraestrutura · **Branch:** `f3/api-matching` · **Atualizado em:** 06/11/2026
 - **Estado:** no ar no servidor, por HTTPS, desde 04/11/2026, com os dados sintéticos do projeto `plantaoseguro`. **Tudo é simulação.** A [cascata no n8n](../../../../n8n/README.md) pergunta a ela quanto esperar. As telas ainda não usam a API.
 
 ## 1. O que é e qual dor resolve
@@ -13,16 +13,20 @@
 | --- | --- | --- | --- |
 | `GET /health` | Qualquer um | Diz que está no ar e a versão do modelo | Nada |
 | `GET /me` | Quem tem login | Devolve o papel e a organização, lidos de `profiles` | Nada |
-| `POST /shifts/extract` | Coordenador | Tela 1: texto vira campos, com os sinais de texto suspeito | Nada |
+| `POST /shifts/extract` | Coordenador | Tela 1: texto vira campos, com os sinais de texto suspeito e, para cada campo, se está escrito (`found`), foi deduzido (`inferred`) ou falta, com o trecho no texto | Nada |
 | `POST /shifts` | Coordenador | Publica a vaga com os campos conferidos | Pedido, vaga e trilha |
-| `POST /shifts/{id}/recommendations` | Coordenador | Telas 2 e 3: top 5 com motivo e excluídos com a regra | Recomendações, explicações, exclusões e trilha. **Nenhuma oferta** |
-| `POST /shifts/{id}/approve` | Coordenador | **O clique.** Grava a decisão, chama o primeiro aprovado e, depois da resposta, avisa o n8n ([ADR 0013](../../../../docs/adr/0013-aviso-da-api-inicia-a-cascata.md)) | Trilha e primeira oferta |
+| `POST /shifts/{id}/recommendations` | Coordenador | Telas 2 e 3: top 5 com motivo e a contribuição de cada variável, e excluídos com a regra e a evidência numérica | Recomendações (com as contribuições), explicações, exclusões (com a evidência) e trilha. **Nenhuma oferta** |
+| `POST /shifts/{id}/approve` | Coordenador | **O clique.** Grava a decisão, chama o primeiro aprovado e, depois da resposta, avisa o n8n ([ADR 0013](../../../../docs/adr/0013-aviso-da-api-inicia-a-cascata.md)). Com alerta de jornada entre os aprovados, exige justificativa (D2); nome pulado não passa | Trilha (com a exceção) e primeira oferta |
+| `GET /shifts/{id}/decision` | Coordenador | A decisão gravada e quem está pulado agora, para a tela voltar igual | Nada |
+| `POST /shifts/{id}/skip` e `/unskip` | Coordenador | Pula um nome ou desfaz o pulo, sem cancelar a vaga (D3) | Trilha |
+| `POST /shifts/{id}/feedback` | Coordenador | "Esta explicação ajudou?" (D3); não treina nada | Trilha |
+| `GET /policy` e `GET /model-card` | Coordenador | A política da organização e a ficha do modelo ativo | Nada |
 | `POST /shifts/{id}/reject` | Coordenador | Recusa a lista e cancela a vaga | Vaga e trilha |
 | `POST /offers/{id}/respond` | O médico da oferta | Tela 4: aceita, ou recusa e chama o próximo | Oferta, vaga e trilha |
 | `POST /internal/cascade/{id}/advance` | n8n, por dentro do servidor | Se o prazo venceu, expira e chama o próximo aprovado | Oferta, vaga e trilha |
 | `POST /internal/reload` | Quem está no servidor | Relê os dados depois de mudança feita por fora | Nada |
 
-Na resposta, a API só usa IDs pseudônimos: a web lê nome e CRM sob RLS, e só de quem o coordenador pode ver. As horas vão em hora local de São Paulo, sem fuso. Os erros têm a forma `{"erro": "codigo", "mensagem": "..."}`, para a tela tratar pelo código.
+Na resposta, a API só usa IDs pseudônimos: a web lê nome e CRM sob RLS, e só de quem o coordenador pode ver. As horas vão em hora local de São Paulo, sem fuso. Texto livre (justificativa, motivo do pulo e comentário) vai para a trilha sem CRM, telefone, e-mail, documento nem número longo (`app/privacy.py`); os nomes, a tela apaga antes de enviar, porque a API nunca lê nome de médico. Os erros têm a forma `{"erro": "codigo", "mensagem": "..."}`, para a tela tratar pelo código.
 
 **Onde há IA:** o LLM só extrai campos e reescreve a explicação. Sem a chave do Gemini, tudo sai pela reserva em regras e pelo texto fixo. Com a chave, o Gemini lê o pedido; os motivos continuam no texto fixo, salvo `LLM_REESCREVER_MOTIVOS=1`. Se ele falhar ou passar de 6 s, a leitura sai pelas regras, e as próximas chamadas não tentam por 60 s. Filtro, ranking, cascata e aprovação são código, e o n8n só pede para avançar.
 
@@ -36,6 +40,7 @@ Na resposta, a API só usa IDs pseudônimos: a web lê nome e CRM sob RLS, e só
 6. Abrimos 22 falhas de propósito (ver a seção 7).
 7. Antes de escrever no banco real, comparamos a leitura real com os CSVs, só lendo.
 8. Compose, imagem e implantação. Depois, o fluxo inteiro no servidor e a medição de carga.
+10. **Fase 2 (06/11), o contrato da tela do coordenador** ([ADR 0015](../../../../docs/adr/0015-decisoes-que-destravam-o-mvp.md)): a leitura passou a dizer a origem e o trecho de cada campo, com a mesma regra da tela; a evidência das exclusões saiu do exportador para `app/evidence.py`, que os dois usam; as contribuições e a evidência ficam gravadas (migração `contrato_da_tela`); a justificativa da exceção, o pulo, o desfazer e o feedback entram na trilha no mesmo formato do modo de demonstração; a política e a ficha do modelo ganharam rota.
 9. A primeira medição travou em 50 chamadas por segundo com a CPU folgada. Testamos o Supabase direto, achamos o teto na chave `sb_secret`, trocamos pela `service_role` e medimos de novo: cerca de 270 por segundo, agora limitadas pela CPU.
 
 ## 4. Código-chave
@@ -51,6 +56,9 @@ Na resposta, a API só usa IDs pseudônimos: a web lê nome e CRM sob RLS, e só
 | `world.py` | Os dados do motor em memória | `engine`: a política da organização, com as variáveis recalculadas se algo mudou |
 | `model_store.py` | Pesos do modelo | `check_against_registry`: a API não sobe se o arquivo e o banco divergirem |
 | `schemas.py` | Contrato em Pydantic | `extra="forbid"`: campo a mais é recusado |
+| `../../privacy.py` | Tira dado pessoal do texto livre que vai para a trilha | `remove_personal_data`: os mesmos padrões da tela |
+| `../../evidence.py` | A evidência numérica de cada exclusão | `exclusion_evidence`: a mesma frase da demonstração |
+| `ficha_do_modelo.json` | A ficha que `GET /model-card` devolve | Um teste a trava igual à da demonstração |
 | `../ranking/modelo_ativo.json` | Os pesos, versionados | Gerado por `python -m app.cli freeze-model` |
 
 ## 5. Ferramentas e versões
@@ -143,7 +151,7 @@ O Victor aprovou o plano, com as decisões e os riscos, antes de começar, e cri
 
 Com o ok do Victor:
 
-1. Completar o contrato (fase 2 do [roteiro](../../../../docs/roteiro-ate-o-mvp.md), decisões do [ADR 0015](../../../../docs/adr/0015-decisoes-que-destravam-o-mvp.md)): justificativa da exceção na trilha (D2), rotas de pular, desfazer o pulo e "Esta explicação ajudou?" (D3), a leitura com o trecho de cada campo, a contribuição de cada variável, a política e a ficha do modelo, e a contestação (D8).
+1. A contestação (D8), com tabela, RLS e rotas; o resto do contrato da tela do coordenador entrou em 06/11 (passos 2.1 a 2.4 do [roteiro](../../../../docs/roteiro-ate-o-mvp.md)).
 2. As telas do coordenador e do médico chamam esta API e leem o resto sob RLS (adaptador `live`).
 3. Gemini: a imagem 0.2.0 já está no servidor, sem a chave. A chave só entra no ensaio e no dia ([passo a passo](../../../../infra/README.md)), e no ensaio se confere a memória com `docker stats` (o limite é de 512 MB). Sem a chave, ela usa 60 MiB.
 4. Repetir a medição antes de 13/11, já com as telas, e reiniciar o servidor.

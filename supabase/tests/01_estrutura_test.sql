@@ -1,7 +1,7 @@
 -- Estrutura, permissões e regras de integridade do banco.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(29);
+select plan(30);
 
 -- Tabelas e permissões
 
@@ -219,6 +219,14 @@ select throws_ok(
      values ('e0000000-0000-4000-8000-000000000001', 'd0000000-0000-4000-8000-000000000001', 1, 0.5,
         'modelo-teste', '{"distance_km": 1, "gender": "F"}') $$,
   '23514', null, 'atributo protegido não entra nas variáveis de uma recomendação'
+);
+
+select throws_ok(
+  $$ insert into public.recommendations
+       (shift_id, doctor_id, rank, score, model_version, features, contributions)
+     values ('e0000000-0000-4000-8000-000000000001', 'd0000000-0000-4000-8000-000000000001', 1, 0.5,
+        'modelo-teste', '{"distance_km": 1}', '{"distance_km": 0.1, "amount_brl_sim": 0.2}') $$,
+  '23514', null, 'valor do plantão também não entra nas contribuições de uma recomendação'
 );
 
 select throws_ok(

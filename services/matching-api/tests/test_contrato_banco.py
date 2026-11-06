@@ -38,7 +38,13 @@ def _columns(table: str) -> set[str]:
     match = re.search(rf"create table public\.{table} \((.*?)\n\);", SQL, re.DOTALL)
     assert match, f"tabela {table} não encontrada nas migrações"
     names = re.findall(r"^  ([a-z_0-9]+) ", match.group(1), re.MULTILINE)
-    return {name for name in names if name not in {"check", "unique", "primary", "foreign"}}
+    # Colunas que uma migração posterior acrescentou com `alter table ... add column`.
+    added = re.findall(
+        rf"alter table public\.{table}\s+add column (?:if not exists )?([a-z_0-9]+)", SQL
+    )
+    return {name for name in names if name not in {"check", "unique", "primary", "foreign"}} | set(
+        added
+    )
 
 
 def _enum(name: str) -> set[str]:
@@ -76,7 +82,9 @@ class ContratoDoBancoTests(unittest.TestCase):
 
     def test_lista_fechada_de_variaveis_e_igual_a_do_ranking(self):
         lists = re.findall(r"array\[(.*?)\]::text\[\]", SQL, re.DOTALL)
-        self.assertEqual(len(lists), 2, "model_registry e recommendations")
+        self.assertEqual(
+            len(lists), 3, "model_registry e as variáveis e contribuições da recomendação"
+        )
         for items in lists:
             self.assertEqual(set(re.findall(r"'([^']+)'", items)), set(RANKING_FEATURES))
 

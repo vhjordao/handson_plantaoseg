@@ -121,9 +121,11 @@ def recommend(
             alerts = (*alerts, f"carga recente alta: {load:.0f} plantões nos últimos 30 dias")
         scored.append((model.probability(features), doctor.id, features, alerts))
     scored.sort(key=lambda row: (-row[0], row[1]))
-    reference = {
-        name: sum(row[2][name] for row in scored) / len(scored) for name in RANKING_FEATURES
-    } if scored else {}
+    reference = (
+        {name: sum(row[2][name] for row in scored) / len(scored) for name in RANKING_FEATURES}
+        if scored
+        else {}
+    )
     candidates: list[Candidate] = []
     for rank, (score, doctor_id, features, alerts) in enumerate(scored[:limit], start=1):
         contributions = model.contributions(features, reference)
@@ -188,8 +190,13 @@ def approve(
     now: datetime,
     coordinator_id: str,
     mode: str = "humano",
+    exception: dict | None = None,
 ) -> dict:
-    """Registra a decisão do coordenador. Sem este passo, nenhuma oferta pode sair."""
+    """Registra a decisão do coordenador. Sem este passo, nenhuma oferta pode sair.
+
+    `exception` guarda os alertas e a justificativa quando o coordenador aprova alguém com alerta
+    de jornada: a exceção humana fica na trilha, com o mesmo formato do modo de demonstração.
+    """
     shortlisted = {c.doctor_id for c in recommendation.candidates}
     if not approved_ids or not set(approved_ids) <= shortlisted:
         raise ValueError("só é possível aprovar candidatos recomendados")
@@ -201,5 +208,9 @@ def approve(
         entity_type="shift",
         entity_id=recommendation.shift_key,
         model_version=recommendation.model_version,
-        details={"approved_doctor_ids": approved_ids, "mode": mode},
+        details={
+            "approved_doctor_ids": approved_ids,
+            "mode": mode,
+            **({"excecao": exception} if exception else {}),
+        },
     )

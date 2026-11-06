@@ -42,6 +42,7 @@ O navegador só lê, sob RLS. A API escreve, com a chave de serviço. As decisõ
 | `migrations/*_acesso_e_rls.sql` | Permissões por coluna, funções de apoio e políticas | `organization_candidate_ids`: define de quem o coordenador abre o cadastro |
 | `migrations/*_fecha_funcao_rls_auto_enable.sql` | Fecha a execução de uma função criada pelo painel | Só existe no projeto real: a CI não a vê, daí a condição |
 | `migrations/*_acoes_de_oferta.sql` | Põe a cascata na trilha: oferta enviada, aceita, recusada e expirada, e vaga descoberta | `ADD VALUE`: não muda nada do que já existe |
+| `migrations/*_contrato_da_tela.sql` | Pulo desfeito e feedback da explicação na trilha; contribuições gravadas com a recomendação e evidência com a exclusão (fase 2, 06/11) | `contributions` tem a mesma lista fechada de `features`: o valor do plantão não cabe |
 | `tests/*.sql` | Testes em pgTAP | `02_rls_test.sql` descreve o cenário com dois hospitais e quatro médicos |
 | `../scripts/carregar-amostra-banco.sql` | Carrega a amostra e desfaz tudo no fim | Prova que os dados gerados cabem nas regras |
 | `../services/matching-api/app/seed_db.py` | Gera o arquivo da carga, com as datas deslocadas | `literal`: toda aspa é dobrada, porque os textos adversariais são entrada hostil |

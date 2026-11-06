@@ -80,9 +80,10 @@ OFFER_COLUMNS = (
 )
 PROFILE_COLUMNS = ("id", "role", "organization_id", "doctor_id")
 MODEL_REGISTRY_COLUMNS = ("model_version", "features", "status")
-SHORTLIST_COLUMNS = ("doctor_id", "rank")
+SHORTLIST_COLUMNS = ("doctor_id", "rank", "alerts")
 EXCLUSION_COLUMNS = ("id",)
-APPROVAL_COLUMNS = ("seq", "details")
+# Da trilha, a API lê a decisão do coordenador e os pulos: quem, quando e o quê.
+APPROVAL_COLUMNS = ("seq", "occurred_at", "actor_pseudo_id", "action", "entity_id", "details")
 
 # Tudo o que a API pode ler. Um teste confere com as migrações e com a neutralidade econômica.
 READ_COLUMNS: dict[str, tuple[str, ...]] = {
@@ -308,6 +309,15 @@ class Repository:
         )
         return [row["doctor_id"] for row in rows]
 
+    def shortlist_rows(self, shift_id: str) -> list[dict[str, Any]]:
+        """Os recomendados com a posição e os alertas, na ordem do ranking."""
+        return self._rest.select(
+            "recommendations",
+            SHORTLIST_COLUMNS,
+            filters={"shift_id": f"eq.{shift_id}"},
+            order="rank",
+        )
+
     def has_exclusions(self, shift_id: str) -> bool:
         rows = self._rest.select(
             "recommendation_exclusions",
@@ -317,8 +327,8 @@ class Repository:
         )
         return bool(rows)
 
-    def approved_ids(self, shift_id: str) -> list[str] | None:
-        """A decisão do coordenador, lida da trilha. `None`: nunca houve aprovação."""
+    def approval(self, shift_id: str) -> dict[str, Any] | None:
+        """A linha da decisão do coordenador na trilha. `None`: nunca houve aprovação."""
         rows = self._rest.select(
             "audit_log",
             APPROVAL_COLUMNS,
@@ -330,7 +340,24 @@ class Repository:
             order="seq",
             limit=1,
         )
-        return list(rows[0]["details"]["approved_doctor_ids"]) if rows else None
+        return rows[0] if rows else None
+
+    def approved_ids(self, shift_id: str) -> list[str] | None:
+        """A decisão do coordenador, lida da trilha. `None`: nunca houve aprovação."""
+        row = self.approval(shift_id)
+        return list(row["details"]["approved_doctor_ids"]) if row else None
+
+    def candidate_events(self, shift_id: str) -> list[dict[str, Any]]:
+        """Pulos, pulos desfeitos e opiniões sobre a explicação, na ordem da trilha.
+
+        Cada linha tem `entity_id` no formato `vaga:médico`, o mesmo do modo de demonstração.
+        """
+        return self._rest.select(
+            "audit_log",
+            APPROVAL_COLUMNS,
+            filters={"entity_type": "eq.recommendation", "entity_id": f"like.{shift_id}:*"},
+            order="seq",
+        )
 
     def publish(
         self,

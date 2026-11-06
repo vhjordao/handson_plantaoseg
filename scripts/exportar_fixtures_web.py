@@ -44,6 +44,10 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "services" / "matching-api"))
 
 from app.audit import AuditLog  # noqa: E402
+from app.evidence import (  # noqa: E402
+    exclusion_evidence,
+    pt,
+)
 from app.llm.extraction import ExtractionResult, extract  # noqa: E402
 from app.llm.guardrails import ShiftFields, normalize  # noqa: E402
 from app.models import Dataset, Doctor, Unit, load_dataset  # noqa: E402
@@ -59,7 +63,7 @@ from app.ranking.compute import FeatureStore  # noqa: E402
 from app.ranking.evaluate import evaluate  # noqa: E402
 from app.ranking.features import RANKING_FEATURES  # noqa: E402
 from app.ranking.model import LogisticModel  # noqa: E402
-from app.rules import RULE_TEXTS, Check, contiguous_hours, evaluate_candidate  # noqa: E402
+from app.rules import Check, evaluate_candidate  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # Constantes
@@ -85,8 +89,6 @@ MAX_EXEMPLOS_TOTAL = 12
 MEDICOS_POR_VAGA_PERSONA = 6  # personas de médico: 6 entre os 8 primeiros de cada vaga
 FILA_DA_CASCATA = 8  # a cascata simulada chama até 8 médicos por vaga (metricas-fluxo.json)
 
-ESPECIALIDADE_PT = {"clinica_medica": "clínica médica", "pediatria": "pediatria"}
-SITUACAO_CRM_PT = {"suspended": "suspenso", "expired": "vencido", "inactive": "inativo"}
 CARGO_COORDENACAO = "Coordenação de escala"
 
 # Estilos de `shift_requests.csv` que viram texto de exemplo: (estilo, id, rótulo).
@@ -265,26 +267,6 @@ def arred(value: float, casas: int) -> float:
     return round(value, casas) + 0.0
 
 
-def pt(value: float, casas: int = 1) -> str:
-    """Número no formato do Brasil: vírgula decimal."""
-    return f"{value:.{casas}f}".replace(".", ",")
-
-
-def numero(value: float) -> str:
-    """Número sem casas inúteis, com vírgula decimal (15 vira "15", 12.5 vira "12,5")."""
-    return f"{value:g}".replace(".", ",")
-
-
-def horas(value: float) -> str:
-    """Horas sem casa decimal quando são inteiras (12), com uma casa quando não são (3,5)."""
-    return str(round(value)) if abs(value - round(value)) < 0.05 else pt(value, 1)
-
-
-def dia_hora(moment: datetime) -> str:
-    texto = f"{moment:%d/%m} {moment.hour}h"
-    return texto if moment.minute == 0 else f"{texto}{moment.minute:02d}"
-
-
 def chave_da_grade(unit_id: str, specialty: str, inicio: datetime) -> str:
     return f"{unit_id}|{specialty}|{inicio.strftime(ISO)}"
 
@@ -396,50 +378,19 @@ def candidato_json(candidate: Candidate, dataset: Dataset) -> dict[str, Any]:
     }
 
 
-def folgas_em_horas(agenda: list[tuple[datetime, datetime]], inicio: datetime, fim: datetime):
-    """Intervalos (h) entre a vaga e o plantão anterior e o seguinte, como em `schedule_check`."""
-    anteriores = [termino for _, termino in agenda if termino <= inicio]
-    seguintes = [comeco for comeco, _ in agenda if comeco >= fim]
-    folgas = []
-    if anteriores:
-        folgas.append((inicio - max(anteriores)).total_seconds() / 3600)
-    if seguintes:
-        folgas.append((min(seguintes) - fim).total_seconds() / 3600)
-    return folgas
-
-
 def evidencia(ctx: Contexto, rec: Recommendation, doctor: Doctor, check: Check) -> str:
-    """A evidência numérica da regra que barrou o médico, calculada com `rules.py`."""
-    fields, policy = rec.fields, ctx.dataset.policy
+    """A evidência numérica da regra que barrou o médico: a mesma frase que a API devolve."""
+    fields = rec.fields
     assert fields.specialty and fields.starts_at and fields.ends_at  # garantido por recommend()
-    inicio, fim = fields.starts_at, fields.ends_at
-    codigo = check.rule_code
-    if codigo == "crm_inactive":
-        situacao = SITUACAO_CRM_PT.get(doctor.crm_status, doctor.crm_status)
-        return f"Situação do CRM simulado: {situacao}."
-    if codigo == "specialty_mismatch":
-        return (
-            f"Especialidade: {ESPECIALIDADE_PT[doctor.specialty]}; "
-            f"a vaga pede {ESPECIALIDADE_PT[fields.specialty]}."
-        )
-    if codigo == "outside_radius":
-        raio = doctor.max_radius_km or policy.default_radius_km
-        return f"Mora a {pt(check.distance_km, 1)} km; o raio declarado é {numero(raio)} km."
-    if codigo == "unavailable":
-        duracao = (fim - inicio).total_seconds() / 3600
-        return f"Cobre {horas(check.overlap_hours)} h das {horas(duracao)} h da vaga."
-    agenda = ctx.store.assignments_at(doctor.id, rec.now)
-    if codigo == "schedule_conflict":
-        comeco, termino = min((s, e) for s, e in agenda if s < fim and e > inicio)
-        return f"Já tem plantão de {dia_hora(comeco)} a {dia_hora(termino)}, no mesmo horário."
-    if codigo == "continuous_hours_exceeded":
-        cadeia = contiguous_hours(agenda, inicio, fim)
-        return f"Faria {horas(cadeia)} h contínuas; o limite é {policy.max_continuous_hours} h."
-    if codigo == "rest_violation":
-        minimo = policy.min_rest_hours
-        curta = min(f for f in folgas_em_horas(agenda, inicio, fim) if 0 < f < minimo)
-        return f"Descansaria {horas(curta)} h entre os plantões; o mínimo é {minimo} h."
-    return f"{RULE_TEXTS.get(codigo or '', 'Regra desconhecida')}."
+    return exclusion_evidence(
+        doctor,
+        check,
+        specialty=fields.specialty,
+        starts_at=fields.starts_at,
+        ends_at=fields.ends_at,
+        policy=ctx.dataset.policy,
+        agenda=ctx.store.assignments_at(doctor.id, rec.now),
+    )
 
 
 def verificar(ctx: Contexto, rec: Recommendation, doctor: Doctor) -> Check:

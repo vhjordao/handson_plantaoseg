@@ -12,7 +12,7 @@ O mapa de tudo o que falta para o PlantãoSeguro funcionar de ponta a ponta, do 
 
 **A fase 1 terminou em 06/11:** o Victor aprovou as onze decisões como recomendadas ([ADR 0015](adr/0015-decisoes-que-destravam-o-mvp.md)). Agora podem andar ao mesmo tempo:
 
-1. **Claude Code: a [fase 2](#fase-2-banco-e-api-completam-o-contrato),** banco e API completam o contrato. É o caminho crítico do produto: sem ela, a web não tem o que chamar. Cada passo vira um PR.
+1. **Claude Code: o resto da [fase 2](#fase-2-banco-e-api-completam-o-contrato).** A API já tem o contrato da tela do coordenador (2.1 a 2.4); falta a contestação (2.5), os logins (2.6), o prazo de 2 minutos (2.7) e publicar no servidor (2.8).
 2. **Victor:** quando o passo 2.6 estiver pronto, rodar o comando que cria os logins da demonstração e guardar as senhas. É a parte dele na fase 2.
 3. **Entrega 3, o prazo mais próximo e a prioridade escolhida pelo Victor em 06/11:** o documento está corrigido, com o experimento da concentração e as fontes públicas, e o PDF tem 12 páginas ([E.1 a E.8](#5-trilha-da-entrega-3-em-paralelo)). Falta o Victor revisar e autorizar o merge. Depois, a fase 2.
 4. **Colegas:** o teste de usabilidade da tarefa do coordenador, que já está no link público, se o grupo puder fazer ([E.2](#5-trilha-da-entrega-3-em-paralelo)).
@@ -61,10 +61,10 @@ Cada fase depende da anterior, salvo onde está escrito. Cada passo vira um PR c
 
 A API hoje faz o fluxo principal, mas a tela pede coisas que ela ainda não tem ([ADR 0014](adr/0014-estrutura-da-plataforma-web.md), divergências 3 a 17).
 
-- [ ] **2.1** Aprovação com a justificativa da exceção gravada na trilha (D2).
-- [ ] **2.2** Pular e desfazer o pulo, por nome, e o "Esta explicação ajudou?" (D3).
-- [ ] **2.3** A leitura devolve, para cada campo, se está no texto ou foi deduzida, e o trecho. As sugestões devolvem a contribuição de cada variável e a evidência de quem ficou de fora.
-- [ ] **2.4** O coordenador lê a política e a ficha do modelo.
+- [x] **2.1** Aprovação com a justificativa da exceção gravada na trilha (D2). *Feito em 06/11.*
+- [x] **2.2** Pular e desfazer o pulo, por nome, e o "Esta explicação ajudou?" (D3). *Feito em 06/11, com o estado da decisão para a tela voltar igual.*
+- [x] **2.3** *Feito em 06/11.* A leitura devolve, para cada campo, se está no texto ou foi deduzida, e o trecho. As sugestões devolvem a contribuição de cada variável e a evidência de quem ficou de fora.
+- [x] **2.4** O coordenador lê a política e a ficha do modelo. *Feito em 06/11.*
 - [ ] **2.5** Contestação: tabela, RLS e rotas para o médico abrir e o coordenador responder, com as ações `contestation_opened` e `contestation_answered` na trilha (D8).
 - [ ] **2.6** Os logins da demonstração na rede simulada, com e-mail e senha: um coordenador e três médicos que a vaga do roteiro recomenda (D1). O script fica pronto, e quem roda o comando é o Victor.
 - [ ] **2.7** Prazo de 2 minutos por oferta na organização da demonstração (D6).

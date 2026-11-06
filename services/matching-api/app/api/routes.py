@@ -18,13 +18,20 @@ from app.api.schemas import (
     AdvanceOut,
     ApproveIn,
     CandidateOut,
+    DecisionOut,
+    ExceptionOut,
     ExclusionOut,
     ExplanationOut,
     ExtractedFields,
     ExtractIn,
     ExtractOut,
+    FeedbackIn,
+    FeedbackOut,
+    FieldReadingOut,
     HealthOut,
+    ModelCardOut,
     OfferOut,
+    PolicyOut,
     ProfileOut,
     PublishIn,
     RecommendationOut,
@@ -33,8 +40,19 @@ from app.api.schemas import (
     RespondIn,
     RespondOut,
     ShiftOut,
+    SkipIn,
+    SpanOut,
+    UnskipIn,
 )
-from app.api.service import CascadeStep, MatchingService, excluded_by_rule, ranking_features
+from app.api.service import (
+    CascadeStep,
+    DecisionState,
+    MatchingService,
+    excluded_by_rule,
+    ranking_features,
+    rounded_contributions,
+)
+from app.llm.extraction import FIELD_KEYS
 from app.models import Offer, Shift
 from app.rules import RULE_TEXTS
 
@@ -158,6 +176,17 @@ def extract_shift(body: ExtractIn, profile: Coordinator, service: Service) -> Ex
             ends_at=fields.ends_at,
             urgency=fields.urgency,
         ),
+        readings=[
+            FieldReadingOut(
+                key=key,
+                origin=result.readings[key].origin,
+                span=SpanOut(start=span[0], end=span[1])
+                if (span := result.readings[key].span)
+                else None,
+            )
+            for key in FIELD_KEYS
+            if key in result.readings
+        ],
         missing_required=fields.missing_required(),
         source=result.source,
         flags=list(result.flags),
@@ -185,10 +214,12 @@ def publish_shift(body: PublishIn, profile: Coordinator, service: Service) -> Sh
 )
 def recommend_shift(shift_id: UUID, profile: Coordinator, service: Service) -> RecommendationOut:
     """Telas 2 e 3: top 5 com o motivo e os excluídos com a regra. Nenhuma oferta sai daqui."""
-    result = service.recommend(profile, str(shift_id))
+    outcome = service.recommend(profile, str(shift_id))
+    result = outcome.result
     return RecommendationOut(
         shift_id=str(shift_id),
         model_version=result.model_version,
+        generated_at=outcome.generated_at,
         pool_size=result.pool_size,
         eligible_count=result.eligible_count,
         candidates=[
@@ -197,12 +228,14 @@ def recommend_shift(shift_id: UUID, profile: Coordinator, service: Service) -> R
                 doctor_id=candidate.doctor_id,
                 score=candidate.score,
                 features=ranking_features(candidate.features),
+                contributions=rounded_contributions(candidate.contributions),
                 alerts=list(candidate.alerts),
                 explanation=ExplanationOut(
                     text=candidate.explanation.text,
                     factors_cited=list(candidate.explanation.factors_cited),
                     source=candidate.explanation.source,
                 ),
+                explanation_fallback=candidate.explanation_fallback,
             )
             for candidate in result.candidates
         ],
@@ -211,6 +244,7 @@ def recommend_shift(shift_id: UUID, profile: Coordinator, service: Service) -> R
                 doctor_id=exclusion.doctor_id,
                 rule_code=exclusion.rule_code,
                 rule_text=exclusion.rule_text,
+                evidence=outcome.evidence.get(exclusion.doctor_id),
             )
             for exclusion in result.exclusions
         ],
@@ -232,11 +266,82 @@ def approve_shift(
     Se uma oferta saiu, o n8n é avisado depois da resposta, para o clique não esperar por ele. O
     aviso é um só: daí em diante, o n8n pergunta à API quanto esperar (ADR 0013).
     """
-    step = service.approve(profile, str(shift_id), [str(i) for i in body.doctor_ids])
+    step = service.approve(
+        profile, str(shift_id), [str(i) for i in body.doctor_ids], body.justification
+    )
     notifier = request.app.state.notifier
     if notifier is not None and step.action == "oferta_enviada":
         tasks.add_task(notifier.cascade_started, step.shift_id)
     return _step_out(step)
+
+
+def _decision_out(shift_id: str, state: DecisionState) -> DecisionOut:
+    exception = state.exception
+    return DecisionOut(
+        shift_id=shift_id,
+        approved_doctor_ids=state.approved_ids,
+        decided_by=state.decided_by,
+        decided_at=state.decided_at,
+        exception=ExceptionOut(
+            alerts=exception["alertas"], justification=exception["justificativa"]
+        )
+        if exception
+        else None,
+        skipped=state.skipped,
+    )
+
+
+@router.get("/shifts/{shift_id}/decision", response_model=DecisionOut)
+def decision_state(shift_id: UUID, profile: Coordinator, service: Service) -> DecisionOut:
+    """A decisão já tomada e os nomes pulados, para a tela voltar igual depois de recarregar."""
+    return _decision_out(str(shift_id), service.decision_state(profile, str(shift_id)))
+
+
+@router.post("/shifts/{shift_id}/skip", response_model=DecisionOut)
+def skip_candidate(
+    shift_id: UUID, body: SkipIn, profile: Coordinator, service: Service
+) -> DecisionOut:
+    """Tira um nome desta decisão, sem cancelar a vaga. Pular de novo não grava outra linha."""
+    service.skip(profile, str(shift_id), str(body.doctor_id), body.reason)
+    return _decision_out(str(shift_id), service.decision_state(profile, str(shift_id)))
+
+
+@router.post("/shifts/{shift_id}/unskip", response_model=DecisionOut)
+def unskip_candidate(
+    shift_id: UUID, body: UnskipIn, profile: Coordinator, service: Service
+) -> DecisionOut:
+    """Desfaz o pulo enquanto a vaga espera a decisão. A trilha guarda as duas linhas."""
+    service.unskip(profile, str(shift_id), str(body.doctor_id))
+    return _decision_out(str(shift_id), service.decision_state(profile, str(shift_id)))
+
+
+@router.post("/shifts/{shift_id}/feedback", response_model=FeedbackOut, status_code=201)
+def explanation_feedback(
+    shift_id: UUID, body: FeedbackIn, profile: Coordinator, service: Service
+) -> FeedbackOut:
+    """ "Esta explicação ajudou?". Vai para a trilha; não treina o modelo."""
+    service.feedback(profile, str(shift_id), str(body.doctor_id), body.helpful, body.comment)
+    return FeedbackOut()
+
+
+@router.get("/policy", response_model=PolicyOut)
+def organization_policy(profile: Coordinator, service: Service) -> PolicyOut:
+    """Os limites que o filtro de regras usa na organização de quem pede."""
+    policy = service.policy(profile)
+    return PolicyOut(
+        max_continuous_hours=policy.max_continuous_hours,
+        min_rest_hours=policy.min_rest_hours,
+        default_radius_km=policy.default_radius_km,
+        offer_ttl_minutes=policy.offer_ttl_minutes,
+        top_k=policy.top_k,
+        allow_secondary_specialty=policy.allow_secondary_specialty,
+    )
+
+
+@router.get("/model-card", response_model=ModelCardOut)
+def model_card(profile: Coordinator, service: Service) -> ModelCardOut:
+    """A ficha do modelo ativo, a mesma que a tela mostra no modo de demonstração."""
+    return ModelCardOut(**service.model_card())
 
 
 @router.post("/shifts/{shift_id}/reject", response_model=RejectOut)
