@@ -4,6 +4,18 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 06/11/2026 (sexta): fase 2 no servidor
+
+**O que foi feito (passo 2.8), com o ok do Victor para a fase 2:**
+
+- **Banco:** as três migrações da fase 2 (`contrato_da_tela`, `contestacao` e `prazo_da_demonstracao`) foram aplicadas no projeto real com `npx supabase@3.0.0 db push`, depois de um ensaio que listou só elas. Conferido por fora: prazo de 2 minutos na rede simulada e de 60 na organização de teste, tabela de contestações respondendo à API e recusando quem não tem login, e as colunas novas no lugar.
+- **API:** imagem 0.3.0 construída no servidor a partir da `main`, com cópias para voltar atrás (`docker-compose.yml.antes-fase2`, `services/matching-api.antes-fase2` e a imagem `antes-fase2`).
+- **Conferência:** 33 de 33 conferências do `conferir-api.py verificar` passaram, `/health` responde de fora, a rota interna segue fechada, as rotas novas pedem login e a API usa 59 MiB.
+
+**Falta na fase 2:** o Victor rodar o comando dos logins da demonstração (2.6).
+
+**Uso de IA:** o Claude Code aplicou as migrações, publicou a imagem e rodou a conferência; nenhum segredo foi impresso.
+
 ## 06/11/2026 (sexta): fase 2, o comando dos logins da demonstração
 
 **O que ficou pronto (passo 2.6, D1):** `scripts/usuarios-de-teste.py` ganhou três comandos. `demonstracao` cria um coordenador da rede simulada e três médicos dela, com e-mail em domínio reservado (nenhum e-mail é enviado) e senha sorteada, que aparece só no terminal de quem roda. Sem `--medicos`, usa os três primeiros médicos das personas da demonstração, que existem no banco com os mesmos IDs; rodar de novo troca as senhas e, com `--medicos`, os médicos. `limpar-demonstracao` apaga só o que o coordenador da demonstração publicou (vagas, recomendações, ofertas e contestações), e `remover-demonstracao` apaga também os logins. A trilha fica.
