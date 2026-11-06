@@ -14,7 +14,7 @@ O mapa de tudo o que falta para o PlantãoSeguro funcionar de ponta a ponta, do 
 
 1. **Victor: conferir a jornada do coordenador no sistema real (3.6).** Em `/entrar`, "Entrar no sistema real" com `coordenador.demo`: escrever um pedido, conferir os campos, ver as sugestões e aprovar. A vaga precisa aparecer na lista e, no banco, com a trilha. É o "pronto quando" da fase 3, e só ele tem as senhas.
 2. **Claude Code: a [fase 4](#fase-4-a-tela-do-médico-e-a-cascata-na-tela),** a tela do médico e a cascata na tela, assim que a 3.6 estiver conferida.
-3. **Entrega 3, o prazo mais próximo e a prioridade escolhida pelo Victor em 06/11:** o documento está corrigido, com o experimento da concentração e as fontes públicas, e o PDF tem 12 páginas ([E.1 a E.8](#5-trilha-da-entrega-3-em-paralelo)). Falta o Victor revisar e autorizar o merge. Depois, a fase 2.
+3. **Victor: enviar a Entrega 3 (07/11).** O documento e o PDF de 12 páginas estão na `main` desde o PR #25 ([E.1 a E.8](#5-trilha-da-entrega-3-em-paralelo)); o envio é dele.
 4. **Colegas:** o teste de usabilidade da tarefa do coordenador, que já está no link público, se o grupo puder fazer ([E.2](#5-trilha-da-entrega-3-em-paralelo)).
 
 ## 2. Onde estamos
@@ -154,7 +154,7 @@ O documento acadêmico anda junto com o produto e usa o que ele mede.
 - [ ] **E.5** Previsão de vagas, se sobrar tempo: um baseline com resultado honesto, mesmo abaixo da meta.
 - [x] **E.6** *Feito em 06/11.* Corrigir o documento: a tela do coordenador já existe, a do médico não; o domínio público já tem a plataforma; o Gemini foi testado; o teste de usabilidade cobre só o coordenador; a apresentação é guiada, sem a plateia usando o sistema; não houve entrevistas.
 - [x] **E.7** *Feito em 06/11, com a referência pública do plantão e a taxa de vagas descobertas da referência acadêmica.* Caso de negócio e critérios de sucesso com números de fontes públicas e da simulação, sempre em faixas e com o rótulo de simulação.
-- [ ] **E.8** Gerar o PDF, atualizar a rastreabilidade (A4-1 a A4-11) e abrir o PR, com o ok do Victor. *PDF de 12 páginas e rastreabilidade prontos em 06/11; falta o merge do PR.*
+- [x] **E.8** Gerar o PDF, atualizar a rastreabilidade (A4-1 a A4-11) e abrir o PR, com o ok do Victor. *Feito em 06/11: PDF de 12 páginas e rastreabilidade na `main` (PR #25).*
 - [ ] **E.9** Aplicar o retorno da aula de storytelling e preparar os slides e o pitch com o grupo.
 
 ## 6. Decisões que destravam o caminho
@@ -179,7 +179,6 @@ O documento acadêmico anda junto com o produto e usa o que ele mede.
 
 - Criar os logins da demonstração (D1) e guardar as senhas fora do Git, num gerenciador de senhas: `py -3.12 scripts/usuarios-de-teste.py demonstracao --env C:\dev\handson_plantaoseg\.env`. Rodar de novo troca as senhas; `--medicos id1,id2,id3` troca os médicos.
 - Antes do ensaio, apagar o que o login da demonstração publicou: `limpar-demonstracao`; depois da apresentação, `remover-demonstracao`.
-- Pedir as correções do documento da Entrega 3 (E.6), que está fora do Git.
 - Ligar o MFA do n8n e conferir no painel que a renovação do servidor está desligada.
 - Rodar `usuarios-de-teste.py limpar` antes do ensaio e `remover` depois da apresentação.
 - Dar o ok de cada merge e de cada publicação no servidor.
