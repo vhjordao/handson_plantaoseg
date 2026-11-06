@@ -23,6 +23,7 @@ Specialty = Literal["clinica_medica", "pediatria"]
 Urgency = Literal["low", "medium", "high"]
 DeclineReason = Literal["distance", "fatigue", "schedule", "other"]
 FieldKey = Literal["unit_id", "specialty", "starts_at", "ends_at", "urgency"]
+ContestationReason = Literal["wrong_data", "explanation_unclear", "unfair_order", "other"]
 
 
 class ApiModel(BaseModel):
@@ -259,6 +260,32 @@ class ModelCardOut(ApiModel):
     risk_class: RiskClassOut
     limits: list[str]
     simulacao: Literal[True] = True
+
+
+class ContestIn(ApiModel):
+    """A contestação do médico: o motivo e o texto. A API tira CRM, telefone, e-mail e documento."""
+
+    reason: ContestationReason
+    text: str = Field(min_length=1, max_length=MAX_FREE_TEXT)
+
+
+class AnswerIn(ApiModel):
+    text: str = Field(min_length=1, max_length=MAX_FREE_TEXT)
+
+
+class ContestationOut(ApiModel):
+    id: str
+    protocol: str
+    offer_id: str
+    shift_id: str
+    doctor_id: str
+    reason: ContestationReason
+    text: str
+    status: Literal["open", "answered"]
+    created_at: datetime
+    answer_text: str | None
+    answered_by: str | None
+    answered_at: datetime | None
 
 
 class OfferOut(ApiModel):

@@ -17,10 +17,11 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from threading import Lock
 from typing import Any
+from uuid import uuid4
 
 from app.api.errors import ApiError
 from app.api.repository import Profile, Repository
-from app.api.tempo import local_from_db, local_now
+from app.api.tempo import db_from_local, local_from_db, local_now
 from app.api.world import WorldCache
 from app.audit import ACTIONS, FORBIDDEN_DETAIL_KEYS
 from app.evidence import exclusion_evidence
@@ -475,6 +476,83 @@ class MatchingService:
         dataset, _ = self._world.engine(profile.organization_id or "")
         return dataset.policy
 
+    def contest(self, profile: Profile, offer_id: str, reason: str, text: str) -> dict[str, Any]:
+        """O médico contesta a recomendação da própria oferta. Uma por oferta (D8, ADR 0015)."""
+        offer = self._repository.offer(offer_id)
+        if offer is None or offer.doctor_id != profile.doctor_id:
+            raise ApiError(404, "oferta_nao_encontrada", "Oferta não encontrada.")
+        shift = self._repository.shift(offer.shift_id)
+        unit = self._world.unit(shift.unit_id) if shift else None
+        if shift is None or unit is None:
+            raise ApiError(404, "oferta_nao_encontrada", "Oferta não encontrada.")
+        if self._repository.contestation_of_offer(offer_id) is not None:
+            raise ApiError(409, "ja_contestada", "Esta oferta já foi contestada.")
+        cleaned = _required_free_text(text, "Escreva por que você contesta a recomendação.")
+        now = self._clock()
+        contestation_id = str(uuid4())
+        protocol = f"CT-{contestation_id[:8].upper()}"
+        row = self._repository.add_contestation(
+            {
+                "id": contestation_id,
+                "protocol": protocol,
+                "organization_id": unit.organization_id,
+                "offer_id": offer_id,
+                "shift_id": offer.shift_id,
+                "doctor_id": offer.doctor_id,
+                "reason": reason,
+                "text": cleaned,
+                "status": "open",
+                "created_at": db_from_local(now),
+            }
+        )
+        # O texto fica na tabela, sob RLS; a trilha guarda só códigos e IDs.
+        RestAudit(self._repository, unit.organization_id).append(
+            now=now,
+            actor_role="doctor",
+            actor_pseudo_id=offer.doctor_id,
+            action="contestation_opened",
+            entity_type="contestation",
+            entity_id=contestation_id,
+            model_version=self._model.version,
+            details={
+                "offer_id": offer_id,
+                "shift_id": offer.shift_id,
+                "reason": reason,
+                "protocol": protocol,
+            },
+        )
+        return row
+
+    def answer_contestation(
+        self, profile: Profile, contestation_id: str, text: str
+    ) -> dict[str, Any]:
+        """O coordenador responde por escrito. A resposta e a trilha ficam para a auditoria."""
+        current = self._repository.contestation(contestation_id)
+        if current is None or current["organization_id"] != profile.organization_id:
+            raise ApiError(404, "contestacao_nao_encontrada", "Contestação não encontrada.")
+        cleaned = _required_free_text(text, "Escreva a resposta ao médico.")
+        now = self._clock()
+        answered = self._repository.answer_contestation(
+            contestation_id, text=cleaned, answered_by=profile.user_id, now=now
+        )
+        if answered is None:
+            raise ApiError(409, "ja_respondida", "Esta contestação já foi respondida.")
+        RestAudit(self._repository, current["organization_id"]).append(
+            now=now,
+            actor_role="coordinator",
+            actor_pseudo_id=profile.user_id,
+            action="contestation_answered",
+            entity_type="contestation",
+            entity_id=contestation_id,
+            model_version=self._model.version,
+            details={
+                "offer_id": current["offer_id"],
+                "shift_id": current["shift_id"],
+                "protocol": current["protocol"],
+            },
+        )
+        return answered
+
     @staticmethod
     def model_card() -> dict[str, Any]:
         """A ficha do modelo ativo: o que usa, o que não usa, métricas, risco e limites."""
@@ -677,6 +755,14 @@ def _clean_free_text(text: str | None) -> str | None:
     if text is None or not text.strip():
         return None
     return remove_personal_data(text.strip()[:MAX_FREE_TEXT])
+
+
+def _required_free_text(text: str, message: str) -> str:
+    """Texto que precisa sobrar depois de tirar o dado pessoal."""
+    cleaned = _clean_free_text(text) or ""
+    if not without_marks(cleaned):
+        raise ApiError(422, "texto_obrigatorio", message)
+    return cleaned
 
 
 def _exception(alerts: list[str], justification: str | None) -> dict[str, Any] | None:

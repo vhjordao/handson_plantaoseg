@@ -133,9 +133,7 @@ class SupabaseRest:
         rows: list[dict[str, Any]] = []
         while True:
             page = PAGE_SIZE if limit is None else min(PAGE_SIZE, limit - len(rows))
-            batch = self._send(
-                "GET", table, params={**params, "limit": page, "offset": len(rows)}
-            )
+            batch = self._send("GET", table, params={**params, "limit": page, "offset": len(rows)})
             rows += batch
             if len(batch) < page or (limit is not None and len(rows) >= limit):
                 return rows

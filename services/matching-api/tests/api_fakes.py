@@ -146,6 +146,7 @@ def seed_tables(dataset: Dataset | None = None) -> dict[str, list[dict[str, Any]
         "recommendation_exclusions": [],
         "explanations": [],
         "audit_log": [],
+        "contestations": [],
         "model_registry": [
             {
                 "model_version": small_model().version,
@@ -217,6 +218,10 @@ class FakeRest:
         if table == "offers":
             self._check_offer_unique(row)
             self._derive_offer(row)
+        if table == "contestations" and any(
+            existing["offer_id"] == row["offer_id"] for existing in self.tables[table]
+        ):
+            raise RestConflict(409, "23505")
         if table == "shift_requests" and ("\x00" in row["raw_text"] or len(row["raw_text"]) > 5000):
             raise RestError(400, "23514")
         if table == "recommendations" and not set(row["features"]) <= set(RANKING_FEATURES):

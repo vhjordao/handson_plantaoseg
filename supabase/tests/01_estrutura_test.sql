@@ -10,7 +10,7 @@ select tables_are(
   array[
     'organizations', 'units', 'doctors', 'doctor_availability', 'policy_config', 'shift_requests',
     'shifts', 'shift_compensation', 'offers', 'model_registry', 'recommendations',
-    'recommendation_exclusions', 'explanations', 'profiles', 'audit_log'
+    'recommendation_exclusions', 'explanations', 'profiles', 'audit_log', 'contestations'
   ],
   'só existem as tabelas do dicionário; doctors_latent fica fora do banco'
 );
