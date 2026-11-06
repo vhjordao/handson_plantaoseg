@@ -4,7 +4,7 @@ import unittest
 from unittest.mock import patch
 from uuid import uuid4
 
-from tests.api_fakes import COORDINATOR_B, WEBHOOK_SECRET, Harness, bearer
+from tests.api_fakes import COORDINATOR_B, JUSTIFICATION, WEBHOOK_SECRET, Harness, bearer
 
 
 class SemAprovacaoNaoHaOfertaTests(unittest.TestCase):
@@ -161,7 +161,9 @@ class CascataTests(unittest.TestCase):
         shift_id, doctors = h.recommended()
         chosen = [doctors[2], doctors[0]]
         step = h.client.post(
-            f"/shifts/{shift_id}/approve", json={"doctor_ids": chosen}, headers=h.coordinator
+            f"/shifts/{shift_id}/approve",
+            json={"doctor_ids": chosen, "justification": JUSTIFICATION},
+            headers=h.coordinator,
         ).json()
         self.assertEqual(step["offer"]["doctor_id"], chosen[0])
 

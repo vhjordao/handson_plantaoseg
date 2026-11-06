@@ -6,6 +6,7 @@ Os testes de comportamento do banco de verdade são os de pgTAP, na CI.
 """
 
 import copy
+import fnmatch
 import re
 from dataclasses import fields as dataclass_fields
 from datetime import UTC, date, datetime, time, timedelta
@@ -35,6 +36,8 @@ from tests.test_contrato_banco import _columns
 
 SUPABASE_URL = "https://teste.supabase.invalid"
 WEBHOOK_SECRET = "segredo-de-teste-com-mais-de-32-caracteres"
+# Vale para qualquer aprovação: com alerta de jornada entre os aprovados, ela é obrigatória.
+JUSTIFICATION = "Cobertura combinada com a direção clínica para esta noite"
 PII_IN_DETAILS = re.compile(r'"(name|name_sim|crm|crm_sim|phone|phone_sim|email|cpf)"\s*:', re.I)
 
 ORG_B = "b0000000-0000-4000-8000-000000000001"
@@ -162,8 +165,11 @@ def seed_tables(dataset: Dataset | None = None) -> dict[str, list[dict[str, Any]
 def _matches(row: dict[str, Any], filters: dict[str, str] | None) -> bool:
     for column, condition in (filters or {}).items():
         operator, _, value = condition.partition(".")
-        assert operator == "eq", f"o banco falso só conhece eq: {condition}"
-        if str(row.get(column)) != value:
+        assert operator in ("eq", "like"), f"o banco falso só conhece eq e like: {condition}"
+        if operator == "like":
+            if not fnmatch.fnmatchcase(str(row.get(column)), value):
+                return False
+        elif str(row.get(column)) != value:
             return False
     return True
 
@@ -222,6 +228,8 @@ class FakeRest:
             if row["action"] not in ACTIONS or PII_IN_DETAILS.search(details):
                 raise RestError(400, "23514")
             row["seq"] = len(self.tables[table]) + 1
+            # O gatilho do banco põe a hora; aqui, a hora do relógio da máquina basta.
+            row["occurred_at"] = row.get("occurred_at") or datetime.now(UTC).isoformat()
         self.tables[table].append(row)
         return row
 
@@ -368,7 +376,9 @@ class Harness:
         shift_id, doctors = self.recommended()
         chosen = doctors[:count]
         response = self.client.post(
-            f"/shifts/{shift_id}/approve", json={"doctor_ids": chosen}, headers=self.coordinator
+            f"/shifts/{shift_id}/approve",
+            json={"doctor_ids": chosen, "justification": JUSTIFICATION},
+            headers=self.coordinator,
         )
         assert response.status_code == 200, response.text
         return shift_id, chosen, response.json()

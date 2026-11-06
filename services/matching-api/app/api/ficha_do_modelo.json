@@ -1,0 +1,88 @@
+{
+  "version": "logreg-v1",
+  "type": "regressão logística",
+  "trained_on": "300 médicos e 12 meses de vagas e ofertas, todos sintéticos",
+  "features_used": [
+    {
+      "feature": "availability_overlap_hours",
+      "weight": 0.8221
+    },
+    {
+      "feature": "distance_km",
+      "weight": -0.4297
+    },
+    {
+      "feature": "night_shift_preference_match",
+      "weight": 0.2523
+    },
+    {
+      "feature": "specialty_match",
+      "weight": 0.1543
+    },
+    {
+      "feature": "hours_since_last_shift",
+      "weight": 0.1446
+    },
+    {
+      "feature": "acceptance_rate_90d",
+      "weight": 0.1163
+    },
+    {
+      "feature": "attendance_rate_90d",
+      "weight": 0.0105
+    }
+  ],
+  "features_not_used": [
+    {
+      "name": "Valor do plantão e pagamento",
+      "reason": "Neutralidade econômica (Res. CFM 2.460/2026, a validar com jurídico): o valor nunca entra na ordem sugerida."
+    },
+    {
+      "name": "Gênero, idade e demais atributos protegidos",
+      "reason": "Risco de discriminação (Res. CFM 2.454/2026 e LGPD, a validar com jurídico). Servem só para auditar viés."
+    },
+    {
+      "name": "Carga recente e ofertas recebidas",
+      "reason": "Só alimentam o alerta de jornada. Em simulação, não melhoram o topo da ordem sugerida."
+    },
+    {
+      "name": "Nome, CRM e telefone",
+      "reason": "Dados pessoais não vão ao modelo nem à IA de linguagem; só pseudônimos."
+    }
+  ],
+  "metrics": [
+    {
+      "name": "AUC do modelo (simulação)",
+      "value": "0,762"
+    },
+    {
+      "name": "AUC do baseline heurístico (simulação)",
+      "value": "0,702"
+    },
+    {
+      "name": "Chance média de sucesso no top-5, modelo (simulação)",
+      "value": "0,712"
+    },
+    {
+      "name": "Chance média de sucesso no top-5, baseline heurístico (simulação)",
+      "value": "0,677"
+    },
+    {
+      "name": "Chance média de sucesso no top-5, sorteio entre elegíveis (simulação)",
+      "value": "0,529"
+    }
+  ],
+  "risk_class": {
+    "preliminary": "Médio (reavaliada; a Entrega 1 propôs baixo)",
+    "note": "Leitura de engenharia do Anexo II da Res. CFM 2.454/2026; a classificação formal é do hospital; validar com jurídico."
+  },
+  "limits": [
+    "O modelo aprende o simulador.",
+    "O Gemini só foi testado à parte, com textos sintéticos.",
+    "A distância cria viés geográfico.",
+    "A extração por regras é otimista.",
+    "Contestação e avaliação de impacto não estão construídas.",
+    "Os limites de jornada são configuração do projeto, não norma verificada."
+  ],
+  "simulacao": true
+}

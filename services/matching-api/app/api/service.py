@@ -9,29 +9,36 @@ não recomendarem ou aprovarem em dobro. As restrições de unicidade do banco s
 barreira para as ofertas.
 """
 
+import json
 from collections import Counter
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
+from pathlib import Path
 from threading import Lock
 from typing import Any
 
 from app.api.errors import ApiError
 from app.api.repository import Profile, Repository
-from app.api.tempo import local_now
+from app.api.tempo import local_from_db, local_now
 from app.api.world import WorldCache
 from app.audit import ACTIONS, FORBIDDEN_DETAIL_KEYS
+from app.evidence import exclusion_evidence
 from app.llm.client import LLMClient
 from app.llm.extraction import ExtractionResult, extract
 from app.llm.guardrails import ShiftFields, detect_injection
-from app.models import Offer, Shift, Unit
+from app.models import Dataset, Offer, Policy, Shift, Unit
 from app.pipeline import Recommendation, approve, recommend
+from app.privacy import MAX_FREE_TEXT, MIN_JUSTIFICATION, remove_personal_data, without_marks
+from app.ranking.compute import FeatureStore
 from app.ranking.features import RANKING_FEATURES
 from app.ranking.model import LogisticModel
 from app.rules import RULE_TEXTS, evaluate_candidate, schedule_check, shift_period
 
 FINAL_STATUSES = ("filled", "cancelled", "uncovered")
 MAX_DAYS_AHEAD = 60
+# Gerada da ficha do modo de demonstração (`apps/web/lib/demo/mundo.json`); um teste trava as duas.
+MODEL_CARD_PATH = Path(__file__).resolve().parent / "ficha_do_modelo.json"
 
 
 class RestAudit:
@@ -99,6 +106,26 @@ class Shortlist:
     shift_key: str
     model_version: str
     candidates: tuple[ShortlistItem, ...]
+
+
+@dataclass(frozen=True, slots=True)
+class RecommendOutcome:
+    """O resultado do motor, a evidência de cada exclusão e a hora em que foi gerado."""
+
+    result: Recommendation
+    evidence: dict[str, str]
+    generated_at: datetime
+
+
+@dataclass(frozen=True, slots=True)
+class DecisionState:
+    """O que já foi decidido na vaga: a aprovação gravada e quem está pulado agora."""
+
+    approved_ids: list[str] | None
+    decided_by: str | None
+    decided_at: datetime | None
+    exception: dict[str, Any] | None
+    skipped: list[str]
 
 
 @dataclass(slots=True)
@@ -217,7 +244,7 @@ class MatchingService:
         audit.flush()
         return shift, flags
 
-    def recommend(self, profile: Profile, shift_id: str) -> Recommendation:
+    def recommend(self, profile: Profile, shift_id: str) -> RecommendOutcome:
         """Roda o motor e grava o resultado. Não envia nenhuma oferta."""
         with self._locks.of(shift_id):
             shift, unit = self._shift_of_organization(shift_id, profile)
@@ -240,6 +267,7 @@ class MatchingService:
                 audit=audit,
                 key=shift_id,
             )
+            evidence = _exclusion_evidence(result, dataset, store)
             self._repository.save_recommendations(
                 [
                     {
@@ -250,6 +278,7 @@ class MatchingService:
                         "model_version": result.model_version,
                         # O banco só aceita as variáveis do ranking; as de contexto vão aos alertas.
                         "features": ranking_features(candidate.features),
+                        "contributions": rounded_contributions(candidate.contributions),
                         "alerts": list(candidate.alerts),
                     }
                     for candidate in result.candidates
@@ -270,36 +299,186 @@ class MatchingService:
                         "doctor_id": exclusion.doctor_id,
                         "rule_code": exclusion.rule_code,
                         "rule_text": exclusion.rule_text,
+                        "evidence": evidence.get(exclusion.doctor_id),
                     }
                     for exclusion in result.exclusions
                 ],
             )
             audit.flush()
-            return result
+            return RecommendOutcome(result, evidence, result.now)
 
-    def approve(self, profile: Profile, shift_id: str, doctor_ids: list[str]) -> CascadeStep:
-        """A decisão do coordenador. Só aqui a cascata começa, e só com quem foi recomendado."""
+    def approve(
+        self,
+        profile: Profile,
+        shift_id: str,
+        doctor_ids: list[str],
+        justification: str | None = None,
+    ) -> CascadeStep:
+        """A decisão do coordenador. Só aqui a cascata começa, e só com quem foi recomendado.
+
+        Aprovar quem tem alerta de jornada é uma exceção humana: pede uma justificativa escrita,
+        que vai para a trilha sem CRM, telefone, e-mail nem documento (D2, ADR 0015).
+        """
         with self._locks.of(shift_id):
             shift, unit = self._shift_of_organization(shift_id, profile)
             if shift.status != "open":
                 raise ApiError(409, "vaga_nao_aberta", "Esta vaga não está mais aberta.")
             if self._repository.approved_ids(shift_id) is not None:
                 raise ApiError(409, "ja_aprovada", "Esta vaga já foi aprovada.")
-            shortlist = self._repository.shortlist(shift_id)
-            if not shortlist:
+            rows = self._repository.shortlist_rows(shift_id)
+            if not rows:
                 raise ApiError(409, "sem_recomendacao", "Gere a recomendação antes de aprovar.")
+            if set(doctor_ids) & set(self._skipped(shift_id)):
+                raise ApiError(
+                    422,
+                    "medico_pulado",
+                    "Um dos nomes foi pulado. Desfaça o pulo antes de aprovar.",
+                )
+            alerts = {row["doctor_id"]: list(row["alerts"] or []) for row in rows}
+            exception = _exception(
+                [alert for doctor_id in doctor_ids for alert in alerts.get(doctor_id, [])],
+                justification,
+            )
             now = self._clock()
             audit = RestAudit(self._repository, unit.organization_id)
             recommended = Shortlist(
                 shift_id,
                 self._model.version,
-                tuple(ShortlistItem(doctor_id) for doctor_id in shortlist),
+                tuple(ShortlistItem(row["doctor_id"]) for row in rows),
             )
             try:
-                approve(audit, recommended, doctor_ids, now=now, coordinator_id=profile.user_id)
+                approve(
+                    audit,
+                    recommended,
+                    doctor_ids,
+                    now=now,
+                    coordinator_id=profile.user_id,
+                    exception=exception,
+                )
             except ValueError as exc:
                 raise ApiError(422, "fora_da_recomendacao", str(exc)) from exc
             return self._send_next(shift, unit, doctor_ids, [], now, audit)
+
+    def _skipped(self, shift_id: str) -> list[str]:
+        """Quem está pulado agora: a trilha só cresce, então desfazer é uma linha nova."""
+        skipped: list[str] = []
+        for row in self._repository.candidate_events(shift_id):
+            doctor_id = row["entity_id"].split(":", 1)[1]
+            if row["action"] == "recommendation_rejected" and doctor_id not in skipped:
+                skipped.append(doctor_id)
+            elif row["action"] == "recommendation_restored" and doctor_id in skipped:
+                skipped.remove(doctor_id)
+        return skipped
+
+    def _candidate_of_open_shift(
+        self, profile: Profile, shift_id: str, doctor_id: str
+    ) -> tuple[Unit, int]:
+        """Vaga aberta, ainda sem aprovação, e o médico entre os recomendados (com a posição)."""
+        shift, unit = self._shift_of_organization(shift_id, profile)
+        if shift.status != "open":
+            raise ApiError(409, "vaga_nao_aberta", "Esta vaga não está mais aberta.")
+        if self._repository.approved_ids(shift_id) is not None:
+            raise ApiError(409, "ja_aprovada", "Esta vaga já foi aprovada.")
+        return unit, self._rank_of(shift_id, doctor_id)
+
+    def _rank_of(self, shift_id: str, doctor_id: str) -> int:
+        for row in self._repository.shortlist_rows(shift_id):
+            if row["doctor_id"] == doctor_id:
+                return int(row["rank"])
+        raise ApiError(422, "fora_da_recomendacao", "Este médico não está entre os recomendados.")
+
+    def skip(self, profile: Profile, shift_id: str, doctor_id: str, reason: str | None) -> None:
+        """O coordenador pula um nome. Não cancela a vaga: só tira o nome desta decisão (D3)."""
+        with self._locks.of(shift_id):
+            unit, rank = self._candidate_of_open_shift(profile, shift_id, doctor_id)
+            if doctor_id in self._skipped(shift_id):
+                return  # pular de novo não duplica o registro
+            RestAudit(self._repository, unit.organization_id).append(
+                now=self._clock(),
+                actor_role="coordinator",
+                actor_pseudo_id=profile.user_id,
+                action="recommendation_rejected",
+                entity_type="recommendation",
+                entity_id=f"{shift_id}:{doctor_id}",
+                model_version=self._model.version,
+                details={
+                    "shift_id": shift_id,
+                    "doctor_id": doctor_id,
+                    "rank": rank,
+                    "reason": _clean_free_text(reason),
+                },
+            )
+
+    def unskip(self, profile: Profile, shift_id: str, doctor_id: str) -> None:
+        """Desfaz o pulo enquanto a vaga espera a decisão. A linha do pulo continua na trilha."""
+        with self._locks.of(shift_id):
+            unit, rank = self._candidate_of_open_shift(profile, shift_id, doctor_id)
+            if doctor_id not in self._skipped(shift_id):
+                return  # desfazer o que não está pulado não grava nada
+            RestAudit(self._repository, unit.organization_id).append(
+                now=self._clock(),
+                actor_role="coordinator",
+                actor_pseudo_id=profile.user_id,
+                action="recommendation_restored",
+                entity_type="recommendation",
+                entity_id=f"{shift_id}:{doctor_id}",
+                model_version=self._model.version,
+                details={"shift_id": shift_id, "doctor_id": doctor_id, "rank": rank},
+            )
+
+    def feedback(
+        self,
+        profile: Profile,
+        shift_id: str,
+        doctor_id: str,
+        helpful: bool,
+        comment: str | None,
+    ) -> None:
+        """ "Esta explicação ajudou?". Fica na trilha e não treina nada (D3)."""
+        _, unit = self._shift_of_organization(shift_id, profile)
+        rank = self._rank_of(shift_id, doctor_id)
+        RestAudit(self._repository, unit.organization_id).append(
+            now=self._clock(),
+            actor_role="coordinator",
+            actor_pseudo_id=profile.user_id,
+            action="explanation_feedback",
+            entity_type="recommendation",
+            entity_id=f"{shift_id}:{doctor_id}",
+            model_version=self._model.version,
+            details={
+                "shift_id": shift_id,
+                "doctor_id": doctor_id,
+                "rank": rank,
+                "helpful": helpful,
+                "comment": _clean_free_text(comment),
+            },
+        )
+
+    def decision_state(self, profile: Profile, shift_id: str) -> DecisionState:
+        """A aprovação gravada e os nomes pulados, para a tela voltar igual depois de recarregar."""
+        self._shift_of_organization(shift_id, profile)
+        row = self._repository.approval(shift_id)
+        skipped = self._skipped(shift_id)
+        if row is None:
+            return DecisionState(None, None, None, None, skipped)
+        details = row["details"]
+        return DecisionState(
+            list(details["approved_doctor_ids"]),
+            row["actor_pseudo_id"],
+            local_from_db(row["occurred_at"]) if row.get("occurred_at") else None,
+            details.get("excecao"),
+            skipped,
+        )
+
+    def policy(self, profile: Profile) -> Policy:
+        """A política da organização de quem pede: limites de jornada, raio, prazo e top-k."""
+        dataset, _ = self._world.engine(profile.organization_id or "")
+        return dataset.policy
+
+    @staticmethod
+    def model_card() -> dict[str, Any]:
+        """A ficha do modelo ativo: o que usa, o que não usa, métricas, risco e limites."""
+        return json.loads(MODEL_CARD_PATH.read_text(encoding="utf-8"))
 
     def reject(self, profile: Profile, shift_id: str) -> Shift:
         """O coordenador recusa a lista: a vaga é cancelada, e ninguém recebe oferta."""
@@ -491,6 +670,70 @@ class MatchingService:
             details={"skipped": _skipped_details(skipped)},
         )
         return CascadeStep(shift.id, "sem_candidatos", "uncovered", None, skipped)
+
+
+def _clean_free_text(text: str | None) -> str | None:
+    """Texto livre que vai para a trilha: sem dado pessoal reconhecível e com tamanho limitado."""
+    if text is None or not text.strip():
+        return None
+    return remove_personal_data(text.strip()[:MAX_FREE_TEXT])
+
+
+def _exception(alerts: list[str], justification: str | None) -> dict[str, Any] | None:
+    """A exceção humana: os alertas aprovados e a justificativa. Sem alerta, não há exceção."""
+    if not alerts:
+        return None
+    cleaned = _clean_free_text(justification) or ""
+    if len(without_marks(cleaned)) < MIN_JUSTIFICATION:
+        raise ApiError(
+            422,
+            "justificativa_obrigatoria",
+            "Aprovar quem tem alerta de jornada pede uma justificativa escrita, "
+            f"com pelo menos {MIN_JUSTIFICATION} caracteres.",
+        )
+    return {"alertas": list(dict.fromkeys(alerts)), "justificativa": cleaned}
+
+
+def _exclusion_evidence(
+    result: Recommendation, dataset: Dataset, store: FeatureStore
+) -> dict[str, str]:
+    """A evidência numérica de cada exclusão, com a agenda do instante da recomendação."""
+    fields = result.fields
+    if not (fields.specialty and fields.starts_at and fields.ends_at):
+        return {}
+    evidence: dict[str, str] = {}
+    for exclusion in result.exclusions:
+        doctor = dataset.doctors.get(exclusion.doctor_id)
+        if doctor is None:
+            continue
+        agenda = store.assignments_at(doctor.id, result.now)
+        check = evaluate_candidate(
+            doctor,
+            specialty=fields.specialty,
+            starts_at=fields.starts_at,
+            ends_at=fields.ends_at,
+            unit=result.unit,
+            policy=dataset.policy,
+            windows=dataset.windows.get(doctor.id, []),
+            assignments=agenda,
+        )
+        if check.eligible or check.rule_code != exclusion.rule_code:
+            continue  # a agenda mudou entre o motor e esta conta: melhor sem evidência
+        evidence[doctor.id] = exclusion_evidence(
+            doctor,
+            check,
+            specialty=fields.specialty,
+            starts_at=fields.starts_at,
+            ends_at=fields.ends_at,
+            policy=dataset.policy,
+            agenda=agenda,
+        )
+    return evidence
+
+
+def rounded_contributions(contributions: dict[str, float]) -> dict[str, float]:
+    """Só as variáveis do contrato, com quatro casas e sem zero negativo."""
+    return {name: round(contributions[name], 4) + 0.0 for name in RANKING_FEATURES}
 
 
 def _skipped_details(skipped: list[tuple[str, str]]) -> list[dict[str, str]]:

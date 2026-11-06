@@ -4,6 +4,25 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 06/11/2026 (sexta): fase 2, a API completa o contrato da tela do coordenador
+
+**Pedido do Victor:** "Todos os merges feitos, tem meu ok. Siga para a fase 2, está autorizado a já executar." Os PRs #24 e #25 entraram na `main` com a CI verde.
+
+**O que ficou pronto (passos 2.1 a 2.4):**
+
+- **Leitura com origem e trecho:** cada campo diz se está escrito, foi deduzido ou falta, e onde está no texto. É a mesma regra da tela, portada para o Python; os valores lidos não mudaram (as fixtures da demonstração continuam idênticas).
+- **Contribuições e evidência:** a recomendação devolve a contribuição de cada variável e a evidência numérica de cada exclusão, e as duas ficam gravadas. A evidência saiu do exportador para `app/evidence.py`, que a API e o exportador usam.
+- **Justificativa da exceção (D2):** aprovar alguém com alerta de jornada exige uma justificativa de pelo menos 10 caracteres, que vai para a trilha sem CRM, telefone, e-mail nem documento. Nome pulado não pode ser aprovado.
+- **Pular, desfazer e feedback (D3):** cada um com rota e linha na trilha, no mesmo formato do modo de demonstração. A trilha só cresce: desfazer é uma linha nova.
+- **Estado da decisão, política e ficha:** rotas só de leitura, para a tela voltar igual depois de recarregar.
+- **Banco:** a migração `contrato_da_tela` acrescenta duas ações à trilha e as colunas de contribuições e evidência. As contribuições têm a mesma lista fechada das variáveis, então o valor do plantão não cabe ali (teste de banco novo).
+
+**Uma escolha de privacidade:** a API nunca lê nome de médico. Por isso o filtro de dados pessoais fica em duas camadas: a tela apaga os nomes antes de enviar, e a API apaga CRM, telefone, e-mail, documento e números longos.
+
+**Testes:** 539 no motor (29 novos) e 184 na web.
+
+**Uso de IA:** o Claude Code desenhou o contrato a partir das divergências do ADR 0014 e do modo de demonstração, escreveu o código, a migração e os testes; o Victor autorizou a fase.
+
 ## 06/11/2026 (sexta): Entrega 3 corrigida, com fontes públicas e o experimento da concentração
 
 **Pedido do Victor:** "Entrega 3 primeiro".
