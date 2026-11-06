@@ -4,6 +4,16 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 06/11/2026 (sexta): o plano por fases
+
+**Pedido do Victor:** "Não quero execução agora. Quero planejar. Divida em fases", e depois "Sim, no roteiro".
+
+**Decisões dele:** o projeto do Gemini continua sem faturamento; a página do telão sai do site; a direção visual fica para depois, porque ele já tem um modelo em mente.
+
+**O que mudou no [roteiro](roteiro-ate-o-mvp.md):** a seção 1 virou o plano por fases A a I, com quem faz e o pronto quando de cada uma. Como o modelo visual vem depois, as telas do médico e da auditoria são feitas no visual de hoje, e o visual novo entra pela base, de uma vez (fase E). O modelo precisa chegar até cerca de 10/11 para caber antes de congelar o código.
+
+**Uso de IA:** o Claude Code organizou as fases e escreveu o plano; nada foi executado.
+
 ## 06/11/2026 (sexta): três pedidos novos no roteiro
 
 **Pedidos do Victor:** melhorar o frontend por completo, da página inicial às telas de dentro; rever a entrada, que agora deve funcionar só com login; e deixar o Gemini ligado, sempre sem gerar custos.
