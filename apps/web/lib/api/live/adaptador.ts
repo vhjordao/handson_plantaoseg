@@ -3,8 +3,8 @@
  * roteiro). Escreve pela API de matching, que confere o login e o papel em toda chamada, e lê o
  * resto do Supabase sob RLS. A chave de serviço nunca chega aqui.
  *
- * Esta fase cobre a jornada do coordenador. Cascata, ofertas, contestações e auditoria na tela
- * chegam nas fases 4 e 6: até lá, esses métodos dizem que ainda não existem neste modo.
+ * Cobre a jornada do coordenador (fase 3) e a do médico com a cascata (fase 4). A auditoria na
+ * tela chega na fase 6: até lá, ela diz que ainda não existe neste modo.
  */
 import { CandidatoInvalidoError, EntradaInvalidaError, EstadoInvalidoError } from "../erros";
 import { removerDadosPessoais } from "../demo/privacidade";
@@ -25,9 +25,12 @@ import {
   type FichaModelo,
   type Indicadores,
   type Leitura,
+  type Fator,
   type Medico,
   type Oferta,
   type Persona,
+  type RespostaOfertaInput,
+  type ContestarInput,
   type Politica,
   type PularInput,
   type Recomendacao,
@@ -42,6 +45,7 @@ import {
   fichaDaApi,
   leituraDaApi,
   medicoDoBanco,
+  medicoRestrito,
   politicaDaApi,
   recomendacaoDaApi,
   unidadeDoBanco,
@@ -55,6 +59,17 @@ import {
   type RecomendacaoDaApi,
   type VagaDoBanco,
 } from "./mapeamento";
+import {
+  MOTIVO_CONTESTACAO_PARA_API,
+  MOTIVO_RECUSA_PARA_API,
+  cascataDoBanco,
+  contestacaoDoBanco,
+  ofertaDoBanco,
+  type ContestacaoDoBanco,
+  type OfertaDoBanco,
+  type RecomendacaoDoMedico,
+  type VagaDaOfertaDoBanco,
+} from "./ofertas";
 import { agoraLocal, instanteAntes, localDoBanco } from "./tempo";
 
 /** A lista mostra o que foi publicado nos últimos 30 dias: o histórico simulado fica de fora. */
@@ -63,6 +78,13 @@ const COLUNAS_DA_VAGA =
   "id,specialty,starts_at,ends_at,urgency,status,published_at,filled_at," +
   "units(id,name,zone),shift_requests(raw_text)";
 const COLUNAS_DO_MEDICO = "id,name_sim,crm_sim,specialty,secondary_specialty";
+const COLUNAS_DA_VAGA_DA_OFERTA = "id,specialty,starts_at,ends_at,urgency,status,units(id,name,zone)";
+const COLUNAS_DA_OFERTA =
+  "id,shift_id,doctor_id,sequence_no,sent_at,ttl_minutes,responded_at,response,decline_reason," +
+  `shifts(${COLUNAS_DA_VAGA_DA_OFERTA})`;
+const COLUNAS_DA_CONTESTACAO =
+  "id,protocol,offer_id,shift_id,doctor_id,reason,text,status,answer_text,answered_by," +
+  "created_at,answered_at";
 
 interface ShiftOut {
   id: string;
@@ -393,32 +415,226 @@ export class AdaptadorLive implements PlantaoApi {
     };
   }
 
-  // --- Fases 4 e 6 ------------------------------------------------------------------------------
+  // --- Cascata e ofertas (fase 4) -------------------------------------------------------------
 
-  obterCascata(): Promise<Cascata> {
-    return Promise.reject(new NaoImplementadoError("obterCascata", this.modo));
+  /**
+   * A cascata que o coordenador acompanha: as ofertas enviadas, do banco, e quem foi aprovado e
+   * ainda espera a vez, da decisão gravada pela API. A tela consulta de novo a cada 3 s (D7).
+   */
+  async obterCascata(vagaId: string): Promise<Cascata> {
+    const id = encodeURIComponent(vagaId);
+    const [[vaga], enviadas, estado] = await Promise.all([
+      lerTabela<VagaDaOfertaDoBanco>(
+        this.opcoes,
+        `shifts?select=${COLUNAS_DA_VAGA_DA_OFERTA}&id=eq.${id}`,
+      ),
+      lerTabela<OfertaDoBanco>(
+        this.opcoes,
+        `offers?select=${COLUNAS_DA_OFERTA}&shift_id=eq.${id}&order=sequence_no`,
+      ),
+      chamarApi<DecisaoDaApi>(this.opcoes, "GET", `/shifts/${vagaId}/decision`),
+    ]);
+    if (!vaga) throw new EstadoInvalidoError("Esta vaga não existe ou não é da sua organização.");
+    const aprovados = estado.approved_doctor_ids ?? [];
+    const ids = [...new Set([...enviadas.map((o) => o.doctor_id), ...aprovados])];
+    const [medicos, recomendacoes] = await Promise.all([
+      this.medicos(ids),
+      this.recomendacoes(`shift_id=eq.${id}`),
+    ]);
+    return cascataDoBanco(
+      vagaId,
+      vaga,
+      enviadas,
+      aprovados,
+      medicos,
+      new Map([...recomendacoes.values()].map((r) => [r.doctor_id, r])),
+      this.agora(),
+    );
   }
-  listarOfertas(): Promise<Oferta[]> {
-    return Promise.reject(new NaoImplementadoError("listarOfertas", this.modo));
+
+  /** As ofertas do médico, da mais nova para a mais antiga. A RLS só abre as dele. */
+  async listarOfertas(medicoId: string): Promise<Oferta[]> {
+    const linhas = await lerTabela<OfertaDoBanco>(
+      this.opcoes,
+      `offers?select=${COLUNAS_DA_OFERTA}&doctor_id=eq.${encodeURIComponent(medicoId)}&order=sent_at.desc`,
+    );
+    return this.ofertasDoMedico(linhas);
   }
-  obterOferta(): Promise<Oferta> {
-    return Promise.reject(new NaoImplementadoError("obterOferta", this.modo));
+
+  async obterOferta(ofertaId: string): Promise<Oferta> {
+    const linhas = await lerTabela<OfertaDoBanco>(
+      this.opcoes,
+      `offers?select=${COLUNAS_DA_OFERTA}&id=eq.${encodeURIComponent(ofertaId)}`,
+    );
+    const [oferta] = await this.ofertasDoMedico(linhas);
+    if (!oferta) throw new EstadoInvalidoError("Esta oferta não existe ou não é sua.");
+    return oferta;
   }
-  responderOferta(): Promise<Oferta> {
-    return Promise.reject(new NaoImplementadoError("responderOferta", this.modo));
+
+  private async ofertasDoMedico(linhas: OfertaDoBanco[]): Promise<Oferta[]> {
+    if (linhas.length === 0) return [];
+    const medicoIds = [...new Set(linhas.map((l) => l.doctor_id))];
+    const vagaIds = [...new Set(linhas.map((l) => l.shift_id))];
+    const [medicos, recomendacoes] = await Promise.all([
+      this.medicos(medicoIds),
+      this.recomendacoes(
+        `doctor_id=in.(${medicoIds.join(",")})&shift_id=in.(${vagaIds.join(",")})`,
+      ),
+    ]);
+    const agora = this.agora();
+    return linhas.map((linha) => {
+      const especialidade = (linha.shifts?.specialty ?? "clinica_medica") as Medico["especialidade"];
+      return ofertaDoBanco(
+        linha,
+        medicos.get(linha.doctor_id) ?? medicoRestrito(linha.doctor_id, especialidade),
+        recomendacoes.get(`${linha.shift_id}:${linha.doctor_id}`) ?? null,
+        agora,
+      );
+    });
   }
+
+  /**
+   * Aceitar ou recusar a própria oferta. A recusa leva um dos quatro motivos (D4), e a API chama o
+   * próximo aprovado na mesma hora. Não se desfaz (D5): a tela confirma antes.
+   */
+  async responderOferta(input: RespostaOfertaInput): Promise<Oferta> {
+    if (input.resposta === "recusar" && !input.motivo) {
+      throw new EntradaInvalidaError("Escolha o motivo da recusa.");
+    }
+    await chamarApi(this.opcoes, "POST", `/offers/${input.ofertaId}/respond`, {
+      response: input.resposta === "aceitar" ? "accepted" : "declined",
+      decline_reason:
+        input.resposta === "recusar" && input.motivo ? MOTIVO_RECUSA_PARA_API[input.motivo] : null,
+    });
+    return this.obterOferta(input.ofertaId);
+  }
+
+  /** D5 do ADR 0015: a resposta não se desfaz, porque a cascata já seguiu com ela. */
   desfazerResposta(): Promise<Oferta> {
-    return Promise.reject(new NaoImplementadoError("desfazerResposta", this.modo));
+    return Promise.reject(
+      new EstadoInvalidoError(
+        "A resposta não se desfaz: a cascata já seguiu com ela. Fale com a coordenação.",
+      ),
+    );
   }
-  contestar(): Promise<Contestacao> {
-    return Promise.reject(new NaoImplementadoError("contestar", this.modo));
+
+  /** As recomendações (com o "Por que você") por `vagaId:medicoId`. A RLS decide o que aparece. */
+  private async recomendacoes(filtro: string): Promise<Map<string, RecomendacaoDoMedico>> {
+    const linhas = await lerTabela<{
+      id: string;
+      shift_id: string;
+      doctor_id: string;
+      rank: number;
+      features: Record<string, number>;
+      contributions: Record<string, number>;
+      alerts: string[];
+    }>(
+      this.opcoes,
+      `recommendations?select=id,shift_id,doctor_id,rank,features,contributions,alerts&${filtro}`,
+    );
+    const explicacoes = linhas.length
+      ? await lerTabela<{
+          recommendation_id: string;
+          text: string;
+          factors_cited: string[];
+          source: "template" | "llm";
+        }>(
+          this.opcoes,
+          `explanations?select=recommendation_id,text,factors_cited,source&recommendation_id=in.(${linhas
+            .map((l) => l.id)
+            .join(",")})`,
+        )
+      : [];
+    const porRecomendacao = new Map(explicacoes.map((e) => [e.recommendation_id, e]));
+    return new Map(
+      linhas.map((linha): [string, RecomendacaoDoMedico] => {
+        const explicacao = porRecomendacao.get(linha.id);
+        return [
+          `${linha.shift_id}:${linha.doctor_id}`,
+          {
+            doctor_id: linha.doctor_id,
+            shift_id: linha.shift_id,
+            rank: linha.rank,
+            features: linha.features,
+            contributions: linha.contributions,
+            alerts: linha.alerts,
+            explicacao: explicacao
+              ? {
+                  texto: explicacao.text,
+                  fatoresCitados: explicacao.factors_cited as Fator[],
+                  fonte: explicacao.source,
+                }
+              : null,
+          },
+        ];
+      }),
+    );
   }
-  listarContestacoes(): Promise<Contestacao[]> {
-    return Promise.reject(new NaoImplementadoError("listarContestacoes", this.modo));
+
+  // --- Contestações ----------------------------------------------------------------------------
+
+  /** O médico contesta a recomendação da própria oferta (D8). Uma contestação por oferta. */
+  async contestar(input: ContestarInput): Promise<Contestacao> {
+    const texto = removerDadosPessoais(input.texto.trim().slice(0, LIMITE_TEXTO_LIVRE), []);
+    if (!texto) throw new EntradaInvalidaError("Escreva o que está errado, em poucas palavras.");
+    const criada = await chamarApi<{ id: string }>(
+      this.opcoes,
+      "POST",
+      `/offers/${input.ofertaId}/contest`,
+      { reason: MOTIVO_CONTESTACAO_PARA_API[input.motivo], text: texto },
+    );
+    return this.contestacao(criada.id);
   }
-  responderContestacao(): Promise<Contestacao> {
-    return Promise.reject(new NaoImplementadoError("responderContestacao", this.modo));
+
+  async listarContestacoes(filtro?: { medicoId?: string }): Promise<Contestacao[]> {
+    const doMedico = filtro?.medicoId ? `&doctor_id=eq.${encodeURIComponent(filtro.medicoId)}` : "";
+    const linhas = await lerTabela<ContestacaoDoBanco>(
+      this.opcoes,
+      `contestations?select=${COLUNAS_DA_CONTESTACAO}${doMedico}&order=created_at.desc`,
+    );
+    return this.contestacoesDoBanco(linhas);
   }
+
+  async responderContestacao(input: { id: string; texto: string }): Promise<Contestacao> {
+    const texto = removerDadosPessoais(input.texto.trim().slice(0, LIMITE_TEXTO_LIVRE), []);
+    if (!texto) throw new EntradaInvalidaError("Escreva a resposta antes de enviar.");
+    await chamarApi(this.opcoes, "POST", `/contestations/${input.id}/answer`, { text: texto });
+    return this.contestacao(input.id);
+  }
+
+  private async contestacao(id: string): Promise<Contestacao> {
+    const linhas = await lerTabela<ContestacaoDoBanco>(
+      this.opcoes,
+      `contestations?select=${COLUNAS_DA_CONTESTACAO}&id=eq.${encodeURIComponent(id)}`,
+    );
+    const [contestacao] = await this.contestacoesDoBanco(linhas);
+    if (!contestacao) {
+      throw new EstadoInvalidoError("A contestação foi enviada, mas ainda não apareceu.");
+    }
+    return contestacao;
+  }
+
+  private async contestacoesDoBanco(linhas: ContestacaoDoBanco[]): Promise<Contestacao[]> {
+    if (linhas.length === 0) return [];
+    const medicoIds = [...new Set(linhas.map((l) => l.doctor_id))];
+    const vagaIds = [...new Set(linhas.map((l) => l.shift_id))];
+    const [medicos, recomendacoes] = await Promise.all([
+      this.medicos(medicoIds),
+      this.recomendacoes(
+        `doctor_id=in.(${medicoIds.join(",")})&shift_id=in.(${vagaIds.join(",")})`,
+      ),
+    ]);
+    return linhas.map((linha) =>
+      contestacaoDoBanco(
+        linha,
+        medicos.get(linha.doctor_id) ?? medicoRestrito(linha.doctor_id, "clinica_medica"),
+        recomendacoes.get(`${linha.shift_id}:${linha.doctor_id}`) ?? null,
+      ),
+    );
+  }
+
+  // --- Fase 6 -----------------------------------------------------------------------------------
+
   listarAuditoria(): Promise<RegistroAuditoria[]> {
     return Promise.reject(new NaoImplementadoError("listarAuditoria", this.modo));
   }
@@ -426,7 +642,10 @@ export class AdaptadorLive implements PlantaoApi {
     return Promise.reject(new NaoImplementadoError("verificarCadeia", this.modo));
   }
 
-  /** A atualização a cada 3 segundos (D7) chega com a cascata na tela, na fase 4. */
+  /**
+   * Sem Realtime (D7): as telas da cascata e das ofertas consultam de novo a cada 3 segundos
+   * (`refetchInterval` nos hooks), então não há eventos a assinar neste modo.
+   */
   assinar(): () => void {
     return () => {};
   }

@@ -46,11 +46,14 @@ export function CartaoPersona({
   nome,
   linhas,
   acao,
+  selo,
 }: {
   nome: string;
   linhas: string[];
   /** Uma ação ao lado do nome, como "Sortear outra". */
   acao?: React.ReactNode;
+  /** Um aviso curto sobre a persona, como "Tem oferta esperando resposta" (4.6). */
+  selo?: React.ReactNode;
 }) {
   return (
     <div className="min-h-[8.75rem] rounded-campo border border-divisor bg-gaze px-3 py-2.5">
@@ -64,6 +67,7 @@ export function CartaoPersona({
         </p>
       ))}
       <p className="mt-1 text-sm text-tinta-suave">Persona fictícia</p>
+      {selo ? <div className="mt-2">{selo}</div> : null}
     </div>
   );
 }

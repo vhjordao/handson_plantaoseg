@@ -12,7 +12,6 @@ import {
   NaoEncontradoError,
   SemRecomendacaoError,
 } from "../erros";
-import { NaoImplementadoError } from "../plantao-api";
 import { LIMITE_TEXTO_LIVRE, LIMITE_TEXTO_VAGA } from "../types";
 import type { ConfirmarVagaInput, EventoPlantao, RegistroAuditoria } from "../types";
 import { criarApiDemo } from "./index";
@@ -249,7 +248,10 @@ describe("fluxo completo: ler, confirmar, sugerir e decidir", () => {
     });
     expect((await api.obterVaga("vaga-demo-1")).status).toBe("oferta_em_andamento");
 
-    const ultimo = (await api.listarAuditoria()).at(-1)!;
+    // A aprovação é seguida, na mesma hora, do envio da 1ª oferta (4.6).
+    const [aprovacao, envio] = (await api.listarAuditoria()).slice(-2) as [RegistroAuditoria, RegistroAuditoria];
+    expect(envio).toMatchObject({ acao: "offer_sent", papelAtor: "system", ocorridoEm: "2026-10-01T09:00:00" });
+    const ultimo = aprovacao;
     expect(ultimo).toMatchObject({
       acao: "recommendation_approved",
       papelAtor: "coordinator",
@@ -259,7 +261,16 @@ describe("fluxo completo: ler, confirmar, sugerir e decidir", () => {
       detalhes: { approved_doctor_ids: tres, mode: "humano" },
     });
     expect(ultimo.detalhes).not.toHaveProperty("excecao");
-    expect(eventos).toEqual([{ tipo: "decisao_registrada", vagaId: "vaga-demo-1", medicoIds: tres, em: "2026-10-01T09:00:00" }]);
+    expect(eventos).toEqual([
+      { tipo: "decisao_registrada", vagaId: "vaga-demo-1", medicoIds: tres, em: "2026-10-01T09:00:00" },
+      {
+        tipo: "oferta_enviada",
+        ofertaId: "oferta-vaga-demo-1-1",
+        vagaId: "vaga-demo-1",
+        medicoId: tres[0],
+        em: "2026-10-01T09:00:00",
+      },
+    ]);
     expect((await api.verificarCadeia()).integra).toBe(true);
   });
 
@@ -289,7 +300,7 @@ describe("fluxo completo: ler, confirmar, sugerir e decidir", () => {
     const justificativa = "Cobertura de última hora; já combinei a folga da semana seguinte.";
     const decisao = await api.aprovar({ vagaId: "vaga-demo-1", medicoIds: ids, justificativa });
     expect(decisao.excecao).toEqual({ alertas: comAlerta.alertas, justificativa });
-    const registro = (await api.listarAuditoria()).at(-1)!;
+    const registro = (await api.listarAuditoria()).findLast((r) => r.acao === "recommendation_approved")!;
     expect(registro.detalhes).toEqual({
       approved_doctor_ids: ids,
       mode: "humano",
@@ -329,7 +340,7 @@ describe("fluxo completo: ler, confirmar, sugerir e decidir", () => {
     // Duplo clique ou nova tentativa: a mesma decisão, sem outro registro e sem outro evento.
     expect(await api.aprovar({ vagaId: "vaga-demo-2", medicoIds: ids })).toEqual(primeira);
     expect((await api.listarAuditoria()).length).toBe(total);
-    expect(eventos).toHaveLength(1);
+    expect(eventos.map((e) => e.tipo)).toEqual(["decisao_registrada", "oferta_enviada"]);
 
     // Outra escolha (outra lista ou outra ordem) é outra decisão, e essa já foi tomada.
     const outras = [[ids[0]!], [...ids].reverse()];
@@ -495,8 +506,178 @@ describe("a grade: onde há e onde não há sugestões", () => {
     expect(new Set([a.id, b.id]).size).toBe(2);
     expect(c.vagaId).toBe("vaga-demo-2");
     const trilha = await api.listarAuditoria();
-    expect(trilha.length).toBe(antes + 8 + 8 + 1);
+    expect(trilha.length).toBe(antes + 8 + 8 + 2); // aprovação e envio da 1ª oferta
     expect(await api.verificarCadeia()).toMatchObject({ integra: true, registros: trilha.length });
+  });
+});
+
+describe("cascata da demonstração (4.6)", () => {
+  /** Três sugeridos sem alerta de jornada da vaga 2, aprovados nessa ordem. */
+  async function aprovarTres(api: ReturnType<typeof criarApiDemo>): Promise<[string, string, string]> {
+    const sugestoes = await api.obterSugestoes("vaga-demo-2");
+    const ids = sugestoes.candidatos.filter((c) => c.alertas.length === 0).slice(0, 3).map((c) => c.medico.id);
+    expect(ids).toHaveLength(3);
+    await api.aprovar({ vagaId: "vaga-demo-2", medicoIds: ids });
+    return ids as [string, string, string];
+  }
+  const situacao = async (api: ReturnType<typeof criarApiDemo>) =>
+    (await api.obterCascata("vaga-demo-2")).ofertas.map((o) => o.status);
+
+  it("aprovar envia a oferta ao 1º, com o prazo e o 'Por que você', e os outros esperam", async () => {
+    const api = criarApiDemo();
+    const ids = await aprovarTres(api);
+    const cascata = await api.obterCascata("vaga-demo-2");
+    expect(cascata.ofertas.map((o) => [o.medico.id, o.status])).toEqual([
+      [ids[0], "aberta"],
+      [ids[1], "na_fila"],
+      [ids[2], "na_fila"],
+    ]);
+    expect(cascata.atualId).toBe(cascata.ofertas[0]!.id);
+    const [oferta] = await api.listarOfertas(ids[0]);
+    expect(oferta).toMatchObject({
+      status: "aberta",
+      enviadaEm: "2026-10-01T09:00:00",
+      expiraEm: "2026-10-01T10:00:00",
+      ttlMin: mundo.politica.ttlOfertaMin,
+    });
+    expect(oferta!.porQue.texto).not.toBe("");
+    expect(oferta!.vaga.distanciaKm).toEqual(expect.any(Number));
+    // Quem está na fila ainda não recebeu nada: sem o clique, nenhuma oferta chega a ele.
+    expect(await api.listarOfertas(ids[1])).toEqual([]);
+  });
+
+  it("o 1º deixa o prazo passar, o 2º recusa e o 3º aceita: a vaga fecha", async () => {
+    const api = criarApiDemo();
+    const ids = await aprovarTres(api);
+    const antes = (await api.listarAuditoria()).length;
+
+    await api.passarPrazo("vaga-demo-2");
+    expect(api.agora()).toBe("2026-10-01T10:00:00");
+    expect(await situacao(api)).toEqual(["expirada", "aberta", "na_fila"]);
+
+    const [segunda] = await api.listarOfertas(ids[1]);
+    await expect(api.responderOferta({ ofertaId: segunda!.id, resposta: "recusar" })).rejects.toBeInstanceOf(
+      EntradaInvalidaError,
+    );
+    const recusada = await api.responderOferta({ ofertaId: segunda!.id, resposta: "recusar", motivo: "cansaco" });
+    expect(recusada).toMatchObject({ status: "recusada", motivoRecusa: "cansaco", respondidaEm: "2026-10-01T10:00:00" });
+    expect(await situacao(api)).toEqual(["expirada", "recusada", "aberta"]);
+
+    const [terceira] = await api.listarOfertas(ids[2]);
+    await api.responderOferta({ ofertaId: terceira!.id, resposta: "aceitar" });
+    const vaga = await api.obterVaga("vaga-demo-2");
+    expect(vaga.status).toBe("preenchida");
+    expect(vaga.preenchidaPor?.medicoId).toBe(ids[2]);
+    const final = await api.obterCascata("vaga-demo-2");
+    expect(final.ofertas.map((o) => o.status)).toEqual(["expirada", "recusada", "aceita"]);
+    expect(final.atualId).toBeNull();
+
+    // O relógio é um só: as vagas de exemplo com oferta aberta também andam. Aqui só a vaga 2.
+    const trilha = (await api.listarAuditoria())
+      .slice(antes)
+      .filter((r) => r.detalhes.shift_id === "vaga-demo-2");
+    expect(trilha.map((r) => r.acao)).toEqual([
+      "offer_expired",
+      "offer_sent",
+      "offer_declined",
+      "offer_sent",
+      "offer_accepted",
+    ]);
+    expect(trilha[2]!.detalhes).toMatchObject({ decline_reason: "fatigue" });
+    expect((await api.verificarCadeia()).integra).toBe(true);
+
+    // A resposta não se desfaz e não vale duas vezes (D5).
+    await expect(
+      api.responderOferta({ ofertaId: terceira!.id, resposta: "recusar", motivo: "agenda" }),
+    ).rejects.toBeInstanceOf(EstadoInvalidoError);
+    await expect(api.desfazerResposta(terceira!.id)).rejects.toBeInstanceOf(EstadoInvalidoError);
+  });
+
+  it("sem ninguém para chamar, a vaga fica sem cobertura", async () => {
+    const api = criarApiDemo();
+    const id = await primeiroSemAlerta(api, "vaga-demo-2");
+    await api.aprovar({ vagaId: "vaga-demo-2", medicoIds: [id] });
+    await api.passarPrazo("vaga-demo-2");
+    expect(await situacao(api)).toEqual(["expirada"]);
+    expect((await api.obterVaga("vaga-demo-2")).status).toBe("sem_cobertura");
+    expect((await api.listarAuditoria()).at(-1)!.acao).toBe("shift_uncovered");
+    await expect(api.passarPrazo("vaga-demo-2")).rejects.toBeInstanceOf(EstadoInvalidoError);
+  });
+
+  it("se o relógio pula mais de um prazo, a cascata anda mais de um passo", async () => {
+    const api = criarApiDemo();
+    await aprovarTres(api);
+    api.avancarRelogio(125);
+    const cascata = await api.obterCascata("vaga-demo-2");
+    expect(cascata.ofertas.map((o) => [o.status, o.enviadaEm])).toEqual([
+      ["expirada", "2026-10-01T09:00:00"],
+      ["expirada", "2026-10-01T10:00:00"],
+      ["aberta", "2026-10-01T11:00:00"],
+    ]);
+  });
+
+  it("com o prazo vencido, a resposta não vale", async () => {
+    const api = criarApiDemo();
+    const ids = await aprovarTres(api);
+    const [oferta] = await api.listarOfertas(ids[0]);
+    api.avancarRelogio(61);
+    await expect(api.responderOferta({ ofertaId: oferta!.id, resposta: "aceitar" })).rejects.toBeInstanceOf(
+      EstadoInvalidoError,
+    );
+  });
+
+  it("as vagas de exemplo mostram a cascata coerente com o status delas", async () => {
+    const api = criarApiDemo();
+    const emAndamento = await api.obterCascata("vaga-demo-3");
+    expect(emAndamento.ofertas.map((o) => o.status)).toEqual(["aberta", "na_fila", "na_fila"]);
+    expect(emAndamento.ofertas[0]!.enviadaEm).toBe(mundo.decisoes["vaga-demo-3"]!.em);
+    const preenchida = await api.obterCascata("vaga-demo-4");
+    expect(preenchida.ofertas.map((o) => o.status)).toEqual(["expirada", "aceita", "cancelada"]);
+    const aceita = preenchida.ofertas.find((o) => o.status === "aceita")!;
+    expect(aceita.medico.id).toBe(mundo.vagas.find((v) => v.id === "vaga-demo-4")!.preenchidaPor!.medicoId);
+  });
+
+  it("contestar: uma por oferta, sem nome nem telefone, e a coordenação responde", async () => {
+    const api = criarApiDemo();
+    const ids = await aprovarTres(api);
+    const [oferta] = await api.listarOfertas(ids[0]);
+    const nome = oferta!.medico.nome;
+    const contestacao = await api.contestar({
+      ofertaId: oferta!.id,
+      motivo: "ordem_injusta",
+      texto: `Sou ${nome} e moro perto; liga no 11 98765-4321`,
+    });
+    expect(contestacao).toMatchObject({ protocolo: "CT-DEMO-0001", status: "aberta", motivo: "ordem_injusta", resposta: null });
+    expect(contestacao.texto).not.toContain(nome);
+    expect(contestacao.texto).not.toContain("98765");
+    await expect(
+      api.contestar({ ofertaId: oferta!.id, motivo: "outro", texto: "De novo." }),
+    ).rejects.toBeInstanceOf(EstadoInvalidoError);
+    expect(await api.listarContestacoes({ medicoId: ids[0] })).toHaveLength(1);
+    expect(await api.listarContestacoes({ medicoId: ids[1] })).toEqual([]);
+
+    const respondida = await api.responderContestacao({ id: contestacao.id, texto: "Conferimos a distância usada." });
+    expect(respondida.status).toBe("respondida");
+    expect(respondida.resposta).toMatchObject({ texto: "Conferimos a distância usada.", em: "2026-10-01T09:00:00" });
+    await expect(api.responderContestacao({ id: contestacao.id, texto: "Outra." })).rejects.toBeInstanceOf(
+      EstadoInvalidoError,
+    );
+    const acoes = (await api.listarAuditoria()).slice(-2).map((r) => r.acao);
+    expect(acoes).toEqual(["contestation_opened", "contestation_answered"]);
+    expect((await api.verificarCadeia()).integra).toBe(true);
+  });
+
+  it("a cascata continua depois de trocar de papel na mesma aba (o mesmo storage)", async () => {
+    const armazenamento = new ArmazenamentoFalso();
+    const coordenador = criarApiDemo({ storage: armazenamento });
+    const ids = await aprovarTres(coordenador);
+    await coordenador.passarPrazo("vaga-demo-2");
+    const medico = criarApiDemo({ storage: armazenamento });
+    const [oferta] = await medico.listarOfertas(ids[1]);
+    expect(oferta?.status).toBe("aberta");
+    await medico.responderOferta({ ofertaId: oferta!.id, resposta: "aceitar" });
+    const deNovo = criarApiDemo({ storage: armazenamento });
+    expect((await deNovo.obterVaga("vaga-demo-2")).status).toBe("preenchida");
   });
 });
 
@@ -738,25 +919,6 @@ describe("eventos, latência e o que ficou para a próxima etapa", () => {
     expect(vagas).toHaveLength(6);
   });
 
-  it("deixa cascata, ofertas e contestações para a etapa UI-2", async () => {
-    const api = criarApiDemo();
-    const chamadas = [
-      api.obterCascata("vaga-demo-3"),
-      api.listarOfertas("medico"),
-      api.obterOferta("oferta"),
-      api.responderOferta({ ofertaId: "oferta", resposta: "aceitar" }),
-      api.desfazerResposta("oferta"),
-      api.contestar({ ofertaId: "oferta", motivo: "outro", texto: "x" }),
-      api.listarContestacoes(),
-      api.responderContestacao({ id: "c", texto: "t" }),
-    ];
-    const erros = await Promise.all(chamadas.map((chamada) => chamada.catch((erro: unknown) => erro)));
-    expect(erros).toHaveLength(8);
-    for (const erro of erros) {
-      expect(erro).toBeInstanceOf(NaoImplementadoError);
-      expect((erro as Error).message).toMatch(/ainda não existe no modo demo/);
-    }
-  });
 
   it("tem a grade carregada uma vez só (a mesma promessa)", () => {
     expect(carregarGrade()).toBe(carregarGrade());

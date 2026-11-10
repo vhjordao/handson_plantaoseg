@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import { TelaEmConstrucao } from "@/components/dominio/tela-em-construcao";
+import { redirect } from "next/navigation";
+import { TelaDeContestacoes } from "@/components/medico/tela-de-contestacoes";
+import { lerSessao } from "@/lib/session/servidor";
 
 export const metadata: Metadata = { title: "Contestações" };
 
-export default function Contestacoes() {
-  return (
-    <TelaEmConstrucao
-      titulo="Contestações"
-      descricao="Suas contestações, com o protocolo e a resposta do coordenador. O fluxo completo de contestação ainda não existe no sistema; na demonstração, ele será simulado."
-    />
-  );
+export default async function Contestacoes() {
+  const sessao = await lerSessao();
+  if (sessao?.papel !== "medico" || !sessao.personaId) redirect("/entrar?papel=medico");
+  return <TelaDeContestacoes medicoId={sessao.personaId} />;
 }

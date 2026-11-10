@@ -1,14 +1,16 @@
 "use client";
 
 import { skipToken, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { PlantaoApi } from "./plantao-api";
+import { NaoImplementadoError, type PlantaoApi } from "./plantao-api";
 import { useApi } from "./provider";
 import type {
   AprovarInput,
   ConfirmarVagaInput,
+  ContestarInput,
   DesfazerPuloInput,
   FeedbackExplicacaoInput,
   PularInput,
+  RespostaOfertaInput,
 } from "./types";
 
 /** Consultas de leitura. A chave inclui o modo, para trocar de `demo` para `live` sem misturar o cache. */
@@ -153,5 +155,59 @@ export function useFeedbackDaExplicacao() {
   const apiCarregada = useApiCarregada();
   return useMutation({
     mutationFn: (input: FeedbackExplicacaoInput) => apiCarregada().enviarFeedbackExplicacao(input),
+  });
+}
+
+// --- Médico e cascata (fase 4) --------------------------------------------------------------------
+
+/** Sem Realtime (D7 do ADR 0015): as telas da cascata e das ofertas consultam a cada 3 segundos. */
+export const INTERVALO_DE_CONSULTA_MS = 3_000;
+
+/** As ofertas do médico. Consulta de novo a cada 3 s, para a oferta nova aparecer sozinha. */
+export function useOfertas(medicoId: string) {
+  const api = useApi();
+  return useQuery({
+    queryKey: [api?.modo, "ofertas", medicoId],
+    queryFn: api ? () => api.listarOfertas(medicoId) : skipToken,
+    refetchInterval: INTERVALO_DE_CONSULTA_MS,
+    retry: (falhas, erro) => !(erro instanceof NaoImplementadoError) && falhas < 2,
+  });
+}
+
+/** A cascata da vaga, para o coordenador. `acompanhar` falso para de consultar (vaga fechada). */
+export function useCascata(vagaId: string, habilitado: boolean, acompanhar: boolean) {
+  const api = useApi();
+  return useQuery({
+    queryKey: [api?.modo, "cascata", vagaId],
+    queryFn: api && habilitado ? () => api.obterCascata(vagaId) : skipToken,
+    refetchInterval: acompanhar ? INTERVALO_DE_CONSULTA_MS : false,
+    retry: (falhas, erro) => !(erro instanceof NaoImplementadoError) && falhas < 2,
+  });
+}
+
+export function useContestacoes(filtro?: { medicoId?: string }) {
+  const api = useApi();
+  return useQuery({
+    queryKey: [api?.modo, "contestacoes", filtro?.medicoId ?? "todas"],
+    queryFn: api ? () => api.listarContestacoes(filtro) : skipToken,
+    retry: (falhas, erro) => !(erro instanceof NaoImplementadoError) && falhas < 2,
+  });
+}
+
+export function useResponderOferta() {
+  const apiCarregada = useApiCarregada();
+  const refazer = useRefazerLeituras();
+  return useMutation({
+    mutationFn: (input: RespostaOfertaInput) => apiCarregada().responderOferta(input),
+    onSuccess: refazer,
+  });
+}
+
+export function useContestar() {
+  const apiCarregada = useApiCarregada();
+  const refazer = useRefazerLeituras();
+  return useMutation({
+    mutationFn: (input: ContestarInput) => apiCarregada().contestar(input),
+    onSuccess: refazer,
   });
 }
