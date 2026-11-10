@@ -134,7 +134,7 @@ services:
 
   matching-api:
     # A imagem é construída no próprio servidor, a partir da cópia da pasta (infra/README.md).
-    image: plantaoseguro-matching-api:0.5.0
+    image: plantaoseguro-matching-api:0.5.1
     build:
       context: ../services/matching-api
     restart: unless-stopped
@@ -150,7 +150,8 @@ services:
       GEMINI_API_KEY: ${GEMINI_API_KEY:-}
       LLM_MODEL_EXTRACAO: ${LLM_MODEL_EXTRACAO:-gemini-3.1-flash-lite}
       LLM_REESCREVER_MOTIVOS: ${LLM_REESCREVER_MOTIVOS:-0}
-      LLM_TETO_DIARIO: ${LLM_TETO_DIARIO:-200}
+      LLM_TETO_DIARIO: ${LLM_TETO_DIARIO:-100}
+      LLM_TETO_POR_MINUTO: ${LLM_TETO_POR_MINUTO:-10}
     mem_limit: 512m
     read_only: true
     tmpfs:
