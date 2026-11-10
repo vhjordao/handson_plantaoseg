@@ -6,8 +6,8 @@ test.describe("entrada só com login (3.7)", () => {
     await page.goto("/entrar");
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Entrar");
     await expect(page.getByText("Não digite dados reais")).toBeVisible();
-    await expect(page.getByLabel("E-mail")).toBeVisible();
-    await expect(page.getByLabel("Senha")).toBeVisible();
+    await expect(page.getByRole("textbox", { name: "E-mail", exact: true })).toBeVisible();
+    await expect(page.getByLabel("Senha", { exact: true })).toBeVisible();
     await expect(page.getByRole("button", { name: "Entrar como coordenador" })).toHaveCount(0);
     await expect(page.getByRole("button", { name: "Entrar como médico" })).toHaveCount(0);
     await expect(page.getByText("Telão")).toHaveCount(0);
