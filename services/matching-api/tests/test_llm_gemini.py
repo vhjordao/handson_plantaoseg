@@ -20,6 +20,7 @@ from app.llm.avaliacao import CASOS_DE_LEITURA, avaliar, main, relatorio  # noqa
 from app.llm.client import (  # noqa: E402
     MODELO_PADRAO,
     TETO_DIARIO_PADRAO,
+    TETO_POR_MINUTO_PADRAO,
     TIMEOUT_MS,
     GeminiClient,
     LLMUnavailableError,
@@ -82,8 +83,8 @@ def _falha(status):
     )
 
 
-def _chamar(cliente: GeminiClient) -> str:
-    return cliente.generate_json(system="sistema", user="pergunta", schema={"type": "object"})
+def _chamar(cliente: GeminiClient, user: str = "pergunta") -> str:
+    return cliente.generate_json(system="sistema", user=user, schema={"type": "object"})
 
 
 class TestPedido:
@@ -289,10 +290,10 @@ class TestTetoDiario:
 
     def test_passando_do_teto_nem_chama_o_servico_e_nao_abre_a_pausa(self):
         cliente, pedidos = _cliente(_responde_json("{}"), teto_diario=2)
-        assert _chamar(cliente) == "{}"
-        assert _chamar(cliente) == "{}"
+        assert _chamar(cliente, "um") == "{}"
+        assert _chamar(cliente, "dois") == "{}"
         with pytest.raises(LLMUnavailableError, match="teto"):
-            _chamar(cliente)
+            _chamar(cliente, "três")
         assert len(pedidos) == 2
         assert cliente.pedidos_hoje() == 2
         assert cliente._pausado_ate == 0.0  # o teto não é falha do serviço
@@ -302,12 +303,12 @@ class TestTetoDiario:
         cliente, pedidos = _cliente(
             _responde_json("{}"), teto_diario=1, hoje=lambda: dia["hoje"]
         )
-        _chamar(cliente)
+        _chamar(cliente, "um")
         with pytest.raises(LLMUnavailableError, match="teto"):
-            _chamar(cliente)
+            _chamar(cliente, "dois")
         dia["hoje"] = date(2026, 11, 11)
         assert cliente.pedidos_hoje() == 0
-        assert _chamar(cliente) == "{}"
+        assert _chamar(cliente, "dois") == "{}"
         assert len(pedidos) == 2
 
     def test_a_repeticao_da_alta_demanda_conta_e_respeita_o_teto(self):
@@ -325,9 +326,9 @@ class TestTetoDiario:
     def test_o_aviso_do_teto_sai_uma_vez_por_dia_e_sem_o_texto(self, caplog):
         cliente, _ = _cliente(_responde_json("{}"), teto_diario=0)
         with caplog.at_level("WARNING", logger="matching_api"):
-            for _ in range(3):
+            for i in range(3):
                 with pytest.raises(LLMUnavailableError):
-                    _chamar(cliente)
+                    _chamar(cliente, f"pedido {i}")
         avisos = [r for r in caplog.records if "teto" in r.getMessage()]
         assert len(avisos) == 1
         assert "pergunta" not in caplog.text
@@ -339,11 +340,104 @@ class TestTetoDiario:
         invalido = client_from_env({"GEMINI_API_KEY": CHAVE, "LLM_TETO_DIARIO": "muito"})
         assert invalido.teto_diario == TETO_DIARIO_PADRAO
 
+    def test_o_teto_por_minuto_vem_do_ambiente(self):
+        assert client_from_env({"GEMINI_API_KEY": CHAVE}).teto_por_minuto == TETO_POR_MINUTO_PADRAO
+        assert TETO_POR_MINUTO_PADRAO < 15  # a cota gratuita do 3.1 Flash Lite
+        ambiente = {"GEMINI_API_KEY": CHAVE, "LLM_TETO_POR_MINUTO": "3"}
+        assert client_from_env(ambiente).teto_por_minuto == 3
+        ambiente["LLM_TETO_POR_MINUTO"] = "x"
+        assert client_from_env(ambiente).teto_por_minuto == TETO_POR_MINUTO_PADRAO
+
     def test_o_teto_padrao_e_o_mesmo_no_codigo_no_compose_e_no_exemplo(self):
         compose = (RAIZ / "infra" / "docker-compose.yml").read_text(encoding="utf-8")
         assert f"LLM_TETO_DIARIO: ${{LLM_TETO_DIARIO:-{TETO_DIARIO_PADRAO}}}" in compose
         exemplo = (RAIZ / ".env.example").read_text(encoding="utf-8")
         assert f"LLM_TETO_DIARIO={TETO_DIARIO_PADRAO}\n" in exemplo.replace("\r\n", "\n")
+        assert f"LLM_TETO_POR_MINUTO: ${{LLM_TETO_POR_MINUTO:-{TETO_POR_MINUTO_PADRAO}}}" in compose
+        assert f"LLM_TETO_POR_MINUTO={TETO_POR_MINUTO_PADRAO}\n" in exemplo.replace("\r\n", "\n")
+
+
+class TestTetoPorMinuto:
+    """Abaixo dos 15 pedidos por minuto da cota gratuita, numa janela móvel de 60 s."""
+
+    def test_passando_do_limite_do_minuto_cai_nas_regras_e_volta_depois(self):
+        relogio = Relogio()
+        cliente, pedidos = _cliente(_responde_json("{}"), teto_por_minuto=2, clock=relogio)
+        _chamar(cliente, "um")
+        relogio.agora += 10
+        _chamar(cliente, "dois")
+        with pytest.raises(LLMUnavailableError, match="minuto"):
+            _chamar(cliente, "três")
+        assert cliente._pausado_ate == 0.0  # não é falha do serviço
+        relogio.agora += 50  # o primeiro saiu da janela
+        assert _chamar(cliente, "três") == "{}"
+        assert len(pedidos) == 3
+
+    def test_recusado_pelo_minuto_nao_conta_no_dia(self):
+        cliente, _ = _cliente(_responde_json("{}"), teto_por_minuto=1, clock=Relogio())
+        _chamar(cliente, "um")
+        with pytest.raises(LLMUnavailableError):
+            _chamar(cliente, "dois")
+        assert cliente.pedidos_hoje() == 1
+
+
+class TestPedidoRepetido:
+    """O mesmo pedido não volta ao Gemini (pedido do Victor em 10/11: uso econômico)."""
+
+    def test_o_mesmo_pedido_responde_da_memoria_sem_gastar_cota(self):
+        cliente, pedidos = _cliente(_responde_json('{"ok": true}'))
+        assert _chamar(cliente) == '{"ok": true}'
+        assert _chamar(cliente) == '{"ok": true}'
+        assert len(pedidos) == 1
+        assert cliente.pedidos_hoje() == 1
+
+    def test_mudar_o_texto_ou_as_instrucoes_pede_de_novo(self):
+        cliente, pedidos = _cliente(_responde_json("{}"))
+        _chamar(cliente, "um")
+        _chamar(cliente, "dois")
+        cliente.generate_json(system="outro dia", user="um", schema={"type": "object"})
+        assert len(pedidos) == 3
+
+    def test_responde_da_memoria_mesmo_na_pausa_e_sem_saldo(self):
+        respostas = iter([httpx.Response(200, json=_gemini_responde("{}"))])
+        relogio = Relogio()
+
+        def tratar(_pedido):
+            try:
+                return next(respostas)
+            except StopIteration:
+                return httpx.Response(500, json={"error": {"code": 500, "message": "x"}})
+
+        cliente, pedidos = _cliente(tratar, teto_diario=2, clock=relogio)
+        _chamar(cliente, "guardado")
+        with pytest.raises(LLMUnavailableError):
+            _chamar(cliente, "novo")  # falha e abre a pausa
+        assert _chamar(cliente, "guardado") == "{}"
+        assert len(pedidos) == 2
+
+    def test_resposta_que_nao_e_json_nao_fica_guardada(self):
+        cliente, pedidos = _cliente(_responde_json("não é json"))
+        _chamar(cliente)
+        _chamar(cliente)
+        assert len(pedidos) == 2
+
+    def test_a_memoria_tem_limite(self):
+        from app.llm.client import RESPOSTAS_GUARDADAS
+
+        cliente, pedidos = _cliente(_responde_json("{}"), teto_diario=1000, teto_por_minuto=1000)
+        for i in range(RESPOSTAS_GUARDADAS + 1):
+            _chamar(cliente, f"pedido {i}")
+        assert len(cliente._guardadas) == RESPOSTAS_GUARDADAS
+        _chamar(cliente, "pedido 0")  # o mais antigo saiu
+        assert len(pedidos) == RESPOSTAS_GUARDADAS + 2
+
+    def test_a_leitura_repetida_continua_vindo_do_gemini(self):
+        cliente, pedidos = _cliente(_responde_json(json.dumps(VALIDA)))
+        primeira = extract(PEDIDO, HOJE, UNITS, cliente)
+        segunda = extract(PEDIDO, HOJE, UNITS, cliente)
+        assert primeira.source == segunda.source == "llm"
+        assert segunda.fields == primeira.fields
+        assert len(pedidos) == 1
 
 
 class TestCaminhoCompleto:

@@ -4,6 +4,14 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 10/11/2026 (terça), à noite: Supabase reativado e Gemini econômico
+
+**O que aconteceu:** ao publicar a 0.5.0, a API não subiu, porque o projeto do Supabase estava pausado (o plano gratuito pausa projetos parados). A versão anterior só parecia saudável porque tinha carregado os dados antes. Com o ok do Victor ("Sim, reative"), o Claude Code reativou o projeto pela API de gestão, e a API subiu com os dados e o Gemini. A conferência do Gemini deu 503 (alta demanda no Google), também da máquina local, com a mesma chave.
+
+**Pedido do Victor:** "Vamos usar o gemini de forma econômica, vamos reduzir as chamadas nele, para ter como usar no dia". O AI Studio mostrava o limite por minuto alcançado; a cota diária estava longe (21 de 500). Mudou: teto diário de 200 para 100, teto de 10 pedidos por minuto e o mesmo pedido respondido da memória da API, sem nova chamada (imagem 0.5.1, [ADR 0003](adr/0003-llm-do-produto-gemini.md)).
+
+**Uso de IA:** o Claude Code diagnosticou a pausa, reativou o projeto com o ok do Victor e escreveu o código, os testes e os documentos.
+
 ## 10/11/2026 (terça): fase B, só login, sem telão e com o teto do Gemini
 
 **Pedido do Victor:** "vamos para fase B": a entrada só com e-mail e senha, o modo de demonstração como plano B, o telão fora do site e o Gemini ligado com um limite diário abaixo da cota gratuita.

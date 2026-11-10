@@ -6,11 +6,14 @@ chave, a falha do serviço ou uma resposta inválida caiam no caminho sem LLM.
 """
 
 import datetime as dt
+import hashlib
+import json
 import logging
 import math
 import os
 import threading
 import time
+from collections import OrderedDict, deque
 from collections.abc import Callable, Mapping
 from typing import Any, Protocol
 
@@ -38,8 +41,17 @@ MODELO_PADRAO = "gemini-3.1-flash-lite"
 # do roteiro não pode gastar a cota do dia da apresentação. Passando dele, a leitura sai pelas
 # regras, sem erro na tela. O dia é o de UTC e a conta fica na memória da API (reinício zera);
 # por isso o teto fica abaixo da metade da cota, e a cota nunca é alcançada. `LLM_TETO_DIARIO`
-# muda o valor; 0 desliga o Gemini sem tirar a chave.
-TETO_DIARIO_PADRAO = 200
+# muda o valor; 0 desliga o Gemini sem tirar a chave. Em 10/11 o Victor pediu uso econômico,
+# para sobrar cota no dia: o teto caiu de 200 para 100 (a cota do 3.1 Flash Lite é de 500).
+TETO_DIARIO_PADRAO = 100
+# A cota gratuita também limita os pedidos por minuto (15 no 3.1 Flash Lite), e foi esse limite
+# que o AI Studio acusou em 10/11. A API fica abaixo dele numa janela móvel de 60 s; passando,
+# a leitura sai pelas regras. `LLM_TETO_POR_MINUTO` muda o valor.
+TETO_POR_MINUTO_PADRAO = 10
+# O mesmo pedido não volta ao Gemini: a resposta fica guardada na memória da API. Nos ensaios, o
+# mesmo texto é digitado várias vezes. A chave inclui as instruções (que levam a data e as
+# unidades), o texto e o esquema, então mudar qualquer um deles pede de novo.
+RESPOSTAS_GUARDADAS = 64
 
 
 def _hoje_utc() -> dt.date:
@@ -83,6 +95,7 @@ class GeminiClient:
         clock: Callable[[], float] = time.monotonic,
         dormir: Callable[[float], None] = time.sleep,
         teto_diario: int = TETO_DIARIO_PADRAO,
+        teto_por_minuto: int = TETO_POR_MINUTO_PADRAO,
         hoje: Callable[[], dt.date] = _hoje_utc,
     ) -> None:
         self._api_key = api_key
@@ -99,6 +112,9 @@ class GeminiClient:
         self._dia: dt.date | None = None
         self._pedidos_no_dia = 0
         self._avisou_teto = False
+        self.teto_por_minuto = max(0, teto_por_minuto)
+        self._no_ultimo_minuto: deque[float] = deque()
+        self._guardadas: OrderedDict[str, str] = OrderedDict()
         self._trava = threading.Lock()
 
     def pedidos_hoje(self) -> int:
@@ -106,8 +122,8 @@ class GeminiClient:
         with self._trava:
             return self._pedidos_no_dia if self._dia == self._hoje() else 0
 
-    def _reservar_pedido(self) -> bool:
-        """Conta um pedido antes de enviá-lo; sem saldo no dia, devolve `False` e não conta."""
+    def _reservar_pedido(self) -> str | None:
+        """Conta um pedido antes de enviá-lo. Sem saldo, devolve o motivo e não conta."""
         with self._trava:
             hoje = self._hoje()
             if self._dia != hoje:
@@ -120,9 +136,38 @@ class GeminiClient:
                         self.teto_diario,
                     )
                     self._avisou_teto = True
-                return False
+                return "teto diário de pedidos ao Gemini alcançado"
+            agora = self._clock()
+            while self._no_ultimo_minuto and agora - self._no_ultimo_minuto[0] >= 60:
+                self._no_ultimo_minuto.popleft()
+            if len(self._no_ultimo_minuto) >= self.teto_por_minuto:
+                return "teto por minuto de pedidos ao Gemini alcançado"
+            self._no_ultimo_minuto.append(agora)
             self._pedidos_no_dia += 1
-            return True
+            return None
+
+    @staticmethod
+    def _chave(system: str, user: str, schema: dict[str, Any]) -> str:
+        esquema = json.dumps(schema, sort_keys=True, ensure_ascii=False)
+        return hashlib.sha256("\x1f".join((system, user, esquema)).encode()).hexdigest()
+
+    def _guardada(self, chave: str) -> str | None:
+        with self._trava:
+            resposta = self._guardadas.get(chave)
+            if resposta is not None:
+                self._guardadas.move_to_end(chave)
+            return resposta
+
+    def _guardar(self, chave: str, resposta: str) -> None:
+        try:
+            json.loads(resposta)
+        except ValueError:
+            return  # resposta quebrada não fica: o próximo pedido tenta de novo
+        with self._trava:
+            self._guardadas[chave] = resposta
+            self._guardadas.move_to_end(chave)
+            while len(self._guardadas) > RESPOSTAS_GUARDADAS:
+                self._guardadas.popitem(last=False)
 
     def preparar(self) -> None:
         """Carrega o SDK na subida da API, para a primeira chamada não pagar esse tempo."""
@@ -147,11 +192,17 @@ class GeminiClient:
         return self._sdk
 
     def generate_json(self, *, system: str, user: str, schema: dict[str, Any]) -> str:
+        # Antes de tudo: um pedido repetido não gasta cota, nem durante a pausa.
+        chave = self._chave(system, user, schema)
+        guardada = self._guardada(chave)
+        if guardada is not None:
+            return guardada
         if self._clock() < self._pausado_ate:
             raise LLMUnavailableError("Gemini em pausa depois de uma falha")
-        # Fora do `try` abaixo: o teto não é falha do serviço e não abre a pausa.
-        if not self._reservar_pedido():
-            raise LLMUnavailableError("teto diário de pedidos ao Gemini alcançado")
+        # Fora do `try` abaixo: os tetos não são falha do serviço e não abrem a pausa.
+        recusa = self._reservar_pedido()
+        if recusa:
+            raise LLMUnavailableError(recusa)
         client = self._cliente()
         from google.genai import types
 
@@ -170,6 +221,7 @@ class GeminiClient:
             raise LLMUnavailableError(f"falha ao chamar o Gemini: {motivo}") from exc
         if text is None:  # bloqueada pelo filtro de segurança, por exemplo: não é queda do serviço
             raise LLMUnavailableError("o Gemini respondeu sem texto")
+        self._guardar(chave, str(text))
         return str(text)
 
     def _gerar(self, client: Any, user: str, config: Any) -> str | None:
@@ -183,7 +235,7 @@ class GeminiClient:
             # A repetição também conta no teto: sem saldo no dia, fica a falha original.
             if getattr(exc, "code", None) != CODIGO_ALTA_DEMANDA or not rapido:
                 raise
-            if not self._reservar_pedido():
+            if self._reservar_pedido():
                 raise
         self._dormir(ESPERA_ANTES_DE_REPETIR_S)
         return client.models.generate_content(model=self.model, contents=user, config=config).text
@@ -202,5 +254,19 @@ def client_from_env(env: Mapping[str, str] | None = None) -> LLMClient:
         logger.warning("LLM_TETO_DIARIO inválido (%r): usando %d", teto, TETO_DIARIO_PADRAO)
         teto_diario = TETO_DIARIO_PADRAO
     return GeminiClient(
-        key, source.get("LLM_MODEL_EXTRACAO", MODELO_PADRAO), teto_diario=teto_diario
+        key,
+        source.get("LLM_MODEL_EXTRACAO", MODELO_PADRAO),
+        teto_diario=teto_diario,
+        teto_por_minuto=_inteiro(source, "LLM_TETO_POR_MINUTO", TETO_POR_MINUTO_PADRAO),
     )
+
+
+def _inteiro(source: Mapping[str, str], nome: str, padrao: int) -> int:
+    valor = source.get(nome, "").strip()
+    if not valor:
+        return padrao
+    try:
+        return int(valor)
+    except ValueError:
+        logger.warning("%s inválido (%r): usando %d", nome, valor, padrao)
+        return padrao

@@ -1,7 +1,7 @@
 # Ficha do componente: API de matching
 
 - **Responsável:** Victor Jordão · **Frente:** motor e infraestrutura · **Branch:** `f3/api-matching` · **Atualizado em:** 06/11/2026
-- **Estado:** no ar no servidor, por HTTPS, desde 04/11/2026, com os dados sintéticos do projeto `plantaoseguro`. **Tudo é simulação.** A [cascata no n8n](../../../../n8n/README.md) pergunta a ela quanto esperar. A fase 2 entrou em 06/11. A tela do coordenador usa a API desde 06/11 (fase 3). Imagem 0.4.0, com o rodízio entre equivalentes (7.2), desde 06/11; a 0.5.0 traz o teto diário do Gemini (3.8).
+- **Estado:** no ar no servidor, por HTTPS, desde 04/11/2026, com os dados sintéticos do projeto `plantaoseguro`. **Tudo é simulação.** A [cascata no n8n](../../../../n8n/README.md) pergunta a ela quanto esperar. A fase 2 entrou em 06/11. A tela do coordenador usa a API desde 06/11 (fase 3). Imagem 0.4.0, com o rodízio entre equivalentes (7.2), desde 06/11; a 0.5.0 trouxe o teto diário do Gemini (3.8), no servidor desde 10/11, e a 0.5.1 o uso econômico (teto por minuto e pedido repetido sem nova chamada).
 
 ## 1. O que é e qual dor resolve
 
@@ -30,7 +30,7 @@
 
 Na resposta, a API só usa IDs pseudônimos: a web lê nome e CRM sob RLS, e só de quem o coordenador pode ver. As horas vão em hora local de São Paulo, sem fuso. Texto livre (justificativa, motivo do pulo e comentário) vai para a trilha sem CRM, telefone, e-mail, documento nem número longo (`app/privacy.py`); os nomes, a tela apaga antes de enviar, porque a API nunca lê nome de médico. Os erros têm a forma `{"erro": "codigo", "mensagem": "..."}`, para a tela tratar pelo código.
 
-**Onde há IA:** o LLM só extrai campos e reescreve a explicação. Sem a chave do Gemini, tudo sai pela reserva em regras e pelo texto fixo. Com a chave, o Gemini lê o pedido; os motivos continuam no texto fixo, salvo `LLM_REESCREVER_MOTIVOS=1`. Se ele falhar ou passar de 6 s, a leitura sai pelas regras, e as próximas chamadas não tentam por 60 s. Passando de `LLM_TETO_DIARIO` pedidos no dia (200 por padrão, abaixo da cota gratuita), a leitura sai pelas regras até o dia seguinte. Filtro, ranking, cascata e aprovação são código, e o n8n só pede para avançar.
+**Onde há IA:** o LLM só extrai campos e reescreve a explicação. Sem a chave do Gemini, tudo sai pela reserva em regras e pelo texto fixo. Com a chave, o Gemini lê o pedido; os motivos continuam no texto fixo, salvo `LLM_REESCREVER_MOTIVOS=1`. Se ele falhar ou passar de 6 s, a leitura sai pelas regras, e as próximas chamadas não tentam por 60 s. Passando de `LLM_TETO_DIARIO` pedidos no dia (100 por padrão) ou de `LLM_TETO_POR_MINUTO` (10), abaixo da cota gratuita, a leitura sai pelas regras. O mesmo pedido, no mesmo dia, responde da memória, sem ir ao Gemini (0.5.1). Filtro, ranking, cascata e aprovação são código, e o n8n só pede para avançar.
 
 ## 3. Como foi feito
 
