@@ -4,6 +4,20 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 10/11/2026 (terça): fase B, só login, sem telão e com o teto do Gemini
+
+**Pedido do Victor:** "vamos para fase B": a entrada só com e-mail e senha, o modo de demonstração como plano B, o telão fora do site e o Gemini ligado com um limite diário abaixo da cota gratuita.
+
+**O que mudou:**
+
+- **Entrada:** `/entrar` tem só o login. O papel vem do perfil no banco. As portas por persona (agora só coordenador e médico) foram para `/entrar/demonstracao`, aberta por um link discreto na entrada ("O sistema não responde? Usar o modo de demonstração") e pelo aviso de indisponível, que já existia.
+- **Telão:** a página saiu, com o cartão da entrada e o papel `telao` da sessão. Um cookie antigo com esse papel deixa de valer.
+- **Gemini:** a API conta os pedidos do dia e, passando de `LLM_TETO_DIARIO` (200 por padrão), lê pelas regras até o dia seguinte, sem erro na tela ([ADR 0003](adr/0003-llm-do-produto-gemini.md)). Imagem 0.5.0.
+
+**O que falta:** a 0.5.0 e a chave no servidor, a conferência com uma chamada e a memória, e o Victor fazer um pedido pela tela.
+
+**Uso de IA:** o Claude Code escreveu o código, os testes e os documentos.
+
 ## 06/11/2026 (sexta): o plano por fases
 
 **Pedido do Victor:** "Não quero execução agora. Quero planejar. Divida em fases", e depois "Sim, no roteiro".

@@ -79,9 +79,9 @@ ssh -i ~/.ssh/<chave> root@<ip do servidor> "cd /docker/n8n && docker compose bu
 
 Depois de mudar o banco por fora, a API precisa reler os dados: reinicie o serviço ou chame `POST /internal/reload` de dentro do servidor.
 
-**Gemini: ligado só para a demonstração, em custo zero.** O servidor fica **sem a chave** até o dia. Sem ela, a API lê a vaga pelas regras, e nada vai ao Google. A chave é de um projeto sem faturamento, na camada gratuita: não clique em "Set up billing" nesse projeto ([ADR 0003](../docs/adr/0003-llm-do-produto-gemini.md)). Para aparecer na tela, a web precisa estar chamando a API (adaptador `live`).
+**Gemini: ligado até o fim do projeto, em custo zero** (3.8 do [roteiro](../docs/roteiro-ate-o-mvp.md), decisão do Victor em 06/11). A chave fica no `.env` do servidor até a 10.1. A API conta os pedidos do dia e, passando de `LLM_TETO_DIARIO` (200 por padrão, abaixo da cota gratuita), lê pelas regras até o dia seguinte, sem erro na tela; `LLM_TETO_DIARIO=0` desliga o Gemini sem tirar a chave. Sem a chave, a API lê a vaga pelas regras, e nada vai ao Google. A chave é de um projeto sem faturamento, na camada gratuita: não clique em "Set up billing" nesse projeto ([ADR 0003](../docs/adr/0003-llm-do-produto-gemini.md)). Para aparecer na tela, a web precisa estar chamando a API (adaptador `live`).
 
-No ensaio e no dia, em `/docker/n8n`, no servidor:
+Para ligar, em `/docker/n8n`, no servidor:
 
 1. Acrescente `GEMINI_API_KEY=` com a chave ao `.env` do servidor.
 2. Religue a API:
@@ -96,7 +96,7 @@ No ensaio e no dia, em `/docker/n8n`, no servidor:
    docker compose exec matching-api python -m app.llm.avaliacao --rapido
    ```
 
-4. No ensaio, meça a memória, porque o limite é de 512 MB e o pacote do Gemini só carrega com a chave:
+4. Meça a memória, porque o limite é de 512 MB e o pacote do Gemini só carrega com a chave:
 
    ```
    docker stats --no-stream $(docker compose ps -q matching-api)

@@ -1,7 +1,7 @@
 # Ficha do componente: API de matching
 
 - **Responsável:** Victor Jordão · **Frente:** motor e infraestrutura · **Branch:** `f3/api-matching` · **Atualizado em:** 06/11/2026
-- **Estado:** no ar no servidor, por HTTPS, desde 04/11/2026, com os dados sintéticos do projeto `plantaoseguro`. **Tudo é simulação.** A [cascata no n8n](../../../../n8n/README.md) pergunta a ela quanto esperar. A fase 2 entrou em 06/11. A tela do coordenador usa a API desde 06/11 (fase 3). Imagem 0.4.0, com o rodízio entre equivalentes (7.2), desde 06/11.
+- **Estado:** no ar no servidor, por HTTPS, desde 04/11/2026, com os dados sintéticos do projeto `plantaoseguro`. **Tudo é simulação.** A [cascata no n8n](../../../../n8n/README.md) pergunta a ela quanto esperar. A fase 2 entrou em 06/11. A tela do coordenador usa a API desde 06/11 (fase 3). Imagem 0.4.0, com o rodízio entre equivalentes (7.2), desde 06/11; a 0.5.0 traz o teto diário do Gemini (3.8).
 
 ## 1. O que é e qual dor resolve
 
@@ -30,7 +30,7 @@
 
 Na resposta, a API só usa IDs pseudônimos: a web lê nome e CRM sob RLS, e só de quem o coordenador pode ver. As horas vão em hora local de São Paulo, sem fuso. Texto livre (justificativa, motivo do pulo e comentário) vai para a trilha sem CRM, telefone, e-mail, documento nem número longo (`app/privacy.py`); os nomes, a tela apaga antes de enviar, porque a API nunca lê nome de médico. Os erros têm a forma `{"erro": "codigo", "mensagem": "..."}`, para a tela tratar pelo código.
 
-**Onde há IA:** o LLM só extrai campos e reescreve a explicação. Sem a chave do Gemini, tudo sai pela reserva em regras e pelo texto fixo. Com a chave, o Gemini lê o pedido; os motivos continuam no texto fixo, salvo `LLM_REESCREVER_MOTIVOS=1`. Se ele falhar ou passar de 6 s, a leitura sai pelas regras, e as próximas chamadas não tentam por 60 s. Filtro, ranking, cascata e aprovação são código, e o n8n só pede para avançar.
+**Onde há IA:** o LLM só extrai campos e reescreve a explicação. Sem a chave do Gemini, tudo sai pela reserva em regras e pelo texto fixo. Com a chave, o Gemini lê o pedido; os motivos continuam no texto fixo, salvo `LLM_REESCREVER_MOTIVOS=1`. Se ele falhar ou passar de 6 s, a leitura sai pelas regras, e as próximas chamadas não tentam por 60 s. Passando de `LLM_TETO_DIARIO` pedidos no dia (200 por padrão, abaixo da cota gratuita), a leitura sai pelas regras até o dia seguinte. Filtro, ranking, cascata e aprovação são código, e o n8n só pede para avançar.
 
 ## 3. Como foi feito
 
@@ -140,7 +140,7 @@ Nenhuma chamada falhou na medição, e a memória da API chegou a 79 MB de 512 M
 - **O banco dos testes é falso:** a CI não exercita o PostgREST real nem o login real. Isso foi conferido no projeto, à mão, com `conferir-api.py`.
 - **A chave `service_role` é marcada como `legacy`** pelo Supabase. Se ela for desligada antes de 17/11, a saída é trocar pela `sb_secret`, com o teto de cerca de 50 chamadas por segundo que medimos. Não sabemos a causa desse teto.
 - **Se o aviso ao n8n se perder, oferta vencida fica pendente** até alguém chamar `advance` ou repetir o aviso, e o médico recebe `oferta_expirada` ao responder. A falha fica só no log ([ficha do workflow](../../../../n8n/README.md)).
-- **Gemini medido numa manhã só e em camada gratuita:** o `gemini-3.1-flash-lite` respondeu 14 de 16 chamadas, e outros modelos gratuitos quase não responderam no mesmo momento ([registro](../../../../docs/teste-manual-gemini.md)). O serviço pode mudar, e por isso há uma conferência de uma chamada para o dia. Só texto sintético pode ir ao modelo, e a cota é limitada: passando dela, a leitura cai nas regras. A imagem 0.2.0 está no servidor desde 05/11, sem a chave: a leitura segue pelas regras até o ensaio.
+- **Gemini medido numa manhã só e em camada gratuita:** o `gemini-3.1-flash-lite` respondeu 14 de 16 chamadas, e outros modelos gratuitos quase não responderam no mesmo momento ([registro](../../../../docs/teste-manual-gemini.md)). O serviço pode mudar, e por isso há uma conferência de uma chamada para o dia. Só texto sintético pode ir ao modelo, e a cota é limitada: passando dela, a leitura cai nas regras. Desde a 3.8, a chave fica no servidor até o fim do projeto, com o teto diário.
 - **O rodízio conta todas as recomendações gravadas,** inclusive as de testes e ensaios. Antes do dia, o `limpar-demonstracao` zera a contagem da demonstração. Ele também não resolve a exclusão por zona ([ADR 0017](../../../../docs/adr/0017-rodizio-entre-equivalentes-na-api.md)).
 - **O limite de requisições é por IP:** na demonstração guiada só o Victor chama a API, bem abaixo do limite. Mesmo assim, as telas precisam tentar de novo depois de um `429`.
 - **A carga é uma primeira medição,** de uma máquina só e com poucas conexões. Os limites estão no [resultado](../../../../docs/resultados/metricas-carga-api.md).
@@ -157,5 +157,5 @@ O Victor aprovou o plano, com as decisões e os riscos, antes de começar, e cri
 Com o ok do Victor:
 
 1. A tela do médico chama esta API (fase 4 do [roteiro](../../../../docs/roteiro-ate-o-mvp.md)); a do coordenador já chama desde 06/11.
-2. Gemini: a imagem 0.4.0 está no servidor sem a chave. A chave só entra no ensaio e no dia ([passo a passo](../../../../infra/README.md)), e no ensaio se confere a memória com `docker stats` (o limite é de 512 MB). Sem a chave, ela usa 60 MiB.
+2. Gemini: com a 3.8, a chave vai para o `.env` do servidor e fica até o fim do projeto, com o teto diário ([passo a passo](../../../../infra/README.md)); a memória se confere com `docker stats` (o limite é de 512 MB). Sem a chave, a API usa 60 MiB.
 3. Repetir a medição antes de 13/11, já com as telas, e reiniciar o servidor.

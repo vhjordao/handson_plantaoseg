@@ -28,6 +28,8 @@ O mapa de tudo o que falta para o PlantãoSeguro funcionar de ponta a ponta, do 
 
 **Em paralelo, se sobrar tempo:** teste de usabilidade com os colegas (E.2), regressão logística contra LightGBM (E.4) e previsão de vagas (E.5).
 
+**Onde está a fase B (10/11):** o código está no PR da branch `f3/so-login-gemini`: a entrada só com login, o telão fora do site e o teto diário do Gemini na API (imagem 0.5.0). Depois do merge, faltam a imagem 0.5.0 e a chave no servidor, a conferência com uma chamada e a memória, e o Victor fazer um pedido pela tela, de ponta a ponta.
+
 **Ponto de atenção:** o visual novo vem depois das fases C e D. Para caber antes de 13/11, o modelo do Victor precisa chegar até cerca de 10/11. Se chegar depois, entra só a base (cores, tipografia e componentes), sem refazer o layout de cada tela ([seção 9](#9-riscos-e-o-que-cortar-primeiro)).
 
 ## 2. Onde estamos
@@ -38,9 +40,9 @@ O mapa de tudo o que falta para o PlantãoSeguro funcionar de ponta a ponta, do 
 | Banco (tabelas, RLS, trilha só de inserção, dados sintéticos) | No Supabase | [ficha](../supabase/README.md) |
 | API de matching, com HTTPS | No servidor, imagem 0.4.0 (fase 2 e o rodízio entre equivalentes da 7.2) | [ficha](../services/matching-api/app/api/README.md) |
 | n8n e a cascata de ofertas | No servidor, conferida de ponta a ponta pela API | [ficha](../n8n/README.md) |
-| Gemini | Pronto em custo zero, ainda sem a chave no servidor; em 06/11 o Victor decidiu deixá-lo ligado, sempre sem custo (3.8) | [ADR 0003](adr/0003-llm-do-produto-gemini.md) |
+| Gemini | Pronto em custo zero, com o teto diário na API desde 10/11 (imagem 0.5.0, ainda não publicada); a chave entra no servidor com a 3.8 | [ADR 0003](adr/0003-llm-do-produto-gemini.md) |
 | Decisões D1 a D11 | Aprovadas pelo Victor em 06/11 | [ADR 0015](adr/0015-decisoes-que-destravam-o-mvp.md) |
-| Web: página inicial, entrada sem senha, lista de vagas, nova vaga, sugestões e decisão | No link público, no modo de demonstração e, com o login da demonstração, no sistema real | [ficha](../apps/web/README.md) |
+| Web: página inicial, entrada com login, lista de vagas, nova vaga, sugestões e decisão | No link público, no sistema real com o login da demonstração; o modo de demonstração fica como plano B (3.7, no PR da fase B) | [ficha](../apps/web/README.md) |
 | Web: médico, auditoria, contestações e equidade | Ainda "em construção" | |
 | Documento da Entrega 3 | Na `main` desde 06/11, com PDF de 12 páginas; o envio é do Victor | [documento](04-entrega-3-validacao.md) |
 
@@ -95,8 +97,8 @@ O adaptador `live` liga a web ao sistema real.
 - [x] **3.4** Se a API não responder, a tela oferece o modo de demonstração. *Feito em 06/11: um aviso leva ao modo de demonstração com um clique.*
 - [x] **3.5** O relógio do cabeçalho vem do sistema, não de um valor fixo. *Feito em 06/11.*
 - [ ] **3.6** A jornada do coordenador, que hoje roda na demonstração, passa a rodar no `live`, com a urgência exigida no pedido (D10).
-- [ ] **3.7** *Pedido do Victor em 06/11.* A entrada passa a ser só com login: e-mail e senha para o coordenador e para os médicos, e o papel vem do perfil. Saem da entrada as portas por persona. A página do telão sai do site, com o cartão da entrada e o papel "telão" da sessão (decisão do Victor em 06/11). O modo de demonstração continua como plano B (3.4 e 5.4), por um link discreto na entrada ("O sistema não responde? Usar o modo de demonstração") e pelo aviso de indisponível. A página inicial e a ajuda passam a apontar para o login.
-- [ ] **3.8** *Pedido do Victor em 06/11: "Gemini ligado, mas sempre sem gerar custos".* A chave vai para o `.env` do servidor e fica lá até o fim do projeto (10.1). O Victor confirmou em 06/11 que o projeto continua sem faturamento. A API ganha um teto diário de chamadas, abaixo da cota gratuita; passando dele, a leitura segue pelas regras, sem erro na tela. A reescrita dos motivos continua desligada. Conferir com uma chamada (`--rapido`), a memória com `docker stats` e um pedido de ponta a ponta pela tela.
+- [x] **3.7** *Pedido do Victor em 06/11.* A entrada passa a ser só com login: e-mail e senha para o coordenador e para os médicos, e o papel vem do perfil. Saem da entrada as portas por persona. A página do telão sai do site, com o cartão da entrada e o papel "telão" da sessão (decisão do Victor em 06/11). O modo de demonstração continua como plano B (3.4 e 5.4), por um link discreto na entrada ("O sistema não responde? Usar o modo de demonstração") e pelo aviso de indisponível. A página inicial e a ajuda passam a apontar para o login. *Feito em 10/11, no PR da fase B: `/entrar` tem só e-mail e senha; as portas por persona foram para `/entrar/demonstracao`, aberta pelo link discreto e pelo aviso; `/telao` dá 404, e o papel `telao` saiu da sessão.*
+- [ ] **3.8** *Pedido do Victor em 06/11: "Gemini ligado, mas sempre sem gerar custos".* A chave vai para o `.env` do servidor e fica lá até o fim do projeto (10.1). O Victor confirmou em 06/11 que o projeto continua sem faturamento. A API ganha um teto diário de chamadas, abaixo da cota gratuita; passando dele, a leitura segue pelas regras, sem erro na tela. A reescrita dos motivos continua desligada. Conferir com uma chamada (`--rapido`), a memória com `docker stats` e um pedido de ponta a ponta pela tela. *Teto feito em 10/11, no PR da fase B: `LLM_TETO_DIARIO`, 200 por padrão ([ADR 0003](adr/0003-llm-do-produto-gemini.md)). Falta publicar a 0.5.0, pôr a chave e conferir.*
 
 **Pronto quando:** a mesma jornada do coordenador passa nos dois modos, e uma vaga criada pela web aparece no banco e na trilha. Com o 3.7 e o 3.8: a entrada só aceita login, e o pedido escrito na tela é lido pelo Gemini, ou pelas regras se ele falhar.
 

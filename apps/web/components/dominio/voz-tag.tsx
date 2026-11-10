@@ -10,7 +10,7 @@ const CONFIG = {
 } as const;
 
 /**
- * Só o ícone da voz, para quando não há espaço para o rótulo inteiro (as etapas do telão): a
+ * Só o ícone da voz, para quando não há espaço para o rótulo inteiro: a
  * forma do ícone distingue as vozes sem depender de cor nem de espessura de traço.
  */
 export function IconeDaVoz({ voz, className }: { voz: ChaveVoz; className?: string }) {

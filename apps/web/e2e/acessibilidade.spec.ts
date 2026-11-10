@@ -72,7 +72,7 @@ test.describe("sem rolagem horizontal a 320 px (1.4.10)", () => {
   test("rotas públicas", async ({ browser, isMobile }) => {
     test.skip(isMobile, "o teste cria o próprio tamanho de tela e roda uma vez só");
     const page = await paginaNaLargura(browser, 320, 640);
-    for (const rota of ["/", "/ajuda", "/entrar", "/entrar?papel=medico&de=%2Fmedico%2Fofertas", "/telao", "/nao-existe"]) {
+    for (const rota of ["/", "/ajuda", "/entrar", "/entrar?papel=medico&de=%2Fmedico%2Fofertas", "/entrar/demonstracao", "/nao-existe"]) {
       await page.goto(rota);
       await page.waitForTimeout(300);
       expect(await rolagemHorizontal(page), rota).toBeLessThanOrEqual(0);
@@ -118,10 +118,9 @@ test.describe("sem rolagem horizontal a 320 px (1.4.10)", () => {
       }
     };
 
-    // O telão fica de fora: é uma tela de projetor, de corpo de 28 px, que ninguém amplia no celular.
     const publico = await paginaNaLargura(browser, 390, 844);
     await ampliar(publico);
-    await semExcesso(publico, ["/", "/entrar", "/ajuda"]);
+    await semExcesso(publico, ["/", "/entrar", "/entrar/demonstracao", "/ajuda"]);
     await publico.context().close();
 
     const medico = await paginaNaLargura(browser, 390, 844);
@@ -141,12 +140,12 @@ test.describe("sem rolagem horizontal a 320 px (1.4.10)", () => {
 
 test.describe("ordem do foco e avisos de estado", () => {
   test("com ?papel=medico, a porta do médico vem primeiro no HTML, não só na tela", async ({ page }) => {
-    await page.goto("/entrar?papel=medico");
-    await expect(page.getByRole("heading", { level: 2 })).toHaveText(["Médico", "Coordenador", "Telão"]);
-    await page.goto("/entrar?papel=coordenador");
-    await expect(page.getByRole("heading", { level: 2 })).toHaveText(["Coordenador", "Médico", "Telão"]);
-    await page.goto("/entrar");
-    await expect(page.getByRole("heading", { level: 2 })).toHaveText(["Coordenador", "Médico", "Telão"]);
+    await page.goto("/entrar/demonstracao?papel=medico");
+    await expect(page.getByRole("heading", { level: 2 })).toHaveText(["Médico", "Coordenador"]);
+    await page.goto("/entrar/demonstracao?papel=coordenador");
+    await expect(page.getByRole("heading", { level: 2 })).toHaveText(["Coordenador", "Médico"]);
+    await page.goto("/entrar/demonstracao");
+    await expect(page.getByRole("heading", { level: 2 })).toHaveText(["Coordenador", "Médico"]);
   });
 
   test("trocar o filtro das vagas é anunciado numa região de status", async ({ page }) => {
@@ -202,7 +201,7 @@ test.describe("alvos de toque dos links soltos (2.5.8)", () => {
       page.getByRole("link", { name: "Como funciona" }).filter({ visible: true }).first(),
       page.getByRole("link", { name: /Teste da aprovação/ }).first(),
       page.getByRole("link", { name: /Ler o relatório completo/ }),
-      page.getByRole("contentinfo").getByRole("link", { name: "Entrar na demonstração" }),
+      page.getByRole("contentinfo").getByRole("link", { name: "Entrar no sistema" }),
       page.getByRole("contentinfo").getByRole("link", { name: "Ajuda" }),
       page.getByRole("contentinfo").getByRole("link", { name: /Código no GitHub/ }),
     ];
@@ -224,9 +223,9 @@ test.describe("rotas que a jornada não visita", () => {
   });
 
   for (const esquema of ["light", "dark"] as const) {
-    test(`@a11y axe e estrutura em /ajuda, /telao, na 404 e em /entrar?papel= (${esquema === "light" ? "claro" : "escuro"})`, async ({ page }) => {
+    test(`@a11y axe e estrutura em /ajuda, na 404, em /entrar?papel= e no modo de demonstração (${esquema === "light" ? "claro" : "escuro"})`, async ({ page }) => {
       await page.emulateMedia({ colorScheme: esquema });
-      for (const rota of ["/ajuda", "/telao", "/nao-existe", "/entrar?papel=medico&de=%2Fmedico%2Fofertas"]) {
+      for (const rota of ["/ajuda", "/nao-existe", "/entrar?papel=medico&de=%2Fmedico%2Fofertas", "/entrar/demonstracao?papel=medico&de=%2Fmedico%2Fofertas"]) {
         await page.goto(rota);
         await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
         await semViolacoesGraves(page, { boasPraticas: true });

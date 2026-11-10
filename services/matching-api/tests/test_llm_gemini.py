@@ -19,6 +19,7 @@ from app.explain import REWRITE_SCHEMA, explain  # noqa: E402
 from app.llm.avaliacao import CASOS_DE_LEITURA, avaliar, main, relatorio  # noqa: E402
 from app.llm.client import (  # noqa: E402
     MODELO_PADRAO,
+    TETO_DIARIO_PADRAO,
     TIMEOUT_MS,
     GeminiClient,
     LLMUnavailableError,
@@ -281,6 +282,68 @@ class TestFalhas:
         with mock.patch.dict(sys.modules, {"google": None, "google.genai": None}):
             with pytest.raises(LLMUnavailableError, match="não instalado"):
                 _chamar(cliente)
+
+
+class TestTetoDiario:
+    """3.8 do roteiro: um teto de pedidos por dia, abaixo da cota gratuita."""
+
+    def test_passando_do_teto_nem_chama_o_servico_e_nao_abre_a_pausa(self):
+        cliente, pedidos = _cliente(_responde_json("{}"), teto_diario=2)
+        assert _chamar(cliente) == "{}"
+        assert _chamar(cliente) == "{}"
+        with pytest.raises(LLMUnavailableError, match="teto"):
+            _chamar(cliente)
+        assert len(pedidos) == 2
+        assert cliente.pedidos_hoje() == 2
+        assert cliente._pausado_ate == 0.0  # o teto não é falha do serviço
+
+    def test_o_teto_volta_no_dia_seguinte(self):
+        dia = {"hoje": date(2026, 11, 10)}
+        cliente, pedidos = _cliente(
+            _responde_json("{}"), teto_diario=1, hoje=lambda: dia["hoje"]
+        )
+        _chamar(cliente)
+        with pytest.raises(LLMUnavailableError, match="teto"):
+            _chamar(cliente)
+        dia["hoje"] = date(2026, 11, 11)
+        assert cliente.pedidos_hoje() == 0
+        assert _chamar(cliente) == "{}"
+        assert len(pedidos) == 2
+
+    def test_a_repeticao_da_alta_demanda_conta_e_respeita_o_teto(self):
+        cliente, pedidos = _cliente(_falha(503), teto_diario=1)
+        with pytest.raises(LLMUnavailableError, match="503"):
+            _chamar(cliente)
+        assert len(pedidos) == 1  # sem saldo para repetir, fica a falha original
+
+    def test_teto_zero_desliga_o_gemini_sem_tirar_a_chave(self):
+        cliente, pedidos = _cliente(_responde_json(json.dumps(VALIDA)), teto_diario=0)
+        resultado = extract(PEDIDO, HOJE, UNITS, cliente)
+        assert resultado.source == "regras"
+        assert pedidos == []
+
+    def test_o_aviso_do_teto_sai_uma_vez_por_dia_e_sem_o_texto(self, caplog):
+        cliente, _ = _cliente(_responde_json("{}"), teto_diario=0)
+        with caplog.at_level("WARNING", logger="matching_api"):
+            for _ in range(3):
+                with pytest.raises(LLMUnavailableError):
+                    _chamar(cliente)
+        avisos = [r for r in caplog.records if "teto" in r.getMessage()]
+        assert len(avisos) == 1
+        assert "pergunta" not in caplog.text
+
+    def test_o_teto_vem_do_ambiente(self):
+        assert client_from_env({"GEMINI_API_KEY": CHAVE}).teto_diario == TETO_DIARIO_PADRAO
+        assert client_from_env({"GEMINI_API_KEY": CHAVE, "LLM_TETO_DIARIO": "50"}).teto_diario == 50
+        assert client_from_env({"GEMINI_API_KEY": CHAVE, "LLM_TETO_DIARIO": "0"}).teto_diario == 0
+        invalido = client_from_env({"GEMINI_API_KEY": CHAVE, "LLM_TETO_DIARIO": "muito"})
+        assert invalido.teto_diario == TETO_DIARIO_PADRAO
+
+    def test_o_teto_padrao_e_o_mesmo_no_codigo_no_compose_e_no_exemplo(self):
+        compose = (RAIZ / "infra" / "docker-compose.yml").read_text(encoding="utf-8")
+        assert f"LLM_TETO_DIARIO: ${{LLM_TETO_DIARIO:-{TETO_DIARIO_PADRAO}}}" in compose
+        exemplo = (RAIZ / ".env.example").read_text(encoding="utf-8")
+        assert f"LLM_TETO_DIARIO={TETO_DIARIO_PADRAO}\n" in exemplo.replace("\r\n", "\n")
 
 
 class TestCaminhoCompleto:

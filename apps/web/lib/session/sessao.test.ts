@@ -14,11 +14,10 @@ describe("lerSessaoDoValor", () => {
       personaId: "med-7",
       modo: "demo",
     });
-    expect(lerSessaoDoValor('{"papel":"telao","personaId":null}')).toEqual({
-      papel: "telao",
-      personaId: null,
-      modo: "demo",
-    });
+  });
+
+  it("não aceita mais o papel do telão, que saiu do site (3.7)", () => {
+    expect(lerSessaoDoValor('{"papel":"telao","personaId":null}')).toBeNull();
   });
 
   it("trata cookie ausente, quebrado ou de outro formato como sem sessão", () => {
@@ -60,7 +59,7 @@ describe("destinoSeguro", () => {
   });
 
   it("cai na rota inicial do papel quando falta o destino", () => {
-    for (const papel of ["coordenador", "medico", "telao"] as const) {
+    for (const papel of ["coordenador", "medico"] as const) {
       expect(destinoSeguro(undefined, papel)).toBe(ROTA_INICIAL[papel]);
       expect(destinoSeguro(null, papel)).toBe(ROTA_INICIAL[papel]);
       expect(destinoSeguro("", papel)).toBe(ROTA_INICIAL[papel]);

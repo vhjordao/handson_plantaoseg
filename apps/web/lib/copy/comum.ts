@@ -16,7 +16,7 @@ export function linkNoRepositorio(caminho: string): string {
 
 export const ACOES = {
   entrar: "Entrar",
-  entrarNaDemonstracao: "Entrar na demonstração",
+  entrarNaDemonstracao: "Entrar no sistema",
   comoFunciona: "Como funciona",
   ajuda: "Ajuda",
   sair: "Sair",

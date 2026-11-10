@@ -39,7 +39,7 @@ export function ApiProvider({
   /** `live`: o sistema real, com o login da demonstração (fase 3 do roteiro). */
   modo?: "demo" | "live";
   /** Para onde a troca para a demonstração leva, se o sistema real não responder. */
-  papel?: Exclude<Papel, "telao">;
+  papel?: Papel;
 }) {
   const [api, setApi] = React.useState<PlantaoApi | null>(null);
   const [falhou, setFalhou] = React.useState(false);

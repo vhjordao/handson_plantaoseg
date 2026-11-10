@@ -12,7 +12,7 @@ test.describe("landing", () => {
     await expect(page.getByRole("region", { name: "Aviso de demonstração" })).toContainText(
       "dados sintéticos",
     );
-    const entrar = page.getByRole("link", { name: "Entrar na demonstração" }).first();
+    const entrar = page.getByRole("link", { name: "Entrar no sistema" }).first();
     await expect(entrar).toHaveAttribute("href", "/entrar");
   });
 

@@ -125,10 +125,10 @@ export const PoliticaSchema = z.object({
 export type Politica = z.infer<typeof PoliticaSchema>;
 
 // ---------------------------------------------------------------------------
-// Sessão por persona (sem senha)
+// Sessão: login (modo live) ou persona do modo de demonstração
 // ---------------------------------------------------------------------------
 
-export const PapelSchema = z.enum(["coordenador", "medico", "telao"]);
+export const PapelSchema = z.enum(["coordenador", "medico"]);
 export type Papel = z.infer<typeof PapelSchema>;
 
 export const PersonaCoordenadorSchema = z.object({
