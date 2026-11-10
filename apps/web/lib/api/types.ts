@@ -374,8 +374,13 @@ export const FeedbackExplicacaoInputSchema = z.object({
 export type FeedbackExplicacaoInput = z.infer<typeof FeedbackExplicacaoInputSchema>;
 
 // ---------------------------------------------------------------------------
-// Oferta, cascata e contestação (UI-2; ainda sem backend)
+// Oferta, cascata e contestação (fase 4 do roteiro)
 // ---------------------------------------------------------------------------
+
+/** Os quatro motivos de recusa (D4 do ADR 0015), sem texto livre: `DeclineReason` da API. */
+export const MOTIVOS_RECUSA = ["distancia", "cansaco", "agenda", "outro"] as const;
+export const MotivoRecusaSchema = z.enum(MOTIVOS_RECUSA);
+export type MotivoRecusa = z.infer<typeof MotivoRecusaSchema>;
 
 export const StatusOfertaSchema = z.enum([
   "na_fila",
@@ -397,7 +402,7 @@ export const OfertaSchema = z.object({
   expiraEm: DataHoraSchema.nullable(),
   respondidaEm: DataHoraSchema.nullable(),
   ttlMin: z.number(),
-  motivoRecusa: z.string().nullable(),
+  motivoRecusa: MotivoRecusaSchema.nullable(),
   vaga: z.object({
     unidade: UnidadeSchema,
     especialidade: EspecialidadeSchema,
@@ -422,11 +427,15 @@ export const CascataSchema = z.object({
 });
 export type Cascata = z.infer<typeof CascataSchema>;
 
-export const RespostaOfertaInputSchema = z.object({
-  ofertaId: z.string(),
-  resposta: z.enum(["aceitar", "recusar"]),
-  motivo: z.string().max(LIMITE_TEXTO_LIVRE).optional(),
-});
+export const RespostaOfertaInputSchema = z
+  .object({
+    ofertaId: z.string(),
+    resposta: z.enum(["aceitar", "recusar"]),
+    motivo: MotivoRecusaSchema.optional(),
+  })
+  .refine((r) => r.resposta === "aceitar" || r.motivo !== undefined, {
+    message: "A recusa precisa de um dos quatro motivos.",
+  });
 export type RespostaOfertaInput = z.infer<typeof RespostaOfertaInputSchema>;
 
 export const MOTIVOS_CONTESTACAO = [

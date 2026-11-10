@@ -7,6 +7,8 @@ import type {
   CodigoRegra,
   Especialidade,
   Fator,
+  MotivoContestacao,
+  MotivoRecusa,
   StatusOferta,
   StatusVaga,
   Urgencia,
@@ -38,6 +40,21 @@ export const ROTULO_STATUS_OFERTA: Record<StatusOferta, string> = {
   recusada: "Recusada",
   expirada: "Expirada",
   cancelada: "Cancelada",
+};
+
+/** Os quatro motivos de recusa (D4), ditos para o médico. */
+export const ROTULO_MOTIVO_RECUSA: Record<MotivoRecusa, string> = {
+  distancia: "Distância",
+  cansaco: "Cansaço",
+  agenda: "Agenda",
+  outro: "Outro motivo",
+};
+
+export const ROTULO_MOTIVO_CONTESTACAO: Record<MotivoContestacao, string> = {
+  dado_errado: "Um dado sobre mim está errado",
+  motivo_nao_faz_sentido: "O motivo não faz sentido",
+  ordem_injusta: "A ordem me parece injusta",
+  outro: "Outro motivo",
 };
 
 export const ROTULO_REGRA: Record<CodigoRegra, string> = {

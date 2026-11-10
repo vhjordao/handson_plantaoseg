@@ -30,6 +30,8 @@ O mapa de tudo o que falta para o PlantãoSeguro funcionar de ponta a ponta, do 
 
 **Onde está a fase B (10/11):** na `main` e no servidor (PR #34): a entrada só com login, o telão fora do site, a imagem 0.5.0 e a chave do Gemini. O projeto do Supabase estava pausado e foi reativado no mesmo dia, com o ok do Victor. Depois, o uso econômico do Gemini (0.5.1, PR #35). **Fase B fechada em 10/11:** o pedido que o Victor escreveu na tela do sistema real foi lido pelo Gemini ("Leitura pela IA").
 
+**Onde está a fase C (10/11):** o código está no PR da branch `f4/tela-medico`: no sistema real, o médico vê as ofertas com o "Por que você" e o prazo andando, aceita ou recusa com um dos quatro motivos e confirmação, contesta e acompanha a resposta, e o coordenador vê a cascata na tela da vaga, atualizada a cada 3 segundos. Faltam duas coisas: a conferência de ponta a ponta ("o 1º recusa, o 2º deixa passar, o 3º aceita"), que precisa dos logins do Victor; e o modo de demonstração, que ainda não simula ofertas nem a cascata (nele, as telas do médico avisam que só funcionam com o login). Sem isso, o plano B (5.4) cobre só a jornada do coordenador.
+
 **Ponto de atenção:** o visual novo vem depois das fases C e D. Para caber antes de 13/11, o modelo do Victor precisa chegar até cerca de 10/11. Se chegar depois, entra só a base (cores, tipografia e componentes), sem refazer o layout de cada tela ([seção 9](#9-riscos-e-o-que-cortar-primeiro)).
 
 ## 2. Onde estamos
@@ -43,7 +45,8 @@ O mapa de tudo o que falta para o PlantãoSeguro funcionar de ponta a ponta, do 
 | Gemini | Ligado no servidor desde 10/11 e lendo os pedidos da tela (3.8), em custo zero, com teto diário de 100, teto de 10 por minuto e pedido repetido sem nova chamada (0.5.1) | [ADR 0003](adr/0003-llm-do-produto-gemini.md) |
 | Decisões D1 a D11 | Aprovadas pelo Victor em 06/11 | [ADR 0015](adr/0015-decisoes-que-destravam-o-mvp.md) |
 | Web: página inicial, entrada com login, lista de vagas, nova vaga, sugestões e decisão | No link público, no sistema real com o login da demonstração; o modo de demonstração fica como plano B (3.7, no PR da fase B) | [ficha](../apps/web/README.md) |
-| Web: médico, auditoria, contestações e equidade | Ainda "em construção" | |
+| Web: médico (ofertas, resposta, contestação) e a cascata na tela da vaga | No sistema real, no PR da fase C; o modo de demonstração ainda não simula | [ficha](../apps/web/README.md) |
+| Web: auditoria, contestações do coordenador e equidade | Ainda "em construção" | |
 | Documento da Entrega 3 | Na `main` desde 06/11, com PDF de 12 páginas; o envio é do Victor | [documento](04-entrega-3-validacao.md) |
 
 **O que falta, em uma frase:** a jornada do coordenador já passa pela API e pelo banco, mas a tela do médico e a cascata na tela ainda não existem. Por isso, na tela, o médico não recebe oferta e a cascata não aparece.
@@ -104,11 +107,12 @@ O adaptador `live` liga a web ao sistema real.
 
 ### Fase 4: a tela do médico e a cascata na tela
 
-- [ ] **4.1** Ofertas, com plantão, local, horário, distância, prazo e "Por que você".
-- [ ] **4.2** Aceitar e recusar, com um dos quatro motivos (distância, cansaço, agenda ou outro) e confirmação antes, porque não se desfaz (D4 e D5).
-- [ ] **4.3** Contestar uma recomendação e ver a resposta.
-- [ ] **4.4** "Minha conta": o que o sistema usa e não usa sobre o médico, e como pedir revisão humana.
-- [ ] **4.5** Na tela da vaga, o coordenador acompanha a cascata: quem recebeu, quem recusou, quem deixou o prazo passar e o tempo que falta (a tela consulta o sistema a cada 3 segundos, D7).
+- [ ] **4.1** Ofertas, com plantão, local, horário, distância, prazo e "Por que você". *Código no PR da fase C (10/11, branch `f4/tela-medico`), no sistema real; falta a conferência de ponta a ponta.*
+- [ ] **4.2** Aceitar e recusar, com um dos quatro motivos (distância, cansaço, agenda ou outro) e confirmação antes, porque não se desfaz (D4 e D5). *Código no PR da fase C (10/11, branch `f4/tela-medico`), no sistema real; falta a conferência de ponta a ponta.*
+- [ ] **4.3** Contestar uma recomendação e ver a resposta. *Código no PR da fase C (10/11, branch `f4/tela-medico`), no sistema real; falta a conferência de ponta a ponta.*
+- [ ] **4.4** "Minha conta": o que o sistema usa e não usa sobre o médico, e como pedir revisão humana. *No PR da fase C: a página já existia; agora mostra o médico do login e leva às contestações.*
+- [ ] **4.5** Na tela da vaga, o coordenador acompanha a cascata: quem recebeu, quem recusou, quem deixou o prazo passar e o tempo que falta (a tela consulta o sistema a cada 3 segundos, D7). *Código no PR da fase C (10/11, branch `f4/tela-medico`), no sistema real; falta a conferência de ponta a ponta.*
+- [ ] **4.6** O modo de demonstração simula as ofertas e a cascata, para o plano B (5.4) fazer o mesmo caminho sem o servidor.
 
 **Pronto quando:** o cenário "o 1º recusa, o 2º deixa passar, o 3º aceita" acontece de verdade, com o n8n, e aparece nas duas telas.
 

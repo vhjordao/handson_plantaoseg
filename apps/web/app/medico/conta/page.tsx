@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { ROTULO_ESPECIALIDADE } from "@/lib/copy/rotulos";
-import { encontrarPersona } from "@/lib/session/personas";
+import { encontrarPersona, personaDoLogin } from "@/lib/session/personas";
 import { lerSessao } from "@/lib/session/servidor";
 
 export const metadata: Metadata = { title: "Minha conta" };
@@ -39,7 +39,12 @@ const NAO_USADOS = [
 
 export default async function MinhaConta() {
   const sessao = await lerSessao();
-  const persona = sessao ? encontrarPersona("medico", sessao.personaId) : null;
+  // No sistema real, o médico vem do login; no modo de demonstração, da persona escolhida.
+  const persona = !sessao
+    ? null
+    : sessao.modo === "live"
+      ? personaDoLogin("medico", sessao.personaId)
+      : encontrarPersona("medico", sessao.personaId);
   const medico = persona?.papel === "medico" ? persona.medico : null;
 
   return (
@@ -100,10 +105,15 @@ export default async function MinhaConta() {
           Como pedir revisão humana
         </h2>
         <p className="mt-2 max-w-[62ch]">
-          Em cada oferta você poderá contestar a recomendação. O coordenador responde por escrito, e
-          a resposta fica na trilha de auditoria. A contestação ainda está em construção.
+          Em cada oferta, o botão “Contestar a recomendação” pede uma revisão humana: você diz o que
+          não está certo, a coordenação responde por escrito, e a contestação e a resposta ficam na
+          trilha de auditoria. Contestar não muda a sua resposta à oferta. A resposta aparece em
+          Contestações.
         </p>
-        <p className="mt-3">
+        <p className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
+          <Link href="/medico/contestacoes" className="font-semibold underline underline-offset-4 hover:no-underline">
+            Ver as minhas contestações
+          </Link>
           <Link href="/ajuda" className="font-semibold underline underline-offset-4 hover:no-underline">
             Ver a ajuda e as perguntas frequentes
           </Link>

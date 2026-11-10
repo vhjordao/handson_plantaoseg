@@ -13,6 +13,7 @@ import { useEstadoApi } from "@/lib/api/provider";
 import { ORDEM, VAGA } from "@/lib/copy/coordenador";
 import { ROTULO_ESPECIALIDADE } from "@/lib/copy/rotulos";
 import { descreverVaga, EtiquetasDaVaga } from "./etiquetas-da-vaga";
+import { CascataDaVaga } from "./cascata-da-vaga";
 import { InicioDaVaga } from "./inicio-da-vaga";
 import { OrdemSugerida } from "./ordem-sugerida";
 
@@ -165,6 +166,8 @@ export function TelaDaVaga({ vagaId, jaExistia }: { vagaId: string; jaExistia: b
         )}
         <RegraBarrou recomendacao={sugestoes.data} />
       </div>
+
+      {decisao.data.decisao ? <CascataDaVaga vaga={vaga} /> : null}
     </div>
   );
 }

@@ -12,6 +12,23 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 **Uso de IA:** o Claude Code diagnosticou a pausa, reativou o projeto com o ok do Victor e escreveu o código, os testes e os documentos.
 
+## 10/11/2026 (terça): fase C, a tela do médico e a cascata na tela
+
+**Pedido do Victor:** "podemos ir fazendo a fase C?", enquanto outra sessão terminava a fase B no servidor.
+
+**O que mudou (no sistema real):**
+
+- **Ofertas do médico (4.1 e 4.2):** plantão, local, horário, distância, prazo andando e o "Por que você", com a mesma explicação que o coordenador viu. Aceitar e recusar pedem confirmação, porque não se desfazem (D5), e a recusa tem um dos quatro motivos, sem texto livre (D4).
+- **Contestação (4.3):** o médico diz o que não está certo; o texto sai sem telefone e CRM antes de ir à API, e a tela de Contestações mostra o protocolo e a resposta.
+- **Minha conta (4.4):** passa a mostrar o médico do login e leva às contestações.
+- **Cascata na tela da vaga (4.5):** quem recebeu, quem recusou e por quê, quem deixou o prazo passar e quem está na fila, consultando a cada 3 segundos (D7).
+
+**O que falta:** conferir "o 1º recusa, o 2º deixa passar, o 3º aceita" com os logins, e simular ofertas e cascata no modo de demonstração (4.6), para o plano B.
+
+**Contratempo:** apagar a pasta da worktree da fase B esvaziou o `node_modules` de outra worktree, porque a pasta tinha um atalho (junction) para ele. Nada se perdeu no repositório; a fase C ganhou um `node_modules` próprio. Daqui em diante, worktree se apaga com `git worktree remove` ou removendo o atalho antes.
+
+**Uso de IA:** o Claude Code escreveu o código, os testes e os documentos.
+
 ## 10/11/2026 (terça): fase B, só login, sem telão e com o teto do Gemini
 
 **Pedido do Victor:** "vamos para fase B": a entrada só com e-mail e senha, o modo de demonstração como plano B, o telão fora do site e o Gemini ligado com um limite diário abaixo da cota gratuita.
