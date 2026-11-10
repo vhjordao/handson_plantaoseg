@@ -7,14 +7,21 @@ import { TempoQueFalta } from "@/components/dominio/prazo";
 import { SuperficieVoz } from "@/components/dominio/superficie-voz";
 import { Alert } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useCascata } from "@/lib/api/hooks";
-import { NaoImplementadoError } from "@/lib/api/plantao-api";
+import { mensagemDoErro } from "@/lib/api/erros";
+import { NaoImplementadoError, type PlantaoApi } from "@/lib/api/plantao-api";
 import { useApi } from "@/lib/api/provider";
 import type { Oferta, StatusOferta, Vaga } from "@/lib/api/types";
 import { CASCATA } from "@/lib/copy/medico";
 import { ROTULO_MOTIVO_RECUSA, ROTULO_STATUS_OFERTA } from "@/lib/copy/rotulos";
 import { formatarHora } from "@/lib/format/datas";
+
+/** Só o modo de demonstração sabe passar o prazo: no sistema real, quem faz isso é o n8n. */
+type ComPassarPrazo = PlantaoApi & { passarPrazo: (vagaId: string) => Promise<unknown> };
+const sabePassarPrazo = (api: PlantaoApi | null): api is ComPassarPrazo =>
+  api !== null && api.modo === "demo" && "passarPrazo" in api;
 
 const ICONE: Record<StatusOferta, typeof Clock> = {
   na_fila: ListOrdered,
@@ -37,7 +44,8 @@ const TOM: Record<StatusOferta, "neutro" | "atencao" | "humano"> = {
 /**
  * A cascata na tela da vaga (4.5): quem recebeu, quem recusou e por quê, quem deixou o prazo
  * passar, quem está na fila e o tempo que falta. Consulta o sistema a cada 3 segundos (D7) até a
- * vaga fechar. No modo de demonstração, que ainda não simula a cascata, a seção não aparece.
+ * vaga fechar. No modo de demonstração (4.6), o relógio só anda quando quem apresenta manda: o
+ * botão "Passar o prazo" faz o papel do n8n.
  */
 export function CascataDaVaga({ vaga }: { vaga: Vaga }) {
   const api = useApi();
@@ -45,6 +53,23 @@ export function CascataDaVaga({ vaga }: { vaga: Vaga }) {
   const fechada = vaga.status === "preenchida" || vaga.status === "sem_cobertura";
   const cascata = useCascata(vaga.id, true, !fechada);
   const ofertas = cascata.data?.ofertas;
+  const [passando, setPassando] = React.useState(false);
+  const [erroAoPassar, setErroAoPassar] = React.useState<string | null>(null);
+  const aberta = ofertas?.find((o) => o.status === "aberta");
+
+  const passarPrazo = async () => {
+    if (!sabePassarPrazo(api)) return;
+    setPassando(true);
+    setErroAoPassar(null);
+    try {
+      await api.passarPrazo(vaga.id);
+      await clienteDeConsultas.invalidateQueries({ queryKey: [api.modo] });
+    } catch (erro) {
+      setErroAoPassar(mensagemDoErro(erro, CASCATA.passarPrazoErro));
+    } finally {
+      setPassando(false);
+    }
+  };
 
   // Quando a cascata muda o estado da vaga (aceite ou fim da lista), o cabeçalho acompanha.
   const aceita = ofertas?.find((o) => o.status === "aceita");
@@ -86,6 +111,16 @@ export function CascataDaVaga({ vaga }: { vaga: Vaga }) {
             <PassoDaCascata key={oferta.id} oferta={oferta} />
           ))}
         </ol>
+      ) : null}
+
+      {sabePassarPrazo(api) && aberta && !fechada ? (
+        <Alert tone="info" title={CASCATA.simulacaoTitulo} className="mt-4">
+          <p>{CASCATA.simulacao}</p>
+          {erroAoPassar ? <p className="mt-2 font-semibold text-erro">{erroAoPassar}</p> : null}
+          <Button className="mt-3" variant="secondary" size="sm" loading={passando} onClick={() => void passarPrazo()}>
+            {CASCATA.passarPrazo}
+          </Button>
+        </Alert>
       ) : null}
 
       {/* Uma região só para o desfecho: anunciar cada segundo do prazo atrapalharia. */}

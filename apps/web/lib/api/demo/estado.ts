@@ -1,6 +1,7 @@
 /**
  * O estado da sessão do modo `demo`: o que mudou desde as fixtures (vagas publicadas, decisões,
- * nomes pulados, feedbacks, linhas novas da trilha e o relógio). Fica em memória e, quando a
+ * nomes pulados, feedbacks, ofertas e contestações da cascata, linhas novas da trilha e o
+ * relógio). Fica em memória e, quando a
  * interface passa um `Storage` (o `sessionStorage`), também lá, na chave `plantao-demo-v1`.
  *
  * Ao restaurar, o conteúdo é validado com Zod e conferido contra o mundo atual (as vagas de
@@ -10,13 +11,16 @@
 import { z } from "zod";
 import type { Mundo } from "../../demo/schema";
 import {
+  ContestacaoSchema,
   DataHoraSchema,
   DecisaoSchema,
   FeedbackExplicacaoInputSchema,
+  MotivoRecusaSchema,
   PularInputSchema,
   RegistroAuditoriaSchema,
   VagaSchema,
 } from "../types";
+import { somarMinutos } from "./datas";
 
 export const CHAVE_DE_ARMAZENAMENTO = "plantao-demo-v1";
 
@@ -24,6 +28,22 @@ export const CHAVE_DE_ARMAZENAMENTO = "plantao-demo-v1";
 export const PuloSchema = PularInputSchema.extend({ em: DataHoraSchema });
 /** "Esta explicação ajudou?": só registrado, fora da trilha de hash e sem treinar nada. */
 export const FeedbackGuardadoSchema = FeedbackExplicacaoInputSchema.extend({ em: DataHoraSchema });
+
+/**
+ * Uma oferta enviada na cascata da demonstração (4.6). Só o que muda: o plantão, o médico e o
+ * "Por que você" vêm da vaga e da recomendação na hora de ler. Quem foi aprovado e ainda não foi
+ * chamado não tem oferta: aparece "na fila", como no sistema real.
+ */
+export const OfertaGuardadaSchema = z.object({
+  id: z.string(),
+  vagaId: z.string(),
+  medicoId: z.string(),
+  sequencia: z.number().int().min(1),
+  status: z.enum(["aberta", "aceita", "recusada", "expirada"]),
+  enviadaEm: DataHoraSchema,
+  respondidaEm: DataHoraSchema.nullable(),
+  motivoRecusa: MotivoRecusaSchema.nullable(),
+});
 
 export const DadosDaSessaoSchema = z.object({
   versao: z.literal(1),
@@ -36,6 +56,9 @@ export const DadosDaSessaoSchema = z.object({
   pulos: z.array(PuloSchema),
   feedbacks: z.array(FeedbackGuardadoSchema),
   auditoria: z.array(RegistroAuditoriaSchema),
+  /** Sessões guardadas antes da 4.6 não têm ofertas nem contestações: começam vazias. */
+  ofertas: z.array(OfertaGuardadaSchema).default([]),
+  contestacoes: z.array(ContestacaoSchema).default([]),
   minutosAvancados: z.number().min(0),
   /** Persona de coordenador que está decidindo; nulo = o coordenador da unidade da vaga. */
   coordenadorId: z.string().nullable(),
@@ -43,6 +66,43 @@ export const DadosDaSessaoSchema = z.object({
 export type DadosDaSessao = z.infer<typeof DadosDaSessaoSchema>;
 export type Pulo = z.infer<typeof PuloSchema>;
 export type FeedbackGuardado = z.infer<typeof FeedbackGuardadoSchema>;
+export type OfertaGuardada = z.infer<typeof OfertaGuardadaSchema>;
+
+/**
+ * As ofertas das vagas de exemplo que já têm decisão nas fixtures, para a cascata delas não
+ * aparecer vazia. Em andamento: o 1º aprovado está com a oferta desde a decisão. Preenchida:
+ * quem veio antes de quem aceitou deixou o prazo passar, um de cada vez, e quem aceitou recebeu
+ * a oferta quando o anterior expirou. Tudo é simulação, como o resto das fixtures.
+ */
+export function ofertasDeExemplo(mundo: Mundo, jaTem: ReadonlySet<string>): OfertaGuardada[] {
+  const ttl = mundo.politica.ttlOfertaMin;
+  const ofertas: OfertaGuardada[] = [];
+  for (const vaga of mundo.vagas) {
+    const decisao = mundo.decisoes[vaga.id];
+    if (!decisao || jaTem.has(vaga.id)) continue;
+    const oferta = (indice: number, status: OfertaGuardada["status"]): OfertaGuardada => {
+      const enviadaEm = somarMinutos(decisao.em, indice * ttl);
+      return {
+        id: `oferta-${vaga.id}-${indice + 1}`,
+        vagaId: vaga.id,
+        medicoId: decisao.medicoIds[indice] as string,
+        sequencia: indice + 1,
+        status,
+        enviadaEm,
+        respondidaEm: status === "aceita" ? enviadaEm : null,
+        motivoRecusa: null,
+      };
+    };
+    if (vaga.status === "oferta_em_andamento" && decisao.medicoIds.length > 0) {
+      ofertas.push(oferta(0, "aberta"));
+    } else if (vaga.status === "preenchida" && vaga.preenchidaPor) {
+      const quem = decisao.medicoIds.indexOf(vaga.preenchidaPor.medicoId);
+      for (let i = 0; i < quem; i++) ofertas.push(oferta(i, "expirada"));
+      if (quem >= 0) ofertas.push(oferta(quem, "aceita"));
+    }
+  }
+  return ofertas;
+}
 
 /** O ponto de partida: as vagas, as decisões e a trilha das fixtures, copiadas. */
 export function estadoInicial(mundo: Mundo): DadosDaSessao {
@@ -55,6 +115,8 @@ export function estadoInicial(mundo: Mundo): DadosDaSessao {
     pulos: [],
     feedbacks: [],
     auditoria: mundo.auditoria,
+    ofertas: ofertasDeExemplo(mundo, new Set()),
+    contestacoes: [],
     minutosAvancados: 0,
     coordenadorId: null,
   });

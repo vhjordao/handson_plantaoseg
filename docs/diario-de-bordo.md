@@ -23,7 +23,9 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 - **Minha conta (4.4):** passa a mostrar o médico do login e leva às contestações.
 - **Cascata na tela da vaga (4.5):** quem recebeu, quem recusou e por quê, quem deixou o prazo passar e quem está na fila, consultando a cada 3 segundos (D7).
 
-**O que falta:** conferir "o 1º recusa, o 2º deixa passar, o 3º aceita" com os logins, e simular ofertas e cascata no modo de demonstração (4.6), para o plano B.
+**O plano B (4.6), pedido do Victor ("Sim, faça a 4.6"):** o modo de demonstração faz a mesma cascata sem o servidor. Como o relógio da demonstração só anda quando quem apresenta manda, o botão "Passar o prazo desta oferta" faz o papel do n8n. Tudo acontece numa aba só, porque o estado fica no `sessionStorage` e o cookie de sessão vale para o navegador inteiro (no sistema real também: coordenador e médico lado a lado pedem dois navegadores ou o celular). A porta do médico mostra primeiro quem tem oferta esperando.
+
+**O que falta:** conferir "o 1º recusa, o 2º deixa passar, o 3º aceita" no sistema real, com os logins.
 
 **Contratempo:** apagar a pasta da worktree da fase B esvaziou o `node_modules` de outra worktree, porque a pasta tinha um atalho (junction) para ele. Nada se perdeu no repositório; a fase C ganhou um `node_modules` próprio. Daqui em diante, worktree se apaga com `git worktree remove` ou removendo o atalho antes.
 

@@ -17,9 +17,8 @@ export const OFERTAS = {
     "Quando a coordenação aprovar o seu nome para uma vaga, a oferta aparece aqui sozinha, sem recarregar a página.",
   historicoTitulo: "Respondidas e encerradas",
   semHistorico: "Nenhuma oferta anterior.",
-  naDemonstracaoTitulo: "Ofertas no modo de demonstração",
-  naDemonstracao:
-    "No modo de demonstração, as ofertas ainda não aparecem. Elas funcionam com o login, no sistema real.",
+  naDemonstracaoTitulo: "Ofertas indisponíveis neste modo",
+  naDemonstracao: "As ofertas não estão disponíveis neste modo. Entre com o login para vê-las.",
 } as const;
 
 export const OFERTA = {
@@ -104,8 +103,11 @@ export const CONTESTACOES = {
   seuTexto: "O que você escreveu",
   resposta: "Resposta da coordenação",
   respondidaEm: (quando: string) => `Respondida em ${quando}`,
-  naDemonstracao:
-    "No modo de demonstração, as contestações ainda não aparecem. Elas funcionam com o login, no sistema real.",
+  naDemonstracao: "As contestações não estão disponíveis neste modo. Entre com o login para vê-las.",
+} as const;
+
+export const ENTRADA_DO_MEDICO = {
+  temOferta: "Tem oferta esperando resposta",
 } as const;
 
 export const CASCATA = {
@@ -123,6 +125,11 @@ export const CASCATA = {
   respondidaAs: (hora: string) => `às ${hora}`,
   motivo: (motivo: string) => `motivo: ${motivo}`,
   preenchida: (nome: string) => `${nome} aceitou. A vaga está preenchida.`,
+  simulacaoTitulo: "Simulação",
+  simulacao:
+    "No modo de demonstração, o relógio só anda quando você manda. No sistema real, o prazo vence sozinho, e o n8n chama o próximo.",
+  passarPrazo: "Passar o prazo desta oferta",
+  passarPrazoErro: "Não foi possível passar o prazo agora.",
   semCobertura:
     "Ninguém da lista aceitou. A vaga ficou sem cobertura: publique de novo ou aprove outros nomes.",
 } as const;

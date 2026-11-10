@@ -20,17 +20,22 @@ import {
   NaoEncontradoError,
   SemRecomendacaoError,
 } from "../erros";
-import { NaoImplementadoError, type PlantaoApi } from "../plantao-api";
+import type { PlantaoApi } from "../plantao-api";
 import {
   AprovarInputSchema,
   ConfirmarVagaInputSchema,
+  ContestarInputSchema,
   DesfazerPuloInputSchema,
+  FATORES,
   FeedbackExplicacaoInputSchema,
+  LIMITE_TEXTO_LIVRE,
   LIMITE_TEXTO_VAGA,
   PularInputSchema,
+  RespostaOfertaInputSchema,
   type Cascata,
   type Candidato,
   type ConfirmarVagaInput,
+  type ContestarInput,
   type Contestacao,
   type DataHora,
   type Decisao,
@@ -40,11 +45,13 @@ import {
   type FichaModelo,
   type Indicadores,
   type Leitura,
+  type MotivoRecusa,
   type Oferta,
   type Persona,
   type Politica,
   type Recomendacao,
   type RegistroAuditoria,
+  type RespostaOfertaInput,
   type Unidade,
   type VerificacaoCadeia,
   type Vaga,
@@ -52,13 +59,15 @@ import {
 import { z } from "zod";
 import { criarRegistro, verificarRegistros, type EntradaDeRegistro } from "./auditoria";
 import { Barramento } from "./barramento";
-import { minutosEntre, normalizarDataHora } from "./datas";
+import { minutosEntre, normalizarDataHora, somarMinutos } from "./datas";
 import {
   esquecerEstado,
   estadoInicial,
+  ofertasDeExemplo,
   persistirEstado,
   restaurarEstado,
   type DadosDaSessao,
+  type OfertaGuardada,
 } from "./estado";
 import { lerTexto } from "./leitura";
 import { removerDadosPessoais, semMarcasDeRemocao } from "./privacidade";
@@ -83,12 +92,25 @@ export interface PlantaoApiDemo extends PlantaoApi {
    * tem esse parâmetro); sem isto, decide o coordenador da unidade da vaga.
    */
   definirCoordenador(personaId: string | null): void;
+  /**
+   * Faz vencer o prazo da oferta aberta da vaga: o relógio anda até o fim do prazo, e o próximo
+   * aprovado é chamado. No sistema real, quem faz isso é o n8n (4.6 do roteiro).
+   */
+  passarPrazo(vagaId: string): Promise<Cascata>;
 }
 
 type PersonaCoordenador = Extract<Persona, { papel: "coordenador" }>;
 
 const DOZE_HORAS_EM_MINUTOS = 12 * 60;
 const AGENTE_DO_SISTEMA = "matching-api";
+
+/** O motivo da recusa com o código do backend (`DeclineReason`), como a trilha real guarda. */
+const MOTIVO_RECUSA_DO_BACKEND: Record<MotivoRecusa, string> = {
+  distancia: "distance",
+  cansaco: "fatigue",
+  agenda: "schedule",
+  outro: "other",
+};
 
 /** Aprovação sem exigir candidatos: quem confere se há algum é o adaptador, com erro próprio. */
 const AprovarEntradaSchema = AprovarInputSchema.extend({ medicoIds: z.array(z.string()) });
@@ -145,6 +167,8 @@ class ApiDemo implements PlantaoApiDemo {
     this.storage = opcoes.storage ?? null;
     this.latenciaMs = Math.max(0, opcoes.latenciaMs ?? 0);
     this.dados = restaurarEstado(this.storage, this.mundo) ?? estadoInicial(this.mundo);
+    const comOfertas = new Set(this.dados.ofertas.map((o) => o.vagaId));
+    this.dados.ofertas.push(...ofertasDeExemplo(this.mundo, comOfertas));
     this.relogio.restaurar(this.dados.minutosAvancados);
   }
 
@@ -376,7 +400,7 @@ class ApiDemo implements PlantaoApiDemo {
         em: agora,
         excecao,
       };
-      const [registro] = await this.encadear([
+      const registros: EntradaDeRegistro[] = [
         {
           ocorridoEm: agora,
           papelAtor: "coordinator",
@@ -391,14 +415,21 @@ class ApiDemo implements PlantaoApiDemo {
             ...(excecao ? { excecao: copia(excecao) } : {}),
           },
         },
-      ]);
+      ];
+      // Com a decisão, sai a primeira oferta, para o 1º aprovado (4.6), como no sistema real.
+      const ofertas = copia(this.dados.ofertas);
+      const enviadas: EventoPlantao[] = [];
+      const status = this.chamarProximo(vaga, ids, ofertas, agora, registros, recomendacao.modeloVersao, enviadas);
+      const novos = await this.encadear(registros);
 
       this.aplicar(geracao, () => {
-        this.vagaOuErro(vaga.id).status = "oferta_em_andamento";
+        this.vagaOuErro(vaga.id).status = status;
         this.dados.decisoes[vaga.id] = copia(decisao);
-        this.dados.auditoria.push(registro as RegistroAuditoria);
+        this.dados.ofertas = ofertas;
+        this.dados.auditoria.push(...novos);
       });
       this.barramento.emitir({ tipo: "decisao_registrada", vagaId: vaga.id, medicoIds: ids, em: agora });
+      for (const evento of enviadas) this.barramento.emitir(evento);
       return copia(decisao);
     });
   }
@@ -511,38 +542,440 @@ class ApiDemo implements PlantaoApiDemo {
     return copia(this.mundo.politica);
   }
 
-  // --- Cascata, ofertas e contestações: outra etapa (UI-2) -----------------------------------
+  // --- Cascata, ofertas e contestações (4.6) -------------------------------------------------
+  //
+  // A mesma regra do sistema real: uma oferta por vez, na ordem aprovada; quem recusa ou deixa o
+  // prazo passar dá lugar ao próximo; sem ninguém, a vaga fica sem cobertura. O relógio da
+  // demonstração só anda quando quem apresenta manda (`passarPrazo` ou `avancarRelogio`), então
+  // o prazo vence por esse comando, no lugar do n8n.
 
-  async obterCascata(): Promise<Cascata> {
-    throw new NaoImplementadoError("obterCascata", this.modo);
+  async obterCascata(vagaId: string): Promise<Cascata> {
+    await this.operacao((geracao) => this.processarPrazos(geracao));
+    const vaga = this.vagaOuErro(vagaId);
+    const recomendacao = await this.recomendacaoDe(vaga);
+    const enviadas = this.ofertasDaVaga(vaga.id);
+    const ofertas = enviadas.map((guardada) => this.oferta(guardada, vaga, recomendacao));
+    const chamados = new Set(enviadas.map((o) => o.medicoId));
+    const fechada = vaga.status === "preenchida" || vaga.status === "sem_cobertura";
+    const fila = (this.dados.decisoes[vaga.id]?.medicoIds ?? []).filter((id) => !chamados.has(id));
+    fila.forEach((medicoId, indice) => {
+      const naFila = this.oferta(
+        {
+          id: `fila-${vaga.id}-${medicoId}`,
+          vagaId: vaga.id,
+          medicoId,
+          sequencia: enviadas.length + indice + 1,
+          status: "aberta",
+          enviadaEm: this.relogio.agora(),
+          respondidaEm: null,
+          motivoRecusa: null,
+        },
+        vaga,
+        recomendacao,
+      );
+      ofertas.push({
+        ...naFila,
+        status: fechada ? "cancelada" : "na_fila",
+        enviadaEm: null,
+        expiraEm: null,
+      });
+    });
+    const atual = ofertas.find((o) => o.status === "aberta");
+    return { vagaId: vaga.id, ofertas, atualId: atual?.id ?? null };
   }
 
-  async listarOfertas(): Promise<Oferta[]> {
-    throw new NaoImplementadoError("listarOfertas", this.modo);
+  async listarOfertas(medicoId: string): Promise<Oferta[]> {
+    await this.operacao((geracao) => this.processarPrazos(geracao));
+    const doMedico = this.dados.ofertas.filter((o) => o.medicoId === medicoId);
+    const ofertas = await Promise.all(doMedico.map((guardada) => this.ofertaCompleta(guardada)));
+    return ofertas.sort((a, b) => ((a.enviadaEm ?? "") < (b.enviadaEm ?? "") ? 1 : -1));
   }
 
-  async obterOferta(): Promise<Oferta> {
-    throw new NaoImplementadoError("obterOferta", this.modo);
+  async obterOferta(ofertaId: string): Promise<Oferta> {
+    await this.operacao((geracao) => this.processarPrazos(geracao));
+    return this.ofertaCompleta(this.ofertaGuardadaOuErro(ofertaId));
   }
 
-  async responderOferta(): Promise<Oferta> {
-    throw new NaoImplementadoError("responderOferta", this.modo);
+  /**
+   * Aceitar ou recusar (D4 e D5). No aceite a vaga fecha; na recusa, o próximo aprovado recebe a
+   * oferta na hora. A demonstração não confere de quem é a oferta: quem conduz faz os dois papéis.
+   */
+  responderOferta(entrada: RespostaOfertaInput): Promise<Oferta> {
+    return this.operacao(async (geracao) => {
+      const input = validar(RespostaOfertaInputSchema, entrada);
+      const guardada = this.ofertaGuardadaOuErro(input.ofertaId);
+      if (guardada.status !== "aberta") {
+        throw new EstadoInvalidoError("Esta oferta já foi fechada.");
+      }
+      const agora = this.relogio.agora();
+      if (minutosEntre(this.expiraEm(guardada), agora) <= 0) {
+        throw new EstadoInvalidoError("O prazo desta oferta já acabou.");
+      }
+      const vaga = this.vagaOuErro(guardada.vagaId);
+      const recomendacao = await this.recomendacaoDe(vaga);
+      const ofertas = copia(this.dados.ofertas);
+      const respondida = ofertas.find((o) => o.id === guardada.id) as OfertaGuardada;
+      const aceitou = input.resposta === "aceitar";
+      const enviadas: EventoPlantao[] = [];
+      respondida.status = aceitou ? "aceita" : "recusada";
+      respondida.respondidaEm = agora;
+      respondida.motivoRecusa = aceitou ? null : (input.motivo ?? null);
+
+      const registros: EntradaDeRegistro[] = [
+        {
+          ocorridoEm: agora,
+          papelAtor: "doctor",
+          atorPseudoId: guardada.medicoId.slice(0, 8),
+          acao: aceitou ? "offer_accepted" : "offer_declined",
+          entidadeTipo: "offer",
+          entidadeId: guardada.id,
+          modeloVersao: recomendacao.modeloVersao,
+          detalhes: {
+            shift_id: vaga.id,
+            decline_reason: aceitou ? null : MOTIVO_RECUSA_DO_BACKEND[input.motivo ?? "outro"],
+          },
+        },
+      ];
+      const status = aceitou
+        ? "preenchida"
+        : this.chamarProximo(
+            vaga,
+            this.aprovadosDe(vaga.id),
+            ofertas,
+            agora,
+            registros,
+            recomendacao.modeloVersao,
+            enviadas,
+          );
+      const novos = await this.encadear(registros);
+      const nome = this.oferta(respondida, vaga, recomendacao).medico.nome;
+      this.aplicar(geracao, () => {
+        this.dados.ofertas = ofertas;
+        this.mudarVaga(vaga.id, status, aceitou ? { medicoId: respondida.medicoId, nome } : null, agora);
+        this.dados.auditoria.push(...novos);
+      });
+      this.barramento.emitir({
+        tipo: "oferta_respondida",
+        ofertaId: guardada.id,
+        vagaId: vaga.id,
+        status: respondida.status,
+        em: agora,
+      });
+      for (const evento of enviadas) this.barramento.emitir(evento);
+      if (aceitou) {
+        this.barramento.emitir({ tipo: "vaga_preenchida", vagaId: vaga.id, medicoId: respondida.medicoId, em: agora });
+      }
+      return this.oferta(respondida, vaga, recomendacao);
+    });
   }
 
+  /** D5 do ADR 0015: a resposta não se desfaz, porque a cascata já seguiu com ela. */
   async desfazerResposta(): Promise<Oferta> {
-    throw new NaoImplementadoError("desfazerResposta", this.modo);
+    throw new EstadoInvalidoError(
+      "A resposta não se desfaz: a cascata já seguiu com ela. Fale com a coordenação.",
+    );
   }
 
-  async contestar(): Promise<Contestacao> {
-    throw new NaoImplementadoError("contestar", this.modo);
+  /**
+   * Faz o prazo da oferta aberta vencer agora: o relógio anda até o fim do prazo, a oferta expira
+   * e o próximo aprovado é chamado. É o que o n8n faz no sistema real, aqui a um clique.
+   */
+  passarPrazo(vagaId: string): Promise<Cascata> {
+    return this.operacao(async (geracao) => {
+      const vaga = this.vagaOuErro(vagaId);
+      const aberta = this.ofertasDaVaga(vaga.id).find((o) => o.status === "aberta");
+      if (!aberta) throw new EstadoInvalidoError("Nenhuma oferta está esperando resposta nesta vaga.");
+      const faltam = Math.max(0, minutosEntre(this.expiraEm(aberta), this.relogio.agora()));
+      this.aplicar(geracao, () => {
+        this.relogio.avancar(faltam);
+        this.dados.minutosAvancados = this.relogio.minutosAvancados;
+      });
+      await this.processarPrazos(geracao);
+    }).then(() => this.obterCascata(vagaId));
   }
 
-  async listarContestacoes(): Promise<Contestacao[]> {
-    throw new NaoImplementadoError("listarContestacoes", this.modo);
+  async contestar(entrada: ContestarInput): Promise<Contestacao> {
+    return this.operacao(async (geracao) => {
+      const input = validar(ContestarInputSchema, entrada);
+      const guardada = this.ofertaGuardadaOuErro(input.ofertaId);
+      if (this.dados.contestacoes.some((c) => c.ofertaId === guardada.id)) {
+        throw new EstadoInvalidoError("Esta oferta já tem uma contestação.");
+      }
+      const vaga = this.vagaOuErro(guardada.vagaId);
+      const recomendacao = await this.recomendacaoDe(vaga);
+      const oferta = this.oferta(guardada, vaga, recomendacao);
+      const texto = removerDadosPessoais(input.texto.trim(), this.nomesConhecidos(recomendacao));
+      if (!semMarcasDeRemocao(texto).trim()) {
+        throw new EntradaInvalidaError("Escreva o que está errado, sem nome, CRM ou telefone.");
+      }
+      const agora = this.relogio.agora();
+      const numero = this.dados.contestacoes.length + 1;
+      const contestacao: Contestacao = {
+        id: `contestacao-${numero}`,
+        protocolo: `CT-DEMO-${String(numero).padStart(4, "0")}`,
+        ofertaId: guardada.id,
+        vagaId: vaga.id,
+        medico: oferta.medico,
+        motivo: input.motivo,
+        texto,
+        criadaEm: agora,
+        status: "aberta",
+        recomendacao: {
+          posicao: recomendacao.candidatos.find((c) => c.medico.id === guardada.medicoId)?.posicao ?? 0,
+          explicacao: oferta.porQue,
+        },
+        resposta: null,
+      };
+      const [registro] = await this.encadear([
+        {
+          ocorridoEm: agora,
+          papelAtor: "doctor",
+          atorPseudoId: guardada.medicoId.slice(0, 8),
+          acao: "contestation_opened",
+          entidadeTipo: "contestation",
+          entidadeId: contestacao.id,
+          modeloVersao: recomendacao.modeloVersao,
+          detalhes: { shift_id: vaga.id, offer_id: guardada.id, reason: input.motivo },
+        },
+      ]);
+      this.aplicar(geracao, () => {
+        this.dados.contestacoes.push(copia(contestacao));
+        this.dados.auditoria.push(registro as RegistroAuditoria);
+      });
+      this.barramento.emitir({ tipo: "contestacao_aberta", contestacaoId: contestacao.id, em: agora });
+      return copia(contestacao);
+    });
   }
 
-  async responderContestacao(): Promise<Contestacao> {
-    throw new NaoImplementadoError("responderContestacao", this.modo);
+  async listarContestacoes(filtro?: { medicoId?: string }): Promise<Contestacao[]> {
+    await this.esperar();
+    const todas = filtro?.medicoId
+      ? this.dados.contestacoes.filter((c) => c.medico.id === filtro.medicoId)
+      : this.dados.contestacoes;
+    return copia(todas).sort((a, b) => (a.criadaEm < b.criadaEm ? 1 : -1));
+  }
+
+  responderContestacao(entrada: { id: string; texto: string }): Promise<Contestacao> {
+    return this.operacao(async (geracao) => {
+      const contestacao = this.dados.contestacoes.find((c) => c.id === entrada.id);
+      if (!contestacao) throw new NaoEncontradoError("A contestação");
+      if (contestacao.status === "respondida") {
+        throw new EstadoInvalidoError("Esta contestação já foi respondida.");
+      }
+      const vaga = this.vagaOuErro(contestacao.vagaId);
+      const recomendacao = await this.recomendacaoDe(vaga);
+      const texto = removerDadosPessoais(
+        validar(z.string().max(LIMITE_TEXTO_LIVRE), entrada.texto).trim(),
+        this.nomesConhecidos(recomendacao),
+      );
+      if (!semMarcasDeRemocao(texto).trim()) {
+        throw new EntradaInvalidaError("Escreva a resposta antes de enviar.");
+      }
+      const agora = this.relogio.agora();
+      const coordenador = this.coordenadorDe(vaga.unidade.id);
+      const [registro] = await this.encadear([
+        {
+          ocorridoEm: agora,
+          papelAtor: "coordinator",
+          atorPseudoId: coordenador.pseudoId,
+          acao: "contestation_answered",
+          entidadeTipo: "contestation",
+          entidadeId: contestacao.id,
+          modeloVersao: recomendacao.modeloVersao,
+          detalhes: { shift_id: vaga.id, offer_id: contestacao.ofertaId },
+        },
+      ]);
+      const respondida: Contestacao = {
+        ...copia(contestacao),
+        status: "respondida",
+        resposta: { texto, porNome: coordenador.nome, em: agora },
+      };
+      this.aplicar(geracao, () => {
+        this.dados.contestacoes = this.dados.contestacoes.map((c) => (c.id === respondida.id ? copia(respondida) : c));
+        this.dados.auditoria.push(registro as RegistroAuditoria);
+      });
+      this.barramento.emitir({ tipo: "contestacao_respondida", contestacaoId: respondida.id, em: agora });
+      return respondida;
+    });
+  }
+
+  /**
+   * Fecha as ofertas cujo prazo venceu e chama o próximo de cada vaga, como o n8n e a API fazem
+   * no sistema real. Se o relógio pulou mais de um prazo, a cascata anda mais de um passo.
+   */
+  private async processarPrazos(geracao: number): Promise<void> {
+    const agora = this.relogio.agora();
+    const ofertas = copia(this.dados.ofertas);
+    const registros: EntradaDeRegistro[] = [];
+    const mudancas = new Map<string, Vaga["status"]>();
+    const enviadas: EventoPlantao[] = [];
+    const modelo = this.mundo.fichaModelo.versao;
+    for (const oferta of ofertas) {
+      // A lista cresce enquanto é percorrida: quem acabou de ser chamado também é conferido.
+      if (oferta.status !== "aberta") continue;
+      const expira = this.expiraEm(oferta);
+      if (minutosEntre(agora, expira) < 0) continue;
+      oferta.status = "expirada";
+      registros.push({
+        ocorridoEm: expira,
+        papelAtor: "system",
+        atorPseudoId: AGENTE_DO_SISTEMA,
+        acao: "offer_expired",
+        entidadeTipo: "offer",
+        entidadeId: oferta.id,
+        modeloVersao: modelo,
+        detalhes: { shift_id: oferta.vagaId },
+      });
+      const vaga = this.vagaOuErro(oferta.vagaId);
+      mudancas.set(
+        vaga.id,
+        this.chamarProximo(vaga, this.aprovadosDe(vaga.id), ofertas, expira, registros, modelo, enviadas),
+      );
+    }
+    if (registros.length === 0) return;
+    const novos = await this.encadear(registros);
+    this.aplicar(geracao, () => {
+      this.dados.ofertas = ofertas;
+      for (const [vagaId, status] of mudancas) this.mudarVaga(vagaId, status, null, agora);
+      this.dados.auditoria.push(...novos);
+    });
+    for (const evento of enviadas) this.barramento.emitir(evento);
+  }
+
+  /** Chama o próximo aprovado que ainda não recebeu oferta. Sem ninguém, a vaga fica descoberta. */
+  private chamarProximo(
+    vaga: Vaga,
+    aprovados: readonly string[],
+    ofertas: OfertaGuardada[],
+    em: DataHora,
+    registros: EntradaDeRegistro[],
+    modeloVersao: string,
+    eventos: EventoPlantao[],
+  ): Vaga["status"] {
+    const daVaga = ofertas.filter((o) => o.vagaId === vaga.id);
+    const chamados = new Set(daVaga.map((o) => o.medicoId));
+    const proximo = aprovados.find((id) => !chamados.has(id));
+    if (!proximo) {
+      registros.push({
+        ocorridoEm: em,
+        papelAtor: "system",
+        atorPseudoId: AGENTE_DO_SISTEMA,
+        acao: "shift_uncovered",
+        entidadeTipo: "shift",
+        entidadeId: vaga.id,
+        modeloVersao,
+        detalhes: { offers: daVaga.length },
+      });
+      return "sem_cobertura";
+    }
+    const sequencia = daVaga.length + 1;
+    const id = `oferta-${vaga.id}-${sequencia}`;
+    ofertas.push({
+      id,
+      vagaId: vaga.id,
+      medicoId: proximo,
+      sequencia,
+      status: "aberta",
+      enviadaEm: em,
+      respondidaEm: null,
+      motivoRecusa: null,
+    });
+    registros.push({
+      ocorridoEm: em,
+      papelAtor: "system",
+      atorPseudoId: AGENTE_DO_SISTEMA,
+      acao: "offer_sent",
+      entidadeTipo: "offer",
+      entidadeId: id,
+      modeloVersao,
+      detalhes: { shift_id: vaga.id, sequence_no: sequencia },
+    });
+    // Quem chama emite depois de gravar: o aviso não sai para uma mudança que não aconteceu.
+    eventos.push({ tipo: "oferta_enviada", ofertaId: id, vagaId: vaga.id, medicoId: proximo, em });
+    return "oferta_em_andamento";
+  }
+
+  private mudarVaga(
+    vagaId: string,
+    status: Vaga["status"],
+    preenchidaPor: Vaga["preenchidaPor"],
+    agora: DataHora,
+  ): void {
+    const vaga = this.vagaOuErro(vagaId);
+    vaga.status = status;
+    if (preenchidaPor) {
+      vaga.preenchidaPor = preenchidaPor;
+      vaga.tempoAtePreencherMin = Math.max(0, Math.round(minutosEntre(agora, vaga.criadaEm)));
+    }
+  }
+
+  private aprovadosDe(vagaId: string): string[] {
+    return this.dados.decisoes[vagaId]?.medicoIds ?? [];
+  }
+
+  private ofertasDaVaga(vagaId: string): OfertaGuardada[] {
+    return this.dados.ofertas
+      .filter((o) => o.vagaId === vagaId)
+      .sort((a, b) => a.sequencia - b.sequencia);
+  }
+
+  private ofertaGuardadaOuErro(ofertaId: string): OfertaGuardada {
+    const oferta = this.dados.ofertas.find((o) => o.id === ofertaId);
+    if (!oferta) throw new NaoEncontradoError("A oferta");
+    return oferta;
+  }
+
+  private expiraEm(oferta: OfertaGuardada): DataHora {
+    return somarMinutos(oferta.enviadaEm, this.mundo.politica.ttlOfertaMin);
+  }
+
+  private async ofertaCompleta(guardada: OfertaGuardada): Promise<Oferta> {
+    const vaga = this.vagaOuErro(guardada.vagaId);
+    return this.oferta(guardada, vaga, await this.recomendacaoDe(vaga));
+  }
+
+  /** A oferta como a tela vê: o plantão da vaga e o "Por que você" da recomendação aprovada. */
+  private oferta(guardada: OfertaGuardada, vaga: Vaga, recomendacao: Recomendacao): Oferta {
+    const candidato = recomendacao.candidatos.find((c) => c.medico.id === guardada.medicoId);
+    const persona = this.mundo.personas.find(
+      (p) => p.papel === "medico" && p.medico.id === guardada.medicoId,
+    );
+    const medico =
+      candidato?.medico ??
+      (persona?.papel === "medico" ? persona.medico : null) ?? {
+        id: guardada.medicoId,
+        pseudonimo: guardada.medicoId.slice(0, 8),
+        nome: `Médico ${guardada.medicoId.slice(0, 8)}`,
+        crm: "Cadastro restrito",
+        especialidade: vaga.especialidade ?? "clinica_medica",
+        especialidadeSecundaria: null,
+      };
+    const ttl = this.mundo.politica.ttlOfertaMin;
+    const distancia = candidato?.fatores.distance_km;
+    return copia({
+      id: guardada.id,
+      vagaId: vaga.id,
+      medico,
+      sequencia: guardada.sequencia,
+      status: guardada.status,
+      enviadaEm: guardada.enviadaEm,
+      expiraEm: somarMinutos(guardada.enviadaEm, ttl),
+      respondidaEm: guardada.respondidaEm,
+      ttlMin: ttl,
+      motivoRecusa: guardada.motivoRecusa,
+      vaga: {
+        unidade: vaga.unidade,
+        especialidade: vaga.especialidade ?? medico.especialidade,
+        inicio: vaga.inicio ?? vaga.criadaEm,
+        fim: vaga.fim ?? vaga.criadaEm,
+        urgencia: vaga.urgencia,
+        distanciaKm: typeof distancia === "number" ? distancia : null,
+      },
+      porQue: candidato?.explicacao ?? { texto: "", fatoresCitados: [], fonte: "template" },
+      fatores: candidato?.fatores ?? Object.fromEntries(FATORES.map((f) => [f, 0])),
+      contribuicoes: candidato?.contribuicoes ?? Object.fromEntries(FATORES.map((f) => [f, 0])),
+      alertas: candidato?.alertas ?? [],
+    }) as Oferta;
   }
 
   // --- Auditoria e indicadores ----------------------------------------------------------------

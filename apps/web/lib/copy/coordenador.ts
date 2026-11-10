@@ -127,7 +127,7 @@ export const ORDEM = {
   acaoFalhou: "Esta ação não foi registrada. Tente de novo.",
   ofertaEmAndamentoTitulo: "Oferta em andamento",
   ofertaEmAndamento:
-    "A decisão está na trilha de auditoria. No sistema real, a cascata aparece logo abaixo e se atualiza sozinha; no modo de demonstração, ela ainda não é simulada.",
+    "A decisão está na trilha de auditoria. A cascata de ofertas aparece logo abaixo e se atualiza sozinha.",
   preenchida: (nome: string, minutos: number | null) =>
     `Aceita por ${nome}${minutos ? ` em ${minutos} min` : ""} (simulado).`,
 } as const;

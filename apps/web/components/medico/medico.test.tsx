@@ -165,7 +165,7 @@ describe("tela de ofertas (4.1 e 4.2)", () => {
   it("no modo que ainda não tem ofertas, diz isso em vez de quebrar", async () => {
     api.listarOfertas.mockRejectedValue(new NaoImplementadoError("listarOfertas", "demo"));
     telaDeOfertas();
-    expect(await screen.findByText(/Elas funcionam com o login/)).toBeInTheDocument();
+    expect(await screen.findByText(/não estão disponíveis neste modo/)).toBeInTheDocument();
   });
 });
 
@@ -209,7 +209,7 @@ describe("cascata na tela da vaga (4.5)", () => {
     ]);
   });
 
-  it("no modo que ainda não simula a cascata, a seção não aparece", async () => {
+  it("num modo sem a cascata, a seção não aparece", async () => {
     api.obterCascata.mockRejectedValue(new NaoImplementadoError("obterCascata", "demo"));
     const { container } = render(
       <ApiProvider modo="live">
