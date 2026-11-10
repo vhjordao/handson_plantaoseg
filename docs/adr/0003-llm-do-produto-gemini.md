@@ -83,7 +83,7 @@ O resultado do teste está em [`docs/teste-manual-gemini.md`](../teste-manual-ge
 - **Onde a chave fica:** só no `.env` do servidor, com permissão 600, lido pelo contêiner da API. Não vai para a Vercel, para o navegador, para o Git nem para a resposta da API. A web fala com a API pela rota do próprio site ([ADR 0016](0016-modo-real-pela-rota-do-site.md)), e o modo de demonstração nem chama a API.
 - **Quem alcança o Gemini:** só a leitura da vaga, que pede login de coordenador. Os logins da demonstração estão só com o Victor.
 - **Por que segue sem custo:** o projeto da chave não tem conta de faturamento, e o Victor confere isso antes de ligar e antes do ensaio. Passando da cota, o Gemini recusa, e a leitura segue pelas regras.
-- **O que muda no código:** um teto diário de chamadas na API, abaixo da cota gratuita, para um uso fora do roteiro não gastar a cota do dia da apresentação. A reescrita dos motivos continua desligada.
+- **O que muda no código:** um teto diário de chamadas na API, abaixo da cota gratuita, para um uso fora do roteiro não gastar a cota do dia da apresentação. A reescrita dos motivos continua desligada. *Feito em 10/11 (imagem 0.5.0):* `LLM_TETO_DIARIO`, 200 por padrão. Cada pedido ao serviço conta, inclusive a repetição da alta demanda. O dia é o de UTC, e a conta fica na memória da API (um reinício zera), por isso o teto fica abaixo da metade da cota. Passando dele, a leitura sai pelas regras, sem abrir a pausa de falha, e o registro avisa uma vez por dia, sem o texto.
 - **Ao fim do projeto:** a linha sai do `.env` do servidor, e a chave é apagada no AI Studio (10.1).
 
 ## Pendências

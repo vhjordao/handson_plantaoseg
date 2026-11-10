@@ -9,18 +9,18 @@ import { lerConfigLive } from "@/lib/api/live/config";
 import { entrarComLogin } from "@/lib/session/acoes";
 
 /**
- * A entrada do sistema real, para a demonstração guiada (D1 do ADR 0015): e-mail e senha dos
- * logins criados pelo script. Aceita colar e o gerenciador de senhas (WCAG 3.3.8). Sem a
- * configuração do sistema real, nada aparece.
+ * A entrada do sistema (D1 do ADR 0015 e 3.7 do roteiro): e-mail e senha dos logins criados
+ * pelo script, para o coordenador e para os médicos. Aceita colar e o gerenciador de senhas
+ * (WCAG 3.3.8). Sem a configuração do sistema real, o formulário avisa e fica desligado.
  */
 export function EntrarComLogin({ de }: { de?: string }) {
   const config = React.useMemo(() => lerConfigLive(), []);
   const [erro, setErro] = React.useState<string | null>(null);
   const [enviando, setEnviando] = React.useState(false);
-  if (!config) return null;
 
   const enviar = async (evento: React.FormEvent<HTMLFormElement>) => {
     evento.preventDefault();
+    if (!config) return;
     const dados = new FormData(evento.currentTarget);
     const email = String(dados.get("email") ?? "");
     const senha = String(dados.get("senha") ?? "");
@@ -57,12 +57,17 @@ export function EntrarComLogin({ de }: { de?: string }) {
       className="mt-10 max-w-[44rem] rounded-cartao border border-divisor bg-papel p-5"
     >
       <h2 id="titulo-login" className="font-serif text-2xl font-semibold">
-        Entrar no sistema real
+        E-mail e senha
       </h2>
       <p className="mt-2 text-tinta-suave">
-        Para a demonstração guiada, com os logins da demonstração. Os dados continuam fictícios; o
-        que muda é que tudo passa pela API, pelo banco e pela cascata de verdade.
+        O coordenador e os médicos entram aqui, e o sistema abre a área de cada um. Os dados
+        continuam fictícios; tudo passa pela API, pelo banco e pela cascata de verdade.
       </p>
+      {!config ? (
+        <Alert tone="info" className="mt-4">
+          O login não está ligado neste endereço. Use o modo de demonstração, no link abaixo.
+        </Alert>
+      ) : null}
       {erro ? (
         <Alert tone="erro" className="mt-4">
           {erro}
@@ -80,8 +85,8 @@ export function EntrarComLogin({ de }: { de?: string }) {
           )}
         </Field>
         <div className="sm:col-span-2">
-          <Button type="submit" disabled={enviando}>
-            {enviando ? "Entrando…" : "Entrar com login"}
+          <Button type="submit" disabled={enviando || !config}>
+            {enviando ? "Entrando…" : "Entrar"}
           </Button>
         </div>
       </form>

@@ -5,9 +5,11 @@ segredos, nome, CRM nem telefone. Toda chamada passa por esta interface, para qu
 chave, a falha do serviço ou uma resposta inválida caiam no caminho sem LLM.
 """
 
+import datetime as dt
 import logging
 import math
 import os
+import threading
 import time
 from collections.abc import Callable, Mapping
 from typing import Any, Protocol
@@ -32,6 +34,16 @@ PAUSA_DEPOIS_DE_FALHA_S = 60.0
 # Estável, com camada gratuita, e o único que respondeu de forma confiável na medição de
 # 05/11/2026 (docs/teste-manual-gemini.md).
 MODELO_PADRAO = "gemini-3.1-flash-lite"
+# Teto de pedidos ao Gemini por dia (3.8 do roteiro), bem abaixo da cota gratuita: um uso fora
+# do roteiro não pode gastar a cota do dia da apresentação. Passando dele, a leitura sai pelas
+# regras, sem erro na tela. O dia é o de UTC e a conta fica na memória da API (reinício zera);
+# por isso o teto fica abaixo da metade da cota, e a cota nunca é alcançada. `LLM_TETO_DIARIO`
+# muda o valor; 0 desliga o Gemini sem tirar a chave.
+TETO_DIARIO_PADRAO = 200
+
+
+def _hoje_utc() -> dt.date:
+    return dt.datetime.now(dt.UTC).date()
 
 
 class LLMUnavailableError(RuntimeError):
@@ -70,6 +82,8 @@ class GeminiClient:
         pausa_s: float = PAUSA_DEPOIS_DE_FALHA_S,
         clock: Callable[[], float] = time.monotonic,
         dormir: Callable[[float], None] = time.sleep,
+        teto_diario: int = TETO_DIARIO_PADRAO,
+        hoje: Callable[[], dt.date] = _hoje_utc,
     ) -> None:
         self._api_key = api_key
         self.model = model
@@ -80,6 +94,35 @@ class GeminiClient:
         self._dormir = dormir
         self._sdk: Any = None
         self._pausado_ate = 0.0
+        self.teto_diario = max(0, teto_diario)
+        self._hoje = hoje
+        self._dia: dt.date | None = None
+        self._pedidos_no_dia = 0
+        self._avisou_teto = False
+        self._trava = threading.Lock()
+
+    def pedidos_hoje(self) -> int:
+        """Quantos pedidos foram ao Gemini hoje (a conta do teto)."""
+        with self._trava:
+            return self._pedidos_no_dia if self._dia == self._hoje() else 0
+
+    def _reservar_pedido(self) -> bool:
+        """Conta um pedido antes de enviá-lo; sem saldo no dia, devolve `False` e não conta."""
+        with self._trava:
+            hoje = self._hoje()
+            if self._dia != hoje:
+                self._dia, self._pedidos_no_dia, self._avisou_teto = hoje, 0, False
+            if self._pedidos_no_dia >= self.teto_diario:
+                if not self._avisou_teto:
+                    # Uma vez por dia, e só a conta: nada do texto.
+                    logger.warning(
+                        "Gemini: teto de %d pedidos do dia alcançado, regras até amanhã",
+                        self.teto_diario,
+                    )
+                    self._avisou_teto = True
+                return False
+            self._pedidos_no_dia += 1
+            return True
 
     def preparar(self) -> None:
         """Carrega o SDK na subida da API, para a primeira chamada não pagar esse tempo."""
@@ -106,6 +149,9 @@ class GeminiClient:
     def generate_json(self, *, system: str, user: str, schema: dict[str, Any]) -> str:
         if self._clock() < self._pausado_ate:
             raise LLMUnavailableError("Gemini em pausa depois de uma falha")
+        # Fora do `try` abaixo: o teto não é falha do serviço e não abre a pausa.
+        if not self._reservar_pedido():
+            raise LLMUnavailableError("teto diário de pedidos ao Gemini alcançado")
         client = self._cliente()
         from google.genai import types
 
@@ -134,7 +180,10 @@ class GeminiClient:
             ).text
         except Exception as exc:
             rapido = self._clock() - inicio <= REPETE_SE_FALHOU_EM_ATE_S
+            # A repetição também conta no teto: sem saldo no dia, fica a falha original.
             if getattr(exc, "code", None) != CODIGO_ALTA_DEMANDA or not rapido:
+                raise
+            if not self._reservar_pedido():
                 raise
         self._dormir(ESPERA_ANTES_DE_REPETIR_S)
         return client.models.generate_content(model=self.model, contents=user, config=config).text
@@ -146,4 +195,12 @@ def client_from_env(env: Mapping[str, str] | None = None) -> LLMClient:
     key = source.get("GEMINI_API_KEY", "")
     if not key:
         return NullClient()
-    return GeminiClient(key, source.get("LLM_MODEL_EXTRACAO", MODELO_PADRAO))
+    teto = source.get("LLM_TETO_DIARIO", "").strip()
+    try:
+        teto_diario = int(teto) if teto else TETO_DIARIO_PADRAO
+    except ValueError:
+        logger.warning("LLM_TETO_DIARIO inválido (%r): usando %d", teto, TETO_DIARIO_PADRAO)
+        teto_diario = TETO_DIARIO_PADRAO
+    return GeminiClient(
+        key, source.get("LLM_MODEL_EXTRACAO", MODELO_PADRAO), teto_diario=teto_diario
+    )

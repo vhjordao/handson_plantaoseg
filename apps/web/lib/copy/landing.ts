@@ -359,7 +359,7 @@ export const PERGUNTAS: TemaDePerguntas[] = [
 
 export const FIM = {
   titulo: "Veja a ordem sugerida e decida.",
-  texto: "Entre como coordenador, como médico ou abra o telão. Não há senha nem dado real.",
+  texto: "Entre com o seu login, como coordenador ou como médico. Os dados são todos fictícios.",
 } as const;
 
 export const RODAPE = {

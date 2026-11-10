@@ -40,7 +40,7 @@
   }
 }
 
-/* Escuro: segue o sistema e é o padrão do telão (data-theme="dark"). */
+/* Escuro: segue o sistema, ou data-theme="dark". */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --gaze: #0c141c;

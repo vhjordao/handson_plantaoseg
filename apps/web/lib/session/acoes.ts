@@ -24,7 +24,7 @@ async function abrirSessao(papel: "coordenador" | "medico", formData: FormData):
   const personaId = formData.get("personaId");
   const de = formData.get("de");
   const persona = encontrarPersona(papel, typeof personaId === "string" ? personaId : null);
-  if (!persona) redirect(`/entrar?papel=${papel}`);
+  if (!persona) redirect(`/entrar/demonstracao?papel=${papel}`);
 
   await gravarSessao({ papel, personaId: persona.id, modo: "demo" });
   redirect(destinoSeguro(typeof de === "string" ? de : null, papel as Papel));
@@ -86,7 +86,7 @@ export async function trocarParaDemonstracao(formData: FormData): Promise<void> 
   const papel = formData.get("papel") === "medico" ? "medico" : "coordenador";
   const { coordenadores, medicos } = listarPersonasDemo();
   const persona = papel === "medico" ? medicos[0] : coordenadores[0];
-  if (!persona) redirect("/entrar");
+  if (!persona) redirect("/entrar/demonstracao");
   await gravarSessao({ papel, personaId: persona.id, modo: "demo" });
   redirect(destinoSeguro(null, papel));
 }

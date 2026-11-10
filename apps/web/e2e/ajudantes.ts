@@ -5,13 +5,13 @@ import { expect, type Page } from "@playwright/test";
 export const REGRAS_WCAG = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
 
 export async function entrarComoCoordenador(page: Page) {
-  await page.goto("/entrar");
+  await page.goto("/entrar/demonstracao");
   await page.getByRole("button", { name: "Entrar como coordenador" }).click();
   await page.waitForURL("**/coordenador/vagas");
 }
 
 export async function entrarComoMedico(page: Page) {
-  await page.goto("/entrar");
+  await page.goto("/entrar/demonstracao");
   const botao = page.getByRole("button", { name: "Entrar como médico" });
   // A persona é sorteada depois que a página monta; até lá o botão fica desabilitado.
   await expect(botao).toBeEnabled({ timeout: 10_000 });

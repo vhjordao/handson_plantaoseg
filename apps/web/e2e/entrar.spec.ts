@@ -1,15 +1,30 @@
 import { expect, test } from "@playwright/test";
 import { entrarComoCoordenador, entrarComoMedico, semViolacoesGraves } from "./ajudantes";
 
-test.describe("entrada por persona", () => {
-  test("as três portas aparecem, sem senha, com aviso de dados reais", async ({ page }) => {
+test.describe("entrada só com login (3.7)", () => {
+  test("a entrada tem só e-mail e senha, sem portas por persona e sem telão", async ({ page }) => {
     await page.goto("/entrar");
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Entrar na demonstração");
-    await expect(page.getByText("Sem senha")).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Entrar");
     await expect(page.getByText("Não digite dados reais")).toBeVisible();
-    await expect(page.getByRole("heading", { level: 2, name: "Coordenador" })).toBeVisible();
-    await expect(page.getByRole("heading", { level: 2, name: "Médico" })).toBeVisible();
-    await expect(page.getByRole("heading", { level: 2, name: "Telão" })).toBeVisible();
+    await expect(page.getByLabel("E-mail")).toBeVisible();
+    await expect(page.getByLabel("Senha")).toBeVisible();
+    await expect(page.getByRole("button", { name: "Entrar como coordenador" })).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "Entrar como médico" })).toHaveCount(0);
+    await expect(page.getByText("Telão")).toHaveCount(0);
+  });
+
+  test("o telão saiu do site", async ({ page }) => {
+    const resposta = await page.goto("/telao");
+    expect(resposta?.status()).toBe(404);
+  });
+
+  test("o modo de demonstração fica por um link discreto, com as duas portas", async ({ page }) => {
+    await page.goto("/entrar");
+    await page.getByRole("link", { name: "Usar o modo de demonstração" }).click();
+    await page.waitForURL("**/entrar/demonstracao");
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Modo de demonstração");
+    await expect(page.getByText("Sem senha")).toBeVisible();
+    await expect(page.getByRole("heading", { level: 2 })).toHaveText(["Coordenador", "Médico"]);
     await expect(page.locator('input[type="password"]')).toHaveCount(0);
   });
 
@@ -22,6 +37,9 @@ test.describe("entrada por persona", () => {
   test("quem volta do login reencontra o filtro da lista", async ({ page }) => {
     await page.goto("/coordenador/vagas?status=risco");
     await expect(page).toHaveURL(/de=%2Fcoordenador%2Fvagas%3Fstatus%3Drisco/);
+    // O link do modo de demonstração leva junto o papel e a rota de origem.
+    await page.getByRole("link", { name: "Usar o modo de demonstração" }).click();
+    await expect(page).toHaveURL(/\/entrar\/demonstracao\?papel=coordenador&de=/);
     await page.getByRole("button", { name: "Entrar como coordenador" }).click();
     await expect(page).toHaveURL(/\/coordenador\/vagas\?status=risco$/);
   });
@@ -49,7 +67,7 @@ test.describe("entrada por persona", () => {
   });
 
   test("entrar como médico sorteia uma persona, deixa sortear outra e abre as ofertas", async ({ page }) => {
-    await page.goto("/entrar");
+    await page.goto("/entrar/demonstracao");
     const entrar = page.getByRole("button", { name: "Entrar como médico" });
     await expect(entrar).toBeEnabled({ timeout: 10_000 });
     const cartao = page.getByRole("region", { name: "Médico" });
@@ -71,7 +89,7 @@ test.describe("entrada por persona", () => {
   });
 
   test("com ?papel=medico, a porta do médico vem primeiro (posição visual)", async ({ page }) => {
-    await page.goto("/entrar?papel=medico");
+    await page.goto("/entrar/demonstracao?papel=medico");
     const [m, c] = await Promise.all([
       page.getByRole("region", { name: "Médico" }).boundingBox(),
       page.getByRole("region", { name: "Coordenador" }).boundingBox(),
@@ -107,9 +125,15 @@ test.describe("entrada por persona", () => {
     test(`@a11y axe sem violações graves em /entrar, na plataforma e na conta (${esquema === "light" ? "claro" : "escuro"})`, async ({ page }) => {
       await page.emulateMedia({ colorScheme: esquema });
       await page.goto("/entrar");
-      await expect(page.getByRole("button", { name: "Entrar como médico" })).toBeEnabled({ timeout: 10_000 });
       const rotas: Array<{ ir: () => Promise<void>; titulo: RegExp }> = [
-        { ir: async () => {}, titulo: /^Entrar na demonstração \| PlantãoSeguro$/ },
+        { ir: async () => {}, titulo: /^Entrar \| PlantãoSeguro$/ },
+        {
+          ir: async () => {
+            await page.goto("/entrar/demonstracao");
+            await expect(page.getByRole("button", { name: "Entrar como médico" })).toBeEnabled({ timeout: 10_000 });
+          },
+          titulo: /^Modo de demonstração \| PlantãoSeguro$/,
+        },
         { ir: () => entrarComoCoordenador(page), titulo: /^Vagas \| PlantãoSeguro$/ },
         {
           ir: async () => {

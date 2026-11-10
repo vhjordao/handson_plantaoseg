@@ -1,5 +1,5 @@
 /**
- * Sessão por persona, sem senha (WCAG 3.3.8; ADR 0014).
+ * Sessão do site: login com e-mail e senha (3.7) ou persona do modo de demonstração (ADR 0014).
  *
  * O cookie guarda só `{papel, personaId}`: nada pessoal. Na demonstração ele **não é assinado**,
  * porque tudo é simulação e não há dado real a proteger. No modo `live`, o login vem do Supabase
@@ -13,7 +13,6 @@ export const DURACAO_SESSAO_SEGUNDOS = 60 * 60 * 8;
 export const ROTA_INICIAL: Record<Papel, string> = {
   coordenador: "/coordenador/vagas",
   medico: "/medico/ofertas",
-  telao: "/telao",
 };
 
 export function lerSessaoDoValor(valor: string | undefined): Sessao | null {
