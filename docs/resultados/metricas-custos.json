@@ -1,0 +1,1129 @@
+{
+  "label": "premissas",
+  "items": [
+    {
+      "key": "supabase",
+      "label": "Banco e login (Supabase)",
+      "recurring": true,
+      "source": "pública",
+      "note": "Pro: backup diário por 7 dias e sem pausa. Alto soma Small e PITR (7 dias).",
+      "shared": 1.0,
+      "low": 1650.0,
+      "base": 1650.0,
+      "high": 9240.0
+    },
+    {
+      "key": "servidor",
+      "label": "Servidor da API e do n8n",
+      "recurring": true,
+      "source": "pública",
+      "note": "Hostinger, preço de renovação. Baixo e base: KVM 2. Alto: dois KVM 4 (redundância).",
+      "shared": 1.0,
+      "low": 935.8799999999999,
+      "base": 935.8799999999999,
+      "high": 3599.76
+    },
+    {
+      "key": "web",
+      "label": "Hospedagem da web (Vercel Pro)",
+      "recurring": true,
+      "source": "pública",
+      "note": "O plano gratuito é só para uso não comercial; um desenvolvedor.",
+      "shared": 1.0,
+      "low": 1320.0,
+      "base": 1320.0,
+      "high": 1320.0
+    },
+    {
+      "key": "gemini",
+      "label": "Gemini (camada paga)",
+      "recurring": true,
+      "source": "pública",
+      "note": "Preço por token público; os tokens por chamada são premissa. Alto: 3 vezes mais.",
+      "shared": 0.0,
+      "low": 7.405200000000001,
+      "base": 7.405200000000001,
+      "high": 22.215600000000002
+    },
+    {
+      "key": "cfm",
+      "label": "Consulta de CRM no CFM",
+      "recurring": true,
+      "source": "pública",
+      "note": "Valor lido em 03/11/2026 para empresa particular; o hospital talvez já tenha acesso.",
+      "shared": 0.0,
+      "low": 0.0,
+      "base": 948.0,
+      "high": 948.0
+    },
+    {
+      "key": "observabilidade",
+      "label": "Domínio, e-mail e monitoramento",
+      "recurring": true,
+      "source": "premissa",
+      "note": "Alertas de queda, registro de erros e e-mail de aviso.",
+      "shared": 1.0,
+      "low": 600.0,
+      "base": 1800.0,
+      "high": 6000.0
+    },
+    {
+      "key": "suporte",
+      "label": "Operação e suporte",
+      "recurring": true,
+      "source": "premissa",
+      "note": "Horas por semana: 2, 4 e 8 (plantão de sobreaviso), a R$ 150 por hora.",
+      "shared": 0.5,
+      "low": 15600.0,
+      "base": 31200.0,
+      "high": 62400.0
+    },
+    {
+      "key": "modelo",
+      "label": "Manutenção do modelo e do monitoramento de vieses",
+      "recurring": true,
+      "source": "premissa",
+      "note": "Retreino mensal, revisão de contestações e da concentração: 4, 8 e 16 horas por mês.",
+      "shared": 0.8,
+      "low": 7200.0,
+      "base": 14400.0,
+      "high": 28800.0
+    },
+    {
+      "key": "juridico_anual",
+      "label": "Revisão jurídica anual",
+      "recurring": true,
+      "source": "premissa",
+      "note": "As normas do CFM mudam (a 2.462 já foi suspensa). Sem cotação ainda.",
+      "shared": 0.8,
+      "low": 3000.0,
+      "base": 8000.0,
+      "high": 20000.0
+    },
+    {
+      "key": "implantacao",
+      "label": "Implantação no hospital",
+      "recurring": false,
+      "source": "premissa",
+      "note": "Cadastros, política de jornada, importação de planilhas: 60, 120 e 240 horas.",
+      "shared": 0.0,
+      "low": 9000.0,
+      "base": 18000.0,
+      "high": 36000.0
+    },
+    {
+      "key": "integracao",
+      "label": "Integração com escala e ponto",
+      "recurring": false,
+      "source": "premissa",
+      "note": "Fica fora no baixo e no base (fase 3 do roteiro); o alto inclui 160 horas.",
+      "shared": 0.0,
+      "low": 0.0,
+      "base": 0.0,
+      "high": 24000.0
+    },
+    {
+      "key": "treinamento",
+      "label": "Treinamento de coordenadores e médicos",
+      "recurring": false,
+      "source": "premissa",
+      "note": "Horas do instrutor (8, 16 e 40) mais material. O tempo dos médicos é do hospital.",
+      "shared": 0.0,
+      "low": 1700.0,
+      "base": 3900.0,
+      "high": 10000.0
+    },
+    {
+      "key": "parecer",
+      "label": "Parecer jurídico e minuta de contrato",
+      "recurring": false,
+      "source": "premissa",
+      "note": "LGPD, Res. CFM 2.454 e 2.460, acordo de tratamento de dados. Sem cotação ainda.",
+      "shared": 0.9,
+      "low": 8000.0,
+      "base": 20000.0,
+      "high": 45000.0
+    },
+    {
+      "key": "ripd",
+      "label": "Relatório de impacto e avaliação de risco algorítmico",
+      "recurring": false,
+      "source": "premissa",
+      "note": "24, 60 e 120 horas, com apoio do jurídico.",
+      "shared": 0.7,
+      "low": 3600.0,
+      "base": 9000.0,
+      "high": 18000.0
+    },
+    {
+      "key": "seguranca",
+      "label": "Revisão de segurança antes de dados reais",
+      "recurring": false,
+      "source": "premissa",
+      "note": "Teste de invasão e revisão de configuração. Baixo: só revisão interna.",
+      "shared": 0.9,
+      "low": 0.0,
+      "base": 15000.0,
+      "high": 40000.0
+    },
+    {
+      "key": "producao",
+      "label": "Passagem para produção",
+      "recurring": false,
+      "source": "premissa",
+      "note": "Plano pago do banco, backups, monitoramento e esteira de deploy: 40, 80 e 160 horas.",
+      "shared": 0.9,
+      "low": 6000.0,
+      "base": 12000.0,
+      "high": 24000.0
+    }
+  ],
+  "totals": {
+    "low": {
+      "1": {
+        "scenario": "low",
+        "hospitals": 1,
+        "recurring": 33344.61372,
+        "once": 31130.000000000004,
+        "year1": 64474.61372000001,
+        "three_years": 131163.84116,
+        "lines": {
+          "supabase": 1650.0,
+          "servidor": 935.8799999999999,
+          "web": 1320.0,
+          "gemini": 7.405200000000001,
+          "cfm": 0.0,
+          "observabilidade": 600.0,
+          "suporte": 15600.0,
+          "modelo": 7200.0,
+          "juridico_anual": 3000.0,
+          "implantacao": 9000.0,
+          "integracao": 0.0,
+          "treinamento": 1700.0,
+          "parecer": 8000.0,
+          "ripd": 3600.0,
+          "seguranca": 0.0,
+          "producao": 6000.0
+        }
+      },
+      "3": {
+        "scenario": "low",
+        "hospitals": 3,
+        "recurring": 18336.301720000003,
+        "once": 20042.0,
+        "year1": 38378.30172,
+        "three_years": 75050.90516000001,
+        "lines": {
+          "supabase": 550.0,
+          "servidor": 311.9599999999999,
+          "web": 440.0,
+          "gemini": 7.405200000000001,
+          "cfm": 0.0,
+          "observabilidade": 200.0,
+          "suporte": 10400.0,
+          "modelo": 3359.9999999999995,
+          "juridico_anual": 1399.9999999999998,
+          "implantacao": 9000.0,
+          "integracao": 0.0,
+          "treinamento": 1700.0,
+          "parecer": 3199.9999999999995,
+          "ripd": 1920.0,
+          "seguranca": 0.0,
+          "producao": 2400.0
+        }
+      },
+      "10": {
+        "scenario": "low",
+        "hospitals": 10,
+        "recurring": 13083.39252,
+        "once": 16161.2,
+        "year1": 29244.59252,
+        "three_years": 55411.37755999999,
+        "lines": {
+          "supabase": 165.0,
+          "servidor": 93.588,
+          "web": 132.0,
+          "gemini": 7.405200000000001,
+          "cfm": 0.0,
+          "observabilidade": 60.0,
+          "suporte": 8580.0,
+          "modelo": 2015.9999999999998,
+          "juridico_anual": 839.9999999999999,
+          "implantacao": 9000.0,
+          "integracao": 0.0,
+          "treinamento": 1700.0,
+          "parecer": 1519.9999999999998,
+          "ripd": 1332.0000000000002,
+          "seguranca": 0.0,
+          "producao": 1139.9999999999998
+        }
+      }
+    },
+    "base": {
+      "1": {
+        "scenario": "base",
+        "hospitals": 1,
+        "recurring": 69300.47798,
+        "once": 89585.0,
+        "year1": 158885.47798,
+        "three_years": 297486.43394,
+        "lines": {
+          "supabase": 1650.0,
+          "servidor": 935.8799999999999,
+          "web": 1320.0,
+          "gemini": 7.405200000000001,
+          "cfm": 948.0,
+          "observabilidade": 1800.0,
+          "suporte": 31200.0,
+          "modelo": 14400.0,
+          "juridico_anual": 8000.0,
+          "implantacao": 18000.0,
+          "integracao": 0.0,
+          "treinamento": 3900.0,
+          "parecer": 20000.0,
+          "ripd": 9000.0,
+          "seguranca": 15000.0,
+          "producao": 12000.0
+        }
+      },
+      "3": {
+        "scenario": "base",
+        "hospitals": 3,
+        "recurring": 39227.30331333332,
+        "once": 52324.99999999999,
+        "year1": 91552.30331333331,
+        "three_years": 170006.90993999995,
+        "lines": {
+          "supabase": 550.0,
+          "servidor": 311.9599999999999,
+          "web": 440.0,
+          "gemini": 7.405200000000001,
+          "cfm": 948.0,
+          "observabilidade": 600.0,
+          "suporte": 20800.0,
+          "modelo": 6719.999999999999,
+          "juridico_anual": 3733.333333333333,
+          "implantacao": 18000.0,
+          "integracao": 0.0,
+          "treinamento": 3900.0,
+          "parecer": 7999.999999999999,
+          "ripd": 4800.0,
+          "seguranca": 5999.999999999999,
+          "producao": 4800.0
+        }
+      },
+      "10": {
+        "scenario": "base",
+        "hospitals": 10,
+        "recurring": 28701.69218,
+        "once": 39284.0,
+        "year1": 67985.69218,
+        "three_years": 125389.07654,
+        "lines": {
+          "supabase": 165.0,
+          "servidor": 93.588,
+          "web": 132.0,
+          "gemini": 7.405200000000001,
+          "cfm": 948.0,
+          "observabilidade": 180.0,
+          "suporte": 17160.0,
+          "modelo": 4031.9999999999995,
+          "juridico_anual": 2239.9999999999995,
+          "implantacao": 18000.0,
+          "integracao": 0.0,
+          "treinamento": 3900.0,
+          "parecer": 3799.9999999999995,
+          "ripd": 3330.0000000000005,
+          "seguranca": 2849.9999999999995,
+          "producao": 2279.9999999999995
+        }
+      }
+    },
+    "high": {
+      "1": {
+        "scenario": "high",
+        "hospitals": 1,
+        "recurring": 158795.97072,
+        "once": 236400.0,
+        "year1": 395195.97072,
+        "three_years": 712787.9121600001,
+        "lines": {
+          "supabase": 9240.0,
+          "servidor": 3599.76,
+          "web": 1320.0,
+          "gemini": 22.215600000000002,
+          "cfm": 948.0,
+          "observabilidade": 6000.0,
+          "suporte": 62400.0,
+          "modelo": 28800.0,
+          "juridico_anual": 20000.0,
+          "implantacao": 36000.0,
+          "integracao": 24000.0,
+          "treinamento": 10000.0,
+          "parecer": 45000.0,
+          "ripd": 18000.0,
+          "seguranca": 40000.0,
+          "producao": 24000.0
+        }
+      },
+      "3": {
+        "scenario": "high",
+        "hospitals": 3,
+        "recurring": 86476.16272000001,
+        "once": 147840.0,
+        "year1": 234316.16272000002,
+        "three_years": 407268.48816,
+        "lines": {
+          "supabase": 3080.0,
+          "servidor": 1199.92,
+          "web": 440.0,
+          "gemini": 22.215600000000002,
+          "cfm": 948.0,
+          "observabilidade": 2000.0,
+          "suporte": 41600.0,
+          "modelo": 13439.999999999998,
+          "juridico_anual": 9333.333333333332,
+          "implantacao": 36000.0,
+          "integracao": 24000.0,
+          "treinamento": 10000.0,
+          "parecer": 18000.0,
+          "ripd": 9600.0,
+          "seguranca": 15999.999999999998,
+          "producao": 9600.0
+        }
+      },
+      "10": {
+        "scenario": "high",
+        "hospitals": 10,
+        "recurring": 61164.22992,
+        "once": 116844.0,
+        "year1": 178008.22992,
+        "three_years": 300336.68976,
+        "lines": {
+          "supabase": 924.0,
+          "servidor": 359.97600000000006,
+          "web": 132.0,
+          "gemini": 22.215600000000002,
+          "cfm": 948.0,
+          "observabilidade": 600.0,
+          "suporte": 34320.0,
+          "modelo": 8063.999999999999,
+          "juridico_anual": 5599.999999999999,
+          "implantacao": 36000.0,
+          "integracao": 24000.0,
+          "treinamento": 10000.0,
+          "parecer": 8549.999999999998,
+          "ripd": 6660.000000000001,
+          "seguranca": 7599.999999999999,
+          "producao": 4559.999999999999
+        }
+      }
+    }
+  },
+  "prices": {
+    "pequeno": {
+      "low": {
+        "1": {
+          "tier": "pequeno",
+          "label": "Pequeno: o hospital da simulação",
+          "shifts_per_year": 816,
+          "scenario": "low",
+          "hospitals": 1,
+          "annual_cost": 43721.280386666665,
+          "floor": 72868.80064444443,
+          "central_benefit": 41167.2,
+          "ceiling": 12350.159999999998,
+          "viable": false,
+          "suggested": null,
+          "price_used": 73000.0,
+          "returns": {
+            "0.25:1000.0": -0.7378739726027398,
+            "0.25:2000.0": -0.5869698630136987,
+            "0.5:1000.0": -0.5869698630136987,
+            "0.5:2000.0": -0.2851616438356165,
+            "1.0:1000.0": -0.2851616438356165,
+            "1.0:2000.0": 0.3184547945205479
+          }
+        },
+        "3": {
+          "tier": "pequeno",
+          "label": "Pequeno: o hospital da simulação",
+          "shifts_per_year": 816,
+          "scenario": "low",
+          "hospitals": 3,
+          "annual_cost": 25016.96838666667,
+          "floor": 41694.947311111115,
+          "central_benefit": 41167.2,
+          "ceiling": 12350.159999999998,
+          "viable": false,
+          "suggested": null,
+          "price_used": 42000.0,
+          "returns": {
+            "0.25:1000.0": -0.5444,
+            "0.25:2000.0": -0.2821142857142857,
+            "0.5:1000.0": -0.2821142857142857,
+            "0.5:2000.0": 0.2424571428571428,
+            "1.0:1000.0": 0.2424571428571428,
+            "1.0:2000.0": 1.2915999999999999
+          }
+        },
+        "10": {
+          "tier": "pequeno",
+          "label": "Pequeno: o hospital da simulação",
+          "shifts_per_year": 816,
+          "scenario": "low",
+          "hospitals": 10,
+          "annual_cost": 18470.459186666667,
+          "floor": 30784.09864444444,
+          "central_benefit": 41167.2,
+          "ceiling": 12350.159999999998,
+          "viable": false,
+          "suggested": null,
+          "price_used": 31000.0,
+          "returns": {
+            "0.25:1000.0": -0.38273548387096773,
+            "0.25:2000.0": -0.0273806451612903,
+            "0.5:1000.0": -0.0273806451612903,
+            "0.5:2000.0": 0.6833290322580644,
+            "1.0:1000.0": 0.6833290322580644,
+            "1.0:2000.0": 2.104748387096774
+          }
+        }
+      },
+      "base": {
+        "1": {
+          "tier": "pequeno",
+          "label": "Pequeno: o hospital da simulação",
+          "shifts_per_year": 816,
+          "scenario": "base",
+          "hospitals": 1,
+          "annual_cost": 99162.14464666667,
+          "floor": 165270.24107777775,
+          "central_benefit": 41167.2,
+          "ceiling": 12350.159999999998,
+          "viable": false,
+          "suggested": null,
+          "price_used": 165500.0,
+          "returns": {
+            "0.25:1000.0": -0.8843794561933535,
+            "0.25:2000.0": -0.8178175226586102,
+            "0.5:1000.0": -0.8178175226586102,
+            "0.5:2000.0": -0.6846936555891239,
+            "1.0:1000.0": -0.6846936555891239,
+            "1.0:2000.0": -0.4184459214501511
+          }
+        },
+        "3": {
+          "tier": "pequeno",
+          "label": "Pequeno: o hospital da simulação",
+          "shifts_per_year": 816,
+          "scenario": "base",
+          "hospitals": 3,
+          "annual_cost": 56668.96997999999,
+          "floor": 94448.28329999997,
+          "central_benefit": 41167.2,
+          "ceiling": 12350.159999999998,
+          "viable": false,
+          "suggested": null,
+          "price_used": 94500.0,
+          "returns": {
+            "0.25:1000.0": -0.7975111111111112,
+            "0.25:2000.0": -0.6809396825396826,
+            "0.5:1000.0": -0.6809396825396826,
+            "0.5:2000.0": -0.4477968253968254,
+            "1.0:1000.0": -0.4477968253968254,
+            "1.0:2000.0": 0.018488888888888857
+          }
+        },
+        "10": {
+          "tier": "pequeno",
+          "label": "Pequeno: o hospital da simulação",
+          "shifts_per_year": 816,
+          "scenario": "base",
+          "hospitals": 10,
+          "annual_cost": 41796.35884666666,
+          "floor": 69660.59807777776,
+          "central_benefit": 41167.2,
+          "ceiling": 12350.159999999998,
+          "viable": false,
+          "suggested": null,
+          "price_used": 70000.0,
+          "returns": {
+            "0.25:1000.0": -0.7266400000000001,
+            "0.25:2000.0": -0.5692685714285715,
+            "0.5:1000.0": -0.5692685714285715,
+            "0.5:2000.0": -0.2545257142857143,
+            "1.0:1000.0": -0.2545257142857143,
+            "1.0:2000.0": 0.37495999999999996
+          }
+        }
+      },
+      "high": {
+        "1": {
+          "tier": "pequeno",
+          "label": "Pequeno: o hospital da simulação",
+          "shifts_per_year": 816,
+          "scenario": "high",
+          "hospitals": 1,
+          "annual_cost": 237595.97072,
+          "floor": 395993.28453333327,
+          "central_benefit": 41167.2,
+          "ceiling": 12350.159999999998,
+          "viable": false,
+          "suggested": null,
+          "price_used": 396000.0,
+          "returns": {
+            "0.25:1000.0": -0.9516787878787879,
+            "0.25:2000.0": -0.923860606060606,
+            "0.5:1000.0": -0.923860606060606,
+            "0.5:2000.0": -0.8682242424242423,
+            "1.0:1000.0": -0.8682242424242423,
+            "1.0:2000.0": -0.7569515151515152
+          }
+        },
+        "3": {
+          "tier": "pequeno",
+          "label": "Pequeno: o hospital da simulação",
+          "shifts_per_year": 816,
+          "scenario": "high",
+          "hospitals": 3,
+          "annual_cost": 135756.16272000002,
+          "floor": 226260.27120000002,
+          "central_benefit": 41167.2,
+          "ceiling": 12350.159999999998,
+          "viable": false,
+          "suggested": null,
+          "price_used": 226500.0,
+          "returns": {
+            "0.25:1000.0": -0.915517880794702,
+            "0.25:2000.0": -0.866882119205298,
+            "0.5:1000.0": -0.866882119205298,
+            "0.5:2000.0": -0.7696105960264901,
+            "1.0:1000.0": -0.7696105960264901,
+            "1.0:2000.0": -0.5750675496688742
+          }
+        },
+        "10": {
+          "tier": "pequeno",
+          "label": "Pequeno: o hospital da simulação",
+          "shifts_per_year": 816,
+          "scenario": "high",
+          "hospitals": 10,
+          "annual_cost": 100112.22992,
+          "floor": 166853.7165333333,
+          "central_benefit": 41167.2,
+          "ceiling": 12350.159999999998,
+          "viable": false,
+          "suggested": null,
+          "price_used": 167000.0,
+          "returns": {
+            "0.25:1000.0": -0.8854179640718562,
+            "0.25:2000.0": -0.8194538922155687,
+            "0.5:1000.0": -0.8194538922155687,
+            "0.5:2000.0": -0.6875257485029941,
+            "1.0:1000.0": -0.6875257485029941,
+            "1.0:2000.0": -0.4236694610778443
+          }
+        }
+      }
+    },
+    "medio": {
+      "low": {
+        "1": {
+          "tier": "medio",
+          "label": "Médio: 3 unidades, cerca de 7 vagas por dia",
+          "shifts_per_year": 2446.0,
+          "scenario": "low",
+          "hospitals": 1,
+          "annual_cost": 43737.55186166667,
+          "floor": 72895.91976944443,
+          "central_benefit": 123400.7,
+          "ceiling": 37020.21,
+          "viable": false,
+          "suggested": null,
+          "price_used": 73000.0,
+          "returns": {
+            "0.25:1000.0": -0.21426438356164387,
+            "0.25:2000.0": 0.23807808219178078,
+            "0.5:1000.0": 0.23807808219178078,
+            "0.5:2000.0": 1.1427630136986302,
+            "1.0:1000.0": 1.1427630136986302,
+            "1.0:2000.0": 2.9521328767123287
+          }
+        },
+        "3": {
+          "tier": "medio",
+          "label": "Médio: 3 unidades, cerca de 7 vagas por dia",
+          "shifts_per_year": 2446.0,
+          "scenario": "low",
+          "hospitals": 3,
+          "annual_cost": 25033.23986166667,
+          "floor": 41722.066436111105,
+          "central_benefit": 123400.7,
+          "ceiling": 37020.21,
+          "viable": false,
+          "suggested": null,
+          "price_used": 42000.0,
+          "returns": {
+            "0.25:1000.0": 0.36568333333333325,
+            "0.25:2000.0": 1.151897619047619,
+            "0.5:1000.0": 1.151897619047619,
+            "0.5:2000.0": 2.724326190476191,
+            "1.0:1000.0": 2.724326190476191,
+            "1.0:2000.0": 5.869183333333334
+          }
+        },
+        "10": {
+          "tier": "medio",
+          "label": "Médio: 3 unidades, cerca de 7 vagas por dia",
+          "shifts_per_year": 2446.0,
+          "scenario": "low",
+          "hospitals": 10,
+          "annual_cost": 18486.73066166667,
+          "floor": 30811.217769444444,
+          "central_benefit": 123400.7,
+          "ceiling": 37020.21,
+          "viable": true,
+          "suggested": 34000.0,
+          "price_used": 34000.0,
+          "returns": {
+            "0.25:1000.0": 0.687020588235294,
+            "0.25:2000.0": 1.6582264705882352,
+            "0.5:1000.0": 1.6582264705882352,
+            "0.5:2000.0": 3.600638235294118,
+            "1.0:1000.0": 3.600638235294118,
+            "1.0:2000.0": 7.4854617647058825
+          }
+        }
+      },
+      "base": {
+        "1": {
+          "tier": "medio",
+          "label": "Médio: 3 unidades, cerca de 7 vagas por dia",
+          "shifts_per_year": 2446.0,
+          "scenario": "base",
+          "hospitals": 1,
+          "annual_cost": 99179.15573416666,
+          "floor": 165298.59289027774,
+          "central_benefit": 123400.7,
+          "ceiling": 37020.21,
+          "viable": false,
+          "suggested": null,
+          "price_used": 165500.0,
+          "returns": {
+            "0.25:1000.0": -0.6534217522658611,
+            "0.25:2000.0": -0.4538990936555891,
+            "0.5:1000.0": -0.4538990936555891,
+            "0.5:2000.0": -0.05485377643504525,
+            "1.0:1000.0": -0.05485377643504525,
+            "1.0:2000.0": 0.7432368580060423
+          }
+        },
+        "3": {
+          "tier": "medio",
+          "label": "Médio: 3 unidades, cerca de 7 vagas por dia",
+          "shifts_per_year": 2446.0,
+          "scenario": "base",
+          "hospitals": 3,
+          "annual_cost": 56685.9810675,
+          "floor": 94476.63511249998,
+          "central_benefit": 123400.7,
+          "ceiling": 37020.21,
+          "viable": false,
+          "suggested": null,
+          "price_used": 94500.0,
+          "returns": {
+            "0.25:1000.0": -0.3930296296296297,
+            "0.25:2000.0": -0.04360105820105823,
+            "0.5:1000.0": -0.04360105820105823,
+            "0.5:2000.0": 0.6552560846560848,
+            "1.0:1000.0": 0.6552560846560848,
+            "1.0:2000.0": 2.0529703703703706
+          }
+        },
+        "10": {
+          "tier": "medio",
+          "label": "Médio: 3 unidades, cerca de 7 vagas por dia",
+          "shifts_per_year": 2446.0,
+          "scenario": "base",
+          "hospitals": 10,
+          "annual_cost": 41813.369934166665,
+          "floor": 69688.94989027777,
+          "central_benefit": 123400.7,
+          "ceiling": 37020.21,
+          "viable": false,
+          "suggested": null,
+          "price_used": 70000.0,
+          "returns": {
+            "0.25:1000.0": -0.18059000000000003,
+            "0.25:2000.0": 0.2911385714285714,
+            "0.5:1000.0": 0.2911385714285714,
+            "0.5:2000.0": 1.2345957142857145,
+            "1.0:1000.0": 1.2345957142857145,
+            "1.0:2000.0": 3.1215100000000002
+          }
+        }
+      },
+      "high": {
+        "1": {
+          "tier": "medio",
+          "label": "Médio: 3 unidades, cerca de 7 vagas por dia",
+          "shifts_per_year": 2446.0,
+          "scenario": "high",
+          "hospitals": 1,
+          "annual_cost": 237649.22282,
+          "floor": 396082.03803333326,
+          "central_benefit": 123400.7,
+          "ceiling": 37020.21,
+          "viable": false,
+          "suggested": null,
+          "price_used": 396500.0,
+          "returns": {
+            "0.25:1000.0": -0.8553374527112232,
+            "0.25:2000.0": -0.7720562421185372,
+            "0.5:1000.0": -0.7720562421185372,
+            "0.5:2000.0": -0.6054938209331652,
+            "1.0:1000.0": -0.6054938209331652,
+            "1.0:2000.0": -0.27236897856242115
+          }
+        },
+        "3": {
+          "tier": "medio",
+          "label": "Médio: 3 unidades, cerca de 7 vagas por dia",
+          "shifts_per_year": 2446.0,
+          "scenario": "high",
+          "hospitals": 3,
+          "annual_cost": 135809.41482,
+          "floor": 226349.02469999998,
+          "central_benefit": 123400.7,
+          "ceiling": 37020.21,
+          "viable": false,
+          "suggested": null,
+          "price_used": 226500.0,
+          "returns": {
+            "0.25:1000.0": -0.746760706401766,
+            "0.25:2000.0": -0.6009726269315673,
+            "0.5:1000.0": -0.6009726269315673,
+            "0.5:2000.0": -0.30939646799116993,
+            "1.0:1000.0": -0.30939646799116993,
+            "1.0:2000.0": 0.27375584988962476
+          }
+        },
+        "10": {
+          "tier": "medio",
+          "label": "Médio: 3 unidades, cerca de 7 vagas por dia",
+          "shifts_per_year": 2446.0,
+          "scenario": "high",
+          "hospitals": 10,
+          "annual_cost": 100165.48202,
+          "floor": 166942.4700333333,
+          "central_benefit": 123400.7,
+          "ceiling": 37020.21,
+          "viable": false,
+          "suggested": null,
+          "price_used": 167000.0,
+          "returns": {
+            "0.25:1000.0": -0.6565347305389222,
+            "0.25:2000.0": -0.4588041916167665,
+            "0.5:1000.0": -0.4588041916167665,
+            "0.5:2000.0": -0.06334311377245502,
+            "1.0:1000.0": -0.06334311377245502,
+            "1.0:2000.0": 0.7275790419161677
+          }
+        }
+      }
+    },
+    "grande": {
+      "low": {
+        "1": {
+          "tier": "grande",
+          "label": "Grande: hospital de referência, 40 vagas por dia",
+          "shifts_per_year": 14600.0,
+          "scenario": "low",
+          "hospitals": 1,
+          "annual_cost": 43858.879166666666,
+          "floor": 73098.13194444444,
+          "central_benefit": 736570.0,
+          "ceiling": 220971.0,
+          "viable": true,
+          "suggested": 147500.0,
+          "price_used": 147500.0,
+          "returns": {
+            "0.25:1000.0": 1.3211525423728814,
+            "0.25:2000.0": 2.6574237288135594,
+            "0.5:1000.0": 2.6574237288135594,
+            "0.5:2000.0": 5.329966101694915,
+            "1.0:1000.0": 5.329966101694915,
+            "1.0:2000.0": 10.675050847457626
+          }
+        },
+        "3": {
+          "tier": "grande",
+          "label": "Grande: hospital de referência, 40 vagas por dia",
+          "shifts_per_year": 14600.0,
+          "scenario": "low",
+          "hospitals": 3,
+          "annual_cost": 25154.567166666668,
+          "floor": 41924.278611111105,
+          "central_benefit": 736570.0,
+          "ceiling": 220971.0,
+          "viable": true,
+          "suggested": 131500.0,
+          "price_used": 131500.0,
+          "returns": {
+            "0.25:1000.0": 1.603574144486692,
+            "0.25:2000.0": 3.1024334600760457,
+            "0.5:1000.0": 3.1024334600760457,
+            "0.5:2000.0": 6.100152091254753,
+            "1.0:1000.0": 6.100152091254753,
+            "1.0:2000.0": 12.095589353612167
+          }
+        },
+        "10": {
+          "tier": "grande",
+          "label": "Grande: hospital de referência, 40 vagas por dia",
+          "shifts_per_year": 14600.0,
+          "scenario": "low",
+          "hospitals": 10,
+          "annual_cost": 18608.057966666667,
+          "floor": 31013.42994444444,
+          "central_benefit": 736570.0,
+          "ceiling": 220971.0,
+          "viable": true,
+          "suggested": 126000.0,
+          "price_used": 126000.0,
+          "returns": {
+            "0.25:1000.0": 1.7172222222222222,
+            "0.25:2000.0": 3.2815079365079365,
+            "0.5:1000.0": 3.2815079365079365,
+            "0.5:2000.0": 6.4100793650793655,
+            "1.0:1000.0": 6.4100793650793655,
+            "1.0:2000.0": 12.667222222222222
+          }
+        }
+      },
+      "base": {
+        "1": {
+          "tier": "grande",
+          "label": "Grande: hospital de referência, 40 vagas por dia",
+          "shifts_per_year": 14600.0,
+          "scenario": "base",
+          "hospitals": 1,
+          "annual_cost": 99305.99791666666,
+          "floor": 165509.99652777775,
+          "central_benefit": 736570.0,
+          "ceiling": 220971.0,
+          "viable": true,
+          "suggested": 193500.0,
+          "price_used": 193500.0,
+          "returns": {
+            "0.25:1000.0": 0.7693540051679587,
+            "0.25:2000.0": 1.7879586563307495,
+            "0.5:1000.0": 1.7879586563307495,
+            "0.5:2000.0": 3.8251679586563307,
+            "1.0:1000.0": 3.8251679586563307,
+            "1.0:2000.0": 7.899586563307493
+          }
+        },
+        "3": {
+          "tier": "grande",
+          "label": "Grande: hospital de referência, 40 vagas por dia",
+          "shifts_per_year": 14600.0,
+          "scenario": "base",
+          "hospitals": 3,
+          "annual_cost": 56812.823249999994,
+          "floor": 94688.03874999998,
+          "central_benefit": 736570.0,
+          "ceiling": 220971.0,
+          "viable": true,
+          "suggested": 158000.0,
+          "price_used": 158000.0,
+          "returns": {
+            "0.25:1000.0": 1.1668987341772152,
+            "0.25:2000.0": 2.414367088607595,
+            "0.5:1000.0": 2.414367088607595,
+            "0.5:2000.0": 4.909303797468354,
+            "1.0:1000.0": 4.909303797468354,
+            "1.0:2000.0": 9.899177215189873
+          }
+        },
+        "10": {
+          "tier": "grande",
+          "label": "Grande: hospital de referência, 40 vagas por dia",
+          "shifts_per_year": 14600.0,
+          "scenario": "base",
+          "hospitals": 10,
+          "annual_cost": 41940.21211666666,
+          "floor": 69900.35352777776,
+          "central_benefit": 736570.0,
+          "ceiling": 220971.0,
+          "viable": true,
+          "suggested": 145500.0,
+          "price_used": 145500.0,
+          "returns": {
+            "0.25:1000.0": 1.3530584192439863,
+            "0.25:2000.0": 2.707697594501718,
+            "0.5:1000.0": 2.707697594501718,
+            "0.5:2000.0": 5.416975945017182,
+            "1.0:1000.0": 5.416975945017182,
+            "1.0:2000.0": 10.83553264604811
+          }
+        }
+      },
+      "high": {
+        "1": {
+          "tier": "grande",
+          "label": "Grande: hospital de referência, 40 vagas por dia",
+          "shifts_per_year": 14600.0,
+          "scenario": "high",
+          "hospitals": 1,
+          "annual_cost": 238046.294,
+          "floor": 396743.82333333325,
+          "central_benefit": 736570.0,
+          "ceiling": 220971.0,
+          "viable": false,
+          "suggested": null,
+          "price_used": 397000.0,
+          "returns": {
+            "0.25:1000.0": -0.13760705289672545,
+            "0.25:2000.0": 0.35886649874055415,
+            "0.5:1000.0": 0.35886649874055415,
+            "0.5:2000.0": 1.3518136020151132,
+            "1.0:1000.0": 1.3518136020151132,
+            "1.0:2000.0": 3.3377078085642315
+          }
+        },
+        "3": {
+          "tier": "grande",
+          "label": "Grande: hospital de referência, 40 vagas por dia",
+          "shifts_per_year": 14600.0,
+          "scenario": "high",
+          "hospitals": 3,
+          "annual_cost": 136206.48599999998,
+          "floor": 227010.80999999994,
+          "central_benefit": 736570.0,
+          "ceiling": 220971.0,
+          "viable": false,
+          "suggested": null,
+          "price_used": 227500.0,
+          "returns": {
+            "0.25:1000.0": 0.5049230769230769,
+            "0.25:2000.0": 1.3712967032967034,
+            "0.5:1000.0": 1.3712967032967034,
+            "0.5:2000.0": 3.104043956043956,
+            "1.0:1000.0": 3.104043956043956,
+            "1.0:2000.0": 6.569538461538461
+          }
+        },
+        "10": {
+          "tier": "grande",
+          "label": "Grande: hospital de referência, 40 vagas por dia",
+          "shifts_per_year": 14600.0,
+          "scenario": "high",
+          "hospitals": 10,
+          "annual_cost": 100562.5532,
+          "floor": 167604.2553333333,
+          "central_benefit": 736570.0,
+          "ceiling": 220971.0,
+          "viable": true,
+          "suggested": 194500.0,
+          "price_used": 194500.0,
+          "returns": {
+            "0.25:1000.0": 0.7602570694087404,
+            "0.25:2000.0": 1.773624678663239,
+            "0.5:1000.0": 1.773624678663239,
+            "0.5:2000.0": 3.8003598971722363,
+            "1.0:1000.0": 3.8003598971722363,
+            "1.0:2000.0": 7.853830334190231
+          }
+        }
+      }
+    }
+  },
+  "break_even": {
+    "pequeno": {
+      "low": null,
+      "base": null,
+      "high": null
+    },
+    "medio": {
+      "low": 5,
+      "base": null,
+      "high": null
+    },
+    "grande": {
+      "low": 1,
+      "base": 1,
+      "high": 4
+    }
+  },
+  "break_even_shifts": {
+    "low": {
+      "1": 4814.588744264581,
+      "3": 2754.8693301031462,
+      "10": 2033.9675351466428
+    },
+    "base": {
+      "1": 10919.738426017691,
+      "3": 6240.38872150644,
+      "10": 4602.616324927503
+    },
+    "high": {
+      "1": 26164.07562162757,
+      "3": 14949.472824578792,
+      "10": 11024.361845611715
+    }
+  },
+  "needed_shift_value": {
+    "pequeno": {
+      "1": 24636.05680794266,
+      "3": 13921.042619825705,
+      "10": 10170.787653984773
+    },
+    "medio": {
+      "1": 7974.586015478926,
+      "3": 4399.994201291096,
+      "10": 3148.887066325357
+    },
+    "grande": {
+      "1": 1031.0248311159967,
+      "3": 432.1582847116522,
+      "10": 222.5549934701316
+    }
+  },
+  "benefit": {
+    "pequeno": {
+      "0.25:1000.0": 19135.2,
+      "0.25:1500.0": 24643.2,
+      "0.25:2000.0": 30151.2,
+      "0.5:1000.0": 30151.2,
+      "0.5:1500.0": 41167.2,
+      "0.5:2000.0": 52183.2,
+      "1.0:1000.0": 52183.2,
+      "1.0:1500.0": 74215.2,
+      "1.0:2000.0": 96247.2
+    },
+    "medio": {
+      "0.25:1000.0": 57358.7,
+      "0.25:1500.0": 73869.2,
+      "0.25:2000.0": 90379.7,
+      "0.5:1000.0": 90379.7,
+      "0.5:1500.0": 123400.7,
+      "0.5:2000.0": 156421.7,
+      "1.0:1000.0": 156421.7,
+      "1.0:1500.0": 222463.7,
+      "1.0:2000.0": 288505.7
+    },
+    "grande": {
+      "0.25:1000.0": 342370.0,
+      "0.25:1500.0": 440920.0,
+      "0.25:2000.0": 539470.0,
+      "0.5:1000.0": 539470.0,
+      "0.5:1500.0": 736570.0,
+      "0.5:2000.0": 933670.0,
+      "1.0:1000.0": 933670.0,
+      "1.0:1500.0": 1327870.0,
+      "1.0:2000.0": 1722070.0
+    }
+  }
+}

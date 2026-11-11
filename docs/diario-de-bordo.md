@@ -4,6 +4,18 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 11/11/2026 (quarta), à noite: feedback da Entrega 3, custo total e preço
+
+**Pedido do Victor:** "Custo total e preço".
+
+**O que mudou (só documentos e uma calculadora):** o `python -m app.cli costs` calcula o custo de um hospital em três cenários (baixo, base e alto), com cada item marcado como preço público ou premissa. Preços de tabela conferidos em 11/11 nas páginas dos fornecedores: Supabase Pro (US$ 25 por mês), Vercel Pro (US$ 20 por desenvolvedor, o gratuito é só para uso não comercial), Hostinger KVM 2 e 4 no preço de renovação, e Gemini 3.1 Flash-Lite na camada paga (em que o conteúdo não é usado para melhorar os produtos, ao contrário da gratuita). O texto de preço e contratação está em `docs/negocio/preco-e-contratacao.md`.
+
+**Resultado:** um hospital sozinho custa R$ 69 mil por ano e R$ 159 mil no primeiro ano no cenário base (de R$ 64 mil a R$ 395 mil), contra os R$ 34 mil da Entrega 3, que avisavam não incluir parecer nem implantação. A tecnologia é só cerca de R$ 4 mil por ano. O preço **não fecha para hospital pequeno nem médio** (o benefício não cobre o custo), e fecha a partir de cerca de 30 vagas por dia sozinho, 17 com três hospitais dividindo a plataforma. Isso muda a resposta da Entrega 3, que dizia que o projeto se paga ao evitar 17 vagas por ano.
+
+**O que não foi possível:** confirmar um valor atual para o parecer jurídico. As tabelas de honorários da OAB variam por seccional, e os valores achados eram de anos diferentes (o PDF da OAB-RO de 2018 não abriu como texto). Ficou como premissa em faixa. O preço de uma ferramenta de escala concorrente (R$ 5,7 mil por mês, "preço inicial") vem de um comparador de terceiros e não foi confirmado com o fornecedor; aparece assim no relatório.
+
+**Uso de IA:** o Claude Code pesquisou e conferiu os preços, escreveu a calculadora, os testes e os textos, e deixou as premissas de hora, parecer, margem e imposto à vista, porque não há cotação.
+
 ## 11/11/2026 (quarta), à noite: feedback da Entrega 3, escala hospitalar
 
 **Pedido do Victor:** "Escala hospitalar", a pergunta "para pensar" do professor: a arquitetura aguenta o volume de um hospital?
