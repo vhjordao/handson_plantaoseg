@@ -4,6 +4,14 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 11/11/2026 (quarta), à noite: o fundo vira uma malha suave
+
+**Pedido do Victor:** "ficou bem ruim a imagem de fundo, vamos retirar e pense em algo melhor". A imagem saiu do projeto. Para não errar de novo no gosto, o Claude Code montou três propostas em CSS (limpo, malha suave e pulso, com uma linha de batimento) e mostrou capturas lado a lado; o Victor escolheu a **malha suave**.
+
+**O que mudou:** o fundo da plataforma e da entrada é uma malha de manchas pastel, paradas, com uma luz no alto; as imagens WebP saíram de `public/fundo/`. Detalhes na [direção de arte, seção 6.3](design/direcao-de-arte.md#63-vozes-sem-tracejado-painel-do-médico-corpo-de-vidro-e-tema-1111).
+
+**Uso de IA:** o Claude Code criou as três propostas, tirou as capturas e aplicou a escolhida.
+
 ## 11/11/2026 (quarta), à noite: o fundo com a anatomia de vidro
 
 **O que aconteceu:** o Victor gerou no Figma, pela conta gratuita dele, uma imagem original de anatomia de vidro a partir do texto que o Claude Code sugeriu, e trouxe para a conversa. O Claude Code não usou a conta do Figma: ele preferiu fazer sozinho, com o passo a passo.
