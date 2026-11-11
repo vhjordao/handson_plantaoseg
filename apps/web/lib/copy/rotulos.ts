@@ -3,6 +3,7 @@
  * Os textos das regras são os de `services/matching-api/app/rules.py` (`RULE_TEXTS`).
  */
 import type {
+  AcaoAuditoria,
   ChaveCampo,
   CodigoRegra,
   Especialidade,
@@ -90,3 +91,29 @@ export const ROTULO_ORIGEM_CAMPO = {
   deduzi: "Calculado do texto",
   nao_achei: "Não está no texto",
 } as const;
+
+/** O que cada registro da trilha de auditoria quer dizer, em português. */
+export const ROTULO_ACAO_AUDITORIA: Record<AcaoAuditoria, string> = {
+  shift_published: "Vaga publicada",
+  extraction_confirmed: "Leitura do pedido confirmada",
+  recommendation_generated: "Ordem sugerida gerada",
+  explanation_generated: "Motivos escritos",
+  recommendation_approved: "Aprovação do coordenador",
+  recommendation_rejected: "Nome pulado",
+  recommendation_restored: "Pulo desfeito",
+  explanation_feedback: "Avaliação de um motivo",
+  contestation_opened: "Contestação aberta",
+  contestation_answered: "Contestação respondida",
+  offer_sent: "Oferta enviada",
+  offer_accepted: "Oferta aceita",
+  offer_declined: "Oferta recusada",
+  offer_expired: "Prazo da oferta encerrado",
+  shift_uncovered: "Vaga sem cobertura",
+};
+
+/** Quem fez: a trilha só guarda o papel e um pseudônimo, nunca o nome. */
+export const ROTULO_PAPEL_ATOR: Record<"coordinator" | "doctor" | "system", string> = {
+  coordinator: "Coordenação",
+  doctor: "Médico",
+  system: "Sistema",
+};

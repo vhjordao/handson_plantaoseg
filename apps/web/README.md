@@ -119,6 +119,7 @@ Na CI, o job `web` roda lint, tipos, contraste, testes e build, e o job `web-e2e
 - Cascata, aceite e contestação são **simulados**; o rastro de pagamentos e o check-in não existem (evolução futura, ADR 0002).
 - As recomendações da demonstração vêm de uma **grade pré-calculada** (12 h, próximos 8 dias), não de um cálculo em tempo real; fora dela, a tela explica o limite.
 - Os números de tempo e de concentração vêm de uma simulação com dados sintéticos e não são evidência real.
+- **Auditoria no sistema real (fase D):** a trilha vem do banco sob RLS, e o navegador refaz o hash de cada linha no formato do Postgres (`lib/api/live/auditoria.ts`: o texto do `jsonb`, com as chaves ordenadas por tamanho, o horário em UTC com microssegundos e `details::text`). O teste usa linhas reais do banco (`lib/api/live/__fixtures__/trilha-do-banco.json`). A cadeia é global, e o coordenador só vê a organização dele: os registros fora da visão viram lacunas, ditas na tela.
 - A trilha de auditoria da demonstração vive no navegador. O hash encadeado **detecta** uma linha alterada, mas **não impede forja**: quem controla o navegador pode refazer a cadeia. A verificação é local, e a imutabilidade de verdade fica para o modo `live`.
 - A limpeza de dados pessoais nos textos livres é de melhor esforço; o aviso "Não digite dados reais" continua valendo.
 - Conferido em navegador com tamanho de tela emulado, não em celular real, e sem leitor de tela real.

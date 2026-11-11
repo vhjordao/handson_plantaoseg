@@ -11,6 +11,7 @@ import type {
   Cascata,
   ConfirmarVagaInput,
   ContestarInput,
+  ContagemOfertas,
   Contestacao,
   Decisao,
   DesfazerPuloInput,
@@ -100,10 +101,13 @@ export interface PlantaoApi {
   responderContestacao(input: { id: string; texto: string }): Promise<Contestacao>;
 
   // --- Auditoria e indicadores (UI-3) --------------------------------------
-  listarAuditoria(filtro?: { vagaId?: string }): Promise<RegistroAuditoria[]>;
+  /** Em ordem de `seq`. Sem filtro por vaga, só os `limite` mais recentes (200 por padrão). */
+  listarAuditoria(filtro?: { vagaId?: string; limite?: number }): Promise<RegistroAuditoria[]>;
   /** Refaz a cadeia de hash no navegador (SHA-256), como `AuditLog.verify` no Python. */
   verificarCadeia(): Promise<VerificacaoCadeia>;
   obterIndicadores(): Promise<Indicadores>;
+  /** As ofertas feitas neste sistema, contadas por médico (equidade, D9). */
+  contarOfertas(): Promise<ContagemOfertas>;
 
   // --- Tempo real -----------------------------------------------------------
   /** Devolve a função que cancela a assinatura. */

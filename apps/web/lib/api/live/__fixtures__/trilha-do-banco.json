@@ -1,0 +1,140 @@
+[
+  {
+    "seq": 1,
+    "occurred_at": "2026-11-04 19:50:49.004102+00",
+    "organization_id": "70000000-0000-4000-8000-000000000001",
+    "actor_role": "coordinator",
+    "actor_pseudo_id": "1981dc52-18aa-471e-8712-13a966481c5d",
+    "action": "extraction_confirmed",
+    "entity_type": "shift_request",
+    "entity_id": "e80c27de-a84a-40a9-9788-02e35652c2d9",
+    "model_version": null,
+    "details": {
+      "flags": []
+    },
+    "details_texto": "{\"flags\": []}",
+    "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+    "hash": "55ed4a684184af09b308ebaf9bbbddc3153c5d4395fce306d696f6ac511c26ef",
+    "texto_no_banco": "{\"seq\": 1, \"action\": \"extraction_confirmed\", \"details\": {\"flags\": []}, \"entity_id\": \"e80c27de-a84a-40a9-9788-02e35652c2d9\", \"prev_hash\": \"0000000000000000000000000000000000000000000000000000000000000000\", \"actor_role\": \"coordinator\", \"entity_type\": \"shift_request\", \"occurred_at\": \"2026-11-04T19:50:49.004102Z\", \"model_version\": null, \"actor_pseudo_id\": \"1981dc52-18aa-471e-8712-13a966481c5d\", \"organization_id\": \"70000000-0000-4000-8000-000000000001\"}"
+  },
+  {
+    "seq": 2,
+    "occurred_at": "2026-11-04 19:50:49.018361+00",
+    "organization_id": "70000000-0000-4000-8000-000000000001",
+    "actor_role": "coordinator",
+    "actor_pseudo_id": "1981dc52-18aa-471e-8712-13a966481c5d",
+    "action": "shift_published",
+    "entity_type": "shift",
+    "entity_id": "21fbf6ee-a07a-4aab-9ed0-95e7ff186861",
+    "model_version": null,
+    "details": {
+      "unit_id": "70000000-0000-4000-8000-000000000002",
+      "urgency": "high",
+      "specialty": "clinica_medica"
+    },
+    "details_texto": "{\"unit_id\": \"70000000-0000-4000-8000-000000000002\", \"urgency\": \"high\", \"specialty\": \"clinica_medica\"}",
+    "prev_hash": "55ed4a684184af09b308ebaf9bbbddc3153c5d4395fce306d696f6ac511c26ef",
+    "hash": "a42a9148483a7c71acf83ed3fdfbfc8c5cf9445637ebfc623741ae56a19a14ac",
+    "texto_no_banco": "{\"seq\": 2, \"action\": \"shift_published\", \"details\": {\"unit_id\": \"70000000-0000-4000-8000-000000000002\", \"urgency\": \"high\", \"specialty\": \"clinica_medica\"}, \"entity_id\": \"21fbf6ee-a07a-4aab-9ed0-95e7ff186861\", \"prev_hash\": \"55ed4a684184af09b308ebaf9bbbddc3153c5d4395fce306d696f6ac511c26ef\", \"actor_role\": \"coordinator\", \"entity_type\": \"shift\", \"occurred_at\": \"2026-11-04T19:50:49.018361Z\", \"model_version\": null, \"actor_pseudo_id\": \"1981dc52-18aa-471e-8712-13a966481c5d\", \"organization_id\": \"70000000-0000-4000-8000-000000000001\"}"
+  },
+  {
+    "seq": 3,
+    "occurred_at": "2026-11-04 19:50:49.513411+00",
+    "organization_id": "70000000-0000-4000-8000-000000000001",
+    "actor_role": "system",
+    "actor_pseudo_id": "matching-api",
+    "action": "recommendation_generated",
+    "entity_type": "shift",
+    "entity_id": "21fbf6ee-a07a-4aab-9ed0-95e7ff186861",
+    "model_version": "logreg-v1",
+    "details": {
+      "eligible": 2,
+      "excluded": 300,
+      "top_doctor_ids": [
+        "70000000-0000-4000-8000-000000000011",
+        "70000000-0000-4000-8000-000000000012"
+      ],
+      "excluded_by_rule": {
+        "crm_inactive": 15,
+        "outside_radius": 172,
+        "specialty_mismatch": 113
+      }
+    },
+    "details_texto": "{\"eligible\": 2, \"excluded\": 300, \"top_doctor_ids\": [\"70000000-0000-4000-8000-000000000011\", \"70000000-0000-4000-8000-000000000012\"], \"excluded_by_rule\": {\"crm_inactive\": 15, \"outside_radius\": 172, \"specialty_mismatch\": 113}}",
+    "prev_hash": "a42a9148483a7c71acf83ed3fdfbfc8c5cf9445637ebfc623741ae56a19a14ac",
+    "hash": "2b5b913a387ecd3eee95024dbfef4d4352cd6bd48aaa7b5013c449d1cedffcf0",
+    "texto_no_banco": "{\"seq\": 3, \"action\": \"recommendation_generated\", \"details\": {\"eligible\": 2, \"excluded\": 300, \"top_doctor_ids\": [\"70000000-0000-4000-8000-000000000011\", \"70000000-0000-4000-8000-000000000012\"], \"excluded_by_rule\": {\"crm_inactive\": 15, \"outside_radius\": 172, \"specialty_mismatch\": 113}}, \"entity_id\": \"21fbf6ee-a07a-4aab-9ed0-95e7ff186861\", \"prev_hash\": \"a42a9148483a7c71acf83ed3fdfbfc8c5cf9445637ebfc623741ae56a19a14ac\", \"actor_role\": \"system\", \"entity_type\": \"shift\", \"occurred_at\": \"2026-11-04T19:50:49.513411Z\", \"model_version\": \"logreg-v1\", \"actor_pseudo_id\": \"matching-api\", \"organization_id\": \"70000000-0000-4000-8000-000000000001\"}"
+  },
+  {
+    "seq": 3814,
+    "occurred_at": "2026-11-06 17:39:18.131228+00",
+    "organization_id": "70000000-0000-4000-8000-000000000001",
+    "actor_role": "system",
+    "actor_pseudo_id": "matching-api",
+    "action": "recommendation_generated",
+    "entity_type": "shift",
+    "entity_id": "82b86808-86b7-457c-bbfd-bddf253665e4",
+    "model_version": "logreg-v1",
+    "details": {
+      "eligible": 2,
+      "excluded": 300,
+      "ordering": {
+        "delta": 0.1,
+        "moved": [],
+        "policy": "rodizio",
+        "window_days": 7
+      },
+      "top_doctor_ids": [
+        "70000000-0000-4000-8000-000000000012",
+        "70000000-0000-4000-8000-000000000011"
+      ],
+      "excluded_by_rule": {
+        "crm_inactive": 15,
+        "outside_radius": 172,
+        "specialty_mismatch": 113
+      }
+    },
+    "details_texto": "{\"eligible\": 2, \"excluded\": 300, \"ordering\": {\"delta\": 0.1, \"moved\": [], \"policy\": \"rodizio\", \"window_days\": 7}, \"top_doctor_ids\": [\"70000000-0000-4000-8000-000000000012\", \"70000000-0000-4000-8000-000000000011\"], \"excluded_by_rule\": {\"crm_inactive\": 15, \"outside_radius\": 172, \"specialty_mismatch\": 113}}",
+    "prev_hash": "fb16931e0ceea9ec35336aac1a09b0d215dff72e30f4ea2be83964d95825b12a",
+    "hash": "5f00bd38f17bc1adbeef239c41b3ed19dc6fc7197e8887dff93d037ffa578caa",
+    "texto_no_banco": "{\"seq\": 3814, \"action\": \"recommendation_generated\", \"details\": {\"eligible\": 2, \"excluded\": 300, \"ordering\": {\"delta\": 0.1, \"moved\": [], \"policy\": \"rodizio\", \"window_days\": 7}, \"top_doctor_ids\": [\"70000000-0000-4000-8000-000000000012\", \"70000000-0000-4000-8000-000000000011\"], \"excluded_by_rule\": {\"crm_inactive\": 15, \"outside_radius\": 172, \"specialty_mismatch\": 113}}, \"entity_id\": \"82b86808-86b7-457c-bbfd-bddf253665e4\", \"prev_hash\": \"fb16931e0ceea9ec35336aac1a09b0d215dff72e30f4ea2be83964d95825b12a\", \"actor_role\": \"system\", \"entity_type\": \"shift\", \"occurred_at\": \"2026-11-06T17:39:18.131228Z\", \"model_version\": \"logreg-v1\", \"actor_pseudo_id\": \"matching-api\", \"organization_id\": \"70000000-0000-4000-8000-000000000001\"}"
+  },
+  {
+    "seq": 3824,
+    "occurred_at": "2026-11-10 23:22:19.276295+00",
+    "organization_id": "557162e6-8f6b-408f-b841-b47d8b9a3652",
+    "actor_role": "system",
+    "actor_pseudo_id": "matching-api",
+    "action": "recommendation_generated",
+    "entity_type": "shift",
+    "entity_id": "79d37e37-1fd8-4ceb-a03a-42e25d9d60db",
+    "model_version": "logreg-v1",
+    "details": {
+      "eligible": 65,
+      "excluded": 237,
+      "ordering": {
+        "delta": 0.1,
+        "moved": [],
+        "policy": "rodizio",
+        "window_days": 7
+      },
+      "top_doctor_ids": [
+        "f4343f8e-f715-404e-ad1b-a79e95ae7f93",
+        "5ae086d5-b62f-4178-b640-62c2df09b45e",
+        "1bd5f9b3-7730-42a7-9e1a-fc422b4d00b0",
+        "d69d231d-684d-40dc-92b1-99051a894ece",
+        "acc5de81-c2bd-4e24-a083-118ec3d80243"
+      ],
+      "excluded_by_rule": {
+        "unavailable": 64,
+        "crm_inactive": 15,
+        "outside_radius": 25,
+        "specialty_mismatch": 133
+      }
+    },
+    "details_texto": "{\"eligible\": 65, \"excluded\": 237, \"ordering\": {\"delta\": 0.1, \"moved\": [], \"policy\": \"rodizio\", \"window_days\": 7}, \"top_doctor_ids\": [\"f4343f8e-f715-404e-ad1b-a79e95ae7f93\", \"5ae086d5-b62f-4178-b640-62c2df09b45e\", \"1bd5f9b3-7730-42a7-9e1a-fc422b4d00b0\", \"d69d231d-684d-40dc-92b1-99051a894ece\", \"acc5de81-c2bd-4e24-a083-118ec3d80243\"], \"excluded_by_rule\": {\"unavailable\": 64, \"crm_inactive\": 15, \"outside_radius\": 25, \"specialty_mismatch\": 133}}",
+    "prev_hash": "1574da1cf00ac976c7f821e06e16c322891166e923481658ed93ce0e1dd1a6db",
+    "hash": "c23bdae69baa88b4b9ccb301c2922a72d9074d8aea0db2ae78750e4ceccbae69",
+    "texto_no_banco": "{\"seq\": 3824, \"action\": \"recommendation_generated\", \"details\": {\"eligible\": 65, \"excluded\": 237, \"ordering\": {\"delta\": 0.1, \"moved\": [], \"policy\": \"rodizio\", \"window_days\": 7}, \"top_doctor_ids\": [\"f4343f8e-f715-404e-ad1b-a79e95ae7f93\", \"5ae086d5-b62f-4178-b640-62c2df09b45e\", \"1bd5f9b3-7730-42a7-9e1a-fc422b4d00b0\", \"d69d231d-684d-40dc-92b1-99051a894ece\", \"acc5de81-c2bd-4e24-a083-118ec3d80243\"], \"excluded_by_rule\": {\"unavailable\": 64, \"crm_inactive\": 15, \"outside_radius\": 25, \"specialty_mismatch\": 133}}, \"entity_id\": \"79d37e37-1fd8-4ceb-a03a-42e25d9d60db\", \"prev_hash\": \"1574da1cf00ac976c7f821e06e16c322891166e923481658ed93ce0e1dd1a6db\", \"actor_role\": \"system\", \"entity_type\": \"shift\", \"occurred_at\": \"2026-11-10T23:22:19.276295Z\", \"model_version\": \"logreg-v1\", \"actor_pseudo_id\": \"matching-api\", \"organization_id\": \"557162e6-8f6b-408f-b841-b47d8b9a3652\"}"
+  }
+]
