@@ -4,6 +4,14 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 11/11/2026 (quarta), à noite: o fundo com a anatomia de vidro
+
+**O que aconteceu:** o Victor gerou no Figma, pela conta gratuita dele, uma imagem original de anatomia de vidro a partir do texto que o Claude Code sugeriu, e trouxe para a conversa. O Claude Code não usou a conta do Figma: ele preferiu fazer sozinho, com o passo a passo.
+
+**O que mudou:** a aurora saiu do fundo. A imagem virou WebP em dois tamanhos (42 KB e 21 KB, contra 187 KB do original), com uma versão escura derivada dela (cores invertidas e matiz devolvido). Ela fica fixa atrás dos painéis translúcidos, como no modelo, e no celular aparece bem fraca.
+
+**Uso de IA:** a imagem é do gerador do Figma, a pedido do Victor. O Claude Code escreveu o texto do pedido, otimizou a imagem, fez a versão escura e conferiu as telas nos dois temas e no celular.
+
 ## 11/11/2026 (quarta), à noite: o fundo vira uma aurora
 
 **Pedido do Victor:** "o fundo da tela ficou bem ruim, não está fiel ao da imagem [...] se não for possível replicar dessa forma, vamos pensar em algo mais agradável aos olhos". O busto de vidro desenhado em SVG não chega perto de um render 3D. As opções eram gerar uma imagem com IA (com créditos do Figma) ou um fundo abstrato em CSS; ele escolheu o abstrato.

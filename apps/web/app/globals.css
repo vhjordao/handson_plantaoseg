@@ -476,150 +476,64 @@
 }
 
 /*
- * O fundo da plataforma (components/dominio/arte-de-fundo.tsx): uma aurora suave em azul, anil e
- * rosa no alto da tela, com duas bolhas de vidro desfocadas. Só CSS, sem imagem. As manchas
- * andam muito devagar; com movimento reduzido, ficam paradas. No alto contraste e na impressão,
- * o fundo some.
+ * O fundo da plataforma (components/dominio/arte-de-fundo.tsx): uma anatomia de vidro (pescoço e
+ * tórax translúcidos, com os nervos em rosa), gerada pelo Victor no Figma a partir de um texto e
+ * otimizada para a web (WebP de 21 a 44 KB). Cobre a janela e fica parada atrás dos painéis
+ * translúcidos, como no modelo. No escuro, a mesma imagem com as cores invertidas e o matiz
+ * devolvido. No celular, fica bem mais fraca para não atrapalhar o texto. No alto contraste e na
+ * impressão, some.
  */
-.arte-de-fundo {
-  --aurora-azul: rgb(96 165 255 / 0.55);
-  --aurora-anil: rgb(129 120 255 / 0.32);
-  --aurora-rosa: rgb(255 150 190 / 0.3);
-  --aurora-ciano: rgb(110 215 255 / 0.28);
-  --bolha-luz: rgb(255 255 255 / 0.9);
-  --bolha-cor: rgb(150 190 255 / 0.4);
-  --bolha-borda: rgb(255 255 255 / 0.7);
+.fundo-anatomia {
+  position: absolute;
+  inset: 0;
+  background-image: url("/fundo/anatomia-2000.webp");
+  background-repeat: no-repeat;
+  background-position: right top;
+  background-size: cover;
+  opacity: 0.88;
+}
+
+@media (max-width: 63.99rem) {
+  .fundo-anatomia {
+    background-image: url("/fundo/anatomia-1200.webp");
+  }
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .arte-de-fundo {
-    --aurora-azul: rgb(45 110 230 / 0.32);
-    --aurora-anil: rgb(100 90 230 / 0.24);
-    --aurora-rosa: rgb(220 80 140 / 0.16);
-    --aurora-ciano: rgb(40 160 220 / 0.16);
-    --bolha-luz: rgb(190 215 255 / 0.35);
-    --bolha-cor: rgb(70 110 220 / 0.25);
-    --bolha-borda: rgb(255 255 255 / 0.12);
+  :root:not([data-theme="light"]) .fundo-anatomia {
+    background-image: url("/fundo/anatomia-escuro-2000.webp");
+    opacity: 0.75;
   }
 }
 
-:root[data-theme="dark"] .arte-de-fundo {
-  --aurora-azul: rgb(45 110 230 / 0.32);
-  --aurora-anil: rgb(100 90 230 / 0.24);
-  --aurora-rosa: rgb(220 80 140 / 0.16);
-  --aurora-ciano: rgb(40 160 220 / 0.16);
-  --bolha-luz: rgb(190 215 255 / 0.35);
-  --bolha-cor: rgb(70 110 220 / 0.25);
-  --bolha-borda: rgb(255 255 255 / 0.12);
+:root[data-theme="dark"] .fundo-anatomia {
+  background-image: url("/fundo/anatomia-escuro-2000.webp");
+  opacity: 0.75;
 }
 
-.aurora {
-  position: absolute;
-  border-radius: 9999px;
-  filter: blur(90px);
-  will-change: transform;
-}
-
-.aurora-azul {
-  top: -18rem;
-  right: -10rem;
-  width: 58rem;
-  height: 40rem;
-  background: var(--aurora-azul);
-  animation: aurora-ir 34s ease-in-out infinite alternate;
-}
-
-.aurora-anil {
-  top: 4rem;
-  right: 22rem;
-  width: 38rem;
-  height: 28rem;
-  background: var(--aurora-anil);
-  animation: aurora-voltar 40s ease-in-out infinite alternate;
-}
-
-.aurora-rosa {
-  top: -6rem;
-  right: 8rem;
-  width: 30rem;
-  height: 22rem;
-  background: var(--aurora-rosa);
-  animation: aurora-ir 46s ease-in-out infinite alternate-reverse;
-}
-
-.aurora-ciano {
-  bottom: -14rem;
-  left: -12rem;
-  width: 44rem;
-  height: 30rem;
-  background: var(--aurora-ciano);
-  animation: aurora-voltar 52s ease-in-out infinite alternate;
-}
-
-/* As bolhas de vidro: luz no alto à esquerda, cor no corpo e uma borda clara, levemente desfocadas. */
-.bolha {
-  position: absolute;
-  border-radius: 9999px;
-  background: radial-gradient(circle at 32% 28%, var(--bolha-luz), var(--bolha-cor) 42%, transparent 72%);
-  box-shadow:
-    inset 0 0 0 1px var(--bolha-borda),
-    inset -10px -16px 40px rgb(80 110 220 / 0.18);
-  filter: blur(1.5px);
-}
-
-.bolha-grande {
-  top: 7rem;
-  right: 9%;
-  width: 15rem;
-  height: 15rem;
-  animation: bolha-flutuar 18s ease-in-out infinite alternate;
-}
-
-.bolha-pequena {
-  top: 3rem;
-  right: 26%;
-  width: 6rem;
-  height: 6rem;
-  opacity: 0.8;
-  animation: bolha-flutuar 14s ease-in-out infinite alternate-reverse;
-}
-
-@keyframes aurora-ir {
-  to {
-    transform: translate3d(-6rem, 3rem, 0) scale(1.08);
+@media (max-width: 63.99rem) and (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .fundo-anatomia {
+    background-image: url("/fundo/anatomia-escuro-1200.webp");
   }
 }
 
-@keyframes aurora-voltar {
-  to {
-    transform: translate3d(5rem, -2rem, 0) scale(0.94);
+@media (max-width: 63.99rem) {
+  :root[data-theme="dark"] .fundo-anatomia {
+    background-image: url("/fundo/anatomia-escuro-1200.webp");
   }
 }
 
-@keyframes bolha-flutuar {
-  to {
-    transform: translate3d(0, 1.25rem, 0);
-  }
-}
-
-/* No celular as manchas encolhem e as bolhas saem: fica só o clima de cor, sem nada sob o texto. */
+/* No celular a figura passa por trás do texto: fica só como clima. */
 @media (max-width: 47.99rem) {
-  .aurora-azul {
-    width: 30rem;
-    height: 22rem;
-    top: -12rem;
-    right: -12rem;
+  .fundo-anatomia,
+  :root[data-theme="dark"] .fundo-anatomia {
+    opacity: 0.3;
   }
+}
 
-  .aurora-anil,
-  .aurora-rosa {
-    width: 18rem;
-    height: 14rem;
-    right: -4rem;
-  }
-
-  .bolha {
-    display: none;
+@media (max-width: 47.99rem) and (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .fundo-anatomia {
+    opacity: 0.3;
   }
 }
 
