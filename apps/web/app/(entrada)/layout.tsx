@@ -1,3 +1,6 @@
+import "@fontsource/open-sauce-one/latin-400.css";
+import "@fontsource/open-sauce-one/latin-600.css";
+import "@fontsource/open-sauce-one/latin-800.css";
 import { ArteDeFundo } from "@/components/dominio/arte-de-fundo";
 import { FaixaDemonstracao } from "@/components/dominio/faixa-demonstracao";
 import { CabecalhoPublico } from "@/components/layout/cabecalho-publico";

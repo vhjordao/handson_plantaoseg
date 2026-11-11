@@ -4,6 +4,18 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 11/11/2026 (quarta), à noite: a página inicial em cartões mascarados
+
+**Pedido do Victor:** "Quero a landing page dessa forma", com um prompt pronto de uma clínica odontológica (splash com contador, barra com Menu e três seções em "cartões mascarados").
+
+**O que mudou:** a página inicial abre com as três seções nesse formato e o conteúdo do PlantãoSeguro: "A IA sugere. Você decide.", o caminho da vaga até a oferta e a decisão auditável, com a demonstração viva no cartão grande. A barra ganhou o painel lateral do Menu, e o texto público passou à Open Sauce One, servida pelo próprio site. As seções de antes continuam abaixo.
+
+**O que ficou de fora, e por quê:** as fotos do prompt (de terceiros e de outro assunto; entraram dois fundos originais em SVG) e o CDN de terceiros da fonte. O splash aparece uma vez por sessão e nunca para quem pede menos movimento. Detalhes na [direção de arte, seção 6.4](design/direcao-de-arte.md#64-a-página-inicial-em-cartões-mascarados-1111).
+
+**Como foi conferido:** a suíte do Playwright inteira, com o axe nos dois temas, nenhuma rolagem horizontal a 320 px, a letra a 200%, os alvos de toque e o foco que não fica sob o cabeçalho, mais capturas no computador e no celular.
+
+**Uso de IA:** o Claude Code adaptou o prompt ao produto, desenhou os dois fundos e escreveu o componente e os ajustes de acessibilidade.
+
 ## 11/11/2026 (quarta), à noite: o fundo vira uma malha suave
 
 **Pedido do Victor:** "ficou bem ruim a imagem de fundo, vamos retirar e pense em algo melhor". A imagem saiu do projeto. Para não errar de novo no gosto, o Claude Code montou três propostas em CSS (limpo, malha suave e pulso, com uma linha de batimento) e mostrou capturas lado a lado; o Victor escolheu a **malha suave**.

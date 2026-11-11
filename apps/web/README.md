@@ -63,6 +63,7 @@
 | Vitest, Testing Library, jsdom | 5.1.0, 16.3.3, 30.1.3 | Testes de componente | Rápido e sem navegador | 0 |
 | Playwright e `@axe-core/playwright` | 1.64.1 e 4.14.0 | Jornada e acessibilidade (axe) nos temas claro e escuro | Mede o que o usuário vê | 0 |
 | Atkinson Hyperlegible Next | `next/font` | Interface, títulos e números (uma família só desde a fase E) | Foi desenhada para leitura cansada; fica hospedada com o site (o build baixa, o navegador não chama o Google) | 0 |
+| Open Sauce One | `@fontsource/open-sauce-one` (OFL) | Texto das páginas públicas (fase E) | Servida pelo próprio site e baixada só nas páginas públicas: quatro pesos, só o alfabeto latino, cerca de 24 KB cada | 0 |
 | Node.js | 26.x | Execução | A mesma versão na máquina, na CI e na Vercel | 0 |
 
 ## 6. Como rodar e testar
