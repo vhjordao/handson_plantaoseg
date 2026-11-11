@@ -1,22 +1,19 @@
-import { Fustat } from "next/font/google";
+import "@fontsource/open-sauce-one/latin-400.css";
+import "@fontsource/open-sauce-one/latin-600.css";
+import "@fontsource/open-sauce-one/latin-700.css";
+import "@fontsource/open-sauce-one/latin-800.css";
 import { FaixaDemonstracao } from "@/components/dominio/faixa-demonstracao";
 import { CabecalhoPublico } from "@/components/layout/cabecalho-publico";
 import { RodapePublico } from "@/components/layout/rodape-publico";
 
-// Títulos da página inicial. Um peso só e só o alfabeto latino: cerca de 25 KB, baixados apenas
-// nas páginas públicas (a plataforma não carrega esta fonte).
-const fustat = Fustat({
-  variable: "--font-fustat",
-  subsets: ["latin"],
-  weight: ["700"],
-  display: "swap",
-  fallback: ["system-ui", "sans-serif"],
-});
-
-/** Casca do site público: aviso de demonstração, cabeçalho, conteúdo e rodapé. */
+/**
+ * Casca do site público: aviso de demonstração, cabeçalho, conteúdo e rodapé. O texto usa a Open
+ * Sauce One (OFL), servida pelo próprio site e baixada só nas páginas públicas: quatro pesos, só o
+ * alfabeto latino, cerca de 24 KB cada.
+ */
 export default function LayoutPublico({ children }: LayoutProps<"/">) {
   return (
-    <div className={`${fustat.variable} contents`}>
+    <div className="fonte-vitrine contents">
       <FaixaDemonstracao />
       <CabecalhoPublico />
       <main id="conteudo" tabIndex={-1} className="flex-1 outline-none">

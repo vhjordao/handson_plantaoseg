@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+  <!-- Fundo da seção 1 da página inicial: céu claro, luz azul no alto à esquerda e uma esfera de vidro azul à direita. Original do PlantãoSeguro. -->
+  <defs>
+    <linearGradient id="ceu" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f6f9fd"/>
+      <stop offset="0.55" stop-color="#e9f0fa"/>
+      <stop offset="1" stop-color="#d9e5f6"/>
+    </linearGradient>
+    <radialGradient id="luz-a" cx="0.15" cy="0.05" r="0.5">
+      <stop offset="0" stop-color="#60b1ff" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#60b1ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="luz-b" cx="0.92" cy="0.95" r="0.45">
+      <stop offset="0" stop-color="#ff9fc4" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#ff9fc4" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="esfera-corpo" cx="0.36" cy="0.3" r="0.78">
+      <stop offset="0" stop-color="#cfe8ff"/>
+      <stop offset="0.18" stop-color="#7cc0ff"/>
+      <stop offset="0.45" stop-color="#2f8fff"/>
+      <stop offset="0.72" stop-color="#1557d6"/>
+      <stop offset="1" stop-color="#0a2c7e"/>
+    </radialGradient>
+    <radialGradient id="esfera-sombra" cx="0.72" cy="0.8" r="0.55">
+      <stop offset="0" stop-color="#061f63" stop-opacity="0.75"/>
+      <stop offset="1" stop-color="#061f63" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="esfera-reflexo" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="esfera-aro" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0.86" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="0.95" stop-color="#bfe0ff" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="borrar-60" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="60"/></filter>
+    <filter id="borrar-24" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="24"/></filter>
+    <clipPath id="dentro-da-esfera"><circle cx="1180" cy="560" r="400"/></clipPath>
+  </defs>
+
+  <rect width="1600" height="1000" fill="url(#ceu)"/>
+  <rect width="1600" height="1000" fill="url(#luz-a)"/>
+  <rect width="1600" height="1000" fill="url(#luz-b)"/>
+
+  <!-- A sombra azul que a esfera projeta no fundo. -->
+  <ellipse cx="1200" cy="650" rx="460" ry="420" fill="#1764e8" opacity="0.35" filter="url(#borrar-60)"/>
+
+  <!-- A esfera. -->
+  <circle cx="1180" cy="560" r="400" fill="url(#esfera-corpo)"/>
+  <g clip-path="url(#dentro-da-esfera)">
+    <circle cx="1180" cy="560" r="400" fill="url(#esfera-sombra)"/>
+    <!-- Faixas de luz dentro do vidro. -->
+    <ellipse cx="1010" cy="760" rx="260" ry="90" fill="#78dcff" opacity="0.55" transform="rotate(-28 1010 760)" filter="url(#borrar-24)"/>
+    <ellipse cx="1360" cy="380" rx="220" ry="70" fill="#9d8cff" opacity="0.5" transform="rotate(32 1360 380)" filter="url(#borrar-24)"/>
+    <ellipse cx="1300" cy="820" rx="200" ry="60" fill="#ff8fc0" opacity="0.35" transform="rotate(-12 1300 820)" filter="url(#borrar-24)"/>
+  </g>
+  <circle cx="1180" cy="560" r="400" fill="url(#esfera-aro)"/>
+  <!-- O reflexo no alto. -->
+  <ellipse cx="1080" cy="330" rx="170" ry="70" fill="url(#esfera-reflexo)" transform="rotate(-18 1080 330)"/>
+  <circle cx="1180" cy="560" r="399" fill="none" stroke="#ffffff" stroke-opacity="0.35" stroke-width="2"/>
+</svg>

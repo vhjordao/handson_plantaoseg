@@ -14,9 +14,10 @@ const atkinson = Atkinson_Hyperlegible_Next({
 });
 
 
-// Lê a escolha de tema guardada pelo BotaoTema (components/layout/botao-tema.tsx). Sem escolha,
-// segue o sistema. Fica em texto porque roda antes do React.
-const SCRIPT_TEMA = `try{var t=localStorage.getItem("plantaoseg-tema");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}`;
+// Lê a escolha de tema guardada pelo BotaoTema (components/layout/botao-tema.tsx); sem escolha,
+// segue o sistema. Também esconde o splash da página inicial se ele já foi visto nesta sessão ou
+// se a pessoa pede menos movimento. Fica em texto porque roda antes do React.
+const SCRIPT_TEMA = `try{var d=document.documentElement;var t=localStorage.getItem("plantaoseg-tema");if(t==="light"||t==="dark")d.dataset.theme=t;if(sessionStorage.getItem("plantaoseg-splash-visto")||matchMedia("(prefers-reduced-motion: reduce)").matches)d.dataset.splash="visto"}catch(e){}`;
 
 export const metadata: Metadata = {
   title: {
