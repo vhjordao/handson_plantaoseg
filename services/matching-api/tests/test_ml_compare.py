@@ -1,5 +1,8 @@
 """Regressão logística contra LightGBM (E.4): o que não depende da biblioteca, que roda só na CI."""
 
+import json
+from pathlib import Path
+
 from app.ml_compare import (
     BASE,
     MIN_GAIN,
@@ -110,3 +113,12 @@ def test_a_avaliacao_roda_ponta_a_ponta_e_o_relatorio_diz_simulacao():
     assert "Simulação" in text and "circularidade" in text
     assert "a regressão logística continua" in text
     assert lightgbm_chart(full).startswith("<svg")
+
+
+def test_relatorio_publicado_bate_com_os_numeros():
+    docs = Path(__file__).resolve().parents[3] / "docs" / "resultados"
+    metrics = json.loads((docs / "metricas-lightgbm.json").read_text(encoding="utf-8"))
+    published = (docs / "metricas-lightgbm.md").read_text(encoding="utf-8")
+    assert published == render_lightgbm(metrics)
+    assert metrics["label"] == "simulacao"
+    assert [row["world"] for row in metrics["rows"]][0] == BASE

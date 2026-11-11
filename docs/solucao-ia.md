@@ -25,7 +25,7 @@ A IA entra onde há **texto livre** e **incerteza**; onde a resposta tem de ser 
 | --- | --- | --- | --- |
 | Extração do texto | Sim (NLP) | Os pedidos variam: abreviações, erros, datas relativas, informação faltando | Formulário rígido: reduz a adoção. Só regras: acerta tudo em texto gerado por modelo, mas é otimista (circularidade) e frágil em texto real |
 | Filtro de elegibilidade e jornada | **Não** | Regra exata, testável e auditável; erro aqui é risco assistencial | LLM decidindo regras: não determinístico e não auditável |
-| Ranking | Sim (ML simples) | Combina sinais (distância, preferência, histórico) que uma pessoa pondera "no olho" | Só heurística: é o baseline; o modelo ganha 3,5 pontos percentuais. LightGBM: não foi testado e perderia a leitura por peso (comparar na Etapa 3) |
+| Ranking | Sim (ML simples) | Combina sinais (distância, preferência, histórico) que uma pessoa pondera "no olho" | Só heurística: é o baseline; o modelo ganha 3,5 pontos percentuais. LightGBM: testado na CI em 11/11 e não ganha (de −1,3 a +0,6 ponto no top-5, em 5 mundos simulados), e perderia a leitura por peso ([resultado](resultados/metricas-lightgbm.md)) |
 | Explicação | Quase não | Os fatores já são conhecidos; o LLM só pode reescrever | LLM gerando o motivo livremente: pode inventar motivo |
 | Aprovação | **Não** | Res. CFM 2.454, Art. 15: a solução não é soberana e a supervisão humana é obrigatória | Aprovação automática: viola o princípio do projeto |
 | Previsão de vagas descobertas | Evolução futura | Não é necessária para o núcleo | Fica para a Etapa 3 |
@@ -110,7 +110,7 @@ A diferença modelo menos baseline é de 3,5 pontos percentuais (erro-padrão 0,
 | Escolha | Alternativa | Por que esta |
 | --- | --- | --- |
 | Gemini (decisão do Victor) | Claude | ADR 0003 |
-| Regressão logística em Python puro | scikit-learn, LightGBM | Sem dependência e explicável por peso; os outros não foram testados (comparação na Etapa 3) |
+| Regressão logística em Python puro | scikit-learn, LightGBM | Sem dependência e explicável por peso; o LightGBM foi comparado na CI e não ganhou ([resultado](resultados/metricas-lightgbm.md)); o scikit-learn não foi testado |
 | Linha de comando | API e tela | Protótipo adiado (ADR 0004) |
 | Trilha em arquivo com hash | Tabela `audit_log` no Postgres | Equivalente para a PoC; a tabela entra com o banco |
 | Esquema fechado escrito à mão | Pydantic | Sem dependência na PoC; Pydantic entra com a API |

@@ -309,14 +309,20 @@ def render_lightgbm(metrics: dict[str, Any]) -> str:
         "## Leitura",
         "",
         f"- **Na base, o LightGBM {decision['verdicts'][BASE]}** "
-        f"({_points(base['gain'])} ponto(s) de chance de sucesso do top-5; AUC "
+        f"({_points(base['gain'])} ponto de chance de sucesso do top-5; AUC "
         f"{_num(base['auc_boost'])} contra {_num(base['auc_logistic'])}). O simulador é quase "
         "linear na escala logística, e é isso que a regressão aprende; um modelo mais flexível "
         "não tem muito o que acrescentar.",
         f"- **No mundo com regra não linear, o LightGBM {decision['verdicts'][NONLINEAR]}** "
-        f"({_points(nonlinear['gain'])} ponto(s); AUC {_num(nonlinear['auc_boost'])} contra "
-        f"{_num(nonlinear['auc_logistic'])}). O resultado de qual modelo é melhor depende de a "
-        "regra do mundo ser linear ou não, e no mundo real não sabemos qual é.",
+        f"({_points(nonlinear['gain'])} ponto; AUC {_num(nonlinear['auc_boost'])} contra "
+        f"{_num(nonlinear['auc_logistic'])}). Os dois ficam longe do oráculo "
+        f"({_points(nonlinear['top5_logistic'] - nonlinear['top5_oracle'])} e "
+        f"{_points(nonlinear['top5_boost'] - nonlinear['top5_oracle'])} pontos), que enxerga a "
+        "confiabilidade latente do médico, algo que nenhum dos modelos vê.",
+        f"- **Entre os {len(rows)} mundos, a diferença do LightGBM para a regressão vai de "
+        f"{_points(min(r['gain'] for r in rows.values()))} a "
+        f"{_points(max(r['gain'] for r in rows.values()))} ponto(s).** Ele não passa "
+        "consistentemente à frente nem na base nem onde a regra deixa de ser linear.",
     ]
     if decision["swap"]:
         lines.append(
@@ -347,7 +353,8 @@ def render_lightgbm(metrics: dict[str, Any]) -> str:
         "diz como cada modelo se sai nesse mundo e em uma variação dele, e não no hospital.",
         "- O mundo não linear foi escolhido pelo grupo para ter o que o LightGBM representa e a "
         "regressão não; os termos extras (−0,30 por km acima de 15 e +0,06 por km vezes a "
-        "preferência) são arbitrários. Mostra que a conclusão não é a mesma em todo mundo.",
+        "preferência) são arbitrários, e outra forma de não linearidade poderia dar outro "
+        "resultado.",
         "- Hiperparâmetros fixos, sem busca; uma busca pode melhorar o LightGBM e não o "
         "piorará.",
         "- O LightGBM roda só na CI. Se vier a entrar no produto, a explicação por variável "

@@ -69,7 +69,7 @@ Cada passo foi conferido com `ruff` e `pytest` antes do commit; a decisão sobre
 | ruff | 0.7.0 | Lint (E, F, I, UP, B) | Rápido e igual na CI e localmente | 0 |
 | GitHub Actions | checkout@v4, setup-python@v5, upload-artifact@v4 | CI com 5 jobs | Já era a escolha do `docs/02` | 0 |
 | Gemini (`google-genai`) | 2.32.0, só na API; testado à parte em 05/11 | Extração e reescrita, opcional | Decisão do Victor ([ADR 0003](../../docs/adr/0003-llm-do-produto-gemini.md)) | Estimado em menos de US$ 1 para 200 chamadas |
-| Regressão logística própria | IRLS, até 15 iterações | Ranking | Explicável por peso e sem dependência; scikit-learn e LightGBM não foram testados (comparação prevista para a Etapa 3) | 0 |
+| Regressão logística própria | IRLS, até 15 iterações | Ranking | Explicável por peso e sem dependência; o LightGBM foi comparado na CI (`python -m app.cli lightgbm`, fora das dependências da API) e não ganhou ([resultado](../../docs/resultados/metricas-lightgbm.md)); o scikit-learn não foi testado | 0 |
 | FastAPI | ver a [ficha da API](app/api/README.md) | Porta HTTP do motor | Só `app/api/` usa pacotes de fora; o núcleo e a CLI continuam só com a biblioteca padrão | 0 |
 | n8n | adiado | Cascata | ADR 0004; a tela, o banco e a API saíram do adiamento nos ADRs 0007, 0008 e 0010 | 0 |
 
@@ -122,4 +122,4 @@ O trabalho foi feito **em conjunto** pelo Victor Jordão e pelo Claude Code (Son
 
 ## 11. Próximos passos
 
-O rodízio de 10 pontos entrou na API em 06/11 (passo 7.2 do [roteiro](../../docs/roteiro-ate-o-mvp.md), [ADR 0017](../../docs/adr/0017-rodizio-entre-equivalentes-na-api.md)). Faltam uma medida contra a exclusão por zona, a comparação com o LightGBM (E.4) e a previsão de vagas descobertas (E.5).
+O rodízio de 10 pontos entrou na API em 06/11 (passo 7.2 do [roteiro](../../docs/roteiro-ate-o-mvp.md), [ADR 0017](../../docs/adr/0017-rodizio-entre-equivalentes-na-api.md)). O experimento contra a exclusão por zona (7.3, [resultado](../../docs/resultados/metricas-zona.md)) e a comparação com o LightGBM (E.4, [resultado](../../docs/resultados/metricas-lightgbm.md)) foram feitos em 11/11 e não mudam a API. Falta a previsão de vagas descobertas (E.5).
