@@ -1,0 +1,711 @@
+{
+  "label": "simulacao",
+  "test_start": "2026-08-01",
+  "n_shifts": 392,
+  "mean_pool": 49.892857142857146,
+  "repetitions": 100,
+  "policies": {
+    "hoje": {
+      "label": "Hoje: só a ordem do modelo",
+      "adoptable": true,
+      "top5_success": 0.7123466334164845,
+      "offers_per_shift": 1.3167446217014092,
+      "uncovered_share": 5.0292187849536374e-05,
+      "time_mean": 47.45909125698395,
+      "filled_share": 0.9999234693877551,
+      "top10_top5_slots": 0.5066326530612245,
+      "top10_effective_offers": 0.8208055175318629,
+      "never_recommended_share": 0.4708171206225681,
+      "zone_top5": {
+        "centro": 0.8680470570405592,
+        "leste": 0.007801854127108233,
+        "norte": 1.664542666500891,
+        "oeste": 0.009754224270353303,
+        "sul": 1.824121100785246
+      },
+      "zone_offers": {
+        "centro": 0.8473302997053355,
+        "leste": 0.0008460517401906308,
+        "norte": 1.7290909974553927,
+        "oeste": 0.0003659629107511355,
+        "sul": 1.8167404390384576
+      },
+      "worst_zone_top5": 0.007801854127108233,
+      "worst_zone_offers": 0.0003659629107511355,
+      "alert_weeks": 9,
+      "weeks": 9,
+      "top5_success_vs_current": 0.017902082475712677,
+      "top5_success_vs_current_se": 0.0017174942364264918
+    },
+    "rodizio10": {
+      "label": "Rodízio de 10 pontos (o que está na API)",
+      "adoptable": true,
+      "top5_success": 0.6944445509407718,
+      "offers_per_shift": 1.3694268354698937,
+      "uncovered_share": 6.543083718458888e-05,
+      "time_mean": 49.368089394596524,
+      "filled_share": 0.9999234693877551,
+      "top10_top5_slots": 0.28520408163265304,
+      "top10_effective_offers": 0.3574304708218539,
+      "never_recommended_share": 0.26459143968871596,
+      "zone_top5": {
+        "centro": 0.9844923939606341,
+        "leste": 0.0702166871439741,
+        "norte": 1.6008558166521611,
+        "oeste": 0.08778801843317974,
+        "sul": 1.5775502485411714
+      },
+      "zone_offers": {
+        "centro": 0.9289457242965654,
+        "leste": 0.08449953677560636,
+        "norte": 1.6290631450780328,
+        "oeste": 0.07405117195753173,
+        "sul": 1.6565257486380502
+      },
+      "worst_zone_top5": 0.0702166871439741,
+      "worst_zone_offers": 0.07405117195753173,
+      "alert_weeks": 9,
+      "weeks": 9,
+      "top5_success_vs_current": 0.0,
+      "top5_success_vs_current_se": 0.0
+    },
+    "dist10": {
+      "label": "Rodízio e limite do peso da distância em 10 km",
+      "adoptable": true,
+      "top5_success": 0.6853871530142647,
+      "offers_per_shift": 1.383928711228046,
+      "uncovered_share": 0.00011796054061701754,
+      "time_mean": 49.87802637956987,
+      "filled_share": 0.9999234693877551,
+      "top10_top5_slots": 0.2739795918367347,
+      "top10_effective_offers": 0.36151550001170796,
+      "never_recommended_share": 0.21011673151750973,
+      "zone_top5": {
+        "centro": 0.9434718775456077,
+        "leste": 0.1989472802412599,
+        "norte": 1.514010112312984,
+        "oeste": 0.30238095238095236,
+        "sul": 1.5372937828686695
+      },
+      "zone_offers": {
+        "centro": 0.9358498589654218,
+        "leste": 0.15394294342804207,
+        "norte": 1.551710127869523,
+        "oeste": 0.17165212624470116,
+        "sul": 1.6154879231442054
+      },
+      "worst_zone_top5": 0.1989472802412599,
+      "worst_zone_offers": 0.15394294342804207,
+      "alert_weeks": 9,
+      "weeks": 9,
+      "top5_success_vs_current": -0.009057397926507171,
+      "top5_success_vs_current_se": 0.0013704899869865516
+    },
+    "opp3": {
+      "label": "Rodízio e lugar de oportunidade no 3º",
+      "adoptable": true,
+      "top5_success": 0.6834715853701592,
+      "offers_per_shift": 1.379522667767812,
+      "uncovered_share": 7.501787261880949e-05,
+      "time_mean": 49.58236599739776,
+      "filled_share": 0.9999234693877551,
+      "top10_top5_slots": 0.2540816326530612,
+      "top10_effective_offers": 0.35152167619843694,
+      "never_recommended_share": 0.1517509727626459,
+      "zone_top5": {
+        "centro": 0.9884621213556368,
+        "leste": 0.17554171785993522,
+        "norte": 1.4937461146338429,
+        "oeste": 0.24385560675883258,
+        "sul": 1.5146495209278872
+      },
+      "zone_offers": {
+        "centro": 0.9514846702400427,
+        "leste": 0.08553802368494241,
+        "norte": 1.5167321025401634,
+        "oeste": 0.08729893831285779,
+        "sul": 1.7037969369363852
+      },
+      "worst_zone_top5": 0.17554171785993522,
+      "worst_zone_offers": 0.08553802368494241,
+      "alert_weeks": 9,
+      "weeks": 9,
+      "top5_success_vs_current": -0.01097296557061267,
+      "top5_success_vs_current_se": 0.0016708287283744875
+    },
+    "opp2": {
+      "label": "Rodízio e lugar de oportunidade no 2º",
+      "adoptable": true,
+      "top5_success": 0.6856740088805503,
+      "offers_per_shift": 1.3880086172859163,
+      "uncovered_share": 7.33892563265421e-05,
+      "time_mean": 50.032604536061434,
+      "filled_share": 0.9999234693877551,
+      "top10_top5_slots": 0.2586734693877551,
+      "top10_effective_offers": 0.35593146122700214,
+      "never_recommended_share": 0.16731517509727625,
+      "zone_top5": {
+        "centro": 0.9831691514956333,
+        "leste": 0.1482352284150564,
+        "norte": 1.519799825935596,
+        "oeste": 0.23410138248847925,
+        "sul": 1.5247136373460124
+      },
+      "zone_offers": {
+        "centro": 0.9506769686192461,
+        "leste": 0.1432797266762395,
+        "norte": 1.4419114437099043,
+        "oeste": 0.20597710217586002,
+        "sul": 1.6718954970460398
+      },
+      "worst_zone_top5": 0.1482352284150564,
+      "worst_zone_offers": 0.1432797266762395,
+      "alert_weeks": 9,
+      "weeks": 9,
+      "top5_success_vs_current": -0.008770542060221542,
+      "top5_success_vs_current_se": 0.0014825421708982687
+    },
+    "longe3_d12": {
+      "label": "Rodízio e 3º lugar para quem mora a 12 km ou mais",
+      "adoptable": true,
+      "top5_success": 0.6546617853565452,
+      "offers_per_shift": 1.3914654540657587,
+      "uncovered_share": 0.00010030243716222149,
+      "time_mean": 50.164183293361226,
+      "filled_share": 0.9998469387755102,
+      "top10_top5_slots": 0.24285714285714285,
+      "top10_effective_offers": 0.3510246422098008,
+      "never_recommended_share": 0.0622568093385214,
+      "zone_top5": {
+        "centro": 0.895835148805577,
+        "leste": 0.4876158829442645,
+        "norte": 1.3576878445024658,
+        "oeste": 0.7364439324116743,
+        "sul": 1.3536236582378791
+      },
+      "zone_offers": {
+        "centro": 0.9239675427520209,
+        "leste": 0.17629848754496097,
+        "norte": 1.5337855095897468,
+        "oeste": 0.19998564348696984,
+        "sul": 1.6246242942099858
+      },
+      "worst_zone_top5": 0.4876158829442645,
+      "worst_zone_offers": 0.17629848754496097,
+      "alert_weeks": 6,
+      "weeks": 9,
+      "top5_success_vs_current": -0.039782765584226665,
+      "top5_success_vs_current_se": 0.001912247854316641
+    },
+    "longe2_d10": {
+      "label": "Rodízio e 2º lugar para quem mora a 10 km ou mais",
+      "adoptable": true,
+      "top5_success": 0.6616162022385915,
+      "offers_per_shift": 1.4290386452737667,
+      "uncovered_share": 8.626650515070842e-05,
+      "time_mean": 51.6220215317108,
+      "filled_share": 0.9999489795918367,
+      "top10_top5_slots": 0.24591836734693878,
+      "top10_effective_offers": 0.3235826102589046,
+      "never_recommended_share": 0.08949416342412451,
+      "zone_top5": {
+        "centro": 0.9262697255005967,
+        "leste": 0.43690383111806097,
+        "norte": 1.349003274068548,
+        "oeste": 0.7218125960061444,
+        "sul": 1.3435595418197535
+      },
+      "zone_offers": {
+        "centro": 0.92306050530273,
+        "leste": 0.38803815044973033,
+        "norte": 1.3240572380312237,
+        "oeste": 0.622324497525992,
+        "sul": 1.4541850527558986
+      },
+      "worst_zone_top5": 0.43690383111806097,
+      "worst_zone_offers": 0.38803815044973033,
+      "alert_weeks": 6,
+      "weeks": 9,
+      "top5_success_vs_current": -0.03282834870218032,
+      "top5_success_vs_current_se": 0.0018830011611423853
+    },
+    "longe2_d12": {
+      "label": "Rodízio e 2º lugar para quem mora a 12 km ou mais",
+      "adoptable": true,
+      "top5_success": 0.6546617853565452,
+      "offers_per_shift": 1.452055915061389,
+      "uncovered_share": 0.00010030243716222149,
+      "time_mean": 52.43089679806098,
+      "filled_share": 0.9998724489795918,
+      "top10_top5_slots": 0.24285714285714285,
+      "top10_effective_offers": 0.3181550885208582,
+      "never_recommended_share": 0.0622568093385214,
+      "zone_top5": {
+        "centro": 0.895835148805577,
+        "leste": 0.4876158829442645,
+        "norte": 1.3576878445024658,
+        "oeste": 0.7364439324116743,
+        "sul": 1.3536236582378791
+      },
+      "zone_offers": {
+        "centro": 0.8677317636947209,
+        "leste": 0.47320063300445303,
+        "norte": 1.376652022004792,
+        "oeste": 0.6513582135622117,
+        "sul": 1.4437693207145523
+      },
+      "worst_zone_top5": 0.4876158829442645,
+      "worst_zone_offers": 0.47320063300445303,
+      "alert_weeks": 6,
+      "weeks": 9,
+      "top5_success_vs_current": -0.039782765584226665,
+      "top5_success_vs_current_se": 0.001912247854316641
+    },
+    "cota3": {
+      "label": "Referência: cota por zona no 3º lugar (usa a zona; não é adotável)",
+      "adoptable": false,
+      "top5_success": 0.6633278243482904,
+      "offers_per_shift": 1.3852036312579508,
+      "uncovered_share": 8.836869172048843e-05,
+      "time_mean": 49.83868663418119,
+      "filled_share": 0.9999234693877551,
+      "top10_top5_slots": 0.2903061224489796,
+      "top10_effective_offers": 0.343838580812205,
+      "never_recommended_share": 0.1867704280155642,
+      "zone_top5": {
+        "centro": 0.8190870858355277,
+        "leste": 0.8113928292192562,
+        "norte": 1.3142649923328773,
+        "oeste": 0.8144777265745007,
+        "sul": 1.2882069015200635
+      },
+      "zone_offers": {
+        "centro": 0.9038398160151145,
+        "leste": 0.22196924229957735,
+        "norte": 1.534425671858413,
+        "oeste": 0.2163093353939719,
+        "sul": 1.6244610273614943
+      },
+      "worst_zone_top5": 0.8113928292192562,
+      "worst_zone_offers": 0.2163093353939719,
+      "alert_weeks": 0,
+      "weeks": 9,
+      "top5_success_vs_current": -0.031116726592481436,
+      "top5_success_vs_current_se": 0.001910015117873334
+    },
+    "cota2": {
+      "label": "Referência: cota por zona no 2º lugar (usa a zona; não é adotável)",
+      "adoptable": false,
+      "top5_success": 0.6631959201107545,
+      "offers_per_shift": 1.4340864497529906,
+      "uncovered_share": 8.809625409434209e-05,
+      "time_mean": 51.651886623976324,
+      "filled_share": 0.9999234693877551,
+      "top10_top5_slots": 0.2897959183673469,
+      "top10_effective_offers": 0.3458740287645466,
+      "never_recommended_share": 0.1867704280155642,
+      "zone_top5": {
+        "centro": 0.8190870858355277,
+        "leste": 0.8113928292192562,
+        "norte": 1.3142649923328773,
+        "oeste": 0.8144777265745007,
+        "sul": 1.2882069015200635
+      },
+      "zone_offers": {
+        "centro": 0.799360143368404,
+        "leste": 0.7709405622287837,
+        "norte": 1.3396796617915976,
+        "oeste": 0.7259985201708887,
+        "sul": 1.3753631957166823
+      },
+      "worst_zone_top5": 0.8113928292192562,
+      "worst_zone_offers": 0.7259985201708887,
+      "alert_weeks": 0,
+      "weeks": 9,
+      "top5_success_vs_current": -0.031248630830017388,
+      "top5_success_vs_current_se": 0.001893496729840752
+    }
+  },
+  "scenarios": [
+    {
+      "scenario": "Outra semente (1)",
+      "n_shifts": 403,
+      "policies": {
+        "hoje": {
+          "top5_success": 0.706725498893117,
+          "top10_effective_offers": 0.779867693214718,
+          "worst_zone_top5": 0.018338196856906533,
+          "worst_zone_offers": 0.0007868603503707811,
+          "time_mean": 46.947715824214
+        },
+        "rodizio10": {
+          "top5_success": 0.6873185504142366,
+          "top10_effective_offers": 0.4074546882486009,
+          "worst_zone_top5": 0.10544463192721258,
+          "worst_zone_offers": 0.04616688161358717,
+          "time_mean": 49.56828390619184
+        },
+        "dist10": {
+          "top5_success": 0.6835089153241172,
+          "top10_effective_offers": 0.3969968721726214,
+          "worst_zone_top5": 0.13521084981006587,
+          "worst_zone_offers": 0.06853556975251487,
+          "time_mean": 49.862733905792425
+        },
+        "opp3": {
+          "top5_success": 0.672837729362912,
+          "top10_effective_offers": 0.40174549859133324,
+          "worst_zone_top5": 0.23323871592236367,
+          "worst_zone_offers": 0.1011637554756631,
+          "time_mean": 49.94191066997519
+        },
+        "opp2": {
+          "top5_success": 0.6742130995560476,
+          "top10_effective_offers": 0.3710083347620749,
+          "worst_zone_top5": 0.21971763094135704,
+          "worst_zone_offers": 0.2005643022863503,
+          "time_mean": 50.617570418166025
+        },
+        "longe3_d12": {
+          "top5_success": 0.6491907993428091,
+          "top10_effective_offers": 0.39468652705648893,
+          "worst_zone_top5": 0.47661824558048227,
+          "worst_zone_offers": 0.1839225286742276,
+          "time_mean": 50.43180126073361
+        },
+        "longe2_d10": {
+          "top5_success": 0.6555309902907838,
+          "top10_effective_offers": 0.3448931337722561,
+          "worst_zone_top5": 0.5205617717687536,
+          "worst_zone_offers": 0.49109713310344855,
+          "time_mean": 52.332679803444684
+        },
+        "longe2_d12": {
+          "top5_success": 0.6491907993428091,
+          "top10_effective_offers": 0.35380969720157723,
+          "worst_zone_top5": 0.47661824558048227,
+          "worst_zone_offers": 0.43171655578207285,
+          "time_mean": 52.32841117784285
+        },
+        "cota3": {
+          "top5_success": 0.6632257805520775,
+          "top10_effective_offers": 0.3887619282479983,
+          "worst_zone_top5": 0.7793733664185277,
+          "worst_zone_offers": 0.20808877348141044,
+          "time_mean": 50.126088790728836
+        },
+        "cota2": {
+          "top5_success": 0.6635963783967952,
+          "top10_effective_offers": 0.3932194075478588,
+          "worst_zone_top5": 0.7774623864078788,
+          "worst_zone_offers": 0.7142354130285431,
+          "time_mean": 51.31503585874879
+        }
+      }
+    },
+    {
+      "scenario": "Outra semente (2)",
+      "n_shifts": 379,
+      "policies": {
+        "hoje": {
+          "top5_success": 0.6948244209090175,
+          "top10_effective_offers": 0.8395322832534613,
+          "worst_zone_top5": 0.0320833907672337,
+          "worst_zone_offers": 0.00153075850794362,
+          "time_mean": 48.80962558378849
+        },
+        "rodizio10": {
+          "top5_success": 0.6806409080205028,
+          "top10_effective_offers": 0.36759861493731066,
+          "worst_zone_top5": 0.09223974845579687,
+          "worst_zone_offers": 0.06605111271612459,
+          "time_mean": 50.58065963060686
+        },
+        "dist10": {
+          "top5_success": 0.6787113503748384,
+          "top10_effective_offers": 0.364738030439803,
+          "worst_zone_top5": 0.09223974845579687,
+          "worst_zone_offers": 0.066981037806073,
+          "time_mean": 50.65152914478718
+        },
+        "opp3": {
+          "top5_success": 0.669407498719411,
+          "top10_effective_offers": 0.3508116498325339,
+          "worst_zone_top5": 0.18447949691159374,
+          "worst_zone_offers": 0.09054501558601344,
+          "time_mean": 50.80804855521836
+        },
+        "opp2": {
+          "top5_success": 0.671252744733085,
+          "top10_effective_offers": 0.3280756547237289,
+          "worst_zone_top5": 0.18447949691159374,
+          "worst_zone_offers": 0.20543916385620983,
+          "time_mean": 51.466038632045596
+        },
+        "longe3_d12": {
+          "top5_success": 0.6444120469763344,
+          "top10_effective_offers": 0.3597565059516682,
+          "worst_zone_top5": 0.5777902539518962,
+          "worst_zone_offers": 0.19555422487225654,
+          "time_mean": 51.70146457316269
+        },
+        "longe2_d10": {
+          "top5_success": 0.6498285131376178,
+          "top10_effective_offers": 0.318911375030797,
+          "worst_zone_top5": 0.5293759476593559,
+          "worst_zone_offers": 0.48276975070332323,
+          "time_mean": 53.25579186236741
+        },
+        "longe2_d12": {
+          "top5_success": 0.6444120469763344,
+          "top10_effective_offers": 0.3279382715791832,
+          "worst_zone_top5": 0.5777902539518962,
+          "worst_zone_offers": 0.497429487315156,
+          "time_mean": 53.6346387290864
+        },
+        "cota3": {
+          "top5_success": 0.6562602527692124,
+          "top10_effective_offers": 0.354664470540018,
+          "worst_zone_top5": 0.7170168211692205,
+          "worst_zone_offers": 0.20988520653706852,
+          "time_mean": 51.02915875026388
+        },
+        "cota2": {
+          "top5_success": 0.6562602527692124,
+          "top10_effective_offers": 0.3574432273358984,
+          "worst_zone_top5": 0.7170168211692205,
+          "worst_zone_offers": 0.6830140484036102,
+          "time_mean": 52.42848096255838
+        }
+      }
+    },
+    {
+      "scenario": "Outra semente (3)",
+      "n_shifts": 386,
+      "policies": {
+        "hoje": {
+          "top5_success": 0.7019611968607967,
+          "top10_effective_offers": 0.8224964864612678,
+          "worst_zone_top5": 0.038857881779966054,
+          "worst_zone_offers": 0.00809808732979462,
+          "time_mean": 48.50190439176059
+        },
+        "rodizio10": {
+          "top5_success": 0.6798751810563723,
+          "top10_effective_offers": 0.36217070108019667,
+          "worst_zone_top5": 0.19169888344783254,
+          "worst_zone_offers": 0.11776045229812768,
+          "time_mean": 50.08786112190698
+        },
+        "dist10": {
+          "top5_success": 0.6738623836010134,
+          "top10_effective_offers": 0.35372282717719183,
+          "worst_zone_top5": 0.29272937607574423,
+          "worst_zone_offers": 0.17130911983897243,
+          "time_mean": 50.2495465146411
+        },
+        "opp3": {
+          "top5_success": 0.6700739846041315,
+          "top10_effective_offers": 0.3582496042725483,
+          "worst_zone_top5": 0.3351069079379078,
+          "worst_zone_offers": 0.17490041396459322,
+          "time_mean": 50.227761511154874
+        },
+        "opp2": {
+          "top5_success": 0.6711279468791099,
+          "top10_effective_offers": 0.3320975192907583,
+          "worst_zone_top5": 0.3259258967615268,
+          "worst_zone_offers": 0.2881881151058822,
+          "time_mean": 50.6184023009354
+        },
+        "longe3_d12": {
+          "top5_success": 0.6458856849589081,
+          "top10_effective_offers": 0.36031351232021064,
+          "worst_zone_top5": 0.5776871757954953,
+          "worst_zone_offers": 0.18555087366895648,
+          "time_mean": 50.58955223880597
+        },
+        "longe2_d10": {
+          "top5_success": 0.6521687543327381,
+          "top10_effective_offers": 0.3189387531127089,
+          "worst_zone_top5": 0.5738131985238147,
+          "worst_zone_offers": 0.5261711150400862,
+          "time_mean": 52.06884133070785
+        },
+        "longe2_d12": {
+          "top5_success": 0.6458856849589081,
+          "top10_effective_offers": 0.3235833525620277,
+          "worst_zone_top5": 0.5776871757954953,
+          "worst_zone_offers": 0.48610466737875646,
+          "time_mean": 52.638026636264705
+        },
+        "cota3": {
+          "top5_success": 0.6566469819885333,
+          "top10_effective_offers": 0.354684286765283,
+          "worst_zone_top5": 0.6813081938754048,
+          "worst_zone_offers": 0.22153888975947236,
+          "time_mean": 50.34761880084987
+        },
+        "cota2": {
+          "top5_success": 0.6567938604060314,
+          "top10_effective_offers": 0.3687189990244669,
+          "worst_zone_top5": 0.6787176684234071,
+          "worst_zone_offers": 0.6239580842487847,
+          "time_mean": 51.69332020521325
+        }
+      }
+    },
+    {
+      "scenario": "Distância pesa metade",
+      "n_shifts": 392,
+      "policies": {
+        "hoje": {
+          "top5_success": 0.7365570059378147,
+          "top10_effective_offers": 0.7464006467349975,
+          "worst_zone_top5": 0.0,
+          "worst_zone_offers": 1.4292736662271304e-05,
+          "time_mean": 46.0522193877551
+        },
+        "rodizio10": {
+          "top5_success": 0.7155868084606634,
+          "top10_effective_offers": 0.30192291990158954,
+          "worst_zone_top5": 0.1639532934800827,
+          "worst_zone_offers": 0.16745727648012648,
+          "time_mean": 48.136840225515954
+        },
+        "dist10": {
+          "top5_success": 0.7013620170160214,
+          "top10_effective_offers": 0.28699926332105047,
+          "worst_zone_top5": 0.4411124324583177,
+          "worst_zone_offers": 0.35168742492870797,
+          "time_mean": 48.829332380928086
+        },
+        "opp3": {
+          "top5_success": 0.7069093085272048,
+          "top10_effective_offers": 0.3035104002888095,
+          "worst_zone_top5": 0.32009928727063763,
+          "worst_zone_offers": 0.18393097004897024,
+          "time_mean": 48.012857470853845
+        },
+        "opp2": {
+          "top5_success": 0.7097758330563516,
+          "top10_effective_offers": 0.2846434507334878,
+          "worst_zone_top5": 0.2576408897544157,
+          "worst_zone_offers": 0.24044629165860854,
+          "time_mean": 48.209633390310486
+        },
+        "longe3_d12": {
+          "top5_success": 0.6951299570170808,
+          "top10_effective_offers": 0.29245154009678703,
+          "worst_zone_top5": 0.5855474767145811,
+          "worst_zone_offers": 0.19558681406420986,
+          "time_mean": 48.380494400367354
+        },
+        "longe2_d10": {
+          "top5_success": 0.7007921897879604,
+          "top10_effective_offers": 0.2732927924145646,
+          "worst_zone_top5": 0.5230890791983591,
+          "worst_zone_offers": 0.47777385435048886,
+          "time_mean": 48.96767692229195
+        },
+        "longe2_d12": {
+          "top5_success": 0.6957092270603098,
+          "top10_effective_offers": 0.2681412028572739,
+          "worst_zone_top5": 0.5816438268698171,
+          "worst_zone_offers": 0.49037053856309076,
+          "time_mean": 49.157686616664115
+        },
+        "cota3": {
+          "top5_success": 0.7030239862944445,
+          "top10_effective_offers": 0.2934394968076113,
+          "worst_zone_top5": 0.8705139153823438,
+          "worst_zone_offers": 0.25629552546310636,
+          "time_mean": 47.95854274561829
+        },
+        "cota2": {
+          "top5_success": 0.7030589205613584,
+          "top10_effective_offers": 0.31131603966747384,
+          "worst_zone_top5": 0.8664781655673549,
+          "worst_zone_offers": 0.7563242602128748,
+          "time_mean": 48.65743150160723
+        }
+      }
+    },
+    {
+      "scenario": "Distância pesa o dobro",
+      "n_shifts": 392,
+      "policies": {
+        "hoje": {
+          "top5_success": 0.6770442577324918,
+          "top10_effective_offers": 0.8520104176855056,
+          "worst_zone_top5": 0.0,
+          "worst_zone_offers": 0.0,
+          "time_mean": 48.319937742396405
+        },
+        "rodizio10": {
+          "top5_success": 0.6609502903687067,
+          "top10_effective_offers": 0.4986494694805242,
+          "worst_zone_top5": 0.0,
+          "worst_zone_offers": 0.0,
+          "time_mean": 50.70094411839755
+        },
+        "dist10": {
+          "top5_success": 0.6609502903687067,
+          "top10_effective_offers": 0.4986494694805242,
+          "worst_zone_top5": 0.0,
+          "worst_zone_offers": 0.0,
+          "time_mean": 50.70094411839755
+        },
+        "opp3": {
+          "top5_success": 0.6449496229004298,
+          "top10_effective_offers": 0.49102593384388893,
+          "worst_zone_top5": 0.0038970271949529227,
+          "worst_zone_offers": 0.001686544981739408,
+          "time_mean": 51.273780363339455
+        },
+        "opp2": {
+          "top5_success": 0.6467142084940438,
+          "top10_effective_offers": 0.4416394999225593,
+          "worst_zone_top5": 0.0038970271949529227,
+          "worst_zone_offers": 0.003426243530442643,
+          "time_mean": 52.175185648301735
+        },
+        "longe3_d12": {
+          "top5_success": 0.6590372400161746,
+          "top10_effective_offers": 0.4984077131241599,
+          "worst_zone_top5": 0.0,
+          "worst_zone_offers": 0.0,
+          "time_mean": 50.885611492434485
+        },
+        "longe2_d10": {
+          "top5_success": 0.6472145293826588,
+          "top10_effective_offers": 0.4784744715098091,
+          "worst_zone_top5": 0.0350732447545763,
+          "worst_zone_offers": 0.04664205915976029,
+          "time_mean": 52.40230676975682
+        },
+        "longe2_d12": {
+          "top5_success": 0.6590372400161746,
+          "top10_effective_offers": 0.49593168363237905,
+          "worst_zone_top5": 0.0,
+          "worst_zone_offers": 0.0,
+          "time_mean": 51.037381985200305
+        },
+        "cota3": {
+          "top5_success": 0.6336046614759474,
+          "top10_effective_offers": 0.4833449410926005,
+          "worst_zone_top5": 0.3078651484012808,
+          "worst_zone_offers": 0.10379222655239825,
+          "time_mean": 51.721503483120266
+        },
+        "cota2": {
+          "top5_success": 0.6338800427207979,
+          "top10_effective_offers": 0.4499558304420638,
+          "worst_zone_top5": 0.30396812120632793,
+          "worst_zone_offers": 0.31016722451187284,
+          "time_mean": 53.398520030620055
+        }
+      }
+    }
+  ]
+}
