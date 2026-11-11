@@ -97,7 +97,10 @@ test.describe("landing", () => {
     // A escolha vale depois de recarregar, antes do React montar (sem piscar).
     await page.reload();
     await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
-    await page.getByRole("banner").getByRole("button", { name: "Tema escuro" }).click();
+    // O estado no botão só aparece depois que o React assume a página: só então o clique vale.
+    const depois = page.getByRole("banner").getByRole("button", { name: "Tema escuro" });
+    await expect(depois).toHaveAttribute("aria-pressed", "true");
+    await depois.click();
     await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
   });
 });
