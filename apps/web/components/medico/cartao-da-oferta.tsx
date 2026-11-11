@@ -1,8 +1,10 @@
 "use client";
 
 import * as React from "react";
-import { CheckCircle2, Clock, MapPin, XCircle } from "lucide-react";
-import { TempoQueFalta } from "@/components/dominio/prazo";
+import { CheckCircle2, Clock, Gauge, MapPin, Navigation, Stethoscope, Timer, XCircle } from "lucide-react";
+import { AnelDoPrazo, TempoQueFalta } from "@/components/dominio/prazo";
+import { Fato } from "@/components/ui/fato";
+import { IconeEmCirculo } from "@/components/ui/painel";
 import { SuperficieVoz } from "@/components/dominio/superficie-voz";
 import { VozTag } from "@/components/dominio/voz-tag";
 import { Alert } from "@/components/ui/alert";
@@ -62,13 +64,16 @@ export function CartaoDaOferta({
   return (
     <article aria-labelledby={tituloId} className="superficie p-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h3 id={tituloId} className="font-titulo text-2xl font-semibold">
-            {especialidade}, {oferta.vaga.unidade.nome}
-          </h3>
-          <p className="mt-1 text-tinta-suave">
-            {formatarIntervalo(oferta.vaga.inicio, oferta.vaga.fim)}
-          </p>
+        <div className="flex min-w-0 items-start gap-3">
+          <IconeEmCirculo icone={Stethoscope} tom="acao" />
+          <div className="min-w-0">
+            <h3 id={tituloId} className="font-titulo text-xl font-semibold">
+              {especialidade}, {oferta.vaga.unidade.nome}
+            </h3>
+            <p className="mt-0.5 text-tinta-suave">
+              {formatarIntervalo(oferta.vaga.inicio, oferta.vaga.fim)}
+            </p>
+          </div>
         </div>
         <Badge tone={TOM_DO_STATUS[oferta.status]}>
           {oferta.status === "aceita" ? <CheckCircle2 aria-hidden="true" /> : null}
@@ -78,32 +83,23 @@ export function CartaoDaOferta({
         </Badge>
       </div>
 
-      <dl className="mt-4 grid gap-x-6 gap-y-2 sm:grid-cols-2">
-        <div>
-          <dt className="text-sm text-tinta-suave">{OFERTA.local}</dt>
-          <dd className="flex items-center gap-1.5">
-            <MapPin aria-hidden="true" className="size-4 shrink-0" />
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
+        <dl className="grid min-w-0 flex-1 basis-64 gap-3">
+          <Fato icone={MapPin} tom="neutro" tamanho="sm" rotulo={OFERTA.local}>
             {oferta.vaga.unidade.nome} ({oferta.vaga.unidade.zona})
-          </dd>
-        </div>
-        <div>
-          <dt className="text-sm text-tinta-suave">{OFERTA.distancia}</dt>
-          <dd>
+          </Fato>
+          <Fato icone={Navigation} tom="neutro" tamanho="sm" rotulo={OFERTA.distancia}>
             {oferta.vaga.distanciaKm === null
               ? OFERTA.semDistancia
               : OFERTA.distanciaKm(formatarNumero(oferta.vaga.distanciaKm))}
-          </dd>
-        </div>
-        {oferta.vaga.urgencia ? (
-          <div>
-            <dt className="sr-only">Urgência</dt>
-            <dd>{OFERTA.urgencia[oferta.vaga.urgencia]}</dd>
-          </div>
-        ) : null}
-        {aberta && oferta.expiraEm ? (
-          <div>
-            <dt className="text-sm text-tinta-suave">{OFERTA.prazo}</dt>
-            <dd>
+          </Fato>
+          {oferta.vaga.urgencia ? (
+            <Fato icone={Gauge} tom="neutro" tamanho="sm" rotulo="Urgência" rotuloOculto>
+              {OFERTA.urgencia[oferta.vaga.urgencia]}
+            </Fato>
+          ) : null}
+          {aberta && oferta.expiraEm ? (
+            <Fato icone={Timer} tom="atencao" tamanho="sm" rotulo={OFERTA.prazo}>
               {OFERTA.responderAte(formatarHora(oferta.expiraEm))},{" "}
               <TempoQueFalta
                 expiraEm={oferta.expiraEm}
@@ -111,21 +107,24 @@ export function CartaoDaOferta({
                 encerrado={OFERTA.prazoAcabou}
                 className="font-semibold"
               />
-            </dd>
-          </div>
+            </Fato>
+          ) : null}
+          {oferta.respondidaEm ? (
+            <div>
+              <dt className="sr-only">Resposta</dt>
+              <dd className="text-tinta-suave">
+                {OFERTA.respondidaEm(formatarHora(oferta.respondidaEm))}
+                {oferta.motivoRecusa
+                  ? `. ${OFERTA.motivoDaRecusa(ROTULO_MOTIVO_RECUSA[oferta.motivoRecusa])}`
+                  : null}
+              </dd>
+            </div>
+          ) : null}
+        </dl>
+        {aberta && oferta.expiraEm ? (
+          <AnelDoPrazo expiraEm={oferta.expiraEm} ttlMin={oferta.ttlMin} />
         ) : null}
-        {oferta.respondidaEm ? (
-          <div>
-            <dt className="sr-only">Resposta</dt>
-            <dd className="text-tinta-suave">
-              {OFERTA.respondidaEm(formatarHora(oferta.respondidaEm))}
-              {oferta.motivoRecusa
-                ? `. ${OFERTA.motivoDaRecusa(ROTULO_MOTIVO_RECUSA[oferta.motivoRecusa])}`
-                : null}
-            </dd>
-          </div>
-        ) : null}
-      </dl>
+      </div>
 
       <SuperficieVoz as="section" voz="ia" aria-label={OFERTA.porQueTitulo} className="mt-4 p-4">
         <div className="flex flex-wrap items-center gap-2">

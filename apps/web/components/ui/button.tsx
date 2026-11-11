@@ -16,8 +16,10 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary: "border-acento bg-acento text-sobre-acento shadow-botao hover:bg-acento-forte hover:border-acento-forte",
+        // O escuro é a ação principal do cabeçalho de uma página, como no modelo visual.
+        escuro: "border-tinta bg-tinta text-sobre-tinta shadow-cartao hover:bg-tinta/85",
         decision: "border-humano bg-humano text-sobre-humano shadow-cartao hover:bg-humano/90",
-        secondary: "border-campo bg-papel text-tinta shadow-cartao hover:border-tinta hover:bg-recuo",
+        secondary: "border-campo/70 bg-papel text-tinta shadow-cartao hover:border-tinta hover:bg-recuo",
         ghost: "border-transparent bg-transparent text-tinta hover:bg-tinta/[0.06]",
         link: "min-h-0 border-transparent bg-transparent p-0 text-acento underline underline-offset-4 hover:no-underline",
       },

@@ -56,7 +56,7 @@ export default async function Ajuda() {
         </Button>
       ) : null}
 
-      <h1 className="mt-2 font-titulo text-4xl font-semibold">Ajuda</h1>
+      <h1 className="mt-2 font-titulo text-4xl font-medium">Ajuda</h1>
       <p className="mt-3 max-w-[60ch] text-lg text-tinta-suave">
         Como ler as telas, o que é de verdade e o que é simulado, e as perguntas mais comuns.
       </p>

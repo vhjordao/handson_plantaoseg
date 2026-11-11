@@ -13,6 +13,7 @@ export const OFERTAS = {
   tentarDeNovo: "Tentar de novo",
   abertasTitulo: "Esperando a sua resposta",
   semAbertasTitulo: "Nenhuma oferta esperando resposta",
+  semAbertasDica: "A próxima oferta aparece aqui",
   semAbertas:
     "Quando a coordenação aprovar o seu nome para uma vaga, a oferta aparece aqui sozinha, sem recarregar a página.",
   historicoTitulo: "Respondidas e encerradas",

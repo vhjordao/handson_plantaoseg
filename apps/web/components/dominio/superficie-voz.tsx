@@ -31,14 +31,14 @@ export function SuperficieVoz({
         "relative rounded-cartao",
         voz === "ia" && "bg-ia-tom",
         voz === "humano" && "bg-humano-tom",
-        voz === "regra" && "border border-campo bg-papel",
+        voz === "regra" && "border border-campo/60 bg-painel shadow-cartao backdrop-blur-xl",
         className,
       )}
       {...props}
     >
       {voz !== "regra" ? (
         <svg className="contorno" aria-hidden="true" focusable="false">
-          <rect className="contorno-rect" x="0" y="0" width="100%" height="100%" rx="18" ry="18" />
+          <rect className="contorno-rect" x="0" y="0" width="100%" height="100%" rx="16" ry="16" />
         </svg>
       ) : null}
       {children}

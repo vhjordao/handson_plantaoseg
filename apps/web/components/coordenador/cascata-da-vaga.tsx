@@ -2,9 +2,10 @@
 
 import * as React from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { CheckCircle2, Clock, Hourglass, ListOrdered, XCircle } from "lucide-react";
+import { CheckCircle2, Clock, Hourglass, ListOrdered, Send, XCircle } from "lucide-react";
 import { TempoQueFalta } from "@/components/dominio/prazo";
 import { SuperficieVoz } from "@/components/dominio/superficie-voz";
+import { IconeEmCirculo } from "@/components/ui/painel";
 import { Alert } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -85,9 +86,12 @@ export function CascataDaVaga({ vaga }: { vaga: Vaga }) {
 
   return (
     <SuperficieVoz as="section" voz="humano" aria-labelledby="cascata-titulo" className="p-5">
-      <h2 id="cascata-titulo" className="font-titulo text-2xl font-semibold">
-        {CASCATA.titulo}
-      </h2>
+      <div className="flex items-center gap-3">
+        <IconeEmCirculo icone={Send} tom="humano" />
+        <h2 id="cascata-titulo" className="min-w-0 flex-1 font-titulo text-lg font-semibold">
+          {CASCATA.titulo}
+        </h2>
+      </div>
       <p className="mt-1 max-w-[70ch] text-tinta-suave">{CASCATA.descricao}</p>
 
       {cascata.isError && !ofertas ? (
@@ -106,7 +110,10 @@ export function CascataDaVaga({ vaga }: { vaga: Vaga }) {
       {ofertas && ofertas.length === 0 ? <p className="mt-4">{CASCATA.vazia}</p> : null}
 
       {ofertas && ofertas.length > 0 ? (
-        <ol role="list" className="mt-4 grid gap-2">
+        <ol
+          role="list"
+          className="relative mt-4 grid gap-2.5 before:absolute before:top-5 before:bottom-5 before:left-[17px] before:w-px before:bg-divisor"
+        >
           {ofertas.map((oferta) => (
             <PassoDaCascata key={oferta.id} oferta={oferta} />
           ))}
@@ -134,16 +141,20 @@ export function CascataDaVaga({ vaga }: { vaga: Vaga }) {
 function PassoDaCascata({ oferta }: { oferta: Oferta }) {
   const Icone = ICONE[oferta.status];
   return (
-    <li className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-campo border border-divisor bg-papel px-3 py-2">
-      <span className="w-8 font-semibold tabular-nums">{CASCATA.vez(oferta.sequencia)}</span>
-      <span className="min-w-0 flex-1 font-medium">{oferta.medico.nome}</span>
-      <Badge tone={TOM[oferta.status]}>
-        <Icone aria-hidden="true" />
-        {ROTULO_STATUS_OFERTA[oferta.status]}
-      </Badge>
-      <span className="w-full text-sm text-tinta-suave sm:w-auto">
-        <DetalheDoPasso oferta={oferta} />
-      </span>
+    <li className="relative flex items-start gap-3">
+      {/* O marcador da linha do tempo: o mesmo ícone do estado, num círculo sobre o trilho. */}
+      <IconeEmCirculo icone={Icone} tom={TOM[oferta.status]} className="relative mt-1" />
+      <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-3 gap-y-1 rounded-cartao border border-painel-borda bg-papel/80 px-4 py-2.5 shadow-cartao">
+        <span className="w-8 font-semibold text-tinta-suave tabular-nums">{CASCATA.vez(oferta.sequencia)}</span>
+        <span className="min-w-0 flex-1 font-medium">{oferta.medico.nome}</span>
+        <Badge tone={TOM[oferta.status]}>
+          <Icone aria-hidden="true" />
+          {ROTULO_STATUS_OFERTA[oferta.status]}
+        </Badge>
+        <span className="w-full text-sm text-tinta-suave sm:w-auto">
+          <DetalheDoPasso oferta={oferta} />
+        </span>
+      </div>
     </li>
   );
 }

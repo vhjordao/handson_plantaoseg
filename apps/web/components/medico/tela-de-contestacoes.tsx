@@ -18,7 +18,7 @@ export function TelaDeContestacoes({ medicoId }: { medicoId: string }) {
 
   const cabecalho = (
     <header>
-      <h1 className="font-titulo text-3xl font-semibold">{CONTESTACOES.titulo}</h1>
+      <h1 className="font-titulo text-[1.75rem] leading-9 font-medium sm:text-[2rem] sm:leading-10">{CONTESTACOES.titulo}</h1>
       <p className="mt-2 max-w-[70ch] text-tinta-suave">{CONTESTACOES.descricao}</p>
     </header>
   );

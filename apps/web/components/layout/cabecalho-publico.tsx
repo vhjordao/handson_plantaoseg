@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { MarcaPlantao } from "@/components/dominio/marca-plantao";
+import { BotaoAjuda } from "@/components/layout/botao-ajuda";
 import { Button } from "@/components/ui/button";
 import { ACOES } from "@/lib/copy/comum";
 
@@ -18,7 +19,7 @@ const ANCORAS = [
  */
 export function CabecalhoPublico({ enxuto = false }: { enxuto?: boolean }) {
   return (
-    <header className="vidro sticky top-0 z-40 border-b border-divisor">
+    <header className="vidro sticky top-0 z-40 border-b border-divisor/70">
       <div className="@container mx-auto flex min-h-16 w-full max-w-[1200px] flex-wrap items-center justify-between gap-x-2 gap-y-2 px-4 py-2 sm:gap-x-4 sm:px-6">
         <Link
           href="/"
@@ -30,12 +31,12 @@ export function CabecalhoPublico({ enxuto = false }: { enxuto?: boolean }) {
 
         {enxuto ? null : (
           <nav aria-label="Seções da página" className="hidden lg:block">
-            <ul role="list" className="flex items-center gap-6">
+            <ul role="list" className="flex items-center gap-1.5">
               {ANCORAS.map((ancora) => (
                 <li key={ancora.href}>
                   <Link
                     href={ancora.href}
-                    className="inline-flex min-h-[var(--alvo-min)] items-center rounded-campo px-1 text-base font-medium underline-offset-4 hover:underline"
+                    className="inline-flex min-h-[var(--alvo-min)] items-center rounded-campo border border-painel-borda bg-papel/55 px-4 text-base font-medium transition-[background-color] duration-150 hover:bg-papel/90"
                   >
                     {ancora.rotulo}
                   </Link>
@@ -46,11 +47,9 @@ export function CabecalhoPublico({ enxuto = false }: { enxuto?: boolean }) {
         )}
 
         <div className="flex items-center gap-1 sm:gap-2">
-          <Button asChild variant="ghost" className="px-3">
-            <Link href="/ajuda">{ACOES.ajuda}</Link>
-          </Button>
+          <BotaoAjuda />
           {enxuto ? null : (
-            <Button asChild variant="primary">
+            <Button asChild variant="escuro">
               <Link href="/entrar">{ACOES.entrar}</Link>
             </Button>
           )}

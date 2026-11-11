@@ -8,7 +8,7 @@ const alertVariants = cva(
   {
     variants: {
       tone: {
-        info: "border-divisor bg-papel shadow-cartao [&_svg]:text-acento",
+        info: "border-painel-borda bg-painel shadow-cartao backdrop-blur-xl [&_svg]:text-acento",
         atencao: "border-atencao bg-atencao-tom [&_svg]:text-atencao",
         erro: "border-erro bg-erro-tom [&_svg]:text-erro",
         sucesso: "border-humano bg-humano-tom [&_svg]:text-humano",

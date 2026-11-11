@@ -7,13 +7,13 @@ export function Compromissos() {
   return (
     <section id="compromissos" aria-labelledby="titulo-compromissos" className="border-t border-divisor">
       <div className="mx-auto w-full max-w-[1200px] px-4 py-14 sm:px-6 lg:py-20">
-        <h2 id="titulo-compromissos" className="font-titulo text-3xl font-semibold">
+        <h2 id="titulo-compromissos" className="font-titulo text-3xl font-medium">
           O que prometemos e como conferir
         </h2>
         <p className="mt-3 max-w-[60ch] text-lg text-tinta-suave">
           Cada compromisso aponta para o código ou o teste que o sustenta. O repositório é público.
         </p>
-        <ul role="list" className="mt-8 divide-y divide-divisor border-y border-divisor">
+        <ul role="list" className="superficie mt-8 divide-y divide-divisor px-5 sm:px-6">
           {COMPROMISSOS.map((compromisso) => (
             <li
               key={compromisso.titulo}

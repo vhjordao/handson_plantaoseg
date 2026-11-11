@@ -7,14 +7,15 @@
  * O azul de ação (`acento`) é da interação: botão principal, item atual, foco e link.
  */
 :root {
-  --gaze: #edf1f6;
+  --gaze: #e8ebef;
   --papel: #ffffff;
-  --recuo: #f5f7fb;
-  --tinta: #101d2b;
-  --tinta-suave: #4a596a;
-  --acento: #1d62d6;
-  --acento-tom: #e9f0fc;
-  --acento-forte: #1650b2;
+  --painel-solido: #f5f6f8;
+  --recuo: #f0f2f5;
+  --tinta: #111a24;
+  --tinta-suave: #4b5868;
+  --acento: #1d60c6;
+  --acento-tom: #e3edfc;
+  --acento-forte: #1a57b5;
   --ia: #4046c4;
   --ia-tom: #eeeffd;
   --ia-forte: #2f349f;
@@ -27,18 +28,30 @@
   --atencao-fundo: #f2b33d;
   --erro: #b42318;
   --erro-tom: #fdeceb;
-  --campo: #758396;
-  --divisor: #dfe5ed;
-  --foco: #1d62d6;
+  --campo: #748191;
+  --divisor: #dde2e8;
+  --foco: #1d60c6;
   --sobre-tinta: #ffffff;
   --sobre-acento: #ffffff;
   --sobre-humano: #ffffff;
   --sobre-atencao: #101d2b;
 
+
+  /* Painel do modelo: papel translúcido sobre a arte de fundo, com desfoque. */
+  --painel: rgb(255 255 255 / 0.62);
+  --painel-borda: rgb(255 255 255 / 0.85);
+  /* Minigráficos: tons pastel; o valor sempre vem também em texto ao lado. */
+  --grafico-rosa: #e7a6cf;
+  --grafico-verde: #8fd0a4;
+  --grafico-azul: #9dbff0;
+  --grafico-laranja: #f2c08f;
+  --grafico-coral: #f0a3b3;
+  --grafico-trilho: rgb(17 26 36 / 0.08);
+
   /* Profundidade: sombras largas e muito suaves, quase só uma separação do fundo. */
-  --sombra-cartao: 0 1px 2px rgb(16 29 43 / 0.04), 0 6px 20px -8px rgb(16 29 43 / 0.1);
+  --sombra-cartao: 0 1px 1px rgb(17 26 36 / 0.03), 0 8px 24px -14px rgb(17 26 36 / 0.14);
   --sombra-flutuante: 0 2px 6px rgb(16 29 43 / 0.06), 0 18px 40px -12px rgb(16 29 43 / 0.22);
-  --sombra-botao: 0 1px 2px rgb(16 29 43 / 0.08), 0 2px 8px -2px rgb(29 98 214 / 0.35);
+  --sombra-botao: 0 1px 2px rgb(17 26 36 / 0.1), 0 4px 12px -4px rgb(42 114 221 / 0.45);
   /* A luz difusa no alto da página: azul de ação e anil da IA, bem diluídos. */
   --brilho-a: rgb(29 98 214 / 0.1);
   --brilho-b: rgb(64 70 196 / 0.07);
@@ -57,13 +70,14 @@
 /* Escuro: segue o sistema, ou data-theme="dark". */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --gaze: #0a121b;
-    --papel: #111c28;
-    --recuo: #0e1822;
+    --gaze: #0a1118;
+    --papel: #121c27;
+    --painel-solido: #152029;
+    --recuo: #0f1821;
     --tinta: #e8eef5;
     --tinta-suave: #9eafc1;
-    --acento: #72aaff;
-    --acento-tom: #13294a;
+    --acento: #6ea8ff;
+    --acento-tom: #14294a;
     --acento-forte: #b0cfff;
     --ia: #a9adff;
     --ia-tom: #1c1e48;
@@ -78,12 +92,20 @@
     --erro: #ff8a80;
     --erro-tom: #3c1a17;
     --campo: #5f748a;
-    --divisor: #213244;
-    --foco: #72aaff;
-    --sobre-tinta: #0a121b;
-    --sobre-acento: #0a121b;
+    --divisor: #22323f;
+    --foco: #6ea8ff;
+    --sobre-tinta: #0a1118;
+    --sobre-acento: #0a1118;
     --sobre-humano: #0a121b;
     --sobre-atencao: #101d2b;
+    --painel: rgb(21 32 43 / 0.66);
+    --painel-borda: rgb(255 255 255 / 0.06);
+    --grafico-rosa: #b46f9c;
+    --grafico-verde: #4f9d73;
+    --grafico-azul: #4f7fc4;
+    --grafico-laranja: #b98652;
+    --grafico-coral: #b56a7a;
+    --grafico-trilho: rgb(255 255 255 / 0.08);
     --sombra-cartao: 0 0 0 1px rgb(255 255 255 / 0.02), 0 8px 24px -12px rgb(0 0 0 / 0.6);
     --sombra-flutuante: 0 0 0 1px rgb(255 255 255 / 0.04), 0 20px 44px -12px rgb(0 0 0 / 0.75);
     --sombra-botao: 0 1px 2px rgb(0 0 0 / 0.4);
@@ -95,13 +117,14 @@
 
 :root[data-theme="dark"],
 [data-theme="dark"] {
-  --gaze: #0a121b;
-  --papel: #111c28;
-  --recuo: #0e1822;
+  --gaze: #0a1118;
+  --papel: #121c27;
+  --painel-solido: #152029;
+  --recuo: #0f1821;
   --tinta: #e8eef5;
   --tinta-suave: #9eafc1;
-  --acento: #72aaff;
-  --acento-tom: #13294a;
+  --acento: #6ea8ff;
+  --acento-tom: #14294a;
   --acento-forte: #b0cfff;
   --ia: #a9adff;
   --ia-tom: #1c1e48;
@@ -116,12 +139,20 @@
   --erro: #ff8a80;
   --erro-tom: #3c1a17;
   --campo: #5f748a;
-  --divisor: #213244;
-  --foco: #72aaff;
-  --sobre-tinta: #0a121b;
-  --sobre-acento: #0a121b;
+  --divisor: #22323f;
+  --foco: #6ea8ff;
+  --sobre-tinta: #0a1118;
+  --sobre-acento: #0a1118;
   --sobre-humano: #0a121b;
   --sobre-atencao: #101d2b;
+  --painel: rgb(21 32 43 / 0.66);
+  --painel-borda: rgb(255 255 255 / 0.06);
+  --grafico-rosa: #b46f9c;
+  --grafico-verde: #4f9d73;
+  --grafico-azul: #4f7fc4;
+  --grafico-laranja: #b98652;
+  --grafico-coral: #b56a7a;
+  --grafico-trilho: rgb(255 255 255 / 0.08);
   --sombra-cartao: 0 0 0 1px rgb(255 255 255 / 0.02), 0 8px 24px -12px rgb(0 0 0 / 0.6);
   --sombra-flutuante: 0 0 0 1px rgb(255 255 255 / 0.04), 0 20px 44px -12px rgb(0 0 0 / 0.75);
   --sombra-botao: 0 1px 2px rgb(0 0 0 / 0.4);
@@ -141,6 +172,15 @@
   --color-gaze: var(--gaze);
   --color-papel: var(--papel);
   --color-recuo: var(--recuo);
+  --color-painel: var(--painel);
+  --color-painel-borda: var(--painel-borda);
+  --color-painel-solido: var(--painel-solido);
+  --color-grafico-rosa: var(--grafico-rosa);
+  --color-grafico-verde: var(--grafico-verde);
+  --color-grafico-azul: var(--grafico-azul);
+  --color-grafico-laranja: var(--grafico-laranja);
+  --color-grafico-coral: var(--grafico-coral);
+  --color-grafico-trilho: var(--grafico-trilho);
   --color-tinta: var(--tinta);
   --color-tinta-suave: var(--tinta-suave);
   --color-acento: var(--acento);
@@ -171,8 +211,8 @@
 
   /* Raios por hierarquia: campo e botão, cartão, diálogo. */
   --radius-campo: 10px;
-  --radius-cartao: 18px;
-  --radius-dialogo: 24px;
+  --radius-cartao: 16px;
+  --radius-dialogo: 22px;
 
   --shadow-cartao: var(--sombra-cartao);
   --shadow-flutuante: var(--sombra-flutuante);
@@ -286,9 +326,18 @@
 /* A superfície neutra de sempre: papel, borda discreta, raio de cartão e sombra larga e suave. */
 @utility superficie {
   border-radius: var(--radius-cartao);
-  border: 1px solid var(--divisor);
-  background-color: var(--papel);
+  border: 1px solid var(--painel-borda);
+  background-color: var(--painel);
+  -webkit-backdrop-filter: blur(22px) saturate(1.4);
+  backdrop-filter: blur(22px) saturate(1.4);
   box-shadow: var(--sombra-cartao);
+}
+
+/* Quem não tem desfoque recebe o painel quase opaco, para o texto não perder contraste. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .superficie {
+    background-color: var(--painel-solido);
+  }
 }
 
 /* Barra translúcida (cabeçalhos fixos): o conteúdo passa por baixo, desfocado. */
@@ -412,5 +461,41 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/*
+ * A arte de fundo (components/dominio/arte-de-fundo.tsx). Some aos poucos para a esquerda e
+ * para baixo, longe dos títulos, e fica mais fraca no escuro. No alto contraste do sistema e
+ * na impressão, some de vez.
+ */
+.arte-de-fundo {
+  --arte-azul: #7fb0ff;
+  --arte-azul-forte: #4a8ef0;
+  --arte-rosa: #ff8aa6;
+  opacity: 0.5;
+  -webkit-mask-image: radial-gradient(ellipse 62% 70% at 78% 30%, #000 22%, transparent 72%);
+  mask-image: radial-gradient(ellipse 62% 70% at 78% 30%, #000 22%, transparent 72%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .arte-de-fundo {
+    --arte-azul: #3f78d6;
+    --arte-azul-forte: #6ea8ff;
+    --arte-rosa: #d0577a;
+    opacity: 0.32;
+  }
+}
+
+:root[data-theme="dark"] .arte-de-fundo {
+  --arte-azul: #3f78d6;
+  --arte-azul-forte: #6ea8ff;
+  --arte-rosa: #d0577a;
+  opacity: 0.32;
+}
+
+@media (forced-colors: active), print {
+  .arte-de-fundo {
+    display: none;
   }
 }

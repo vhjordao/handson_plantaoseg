@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Card } from "@/components/ui/card";
+import { ListChecks, MessageSquareWarning, ShieldCheck } from "lucide-react";
+import { CabecalhoDoPainel, Painel } from "@/components/ui/painel";
 import { ROTULO_ESPECIALIDADE } from "@/lib/copy/rotulos";
 import { encontrarPersona, personaDoLogin } from "@/lib/session/personas";
 import { lerSessao } from "@/lib/session/servidor";
@@ -37,6 +38,12 @@ const NAO_USADOS = [
   ],
 ] as const;
 
+/** As iniciais do nome, para o círculo do perfil (os dados são fictícios e não há foto). */
+function iniciais(nome: string): string {
+  const partes = nome.split(" ").filter(Boolean);
+  return `${partes[0]?.[0] ?? ""}${partes.length > 1 ? partes[partes.length - 1][0] : ""}`.toUpperCase();
+}
+
 export default async function MinhaConta() {
   const sessao = await lerSessao();
   // No sistema real, o médico vem do login; no modo de demonstração, da persona escolhida.
@@ -48,16 +55,25 @@ export default async function MinhaConta() {
   const medico = persona?.papel === "medico" ? persona.medico : null;
 
   return (
-    <div className="grid gap-8">
-      <div>
-        <h1 className="font-titulo text-3xl font-semibold">Minha conta e transparência</h1>
+    <div className="grid grid-cols-1 gap-3">
+      <div className="mb-2">
+        <h1 className="font-titulo text-[1.75rem] leading-9 font-medium sm:text-[2rem] sm:leading-10">
+          Minha conta e transparência
+        </h1>
         <p className="mt-2 text-tinta-suave">
           O que o sistema sabe sobre você, o que usa e o que nunca usa.
         </p>
       </div>
 
       {medico ? (
-        <Card className="p-4">
+        <Painel aria-label="Seu perfil" className="flex items-start gap-4">
+          <span
+            aria-hidden="true"
+            className="inline-flex size-16 shrink-0 items-center justify-center rounded-full bg-acento-tom text-xl font-semibold text-acento-forte shadow-cartao"
+          >
+            {iniciais(medico.nome)}
+          </span>
+          <div className="min-w-0">
           <h2 className="font-titulo text-xl font-semibold">{medico.nome}</h2>
           <p className="mt-1 text-tinta-suave">
             {ROTULO_ESPECIALIDADE[medico.especialidade]}
@@ -69,14 +85,15 @@ export default async function MinhaConta() {
           <p className="mt-2 text-sm text-tinta-suave">
             Persona fictícia. Os dados desta demonstração são todos sintéticos.
           </p>
-        </Card>
+          </div>
+        </Painel>
       ) : null}
 
-      <section aria-labelledby="conta-usa">
-        <h2 id="conta-usa" className="font-titulo text-xl font-semibold">
-          O que o sistema usa para sugerir você
-        </h2>
-        <ul role="list" className="mt-3 divide-y divide-divisor border-y border-divisor">
+      <div className="grid grid-cols-1 items-start gap-3 md:grid-cols-2">
+
+      <Painel aria-labelledby="conta-usa">
+        <CabecalhoDoPainel icone={ListChecks} tom="ia" id="conta-usa" titulo="O que o sistema usa para sugerir você" />
+        <ul role="list" className="mt-3 divide-y divide-divisor">
           {USADOS.map(([titulo, texto]) => (
             <li key={titulo} className="py-3">
               <p className="font-semibold">{titulo}</p>
@@ -84,13 +101,11 @@ export default async function MinhaConta() {
             </li>
           ))}
         </ul>
-      </section>
+      </Painel>
 
-      <section aria-labelledby="conta-nao-usa">
-        <h2 id="conta-nao-usa" className="font-titulo text-xl font-semibold">
-          O que o sistema não usa
-        </h2>
-        <ul role="list" className="mt-3 divide-y divide-divisor border-y border-divisor">
+      <Painel aria-labelledby="conta-nao-usa">
+        <CabecalhoDoPainel icone={ShieldCheck} tom="humano" id="conta-nao-usa" titulo="O que o sistema não usa" />
+        <ul role="list" className="mt-3 divide-y divide-divisor">
           {NAO_USADOS.map(([titulo, texto]) => (
             <li key={titulo} className="py-3">
               <p className="font-semibold">{titulo}</p>
@@ -98,13 +113,12 @@ export default async function MinhaConta() {
             </li>
           ))}
         </ul>
-      </section>
+      </Painel>
+      </div>
 
-      <section aria-labelledby="conta-revisao">
-        <h2 id="conta-revisao" className="font-titulo text-xl font-semibold">
-          Como pedir revisão humana
-        </h2>
-        <p className="mt-2 max-w-[62ch]">
+      <Painel aria-labelledby="conta-revisao">
+        <CabecalhoDoPainel icone={MessageSquareWarning} tom="acao" id="conta-revisao" titulo="Como pedir revisão humana" />
+        <p className="mt-3 max-w-[62ch]">
           Em cada oferta, o botão “Contestar a recomendação” pede uma revisão humana: você diz o que
           não está certo, a coordenação responde por escrito, e a contestação e a resposta ficam na
           trilha de auditoria. Contestar não muda a sua resposta à oferta. A resposta aparece em
@@ -118,7 +132,7 @@ export default async function MinhaConta() {
             Ver a ajuda e as perguntas frequentes
           </Link>
         </p>
-      </section>
+      </Painel>
     </div>
   );
 }

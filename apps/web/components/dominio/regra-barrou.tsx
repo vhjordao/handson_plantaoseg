@@ -10,6 +10,8 @@ import type { CodigoRegra, Recomendacao } from "@/lib/api/types";
 import { QUEM_FICOU_DE_FORA } from "@/lib/copy/coordenador";
 import { ROTULO_REGRA } from "@/lib/copy/rotulos";
 import { SuperficieVoz } from "./superficie-voz";
+import { Filter } from "lucide-react";
+import { IconeEmCirculo } from "@/components/ui/painel";
 import { VozTag } from "./voz-tag";
 
 /**
@@ -32,10 +34,13 @@ export function RegraBarrou({
   return (
     <SuperficieVoz as="section" voz="regra" aria-labelledby="fora-titulo" className={className}>
       <div className="grid gap-2 p-4">
+        <div className="flex items-center gap-3">
+          <IconeEmCirculo icone={Filter} tom="neutro" />
+          <h2 id="fora-titulo" className="min-w-0 flex-1 font-titulo text-lg font-semibold">
+            {QUEM_FICOU_DE_FORA.titulo}
+          </h2>
+        </div>
         <VozTag voz="regra" className="justify-self-start" />
-        <h2 id="fora-titulo" className="font-titulo text-xl font-semibold">
-          {QUEM_FICOU_DE_FORA.titulo}
-        </h2>
         <p className="text-sm text-tinta-suave">
           {regras.length > 0
             ? QUEM_FICOU_DE_FORA.resumo(excluidos, recomendacao.totalPool)

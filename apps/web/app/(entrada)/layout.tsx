@@ -1,3 +1,4 @@
+import { ArteDeFundo } from "@/components/dominio/arte-de-fundo";
 import { FaixaDemonstracao } from "@/components/dominio/faixa-demonstracao";
 import { CabecalhoPublico } from "@/components/layout/cabecalho-publico";
 import { RodapePublico } from "@/components/layout/rodape-publico";
@@ -10,6 +11,7 @@ import { RodapePublico } from "@/components/layout/rodape-publico";
 export default function LayoutEntrada({ children }: LayoutProps<"/">) {
   return (
     <>
+      <ArteDeFundo />
       <FaixaDemonstracao />
       <CabecalhoPublico enxuto />
       <main id="conteudo" tabIndex={-1} className="flex-1 outline-none">

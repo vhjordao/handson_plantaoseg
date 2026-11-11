@@ -1,6 +1,8 @@
 "use client";
 
 import * as React from "react";
+import { BadgeCheck, Sparkles } from "lucide-react";
+import { IconeEmCirculo } from "@/components/ui/painel";
 import { SeloDecisaoHumana } from "@/components/dominio/selo-decisao-humana";
 import { SugestaoCard, type EstadoDaSugestao } from "@/components/dominio/sugestao-card";
 import { SuperficieVoz } from "@/components/dominio/superficie-voz";
@@ -117,7 +119,8 @@ export function OrdemSugerida({
       <div className="grid grid-cols-1 gap-3 p-4 md:px-5">
         <div>
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <h2 id="ordem-titulo" ref={tituloRef} tabIndex={-1} className="font-titulo text-xl font-semibold outline-none">
+            <IconeEmCirculo icone={decisao ? BadgeCheck : Sparkles} tom={decisao ? "humano" : "ia"} />
+            <h2 id="ordem-titulo" ref={tituloRef} tabIndex={-1} className="min-w-0 flex-1 font-titulo text-lg font-semibold outline-none">
               {ORDEM.titulo(recomendacao.candidatos.length, recomendacao.totalElegiveis)}
             </h2>
             <VozTag voz={decisao ? "humano" : "ia"} />

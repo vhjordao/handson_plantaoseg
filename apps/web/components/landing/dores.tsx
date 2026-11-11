@@ -11,13 +11,13 @@ export function Dores() {
       className="border-t border-divisor"
     >
       <div className="mx-auto w-full max-w-[1200px] px-4 py-14 sm:px-6 lg:py-20">
-        <h2 id="titulo-dores" className="font-titulo text-3xl font-semibold">
+        <h2 id="titulo-dores" className="font-titulo text-3xl font-medium">
           O que queremos resolver
         </h2>
         <p className="mt-3 max-w-[60ch] text-lg text-tinta-suave">
           Quatro dores levantadas na Entrega 1, e a situação de cada uma hoje.
         </p>
-        <ul role="list" className="mt-8 divide-y divide-divisor border-y border-divisor">
+        <ul role="list" className="superficie mt-8 divide-y divide-divisor px-5 sm:px-6">
           {DORES.map((dor) => (
             <li
               key={dor.dor}

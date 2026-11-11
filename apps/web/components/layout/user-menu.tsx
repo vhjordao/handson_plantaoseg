@@ -32,7 +32,12 @@ export function UserMenu({
           <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-acento-tom text-acento-forte">
             <UserRound aria-hidden="true" className="size-[18px]" />
           </span>
-          <span className="hidden max-w-[16rem] truncate sm:inline">{nome}</span>
+          <span className="hidden min-w-0 text-left leading-tight sm:grid">
+            <span className="max-w-[14rem] truncate">{nome}</span>
+            <span className="hidden max-w-[14rem] truncate text-xs font-normal text-tinta-suave xl:block">
+              {descricao}
+            </span>
+          </span>
           <span className="sr-only sm:hidden">Menu de {nome}</span>
           <ChevronDown aria-hidden="true" className="size-4 shrink-0" />
         </button>
