@@ -54,10 +54,10 @@ function Indicador({
         </p>
       ) : null}
       <div className="mt-auto flex flex-wrap items-end justify-between gap-3">
-        <p className="numero-destaque text-[2.5rem] leading-none text-tinta">
+        <p className="numero-destaque flex min-w-0 flex-wrap items-baseline gap-x-1.5 gap-y-1 text-[2.5rem] leading-none text-tinta">
           {valor}
           {simulado ? (
-            <span className="ml-1.5 align-baseline text-xs font-normal tracking-normal text-tinta-suave">
+            <span className="text-xs font-normal tracking-normal text-tinta-suave">
               simulado
             </span>
           ) : null}

@@ -1,7 +1,7 @@
 # Direção de arte da plataforma PlantãoSeguro
 
 - **Responsável:** Victor Jordão com o Claude Code · **Branch:** `f3/web-plataforma` · **Data:** 03/11/2026, revisada em 04/11/2026
-- **Status:** plano de 03/11, com revisão contra o padrão genérico (seção 3). **Revisado em 10/11/2026 na fase E (seção 6):** cores, raios, sombras e tipografia mudaram; as três vozes continuam. Onde a seção 6 diverge das anteriores, vale a seção 6. Valores de cor e de tipo são os **finais** quando constam em `apps/web/lib/tokens/cores.ts`; o script `npm run check:contraste` confere os contrastes.
+- **Status:** plano de 03/11, com revisão contra o padrão genérico (seção 3). **Revisado em 10 e 11/11/2026 na fase E (seção 6, com a segunda passada em 6.1 e o hero em 6.2):** cores, raios, sombras e tipografia mudaram; as três vozes continuam. Onde a seção 6 diverge das anteriores, vale a seção 6. Valores de cor e de tipo são os **finais** quando constam em `apps/web/lib/tokens/cores.ts`; o script `npm run check:contraste` confere os contrastes.
 - **Fontes:** [prompt v2](prompt-frontend.md) (regras), [referências](referencias.md) (o que foi visto e por quê) e a skill `frontend-design` (processo de duas passagens).
 
 ## 1. Conceito: rascunho a lápis, decisão a carimbo
@@ -290,3 +290,38 @@ O divisor (1,28:1 no claro, 1,54:1 no escuro) é decorativo, não carrega inform
 **Escuro:** fundo `#0A121B`, papel `#111C28`, azul de ação `#72AAFF`, anil `#A9ADFF`. As sombras viram quase só um fio de luz, porque sombra escura sobre fundo escuro não aparece.
 
 **O acessório que saiu:** a Source Serif 4.
+
+### 6.1 Segunda passada (10 e 11/11): fiel ao desenho do modelo
+
+**Pedido do Victor:** "quero que siga fiel a esse modelo, claro que o conteúdo do meu produto é outro". A primeira passada só trocou o acabamento. A segunda trouxe a **estrutura** do modelo, sempre com as funções, as rotas e os dados do PlantãoSeguro:
+
+| Do modelo | No PlantãoSeguro |
+| --- | --- |
+| Barra superior com o menu em pílulas e a pessoa à direita | A barra lateral do coordenador virou uma barra superior: marca, menu em pílulas (a página atual em azul cheio), **Ajuda** redonda e a pessoa com nome e cargo. O médico ganhou a mesma barra no computador e manteve a barra inferior no celular. Abaixo de 1024 px, o menu do coordenador vai para a gaveta |
+| Caminho ("MediCore / Patients / Details") | `Caminho`: "Coordenação › Vagas › Detalhes da vaga", montado a partir do menu. Do outro lado, o hospital e o relógio da simulação |
+| Título leve e ações à direita, a principal em botão escuro | `CabecalhoDePagina` e o botão `escuro` ("Nova vaga") |
+| Painéis translúcidos, com ícone em círculo e título | `superficie` virou papel translúcido com desfoque; `Painel`, `CabecalhoDoPainel`, `IconeEmCirculo` e `Fato` (rótulo e valor com ícone, numa lista de definição válida) |
+| Ilustração grande ao fundo | `ArteDeFundo`: a rede de plantão em SVG (um hospital no centro e fibras até os médicos, em azul e rosa), atrás dos painéis, sem custo de download |
+| Cartões pequenos com número leve, variação e minigráfico | Os indicadores da tela de Vagas: número, "57% a menos que o manual" e duas barras (manual contra modelo), sempre com "simulado" |
+| Mostrador de traços ("80% Health Score") | `AnelDeTracos`: "50 elegíveis de 300" na tela da vaga e o tempo que falta para responder na oferta do médico |
+| Perfil do paciente | O resumo da vaga (hospital, quando, urgência e pedido original) e o perfil do médico em "Minha conta" |
+| Linha do tempo com pílulas | A cascata de ofertas, com o estado de cada passo num círculo sobre o trilho |
+
+Nada de menu, página ou indicador novo entrou só porque estava no modelo: os números dos painéis já existiam na tela.
+
+### 6.2 O hero em "vidro líquido" (11/11)
+
+**Pedido do Victor:** um hero no formato de um prompt de "liquid glass" (barra flutuante de vidro, título grande em Fustat, selo de avaliação, botão de vidro azul, orbe em vídeo à direita e logos de clientes), "porém com o meu produto", com a análise do peso.
+
+| O prompt pedia | O que entrou | Por quê |
+| --- | --- | --- |
+| Fundo branco com luz azul (#60B1FF, #319AFF) no alto à esquerda | Igual, com as duas elipses desfocadas; no escuro, a mesma luz mais fraca | É CSS: não pesa |
+| Barra de vidro flutuante, a 30 px do topo, `blur(50px)`, borda e brilho interno | Igual (`barra-vidro`), com as âncoras, **Ajuda** e "Entrar" com seta | No celular a barra ocupa a largura e cabe numa linha (o teste exige menos de 80 px a 320 px) |
+| Título "Work smarter, achieve faster" em Fustat 75 px | "A IA sugere. Você decide." em Fustat 700, até 75 px, entrelinha 1,05 | O título é o do produto |
+| Fustat nos títulos e Inter no texto | Fustat só nos títulos da página inicial; o texto continua na Atkinson | A Fustat (um peso, só latino) custa cerca de 25 KB e só é baixada nas páginas públicas. A Inter seria uma terceira fonte para trocar a Atkinson, escolhida pela legibilidade |
+| "Rated 4.9/5 by 2700+ customers" com estrelas | "Testado em 392 vagas e 300 médicos sintéticos" | Não há clientes: uma nota seria inventada. O selo traz fatos da simulação |
+| Botão "Get Started Now" em `rgba(0,132,255,0.8)` | "Entrar no sistema" em vidro azul com o círculo e a seta, e o aumento de 2% ao passar o mouse | O azul do prompt com texto branco dá cerca de 3:1. O botão usa o azul de ação a 94%, acima de 4,5:1, e no escuro o azul claro com o rótulo escuro |
+| Orbe em vídeo da future.co, com `mix-blend-screen` e filtro de cor | Orbe em CSS (`Orbe`): esfera azul elétrica, reflexo, borda iluminada e um véu que gira devagar; a demonstração viva flutua sobre ele | O vídeo é de outro site, sem licença para usar, e pesaria de 1 a 3 MB, tocando sozinho no celular. Além disso, `screen` sobre fundo branco some. O orbe em CSS pesa menos de 2 KB, roda numa camada da placa de vídeo e fica parado com movimento reduzido |
+| "Trusted by" com cinco logos | "Construído com": Next.js, FastAPI, Supabase, n8n, Gemini e Vercel, em texto | Logos de empresas que não usam o produto seriam falsa prova social. As ferramentas são as que rodam o protótipo, e em texto não há marca de terceiros |
+
+**Peso, em resumo:** a página inicial ganhou só a Fustat (cerca de 25 KB, uma vez, com `display: swap`). Orbe, luzes e vidro são CSS. O que poderia pesar é o desfoque (`backdrop-filter`) em telas fracas, por isso ele fica em poucas camadas: a barra, os painéis e a demonstração. O vídeo pedido, que seria o item mais caro, não entrou.

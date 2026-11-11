@@ -85,7 +85,7 @@ export function HeroDemo() {
   return (
     <section
       aria-label="Exemplo da simulação: a leitura de uma vaga e a ordem sugerida"
-      className="rounded-dialogo border border-divisor bg-papel p-4 sm:p-5"
+      className="rounded-dialogo border border-[rgb(255_255_255/0.7)] bg-papel/[0.88] p-4 shadow-flutuante backdrop-blur-2xl sm:p-5"
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="font-titulo text-xl font-semibold">Nova vaga</h2>

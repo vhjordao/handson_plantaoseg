@@ -119,10 +119,12 @@ export function OrdemSugerida({
       <div className="grid grid-cols-1 gap-3 p-4 md:px-5">
         <div>
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <IconeEmCirculo icone={decisao ? BadgeCheck : Sparkles} tom={decisao ? "humano" : "ia"} />
-            <h2 id="ordem-titulo" ref={tituloRef} tabIndex={-1} className="min-w-0 flex-1 font-titulo text-lg font-semibold outline-none">
-              {ORDEM.titulo(recomendacao.candidatos.length, recomendacao.totalElegiveis)}
-            </h2>
+            <div className="flex min-w-0 flex-1 basis-64 items-center gap-3">
+              <IconeEmCirculo icone={decisao ? BadgeCheck : Sparkles} tom={decisao ? "humano" : "ia"} />
+              <h2 id="ordem-titulo" ref={tituloRef} tabIndex={-1} className="min-w-0 flex-1 font-titulo text-lg font-semibold outline-none">
+                {ORDEM.titulo(recomendacao.candidatos.length, recomendacao.totalElegiveis)}
+              </h2>
+            </div>
             <VozTag voz={decisao ? "humano" : "ia"} />
           </div>
 

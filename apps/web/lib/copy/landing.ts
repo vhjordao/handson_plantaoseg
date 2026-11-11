@@ -10,6 +10,9 @@ export const HERO = {
   apoio:
     "O PlantãoSeguro lê o pedido de plantão, ordena quem pode aceitar, explica cada nome e só envia a oferta depois que você aprova.",
   nota: "Projeto acadêmico, com dados 100% sintéticos.",
+  /** O selo do alto: fatos da simulação, no lugar de uma nota de clientes (não há clientes). */
+  selo: "Testado em 392 vagas e 300 médicos sintéticos",
+  construidoCom: "Construído com",
 } as const;
 
 /**

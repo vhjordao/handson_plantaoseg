@@ -208,6 +208,8 @@
 
   /* As classes das fontes ficam no <html> (app/layout.tsx), então o var() resolve. */
   --font-sans: var(--font-atkinson), ui-sans-serif, system-ui, sans-serif;
+  /* Fustat: só nos títulos da página inicial, carregada só no layout público (app/(publico)/layout.tsx). */
+  --font-vitrine: var(--font-fustat), var(--font-atkinson), ui-sans-serif, system-ui, sans-serif;
 
   /* Raios por hierarquia: campo e botão, cartão, diálogo. */
   --radius-campo: 10px;
@@ -498,4 +500,151 @@
   .arte-de-fundo {
     display: none;
   }
+}
+
+/*
+ * O hero da página inicial ("vidro líquido"): fundo branco com luz azul no canto superior
+ * esquerdo, o orbe de vidro em CSS e a barra de navegação flutuante. Tudo sem imagem nem vídeo.
+ */
+.hero-vidro {
+  --hero-fundo: #ffffff;
+  --hero-luz-a: rgb(96 177 255 / 0.32);
+  --hero-luz-b: rgb(49 154 255 / 0.22);
+  background-color: var(--hero-fundo);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .hero-vidro {
+    --hero-fundo: #0a1118;
+    --hero-luz-a: rgb(96 177 255 / 0.16);
+    --hero-luz-b: rgb(49 154 255 / 0.12);
+  }
+}
+
+:root[data-theme="dark"] .hero-vidro {
+  --hero-fundo: #0a1118;
+  --hero-luz-a: rgb(96 177 255 / 0.16);
+  --hero-luz-b: rgb(49 154 255 / 0.12);
+}
+
+.hero-luz {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  pointer-events: none;
+}
+
+.orbe {
+  position: absolute;
+  aspect-ratio: 1;
+  border-radius: 9999px;
+  transform: scale(1.25);
+}
+
+.orbe > div {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+/* O corpo: azul elétrico, mais claro no alto e escuro na base, com a borda iluminada. */
+.orbe-esfera {
+  background:
+    radial-gradient(circle at 32% 26%, #bfe2ff 0%, rgb(120 196 255 / 0.9) 14%, transparent 42%),
+    radial-gradient(circle at 70% 78%, #0a3fae 0%, transparent 55%),
+    radial-gradient(circle at 50% 50%, #2f8fff 0%, #1764e8 48%, #0b3fb8 74%, #0a2f86 100%);
+  box-shadow:
+    inset 0 0 60px rgb(255 255 255 / 0.35),
+    inset -18px -30px 80px rgb(4 22 80 / 0.55),
+    0 40px 120px -20px rgb(23 100 232 / 0.55);
+}
+
+/* O véu: faixas de luz que giram devagar, como líquido dentro do vidro. */
+.orbe-veu {
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgb(120 220 255 / 0.55) 60deg,
+    transparent 120deg,
+    rgb(150 140 255 / 0.4) 200deg,
+    transparent 260deg,
+    rgb(96 177 255 / 0.5) 320deg,
+    transparent 360deg
+  );
+  filter: blur(26px);
+  mix-blend-mode: screen;
+  animation: orbe-girar 22s linear infinite;
+  will-change: transform;
+}
+
+/* O reflexo do vidro: um arco branco no alto e uma borda clara. */
+.orbe-brilho {
+  background:
+    radial-gradient(ellipse 46% 22% at 40% 14%, rgb(255 255 255 / 0.75), transparent 70%),
+    radial-gradient(circle at 50% 50%, transparent 66%, rgb(255 255 255 / 0.28) 70%, transparent 74%);
+}
+
+@keyframes orbe-girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* A barra flutuante: vidro forte, borda fina e um brilho por dentro, no alto. */
+.barra-vidro {
+  background-color: rgb(255 255 255 / 0.3);
+  -webkit-backdrop-filter: blur(50px) saturate(1.6);
+  backdrop-filter: blur(50px) saturate(1.6);
+  border: 1px solid rgb(0 0 0 / 0.1);
+  box-shadow:
+    inset 0 4px 4px 0 rgb(255 255 255 / 0.25),
+    0 10px 30px -12px rgb(16 29 43 / 0.18);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .barra-vidro {
+    background-color: rgb(17 28 40 / 0.55);
+    border-color: rgb(255 255 255 / 0.1);
+    box-shadow: inset 0 1px 0 0 rgb(255 255 255 / 0.06);
+  }
+}
+
+:root[data-theme="dark"] .barra-vidro {
+  background-color: rgb(17 28 40 / 0.55);
+  border-color: rgb(255 255 255 / 0.1);
+  box-shadow: inset 0 1px 0 0 rgb(255 255 255 / 0.06);
+}
+
+/* O botão de vidro azul da chamada principal: o azul de ação, quase opaco, para o texto passar de 4,5:1. */
+.botao-vidro-azul {
+  background-color: rgb(29 96 198 / 0.94);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  box-shadow:
+    inset 0 4px 4px 0 rgb(255 255 255 / 0.35),
+    0 10px 24px -10px rgb(29 96 198 / 0.7);
+}
+
+@media (forced-colors: active), print {
+  .orbe,
+  .hero-luz {
+    display: none;
+  }
+}
+
+/* No escuro, o botão de vidro usa o azul claro do tema, com o rótulo escuro (como o primário). */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .botao-vidro-azul {
+    background-color: rgb(110 168 255 / 0.95);
+    box-shadow:
+      inset 0 4px 4px 0 rgb(255 255 255 / 0.3),
+      0 10px 24px -10px rgb(110 168 255 / 0.5);
+  }
+}
+
+:root[data-theme="dark"] .botao-vidro-azul {
+  background-color: rgb(110 168 255 / 0.95);
+  box-shadow:
+    inset 0 4px 4px 0 rgb(255 255 255 / 0.3),
+    0 10px 24px -10px rgb(110 168 255 / 0.5);
 }

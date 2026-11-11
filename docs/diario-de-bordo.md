@@ -4,6 +4,18 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 11/11/2026 (quarta): fase E, fiel ao modelo e o hero em vidro líquido
+
+**Pedidos do Victor:** "quero que siga fiel a esse modelo, claro que o conteúdo do meu produto é outro" e, para a página inicial, um hero em "vidro líquido", "porém com o meu produto", com a análise do peso.
+
+**O que mudou:** a barra lateral do coordenador virou uma barra superior com o menu em pílulas; as telas ganharam painéis translúcidos com ícone em círculo, o caminho da página, a arte da rede de plantão ao fundo, indicadores com minigráficos, anéis de traços (a rede elegível da vaga e o prazo da oferta) e a cascata em linha do tempo. A página inicial abre com a barra de vidro flutuante, o título em Fustat, um selo com fatos da simulação, o botão de vidro azul e a demonstração viva sobre um orbe feito em CSS.
+
+**O que ficou de fora, e por quê:** o vídeo do orbe (é de outro site e pesaria de 1 a 3 MB), a nota de clientes e os logos de empresas (não há clientes; entraram fatos da simulação e as ferramentas do protótipo) e a fonte Inter (a Atkinson fica pela legibilidade). Detalhes na [direção de arte, seções 6.1 e 6.2](design/direcao-de-arte.md#61-segunda-passada-10-e-1111-fiel-ao-desenho-do-modelo).
+
+**Como foi conferido:** contraste dos pares nos dois temas, typecheck, lint, testes unitários, a suíte do Playwright (com o axe e a letra a 200% no celular) e capturas em 1440 e 390 px, no claro e no escuro.
+
+**Uso de IA:** o Claude Code adaptou o modelo e o prompt ao produto, escreveu os componentes e revisou as telas pelas capturas.
+
 ## 10/11/2026 (terça), à noite: fase E, o visual novo
 
 **Pedido do Victor:** "Essa é a fase E do projeto, pulei a D por enquanto", com uma tela de painel médico como referência visual e a regra de não copiar a tela, os componentes nem as funções dela: o sistema continua o mesmo, com outro acabamento.
