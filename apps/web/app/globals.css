@@ -476,64 +476,63 @@
 }
 
 /*
- * O fundo da plataforma (components/dominio/arte-de-fundo.tsx): uma anatomia de vidro (pescoço e
- * tórax translúcidos, com os nervos em rosa), gerada pelo Victor no Figma a partir de um texto e
- * otimizada para a web (WebP de 21 a 44 KB). Cobre a janela e fica parada atrás dos painéis
- * translúcidos, como no modelo. No escuro, a mesma imagem com as cores invertidas e o matiz
- * devolvido. No celular, fica bem mais fraca para não atrapalhar o texto. No alto contraste e na
- * impressão, some.
+ * O fundo da plataforma (components/dominio/arte-de-fundo.tsx): uma malha suave de manchas pastel
+ * (azul, anil, rosa e ciano), paradas, com uma luz larga no alto. Só CSS, sem imagem e sem nada
+ * desenhado sob o texto. Escolhida pelo Victor entre três propostas (limpo, malha e pulso).
  */
-.fundo-anatomia {
-  position: absolute;
-  inset: 0;
-  background-image: url("/fundo/anatomia-2000.webp");
-  background-repeat: no-repeat;
-  background-position: right top;
-  background-size: cover;
-  opacity: 0.88;
-}
-
-@media (max-width: 63.99rem) {
-  .fundo-anatomia {
-    background-image: url("/fundo/anatomia-1200.webp");
-  }
+.arte-de-fundo {
+  --fundo-luz: rgb(255 255 255 / 0.85);
+  --fundo-azul: rgb(120 175 255 / 0.28);
+  --fundo-anil: rgb(150 140 255 / 0.18);
+  --fundo-rosa: rgb(255 170 200 / 0.16);
+  --fundo-ciano: rgb(130 215 240 / 0.16);
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .fundo-anatomia {
-    background-image: url("/fundo/anatomia-escuro-2000.webp");
-    opacity: 0.75;
-  }
+  :root:not([data-theme="light"]) .arte-de-fundo {
+    --fundo-luz: rgb(60 90 140 / 0.22);
+    --fundo-azul: rgb(50 110 230 / 0.2);
+    --fundo-anil: rgb(100 90 230 / 0.14);
+    --fundo-rosa: rgb(220 90 150 / 0.08);
+    --fundo-ciano: rgb(40 160 220 / 0.08);
+    }
 }
 
-:root[data-theme="dark"] .fundo-anatomia {
-  background-image: url("/fundo/anatomia-escuro-2000.webp");
-  opacity: 0.75;
+:root[data-theme="dark"] .arte-de-fundo {
+  --fundo-luz: rgb(60 90 140 / 0.22);
+  --fundo-azul: rgb(50 110 230 / 0.2);
+  --fundo-anil: rgb(100 90 230 / 0.14);
+  --fundo-rosa: rgb(220 90 150 / 0.08);
+  --fundo-ciano: rgb(40 160 220 / 0.08);
 }
 
-@media (max-width: 63.99rem) and (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .fundo-anatomia {
-    background-image: url("/fundo/anatomia-escuro-1200.webp");
-  }
+.arte-de-fundo > div {
+  position: absolute;
+  inset: 0;
 }
 
-@media (max-width: 63.99rem) {
-  :root[data-theme="dark"] .fundo-anatomia {
-    background-image: url("/fundo/anatomia-escuro-1200.webp");
-  }
+/* A luz larga no alto, um pouco mais azul à direita. */
+.fundo-luz {
+  background:
+    radial-gradient(90rem 34rem at 50% -14rem, var(--fundo-luz), transparent 70%),
+    radial-gradient(50rem 28rem at 100% -6rem, var(--fundo-azul), transparent 70%);
 }
 
-/* No celular a figura passa por trás do texto: fica só como clima. */
+/* A malha: manchas grandes e paradas, bem diluídas. */
+.fundo-malha {
+  background:
+    radial-gradient(60rem 38rem at 92% -6rem, var(--fundo-azul), transparent 70%),
+    radial-gradient(44rem 30rem at 56% 4rem, var(--fundo-anil), transparent 72%),
+    radial-gradient(40rem 28rem at 80% 26rem, var(--fundo-rosa), transparent 72%),
+    radial-gradient(56rem 36rem at -8% 108%, var(--fundo-ciano), transparent 72%),
+    radial-gradient(40rem 30rem at 30% 70%, var(--fundo-anil), transparent 72%);
+  filter: saturate(1.4);
+}
+
+/* No celular as manchas ficam mais fracas: só o clima de cor. */
 @media (max-width: 47.99rem) {
-  .fundo-anatomia,
-  :root[data-theme="dark"] .fundo-anatomia {
-    opacity: 0.3;
-  }
-}
-
-@media (max-width: 47.99rem) and (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .fundo-anatomia {
-    opacity: 0.3;
+  .fundo-malha {
+    opacity: 0.6;
   }
 }
 
