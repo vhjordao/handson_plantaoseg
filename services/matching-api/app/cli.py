@@ -6,6 +6,7 @@ Uso, a partir de `services/matching-api`:
     python -m app.cli evaluate    # treina o modelo e compara com o baseline (simulação)
     python -m app.cli flow        # fluxo recomendado contra o processo manual (simulação)
     python -m app.cli concentration # rodízio e limite contra a concentração (simulação)
+    python -m app.cli zone        # medidas contra a exclusão por zona (simulação)
     python -m app.cli demo --yes  # vaga em texto livre -> top 5 -> aprovação -> auditoria
     python -m app.cli blind-review  # casos da revisão às cegas para as entrevistas
     python -m app.cli robustness    # teste de premissas e simulação de lançamento
@@ -315,6 +316,32 @@ def cmd_concentration(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_zone(args: argparse.Namespace) -> int:
+    from app.zone import adoptable_key, evaluate_suite, render_zone, zone_chart
+
+    data_dir = Path(args.data)
+    dataset, params = _load(data_dir)
+    model = _load_model(data_dir, dataset, params)
+    metrics = evaluate_suite(dataset, params, model)
+    if args.report_dir:
+        report_dir = Path(args.report_dir)
+        report_dir.mkdir(parents=True, exist_ok=True)
+        (report_dir / "metricas-zona.md").write_text(render_zone(metrics), encoding="utf-8")
+        (report_dir / "metricas-zona.json").write_text(
+            json.dumps(metrics, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+        (report_dir / "fig-zona-politicas.svg").write_text(zone_chart(metrics), encoding="utf-8")
+    print("Exclusão por zona, por política (SIMULAÇÃO, dados sintéticos)")
+    for key, r in metrics["policies"].items():
+        print(
+            f"  {key}: sucesso do top-5 {_pt(r['top5_success'] * 100)}% | "
+            f"tempo {r['time_mean']:.0f} min | zona menos exposta "
+            f"{_pt(r['worst_zone_top5'])} no top-5 e {_pt(r['worst_zone_offers'])} nas ofertas"
+        )
+    print(f"  Adotável pelos critérios: {adoptable_key(metrics) or 'nenhuma'}")
+    return 0
+
+
 def cmd_walkthrough(args: argparse.Namespace) -> int:
     from app.walkthrough import render_walkthrough
 
@@ -487,6 +514,11 @@ def build_parser() -> argparse.ArgumentParser:
     conc.add_argument("--data", default=str(DEFAULT_DATA))
     conc.add_argument("--report-dir", default=None)
     conc.set_defaults(func=cmd_concentration)
+
+    zone = sub.add_parser("zone", help="medidas contra a exclusão por zona")
+    zone.add_argument("--data", default=str(DEFAULT_DATA))
+    zone.add_argument("--report-dir", default=None)
+    zone.set_defaults(func=cmd_zone)
 
     demo = sub.add_parser("demo", help="fluxo completo para uma vaga em texto livre")
     demo.add_argument("--data", default=str(DEFAULT_DATA))

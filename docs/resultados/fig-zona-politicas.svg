@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 300" role="img" aria-labelledby="t d" font-family='system-ui, -apple-system, "Segoe UI", sans-serif'>
+<title id="t">Zona menos exposta nas ofertas</title><desc id="d">Colunas com a participação da zona menos exposta nas ofertas que saem, em relação ao proporcional: a ordem de hoje, o rodízio de 10 pontos, o limite ao peso da distância, o lugar de oportunidade no 2º, o 2º lugar para quem mora longe e a cota por zona.</desc>
+<rect width="440" height="300" fill="#fcfcfb"/>
+<text x="56" y="28" font-size="16" font-weight="600" fill="#0b0b0b">Zona menos exposta nas ofertas</text>
+<text x="56" y="48" font-size="12" fill="#52514e">Em % do proporcional; 100% seria justo</text>
+<line x1="56" x2="416" y1="236.0" y2="236.0" stroke="#c3c2b7" stroke-width="1"/><text x="48" y="240.0" font-size="11" text-anchor="end" fill="#898781">0%</text>
+<line x1="56" x2="416" y1="208.0" y2="208.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="212.0" font-size="11" text-anchor="end" fill="#898781">20%</text>
+<line x1="56" x2="416" y1="180.0" y2="180.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="184.0" font-size="11" text-anchor="end" fill="#898781">40%</text>
+<line x1="56" x2="416" y1="152.0" y2="152.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="156.0" font-size="11" text-anchor="end" fill="#898781">60%</text>
+<line x1="56" x2="416" y1="124.0" y2="124.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="128.0" font-size="11" text-anchor="end" fill="#898781">80%</text>
+<line x1="56" x2="416" y1="96.0" y2="96.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="100.0" font-size="11" text-anchor="end" fill="#898781">100%</text>
+<path d="M69.7,236.0 L69.7,236.0 Q69.7,235.9 69.8,235.9 L93.7,235.9 Q93.7,235.9 93.7,236.0 L93.7,236.0 Z" fill="#2a78d6"/>
+<text x="81.7" y="229.9" font-size="11" text-anchor="middle" fill="#52514e">0%</text>
+<text x="81.7" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">Hoje</text>
+<path d="M121.1,236.0 L121.1,229.6 Q121.1,225.6 125.1,225.6 L141.1,225.6 Q145.1,225.6 145.1,229.6 L145.1,236.0 Z" fill="#2a78d6"/>
+<text x="133.1" y="219.6" font-size="11" text-anchor="middle" fill="#52514e">7%</text>
+<text x="133.1" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">Rodízio</text>
+<text x="133.1" y="268.0" font-size="11" text-anchor="middle" fill="#52514e">10</text>
+<path d="M172.6,236.0 L172.6,218.4 Q172.6,214.4 176.6,214.4 L192.6,214.4 Q196.6,214.4 196.6,218.4 L196.6,236.0 Z" fill="#2a78d6"/>
+<text x="184.6" y="208.4" font-size="11" text-anchor="middle" fill="#52514e">15%</text>
+<text x="184.6" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">Limite</text>
+<text x="184.6" y="268.0" font-size="11" text-anchor="middle" fill="#52514e">10 km</text>
+<path d="M224.0,236.0 L224.0,219.9 Q224.0,215.9 228.0,215.9 L244.0,215.9 Q248.0,215.9 248.0,219.9 L248.0,236.0 Z" fill="#2a78d6"/>
+<text x="236.0" y="209.9" font-size="11" text-anchor="middle" fill="#52514e">14%</text>
+<text x="236.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">Oport.</text>
+<text x="236.0" y="268.0" font-size="11" text-anchor="middle" fill="#52514e">2º</text>
+<path d="M275.4,236.0 L275.4,185.7 Q275.4,181.7 279.4,181.7 L295.4,181.7 Q299.4,181.7 299.4,185.7 L299.4,236.0 Z" fill="#2a78d6"/>
+<text x="287.4" y="175.7" font-size="11" text-anchor="middle" fill="#52514e">39%</text>
+<text x="287.4" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">Longe 2º</text>
+<text x="287.4" y="268.0" font-size="11" text-anchor="middle" fill="#52514e">10 km</text>
+<path d="M326.9,236.0 L326.9,173.8 Q326.9,169.8 330.9,169.8 L346.9,169.8 Q350.9,169.8 350.9,173.8 L350.9,236.0 Z" fill="#2a78d6"/>
+<text x="338.9" y="163.8" font-size="11" text-anchor="middle" fill="#52514e">47%</text>
+<text x="338.9" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">Longe 2º</text>
+<text x="338.9" y="268.0" font-size="11" text-anchor="middle" fill="#52514e">12 km</text>
+<path d="M378.3,236.0 L378.3,138.4 Q378.3,134.4 382.3,134.4 L398.3,134.4 Q402.3,134.4 402.3,138.4 L402.3,236.0 Z" fill="#2a78d6"/>
+<text x="390.3" y="128.4" font-size="11" text-anchor="middle" fill="#52514e">73%</text>
+<text x="390.3" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">Cota</text>
+<text x="390.3" y="268.0" font-size="11" text-anchor="middle" fill="#52514e">zona 2º</text>
+</svg>

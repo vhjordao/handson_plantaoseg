@@ -4,6 +4,20 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 11/11/2026 (quarta), à noite: feedback da Entrega 3, experimento da exclusão por zona
+
+**Pedido do Victor:** "Sim, começar" pelo experimento da zona, depois de colar o feedback da Entrega 3 (a pergunta: "será que o rodízio resolve a desigualdade entre regiões?"). O Victor também decidiu: sem entrega escrita depois de 17/11, código congelado em 16/11 (e não 13/11) e LightGBM só na CI.
+
+**O que mudou (só experimento e documentos, a API não muda):** o `python -m app.cli zone` compara o rodízio de hoje com um limite ao peso da distância, com um lugar de oportunidade (para quem tem menos aparições, sem olhar a zona), com um lugar para quem mora longe (usa a distância, que já é variável do ranking) e com uma cota por zona, esta só como referência. A regra do lugar fica em `app/ranking/rotation.py`, como a do rodízio. O relatório está em [`metricas-zona.md`](resultados/metricas-zona.md).
+
+**Resultado:** o rodízio reduz a concentração entre pessoas em todos os 6 mundos testados (sementes e peso da distância), mas a zona menos exposta recebe só 0,07 do proporcional. O que não olha a distância quase não ajuda (0,14). Reservar o 2º lugar a quem mora longe leva a 0,39, por −3,3 pontos de chance de sucesso; a cota por zona chega a 0,73, por −3,1. **Nenhuma política cumpre os critérios combinados antes do experimento** (zona de pelo menos 0,50 e perda de até 2 pontos), então nada entra na API por padrão.
+
+**Descoberta que muda a resposta:** estar em 5º no top-5 quase nunca significa receber oferta (a cascata faz 1,4 ofertas por vaga), por isso o experimento mede também as ofertas que saem. Uma hipótese minha, de que o lugar de oportunidade sem zona bastaria, estava errada, e o relatório diz isso.
+
+**Como foi conferido:** 588 testes da API passando, mais os novos (a regra, a ordem de cada política, o critério de adoção e a coincidência de "hoje" e do rodízio com o experimento da concentração).
+
+**Uso de IA:** o Claude Code propôs as políticas e os critérios (aprovados pelo Victor antes), escreveu o experimento e os testes e leu o resultado, inclusive o que contrariou a hipótese.
+
 ## 11/11/2026 (quarta), à noite: fase D, auditoria, contestações e equidade
 
 **Pedido do Victor:** "execute a fase D".

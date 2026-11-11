@@ -47,3 +47,47 @@ def rotate(
         result.append(pick)
         remaining.remove(pick)
     return result
+
+
+# O lugar de oportunidade (experimento da zona, `app/zone.py`): ainda não está na API.
+OPPORTUNITY_POSITION = 3
+OPPORTUNITY_REACH = 0.30
+
+
+def with_opportunity_slot(
+    ordered: Sequence[T],
+    *,
+    score: Callable[[T], float],
+    key: Callable[[T], str],
+    exposure: Mapping[str, int],
+    position: int = OPPORTUNITY_POSITION,
+    reach: float = OPPORTUNITY_REACH,
+    only: Callable[[T], bool] | None = None,
+) -> list[T]:
+    """Reserva um lugar da lista (1 é o primeiro) para quem tem menos exposição e ainda tem chance.
+
+    Entre os que estão do lugar `position` em diante e a até `reach` de chance prevista do melhor,
+    vai para esse lugar o menos exposto; no empate, o de maior score e, depois, o de menor id. Quem
+    estava no lugar sai um degrau para baixo, e ninguém sai da lista. Não olha zona, idade, gênero
+    nem pagamento: só a contagem de aparições e a chance prevista. `only`, se vier, limita a escolha
+    a quem passa no teste (o experimento usa a distância, que já é variável do ranking).
+    """
+    result = list(ordered)
+    index = position - 1
+    if index <= 0 or index >= len(result):
+        return result
+    best = score(result[0])
+    candidates = [
+        i
+        for i in range(index, len(result))
+        if score(result[i]) >= best - reach and (only is None or only(result[i]))
+    ]
+    if not candidates:
+        return result
+    chosen = min(
+        candidates,
+        key=lambda i: (exposure.get(key(result[i]), 0), -score(result[i]), key(result[i])),
+    )
+    if chosen != index:
+        result.insert(index, result.pop(chosen))
+    return result

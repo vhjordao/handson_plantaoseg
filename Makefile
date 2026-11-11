@@ -40,6 +40,9 @@ walkthrough: ## Exemplo trabalhado (docs/exemplo-trabalhado.md) com as contas à
 concentracao: ## Rodízio e limite de exposição contra a concentração das ofertas (simulação)
 	$(CLI) concentration --report-dir ../../docs/resultados
 
+zona: ## Medidas contra a exclusão por zona (simulação; leva cerca de um minuto)
+	$(CLI) zone --report-dir ../../docs/resultados
+
 robustez: ## Teste de premissas e simulação de lançamento (simulação; leva alguns minutos)
 	$(CLI) robustness --report-dir ../../docs/resultados
 
