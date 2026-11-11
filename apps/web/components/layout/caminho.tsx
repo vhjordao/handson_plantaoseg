@@ -7,7 +7,7 @@ import { itensDaArea, type AreaDeNavegacao } from "@/lib/nav";
 
 const RAIZ: Record<AreaDeNavegacao, { rotulo: string; href: string }> = {
   coordenador: { rotulo: "Coordenação", href: "/coordenador/vagas" },
-  medico: { rotulo: "Médico", href: "/medico/ofertas" },
+  medico: { rotulo: "Médico", href: "/medico" },
 };
 
 /**

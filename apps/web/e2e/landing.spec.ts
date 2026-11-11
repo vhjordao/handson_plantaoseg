@@ -85,4 +85,19 @@ test.describe("landing", () => {
       expect(graves, JSON.stringify(graves.map((v) => ({ id: v.id, nos: v.nodes.map((n) => n.target) })), null, 2)).toEqual([]);
     });
   }
+
+  test("o botão de tema troca para o escuro e lembra a escolha", async ({ page }) => {
+    await page.emulateMedia({ colorScheme: "light" });
+    await page.goto("/");
+    const botao = page.getByRole("banner").getByRole("button", { name: "Tema escuro" });
+    await expect(botao).toHaveAttribute("aria-pressed", "false");
+    await botao.click();
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+    await expect(botao).toHaveAttribute("aria-pressed", "true");
+    // A escolha vale depois de recarregar, antes do React montar (sem piscar).
+    await page.reload();
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+    await page.getByRole("banner").getByRole("button", { name: "Tema escuro" }).click();
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  });
 });

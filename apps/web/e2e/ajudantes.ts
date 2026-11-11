@@ -16,7 +16,9 @@ export async function entrarComoMedico(page: Page) {
   // A persona é sorteada depois que a página monta; até lá o botão fica desabilitado.
   await expect(botao).toBeEnabled({ timeout: 10_000 });
   await botao.click();
-  await page.waitForURL("**/medico/ofertas");
+  // O login do médico abre o painel inicial; os testes seguem para as ofertas.
+  await page.waitForURL(/\/medico$/);
+  await page.goto("/medico/ofertas");
 }
 
 /**

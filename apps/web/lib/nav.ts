@@ -2,6 +2,7 @@ import {
   ClipboardList,
   FilePlus2,
   Inbox,
+  LayoutDashboard,
   MessageSquareWarning,
   Scale,
   ScrollText,
@@ -62,6 +63,13 @@ const NAV_COORDENADOR: ItemDeNavegacao[] = [
 ];
 
 const NAV_MEDICO: ItemDeNavegacao[] = [
+  {
+    id: "inicio",
+    href: "/medico",
+    rotulo: "Início",
+    icone: LayoutDashboard,
+    ativo: (c) => c === "/medico",
+  },
   {
     id: "ofertas",
     href: "/medico/ofertas",

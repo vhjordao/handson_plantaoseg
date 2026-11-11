@@ -12,7 +12,7 @@ export const DURACAO_SESSAO_SEGUNDOS = 60 * 60 * 8;
 
 export const ROTA_INICIAL: Record<Papel, string> = {
   coordenador: "/coordenador/vagas",
-  medico: "/medico/ofertas",
+  medico: "/medico",
 };
 
 export function lerSessaoDoValor(valor: string | undefined): Sessao | null {

@@ -4,11 +4,11 @@ import type { ChaveVoz } from "@/lib/copy/comum";
 import { cn } from "@/lib/utils";
 
 /**
- * O trilho à esquerda de cada etapa tem a forma da voz: tracejado (2 px), contínuo (2 px) ou
- * fino e cinza (1 px). A espessura distingue a regra da decisão sem depender da cor (WCAG 1.4.1).
+ * O trilho à esquerda de cada etapa tem a cor da voz: azul (2 px), verde (2 px) ou fino e cinza
+ * (1 px). A etiqueta de cada etapa diz o mesmo em texto, então a cor não é o único sinal (WCAG 1.4.1).
  */
 const TRILHO: Record<ChaveVoz, string> = {
-  ia: "border-l-2 border-dashed border-ia",
+  ia: "border-l-2 border-ia",
   humano: "border-l-2 border-humano",
   regra: "border-l border-campo",
 };
@@ -25,8 +25,8 @@ export function ComoFunciona() {
           Oito etapas, uma decisão humana
         </h2>
         <p className="mt-3 max-w-[64ch] text-lg text-tinta-suave">
-          Do pedido em texto livre à oferta aceita. O trilho à esquerda de cada etapa diz quem age:
-          tracejado, a IA; contínuo, uma pessoa; fino e cinza, uma regra.
+          Do pedido em texto livre à oferta aceita. A etiqueta e o trilho à esquerda de cada etapa
+          dizem quem age: azul, a IA; verde, uma pessoa; fino e cinza, uma regra.
         </p>
 
         <ol role="list" className="mt-10 grid gap-3 lg:grid-flow-col lg:grid-cols-2 lg:grid-rows-4">

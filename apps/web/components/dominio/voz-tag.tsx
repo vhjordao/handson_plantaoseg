@@ -1,17 +1,17 @@
 import * as React from "react";
-import { BadgeCheck, CircleDashed, Ruler } from "lucide-react";
+import { BadgeCheck, Ruler, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { VOZES, type ChaveVoz } from "@/lib/copy/comum";
 
 const CONFIG = {
-  ia: { Icone: CircleDashed, tone: "ia" },
+  ia: { Icone: Sparkles, tone: "iaVoz" },
   humano: { Icone: BadgeCheck, tone: "humano" },
   regra: { Icone: Ruler, tone: "regra" },
 } as const;
 
 /**
  * Só o ícone da voz, para quando não há espaço para o rótulo inteiro: a
- * forma do ícone distingue as vozes sem depender de cor nem de espessura de traço.
+ * forma do ícone (brilho, selo, régua) distingue as vozes sem depender da cor.
  */
 export function IconeDaVoz({ voz, className }: { voz: ChaveVoz; className?: string }) {
   const { Icone } = CONFIG[voz];

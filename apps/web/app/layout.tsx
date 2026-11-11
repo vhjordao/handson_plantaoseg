@@ -14,6 +14,10 @@ const atkinson = Atkinson_Hyperlegible_Next({
 });
 
 
+// Lê a escolha de tema guardada pelo BotaoTema (components/layout/botao-tema.tsx). Sem escolha,
+// segue o sistema. Fica em texto porque roda antes do React.
+const SCRIPT_TEMA = `try{var t=localStorage.getItem("plantaoseg-tema");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}`;
+
 export const metadata: Metadata = {
   title: {
     default: "PlantãoSeguro: a IA sugere, você decide",
@@ -39,7 +43,12 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="pt-BR" className={`${atkinson.variable} h-full`}>
+    // O script aplica o tema escolhido antes da primeira pintura (sem piscar); por isso o <html>
+    // pode chegar ao navegador com um `data-theme` que o servidor não pôs.
+    <html lang="pt-BR" className={`${atkinson.variable} h-full`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: SCRIPT_TEMA }} />
+      </head>
       <body className="flex min-h-dvh flex-col">
         <PularParaConteudo />
         {children}

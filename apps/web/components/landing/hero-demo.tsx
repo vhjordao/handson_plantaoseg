@@ -29,8 +29,8 @@ function usePrefereMenosMovimento(): boolean {
 
 /**
  * A interface em miniatura, viva. Um texto de vaga é digitado, o sistema mostra os campos que
- * leu (por regras: cinza), o modelo sugere uma ordem (tracejado) e, quando a pessoa clica em
- * "Aprovar e oferecer", o tracejado fecha e o selo assenta. Os nomes, os motivos e o texto são
+ * leu (por regras: cinza), o modelo sugere uma ordem (fundo da IA) e, quando a pessoa clica em
+ * "Aprovar e oferecer", o bloco passa ao verde e o selo assenta. Os nomes, os motivos e o texto são
  * a saída real da PoC, com dados sintéticos.
  *
  * É compacta de propósito: o botão de decisão precisa aparecer sem rolar a página. O espaço de

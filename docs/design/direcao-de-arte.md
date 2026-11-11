@@ -1,7 +1,7 @@
 # Direção de arte da plataforma PlantãoSeguro
 
 - **Responsável:** Victor Jordão com o Claude Code · **Branch:** `f3/web-plataforma` · **Data:** 03/11/2026, revisada em 04/11/2026
-- **Status:** plano de 03/11, com revisão contra o padrão genérico (seção 3). **Revisado em 10 e 11/11/2026 na fase E (seção 6, com a segunda passada em 6.1 e o hero em 6.2):** cores, raios, sombras e tipografia mudaram; as três vozes continuam. Onde a seção 6 diverge das anteriores, vale a seção 6. Valores de cor e de tipo são os **finais** quando constam em `apps/web/lib/tokens/cores.ts`; o script `npm run check:contraste` confere os contrastes.
+- **Status:** plano de 03/11, com revisão contra o padrão genérico (seção 3). **Revisado em 10 e 11/11/2026 na fase E (seção 6, com a segunda passada em 6.1, o hero em 6.2 e as vozes sem tracejado, o painel do médico e o tema em 6.3):** cores, raios, sombras e tipografia mudaram; as três vozes continuam. Onde a seção 6 diverge das anteriores, vale a seção 6. Valores de cor e de tipo são os **finais** quando constam em `apps/web/lib/tokens/cores.ts`; o script `npm run check:contraste` confere os contrastes.
 - **Fontes:** [prompt v2](prompt-frontend.md) (regras), [referências](referencias.md) (o que foi visto e por quê) e a skill `frontend-design` (processo de duas passagens).
 
 ## 1. Conceito: rascunho a lápis, decisão a carimbo
@@ -325,3 +325,15 @@ Nada de menu, página ou indicador novo entrou só porque estava no modelo: os n
 | "Trusted by" com cinco logos | "Construído com": Next.js, FastAPI, Supabase, n8n, Gemini e Vercel, em texto | Logos de empresas que não usam o produto seriam falsa prova social. As ferramentas são as que rodam o protótipo, e em texto não há marca de terceiros |
 
 **Peso, em resumo:** a página inicial ganhou só a Fustat (cerca de 25 KB, uma vez, com `display: swap`). Orbe, luzes e vidro são CSS. O que poderia pesar é o desfoque (`backdrop-filter`) em telas fracas, por isso ele fica em poucas camadas: a barra, os painéis e a demonstração. O vídeo pedido, que seria o item mais caro, não entrou.
+
+### 6.3 Vozes sem tracejado, painel do médico, corpo de vidro e tema (11/11)
+
+**Pedido do Victor:** "o tracejado e etc, não ficam muito agradáveis nas telas, vamos pensar em algo mais estético como o do print"; um painel para o médico no formato do dashboard do modelo, "porém o fundo de tela não tem nem o corpo humano transparente"; "quero esse estilo bem clean"; e a opção de mudar entre claro e escuro.
+
+| Antes | Agora | Por quê |
+| --- | --- | --- |
+| A IA com contorno **tracejado** que fechava na decisão (o "momento memorável" da seção 1) | A IA com fundo em degradê anil e azul, borda suave e um brilho no alto (`.voz-ia`); a etiqueta "Sugestão da IA" virou a pílula em degradê com o ícone de brilho (`Sparkles`), como o botão de "insights" do modelo. A decisão humana tem fundo e borda verdes (`.voz-humano`) e o selo | O tracejado ficava pesado em telas cheias de cartões. O significado continua sem depender só da cor: cada voz tem rótulo e ícone (brilho, selo, régua). O momento da decisão agora é o bloco passar ao verde com o selo assentando |
+| Ícone da IA: círculo tracejado | Brilho (`Sparkles`) | É o sinal de IA que o modelo e a maioria dos produtos usam |
+| Fundo: a rede de plantão | Na plataforma, um **busto humano de vidro** em SVG (`CorpoTranslucido`: silhueta azul translúcida, coluna, costelas e nervos em rosa); a rede fica na entrada | É a figura do modelo, desenhada aqui (a imagem do print é de terceiros). Pesa só o SVG, e no celular fica bem mais fraca para não atrapalhar a leitura |
+| O médico entrava direto nas ofertas | **Painel inicial** em `/medico`: perfil com as iniciais (os dados são fictícios), a próxima resposta com o prazo num anel e a pílula "Por que você", ofertas recebidas, taxa de aceite, a linha do tempo das ofertas e os cartões de aceitas, recusadas, expiradas e contestações | É o dashboard do modelo com os dados que o médico já tinha: nada é inventado, e as ofertas continuam a um clique ("Ver as ofertas" e o menu) |
+| Tema seguia só o sistema | Botão de tema (lua e sol) em todos os cabeçalhos; a escolha fica neste navegador, e um script curto no `<head>` aplica antes da primeira pintura, sem piscar | Pedido do Victor. Sem escolha, continua seguindo o sistema |

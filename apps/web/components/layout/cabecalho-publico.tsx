@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { MarcaPlantao } from "@/components/dominio/marca-plantao";
 import { BotaoAjuda } from "@/components/layout/botao-ajuda";
+import { BotaoTema } from "@/components/layout/botao-tema";
 import { ArrowRight } from "lucide-react";
 import { ACOES } from "@/lib/copy/comum";
 
@@ -49,6 +50,7 @@ export function CabecalhoPublico({ enxuto = false }: { enxuto?: boolean }) {
           )}
 
           <div className="flex items-center gap-1 sm:gap-2">
+            <BotaoTema />
             <BotaoAjuda />
             {enxuto ? null : (
               <Link
