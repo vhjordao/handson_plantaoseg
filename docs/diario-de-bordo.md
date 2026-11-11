@@ -4,6 +4,20 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 11/11/2026 (quarta), à noite: feedback da Entrega 3, escala hospitalar
+
+**Pedido do Victor:** "Escala hospitalar", a pergunta "para pensar" do professor: a arquitetura aguenta o volume de um hospital?
+
+**O que foi medido (só local, sem tocar no servidor):** o `python -m app.cli scale` replica a rede simulada 1, 3, 10 e 30 vezes (300 a 9.000 médicos, até 227 mil ofertas) e mede o tempo de recomendar uma vaga, o de reconstruir o índice de variáveis e a memória. Com 9.000 médicos, recomendar leva 130 ms e o mundo ocupa cerca de 111 MB: o motor não é o gargalo. Sobre isso, um modelo de volume com quatro portes de hospital (P, M, G e rede de 10), com premissas à vista.
+
+**O que o relatório conclui:** um hospital grande cabe no desenho de hoje no que depende de CPU e memória. O que aperta primeiro é a consulta a cada 3 segundos: lendo o código do adaptador, cada médico com a tela aberta fazia 4 requisições por consulta (e o coordenador, 6, uma delas na API), e a lista de ofertas pedia o histórico inteiro, com um endereço que crescia junto (um médico com cerca de 200 ofertas passaria do limite de tamanho do endereço). Três limites são de arquitetura: a API é um processo só com o mundo em memória, o servidor é único e o Supabase gratuito pausa e não tem backup.
+
+**O que mudou no código (só a web):** o adaptador `live` guarda por usuário o perfil dos médicos e as recomendações, que não mudam entre consultas; a consulta do médico passou de 4 requisições para 1, e a da cascata de 6 para 3. As listas de ids saem em lotes de 40, e a lista de ofertas pede as 100 mais novas. Cinco testes novos contam as requisições, e um confere que outro login não recebe o que ficou guardado do anterior. A API não mudou.
+
+**O que ficou de fora, de propósito:** atualizar o índice em vez de refazê-lo (só importa numa rede de milhares de médicos), notificação em vez de consulta (Realtime) e uma API com mais de um processo. Estão no relatório como próximos passos de produção. Não houve novo teste de carga no servidor: a medição de 04/11 continua a única.
+
+**Uso de IA:** o Claude Code leu o código para contar as requisições, escreveu a medição, o modelo de volume, a mudança no adaptador e os testes, e deixou as premissas de volume declaradas, porque não há dado real.
+
 ## 11/11/2026 (quarta), à noite: feedback da Entrega 3, regressão logística contra LightGBM
 
 **Pedido do Victor:** LightGBM só na CI, junto com o experimento da zona.

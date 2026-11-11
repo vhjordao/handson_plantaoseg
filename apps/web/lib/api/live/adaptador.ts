@@ -40,6 +40,7 @@ import {
   type Vaga,
   type VerificacaoCadeia,
 } from "../types";
+import { lerTokens } from "./autenticacao";
 import { chamarApi, lerTabela, type OpcoesHttp } from "./http";
 import { COLUNAS_DA_TRILHA, registroDoBanco, verificarTrilhaDoBanco, type RegistroDoBanco } from "./auditoria";
 import { contarOfertas } from "../contagem";
@@ -93,10 +94,62 @@ interface ShiftOut {
   id: string;
 }
 
+/** Quantos ids cabem numa consulta `in.(...)`: o endereço não cresce com o histórico do médico. */
+const IDS_POR_CONSULTA = 40;
+/** A lista de ofertas do médico traz as mais novas: o histórico inteiro não vem a cada 3 s. */
+const LIMITE_DAS_OFERTAS = 100;
+
+function emLotes<T>(itens: T[], tamanho: number): T[][] {
+  const lotes: T[][] = [];
+  for (let i = 0; i < itens.length; i += tamanho) lotes.push(itens.slice(i, i + tamanho));
+  return lotes;
+}
+
+/** Quem está logado: o `sub` do token de acesso (ou o próprio token, se não for um JWT). */
+function donoDaSessao(): string {
+  const acesso = lerTokens()?.acesso ?? "";
+  try {
+    const carga = JSON.parse(atob(acesso.split(".")[1]!.replace(/-/g, "+").replace(/_/g, "/")));
+    return String(carga.sub ?? acesso);
+  } catch {
+    return acesso;
+  }
+}
+
+/**
+ * O que não muda entre uma consulta e a seguinte: o perfil dos médicos e as recomendações (gravadas
+ * uma vez). Guardado por usuário, para a consulta a cada 3 s das telas do médico e da cascata fazer
+ * uma requisição em vez de quatro. Quem entra com outro login começa do zero.
+ */
+interface Guardados {
+  dono: string;
+  medicos: Map<string, Medico>;
+  semAcesso: Set<string>;
+  recomendacoes: Map<string, RecomendacaoDoMedico>;
+  vagasCompletas: Set<string>;
+}
+
+function guardadosVazios(dono: string): Guardados {
+  return {
+    dono,
+    medicos: new Map(),
+    semAcesso: new Set(),
+    recomendacoes: new Map(),
+    vagasCompletas: new Set(),
+  };
+}
+
 export class AdaptadorLive implements PlantaoApi {
   readonly modo = "live" as const;
+  private guardados: Guardados = guardadosVazios("");
 
   constructor(private readonly opcoes: OpcoesHttp) {}
+
+  private memoria(): Guardados {
+    const dono = donoDaSessao();
+    if (this.guardados.dono !== dono) this.guardados = guardadosVazios(dono);
+    return this.guardados;
+  }
 
   agora(): DataHora {
     return agoraLocal();
@@ -325,12 +378,25 @@ export class AdaptadorLive implements PlantaoApi {
   }
 
   private async medicos(ids: string[]): Promise<Map<string, Medico>> {
-    if (ids.length === 0) return new Map();
-    const linhas = await lerTabela<MedicoDoBanco>(
-      this.opcoes,
-      `doctors?select=${COLUNAS_DO_MEDICO}&id=in.(${ids.join(",")})`,
+    const guardados = this.memoria();
+    const faltam = [...new Set(ids)].filter(
+      (id) => !guardados.medicos.has(id) && !guardados.semAcesso.has(id),
     );
-    return new Map(linhas.map((linha) => [linha.id, medicoDoBanco(linha)]));
+    for (const lote of emLotes(faltam, IDS_POR_CONSULTA)) {
+      const linhas = await lerTabela<MedicoDoBanco>(
+        this.opcoes,
+        `doctors?select=${COLUNAS_DO_MEDICO}&id=in.(${lote.join(",")})`,
+      );
+      for (const linha of linhas) guardados.medicos.set(linha.id, medicoDoBanco(linha));
+      // O que a RLS não abriu não vai abrir na próxima consulta: não pergunta de novo.
+      for (const id of lote) if (!guardados.medicos.has(id)) guardados.semAcesso.add(id);
+    }
+    const encontrados = new Map<string, Medico>();
+    for (const id of ids) {
+      const medico = guardados.medicos.get(id);
+      if (medico) encontrados.set(id, medico);
+    }
+    return encontrados;
   }
 
   /** Os nomes dos sugeridos, para tirar dos textos livres antes de mandar (a API não lê nomes). */
@@ -442,7 +508,7 @@ export class AdaptadorLive implements PlantaoApi {
     const ids = [...new Set([...enviadas.map((o) => o.doctor_id), ...aprovados])];
     const [medicos, recomendacoes] = await Promise.all([
       this.medicos(ids),
-      this.recomendacoes(`shift_id=eq.${id}`),
+      this.recomendacoesDaVaga(vagaId),
     ]);
     return cascataDoBanco(
       vagaId,
@@ -450,7 +516,7 @@ export class AdaptadorLive implements PlantaoApi {
       enviadas,
       aprovados,
       medicos,
-      new Map([...recomendacoes.values()].map((r) => [r.doctor_id, r])),
+      new Map(recomendacoes.map((r) => [r.doctor_id, r])),
       this.agora(),
     );
   }
@@ -459,7 +525,7 @@ export class AdaptadorLive implements PlantaoApi {
   async listarOfertas(medicoId: string): Promise<Oferta[]> {
     const linhas = await lerTabela<OfertaDoBanco>(
       this.opcoes,
-      `offers?select=${COLUNAS_DA_OFERTA}&doctor_id=eq.${encodeURIComponent(medicoId)}&order=sent_at.desc`,
+      `offers?select=${COLUNAS_DA_OFERTA}&doctor_id=eq.${encodeURIComponent(medicoId)}&order=sent_at.desc&limit=${LIMITE_DAS_OFERTAS}`,
     );
     return this.ofertasDoMedico(linhas);
   }
@@ -477,12 +543,9 @@ export class AdaptadorLive implements PlantaoApi {
   private async ofertasDoMedico(linhas: OfertaDoBanco[]): Promise<Oferta[]> {
     if (linhas.length === 0) return [];
     const medicoIds = [...new Set(linhas.map((l) => l.doctor_id))];
-    const vagaIds = [...new Set(linhas.map((l) => l.shift_id))];
     const [medicos, recomendacoes] = await Promise.all([
       this.medicos(medicoIds),
-      this.recomendacoes(
-        `doctor_id=in.(${medicoIds.join(",")})&shift_id=in.(${vagaIds.join(",")})`,
-      ),
+      this.recomendacoesDosPares(linhas),
     ]);
     const agora = this.agora();
     return linhas.map((linha) => {
@@ -522,6 +585,37 @@ export class AdaptadorLive implements PlantaoApi {
   }
 
   /** As recomendações (com o "Por que você") por `vagaId:medicoId`. A RLS decide o que aparece. */
+  /** As recomendações dos pares (vaga, médico) que ainda não estão guardadas, em consultas curtas. */
+  private async recomendacoesDosPares(
+    pares: { shift_id: string; doctor_id: string }[],
+  ): Promise<Map<string, RecomendacaoDoMedico>> {
+    const guardados = this.memoria();
+    const faltam = pares.filter((p) => !guardados.recomendacoes.has(`${p.shift_id}:${p.doctor_id}`));
+    const medicoIds = [...new Set(faltam.map((p) => p.doctor_id))];
+    const vagaIds = [...new Set(faltam.map((p) => p.shift_id))];
+    for (const lote of emLotes(vagaIds, IDS_POR_CONSULTA)) {
+      const lidas = await this.recomendacoes(
+        `doctor_id=in.(${medicoIds.join(",")})&shift_id=in.(${lote.join(",")})`,
+      );
+      for (const [par, recomendacao] of lidas) guardados.recomendacoes.set(par, recomendacao);
+    }
+    return guardados.recomendacoes;
+  }
+
+  /** Todas as recomendações da vaga, lidas uma vez: depois de gravadas, elas não mudam. */
+  private async recomendacoesDaVaga(vagaId: string): Promise<RecomendacaoDoMedico[]> {
+    const guardados = this.memoria();
+    if (!guardados.vagasCompletas.has(vagaId)) {
+      const lidas = await this.recomendacoes(`shift_id=eq.${encodeURIComponent(vagaId)}`);
+      for (const [par, recomendacao] of lidas) guardados.recomendacoes.set(par, recomendacao);
+      // Sem nenhuma linha, a recomendação pode ainda não estar visível: tenta de novo na próxima.
+      if (lidas.size > 0) guardados.vagasCompletas.add(vagaId);
+    }
+    return [...guardados.recomendacoes]
+      .filter(([par]) => par.startsWith(`${vagaId}:`))
+      .map(([, recomendacao]) => recomendacao);
+  }
+
   private async recomendacoes(filtro: string): Promise<Map<string, RecomendacaoDoMedico>> {
     const linhas = await lerTabela<{
       id: string;
@@ -620,12 +714,9 @@ export class AdaptadorLive implements PlantaoApi {
   private async contestacoesDoBanco(linhas: ContestacaoDoBanco[]): Promise<Contestacao[]> {
     if (linhas.length === 0) return [];
     const medicoIds = [...new Set(linhas.map((l) => l.doctor_id))];
-    const vagaIds = [...new Set(linhas.map((l) => l.shift_id))];
     const [medicos, recomendacoes] = await Promise.all([
       this.medicos(medicoIds),
-      this.recomendacoes(
-        `doctor_id=in.(${medicoIds.join(",")})&shift_id=in.(${vagaIds.join(",")})`,
-      ),
+      this.recomendacoesDosPares(linhas),
     ]);
     return linhas.map((linha) =>
       contestacaoDoBanco(

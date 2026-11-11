@@ -1,0 +1,176 @@
+{
+  "label": "simulacao",
+  "memory_per_copy_mb": 3.696343750789248,
+  "rows": [
+    {
+      "factor": 1,
+      "doctors": 300,
+      "offers": 7555,
+      "windows": 3391,
+      "recommend_median_ms": 3.918800000974443,
+      "recommend_p95_ms": 4.475499998079613,
+      "store_build_ms": 10.497700000996701,
+      "memory_mb": 3.696343750789248
+    },
+    {
+      "factor": 3,
+      "doctors": 900,
+      "offers": 22665,
+      "windows": 10173,
+      "recommend_median_ms": 12.038199998642085,
+      "recommend_p95_ms": 13.576199999079108,
+      "store_build_ms": 36.00100000039674,
+      "memory_mb": 11.089031252367743
+    },
+    {
+      "factor": 10,
+      "doctors": 3000,
+      "offers": 75550,
+      "windows": 33910,
+      "recommend_median_ms": 43.845649997820146,
+      "recommend_p95_ms": 49.56639999727486,
+      "store_build_ms": 173.8102000017534,
+      "memory_mb": 36.96343750789248
+    },
+    {
+      "factor": 30,
+      "doctors": 9000,
+      "offers": 226650,
+      "windows": 101730,
+      "recommend_median_ms": 130.03800000296906,
+      "recommend_p95_ms": 163.36329999467125,
+      "store_build_ms": 504.04729999718256,
+      "memory_mb": 110.89031252367744
+    }
+  ],
+  "hospitals": [
+    {
+      "key": "P",
+      "label": "Pequeno: 1 pronto-socorro",
+      "doctors": 150,
+      "shifts_per_day": 6.0,
+      "coordinators": 1,
+      "offers_history": 3780.0,
+      "online_screens": 15.0,
+      "cycle_cpu_s": 0.09277578833328638,
+      "cycles_per_second": 10.778674242115999,
+      "burst_cycles_per_second": 0.075,
+      "reads_per_second_now": 25.0,
+      "reads_per_second_after": 7.0,
+      "api_calls_per_second": 1.40275,
+      "memory_mb": 71.84817187539463,
+      "use": {
+        "cpu": 0.0069581841249964785,
+        "reads_now": 0.05793742757821553,
+        "reads_after": 0.016222479721900347,
+        "rate": 0.04675833333333333,
+        "gemini": 0.06,
+        "memory": 0.14032846069413013
+      },
+      "status": {
+        "cpu": "folga",
+        "reads_now": "folga",
+        "reads_after": "folga",
+        "rate": "folga",
+        "gemini": "folga",
+        "memory": "folga"
+      }
+    },
+    {
+      "key": "M",
+      "label": "Médio: a rede simulada, 3 unidades",
+      "doctors": 300,
+      "shifts_per_day": 6.7,
+      "coordinators": 2,
+      "offers_history": 7560.0,
+      "online_screens": 30.0,
+      "cycle_cpu_s": 0.10159237666569729,
+      "cycles_per_second": 9.843258252443762,
+      "burst_cycles_per_second": 0.08375,
+      "reads_per_second_now": 50.0,
+      "reads_per_second_after": 14.0,
+      "api_calls_per_second": 2.4497375,
+      "memory_mb": 73.69634375078925,
+      "use": {
+        "cpu": 0.008508361545752149,
+        "reads_now": 0.11587485515643106,
+        "reads_after": 0.03244495944380069,
+        "rate": 0.08165791666666666,
+        "gemini": 0.067,
+        "memory": 0.14393817138826026
+      },
+      "status": {
+        "cpu": "folga",
+        "reads_now": "folga",
+        "reads_after": "folga",
+        "rate": "folga",
+        "gemini": "folga",
+        "memory": "folga"
+      }
+    },
+    {
+      "key": "G",
+      "label": "Grande: hospital de referência",
+      "doctors": 1500,
+      "shifts_per_day": 40.0,
+      "coordinators": 6,
+      "offers_history": 37800.0,
+      "online_screens": 150.0,
+      "cycle_cpu_s": 0.18613708333238416,
+      "cycles_per_second": 5.3723846000869395,
+      "burst_cycles_per_second": 0.5,
+      "reads_per_second_now": 230.0,
+      "reads_per_second_after": 62.0,
+      "api_calls_per_second": 8.685,
+      "memory_mb": 88.48171875394624,
+      "use": {
+        "cpu": 0.09306854166619208,
+        "reads_now": 0.5330243337195828,
+        "reads_after": 0.1436848203939745,
+        "rate": 0.28950000000000004,
+        "gemini": 0.4,
+        "memory": 0.17281585694130125
+      },
+      "status": {
+        "cpu": "folga",
+        "reads_now": "atenção",
+        "reads_after": "folga",
+        "rate": "folga",
+        "gemini": "folga",
+        "memory": "folga"
+      }
+    },
+    {
+      "key": "R",
+      "label": "Rede: 10 hospitais no mesmo sistema",
+      "doctors": 6000,
+      "shifts_per_day": 150.0,
+      "coordinators": 20,
+      "offers_history": 151200.0,
+      "online_screens": 600.0,
+      "cycle_cpu_s": 0.5031797333324599,
+      "cycles_per_second": 1.987361441163772,
+      "burst_cycles_per_second": 1.875,
+      "reads_per_second_now": 900.0,
+      "reads_per_second_after": 240.0,
+      "api_calls_per_second": 30.06875,
+      "memory_mb": 143.92687501578496,
+      "use": {
+        "cpu": 0.9434619999983623,
+        "reads_now": 2.085747392815759,
+        "reads_after": 0.5561993047508691,
+        "rate": 1.0022916666666668,
+        "gemini": 1.5,
+        "memory": 0.281107177765205
+      },
+      "status": {
+        "cpu": "atenção",
+        "reads_now": "excede",
+        "reads_after": "atenção",
+        "rate": "excede",
+        "gemini": "excede",
+        "memory": "folga"
+      }
+    }
+  ]
+}
