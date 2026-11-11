@@ -4,6 +4,18 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 11/11/2026 (quarta), à noite: feedback da Entrega 3, regressão logística contra LightGBM
+
+**Pedido do Victor:** LightGBM só na CI, junto com o experimento da zona.
+
+**O que mudou:** um workflow manual (`lightgbm.yml`) instala o LightGBM, roda `python -m app.cli lightgbm` e entrega o relatório como artefato; o LightGBM não entra nas dependências da API nem da PoC. O mesmo teste temporal, as mesmas sete variáveis, e cinco mundos: a base, três sementes e um mundo com regra não linear (a distância pesa mais a partir de 15 km e interage com a preferência), para ver se a conclusão depende de o simulador ser quase linear. O critério de troca foi escrito antes do resultado: 1 ponto de chance de sucesso do top-5 e 3 erros-padrão, na base e no mundo não linear.
+
+**Resultado:** o LightGBM não ganha. Fica entre −1,3 e +0,6 ponto contra a regressão logística nos cinco mundos, e empata até no mundo com regra não linear (+0,6). A regressão logística continua, com a leitura por peso. Os dois ficam a cerca de 6 pontos do oráculo, que vê a confiabilidade latente do médico.
+
+**O que deu errado no caminho:** um incidente do GitHub Actions (20:48 UTC) deixou seis execuções presas numa fila que nem a API conseguia cancelar; um commit vazio gerou execuções novas. Na resolução de um conflito do `cli.py`, a função do comando da zona perdeu o `return 0`; achei ao reler, e nenhum teste cobre a CLI.
+
+**Uso de IA:** o Claude Code escreveu o módulo, o workflow e os testes (com um treino falso no lugar do LightGBM, que só existe na CI) e ajustou duas frases do relatório que diziam mais do que os números.
+
 ## 11/11/2026 (quarta), à noite: feedback da Entrega 3, experimento da exclusão por zona
 
 **Pedido do Victor:** "Sim, começar" pelo experimento da zona, depois de colar o feedback da Entrega 3 (a pergunta: "será que o rodízio resolve a desigualdade entre regiões?"). O Victor também decidiu: sem entrega escrita depois de 17/11, código congelado em 16/11 (e não 13/11) e LightGBM só na CI.

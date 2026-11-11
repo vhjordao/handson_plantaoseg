@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 300" role="img" aria-labelledby="t d" font-family='system-ui, -apple-system, "Segoe UI", sans-serif'>
+<title id="t">Chance de sucesso do top-5</title><desc id="d">Colunas agrupadas com a chance média de sucesso do top-5 da regressão logística e do LightGBM, na base, em três outras sementes e no mundo com regra não linear.</desc>
+<rect width="440" height="300" fill="#fcfcfb"/>
+<text x="56" y="28" font-size="16" font-weight="600" fill="#0b0b0b">Chance de sucesso do top-5</text>
+<text x="56" y="48" font-size="12" fill="#52514e">Regressão logística e LightGBM, por mundo; simulação</text>
+<rect x="56.0" y="62" width="10" height="10" rx="2" fill="#2a78d6"/><text x="72.0" y="71" font-size="12" fill="#52514e">Logística</text>
+<rect x="159.0" y="62" width="10" height="10" rx="2" fill="#eb6834"/><text x="175.0" y="71" font-size="12" fill="#52514e">LightGBM</text>
+<line x1="56" x2="416" y1="236.0" y2="236.0" stroke="#c3c2b7" stroke-width="1"/><text x="48" y="240.0" font-size="11" text-anchor="end" fill="#898781">0%</text>
+<line x1="56" x2="416" y1="208.0" y2="208.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="212.0" font-size="11" text-anchor="end" fill="#898781">20%</text>
+<line x1="56" x2="416" y1="180.0" y2="180.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="184.0" font-size="11" text-anchor="end" fill="#898781">40%</text>
+<line x1="56" x2="416" y1="152.0" y2="152.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="156.0" font-size="11" text-anchor="end" fill="#898781">60%</text>
+<line x1="56" x2="416" y1="124.0" y2="124.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="128.0" font-size="11" text-anchor="end" fill="#898781">80%</text>
+<line x1="56" x2="416" y1="96.0" y2="96.0" stroke="#e1e0d9" stroke-width="1"/><text x="48" y="100.0" font-size="11" text-anchor="end" fill="#898781">100%</text>
+<path d="M67.0,236.0 L67.0,140.3 Q67.0,136.3 71.0,136.3 L87.0,136.3 Q91.0,136.3 91.0,140.3 L91.0,236.0 Z" fill="#2a78d6"/>
+<text x="79.0" y="130.3" font-size="11" text-anchor="middle" fill="#52514e">71%</text>
+<path d="M93.0,236.0 L93.0,141.6 Q93.0,137.6 97.0,137.6 L113.0,137.6 Q117.0,137.6 117.0,141.6 L117.0,236.0 Z" fill="#eb6834"/>
+<text x="105.0" y="131.6" font-size="11" text-anchor="middle" fill="#52514e">70%</text>
+<text x="92.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">Base</text>
+<path d="M139.0,236.0 L139.0,141.1 Q139.0,137.1 143.0,137.1 L159.0,137.1 Q163.0,137.1 163.0,141.1 L163.0,236.0 Z" fill="#2a78d6"/>
+<text x="151.0" y="131.1" font-size="11" text-anchor="middle" fill="#52514e">71%</text>
+<path d="M165.0,236.0 L165.0,142.9 Q165.0,138.9 169.0,138.9 L185.0,138.9 Q189.0,138.9 189.0,142.9 L189.0,236.0 Z" fill="#eb6834"/>
+<text x="177.0" y="132.9" font-size="11" text-anchor="middle" fill="#52514e">69%</text>
+<text x="164.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">Semente 1</text>
+<path d="M211.0,236.0 L211.0,142.7 Q211.0,138.7 215.0,138.7 L231.0,138.7 Q235.0,138.7 235.0,142.7 L235.0,236.0 Z" fill="#2a78d6"/>
+<text x="223.0" y="132.7" font-size="11" text-anchor="middle" fill="#52514e">69%</text>
+<path d="M237.0,236.0 L237.0,143.3 Q237.0,139.3 241.0,139.3 L257.0,139.3 Q261.0,139.3 261.0,143.3 L261.0,236.0 Z" fill="#eb6834"/>
+<text x="249.0" y="133.3" font-size="11" text-anchor="middle" fill="#52514e">69%</text>
+<text x="236.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">Semente 2</text>
+<path d="M283.0,236.0 L283.0,141.7 Q283.0,137.7 287.0,137.7 L303.0,137.7 Q307.0,137.7 307.0,141.7 L307.0,236.0 Z" fill="#2a78d6"/>
+<text x="295.0" y="131.7" font-size="11" text-anchor="middle" fill="#52514e">70%</text>
+<path d="M309.0,236.0 L309.0,141.4 Q309.0,137.4 313.0,137.4 L329.0,137.4 Q333.0,137.4 333.0,141.4 L333.0,236.0 Z" fill="#eb6834"/>
+<text x="321.0" y="131.4" font-size="11" text-anchor="middle" fill="#52514e">70%</text>
+<text x="308.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">Semente 3</text>
+<path d="M355.0,236.0 L355.0,136.6 Q355.0,132.6 359.0,132.6 L375.0,132.6 Q379.0,132.6 379.0,136.6 L379.0,236.0 Z" fill="#2a78d6"/>
+<text x="367.0" y="126.6" font-size="11" text-anchor="middle" fill="#52514e">74%</text>
+<path d="M381.0,236.0 L381.0,135.9 Q381.0,131.9 385.0,131.9 L401.0,131.9 Q405.0,131.9 405.0,135.9 L405.0,236.0 Z" fill="#eb6834"/>
+<text x="393.0" y="125.9" font-size="11" text-anchor="middle" fill="#52514e">74%</text>
+<text x="380.0" y="254.0" font-size="11" text-anchor="middle" fill="#52514e">Não linear</text>
+</svg>

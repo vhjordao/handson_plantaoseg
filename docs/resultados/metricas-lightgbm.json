@@ -1,0 +1,175 @@
+{
+  "label": "simulacao",
+  "rows": [
+    {
+      "world": "Base",
+      "accept_rate": 0.3084050297816016,
+      "n_train_offers": 6259,
+      "n_test_offers": 1296,
+      "n_shifts": 392,
+      "auc_logistic": 0.7622500509794043,
+      "auc_boost": 0.7648784890904075,
+      "auc_baseline": 0.7019324193026018,
+      "brier_logistic": 0.16424445088191783,
+      "brier_boost": 0.1637598429336995,
+      "top5_oracle": 0.7580091628271695,
+      "top5_baseline": 0.6774490084469174,
+      "top5_random": 0.5293432922074272,
+      "top5_logistic": 0.7123466125714519,
+      "top5_boost": 0.7026864978447588,
+      "gain": -0.009660114726693078,
+      "gain_se": 0.0016038943670717632,
+      "fit": {
+        "library": "lightgbm 4.5.0",
+        "rounds": 130,
+        "importance": {
+          "specialty_match": 0.015775781076935076,
+          "distance_km": 0.22432591159143617,
+          "availability_overlap_hours": 0.501434795526681,
+          "acceptance_rate_90d": 0.1083145457757801,
+          "attendance_rate_90d": 0.04004889171942471,
+          "hours_since_last_shift": 0.048401723011603504,
+          "night_shift_preference_match": 0.06169835129813945
+        }
+      }
+    },
+    {
+      "world": "Outra semente (1)",
+      "accept_rate": 0.2968571065020995,
+      "n_train_offers": 6595,
+      "n_test_offers": 1264,
+      "n_shifts": 403,
+      "auc_logistic": 0.7775201822836912,
+      "auc_boost": 0.7772062696769609,
+      "auc_baseline": 0.7165170094694417,
+      "brier_logistic": 0.1642604818103866,
+      "brier_boost": 0.16451147018654252,
+      "top5_oracle": 0.7590200181279415,
+      "top5_baseline": 0.674085596031492,
+      "top5_random": 0.5270604447441786,
+      "top5_logistic": 0.706725498893117,
+      "top5_boost": 0.6932463692064139,
+      "gain": -0.013479129686703029,
+      "gain_se": 0.0015720667297480092,
+      "fit": {
+        "library": "lightgbm 4.5.0",
+        "rounds": 63,
+        "importance": {
+          "specialty_match": 0.005017122842985708,
+          "distance_km": 0.21618888846305503,
+          "availability_overlap_hours": 0.5923699894006844,
+          "acceptance_rate_90d": 0.05316242877885403,
+          "attendance_rate_90d": 0.02105155043732878,
+          "hours_since_last_shift": 0.04335708274413298,
+          "night_shift_preference_match": 0.06885293733295908
+        }
+      }
+    },
+    {
+      "world": "Outra semente (2)",
+      "accept_rate": 0.309146585008654,
+      "n_train_offers": 6280,
+      "n_test_offers": 1231,
+      "n_shifts": 379,
+      "auc_logistic": 0.7738557921941963,
+      "auc_boost": 0.7807308535348578,
+      "auc_baseline": 0.712456243661465,
+      "brier_logistic": 0.1624572091707589,
+      "brier_boost": 0.15899379043489237,
+      "top5_oracle": 0.7464989005644282,
+      "top5_baseline": 0.6568047616448208,
+      "top5_random": 0.5131565533437593,
+      "top5_logistic": 0.6948244209090175,
+      "top5_boost": 0.690995261960287,
+      "gain": -0.003829158948730482,
+      "gain_se": 0.001560935784827191,
+      "fit": {
+        "library": "lightgbm 4.5.0",
+        "rounds": 56,
+        "importance": {
+          "specialty_match": 0.005949285725342493,
+          "distance_km": 0.20649937421255699,
+          "availability_overlap_hours": 0.6252574633218104,
+          "acceptance_rate_90d": 0.04787994001434094,
+          "attendance_rate_90d": 0.022021161221884987,
+          "hours_since_last_shift": 0.03705606453952667,
+          "night_shift_preference_match": 0.05533671096453751
+        }
+      }
+    },
+    {
+      "world": "Outra semente (3)",
+      "accept_rate": 0.3043030146869364,
+      "n_train_offers": 6597,
+      "n_test_offers": 1165,
+      "n_shifts": 386,
+      "auc_logistic": 0.7785515562510867,
+      "auc_boost": 0.7903686315423405,
+      "auc_baseline": 0.70188662841245,
+      "brier_logistic": 0.16899525664125795,
+      "brier_boost": 0.16504913472180782,
+      "top5_oracle": 0.74433799818944,
+      "top5_baseline": 0.6747797867451575,
+      "top5_random": 0.5239894519759917,
+      "top5_logistic": 0.7019611968607967,
+      "top5_boost": 0.7041875738468407,
+      "gain": 0.0022263769860440367,
+      "gain_se": 0.001311049441593684,
+      "fit": {
+        "library": "lightgbm 4.5.0",
+        "rounds": 52,
+        "importance": {
+          "specialty_match": 0.005290042317100227,
+          "distance_km": 0.19125027850515294,
+          "availability_overlap_hours": 0.634472913687731,
+          "acceptance_rate_90d": 0.044141204048286996,
+          "attendance_rate_90d": 0.016843408823028618,
+          "hours_since_last_shift": 0.03814224340371109,
+          "night_shift_preference_match": 0.06985990921498923
+        }
+      }
+    },
+    {
+      "world": "Regra não linear",
+      "accept_rate": 0.3684129191778705,
+      "n_train_offers": 5471,
+      "n_test_offers": 1000,
+      "n_shifts": 392,
+      "auc_logistic": 0.7801408353588113,
+      "auc_boost": 0.7843016841633483,
+      "auc_baseline": 0.6966803709641275,
+      "brier_logistic": 0.18050326827520177,
+      "brier_boost": 0.17601110259757824,
+      "top5_oracle": 0.8042238304061715,
+      "top5_baseline": 0.6989913098756749,
+      "top5_random": 0.6025514586895585,
+      "top5_logistic": 0.7383725493163307,
+      "top5_boost": 0.7438967546368179,
+      "gain": 0.005524205320487249,
+      "gain_se": 0.0015152575046456845,
+      "fit": {
+        "library": "lightgbm 4.5.0",
+        "rounds": 65,
+        "importance": {
+          "specialty_match": 0.0031767753107775814,
+          "distance_km": 0.256838348416243,
+          "availability_overlap_hours": 0.5101589649894696,
+          "acceptance_rate_90d": 0.0326187104422605,
+          "attendance_rate_90d": 0.025803440262074685,
+          "hours_since_last_shift": 0.04228464379593833,
+          "night_shift_preference_match": 0.12911911678323632
+        }
+      }
+    }
+  ],
+  "decision": {
+    "verdicts": {
+      "Base": "empata",
+      "Outra semente (1)": "perde",
+      "Outra semente (2)": "empata",
+      "Outra semente (3)": "empata",
+      "Regra não linear": "empata"
+    },
+    "swap": false
+  }
+}

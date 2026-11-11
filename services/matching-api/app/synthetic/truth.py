@@ -31,6 +31,10 @@ def p_accept(
 ) -> float:
     z = accept["b0"]
     z += accept["distance"] * distance_km
+    # Termos opcionais do cenário "regra não linear" (comparação com o LightGBM). Sem eles na
+    # configuração, valem zero e a base publicada não muda.
+    z += accept.get("distance_far", 0.0) * max(0.0, distance_km - 15.0)
+    z += accept.get("distance_preference", 0.0) * distance_km * preference_match
     z += accept["preference"] * preference_match
     z += accept["reliability"] * (reliability - 0.5)
     if not covered:
