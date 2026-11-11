@@ -7,6 +7,7 @@ Uso, a partir de `services/matching-api`:
     python -m app.cli flow        # fluxo recomendado contra o processo manual (simulação)
     python -m app.cli concentration # rodízio e limite contra a concentração (simulação)
     python -m app.cli zone        # medidas contra a exclusão por zona (simulação)
+    python -m app.cli scale       # escala hospitalar: o motor com redes maiores (simulação)
     python -m app.cli lightgbm    # regressão logística contra LightGBM (só na CI)
     python -m app.cli demo --yes  # vaga em texto livre -> top 5 -> aprovação -> auditoria
     python -m app.cli blind-review  # casos da revisão às cegas para as entrevistas
@@ -344,6 +345,31 @@ def cmd_zone(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_scale(args: argparse.Namespace) -> int:
+    from app.scale import evaluate_scale, render_scale
+
+    data_dir = Path(args.data)
+    dataset, params = _load(data_dir)
+    model = _load_model(data_dir, dataset, params)
+    metrics = evaluate_scale(dataset, params, model)
+    if args.report_dir:
+        report_dir = Path(args.report_dir)
+        report_dir.mkdir(parents=True, exist_ok=True)
+        (report_dir / "metricas-escala.md").write_text(render_scale(metrics), encoding="utf-8")
+        (report_dir / "metricas-escala.json").write_text(
+            json.dumps(metrics, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+    print("Escala hospitalar (SIMULAÇÃO, dados sintéticos replicados)")
+    for r in metrics["rows"]:
+        print(
+            f"  {r['doctors']} médicos: recomendar {r['recommend_median_ms']:.1f} ms | "
+            f"índice {r['store_build_ms']:.0f} ms | memória {r['memory_mb']:.0f} MB"
+        )
+    for h in metrics["hospitals"]:
+        print(f"  {h['key']}: {h['status']}")
+    return 0
+
+
 def cmd_lightgbm(args: argparse.Namespace) -> int:
     if importlib.util.find_spec("lightgbm") is None:
         print("LightGBM não instalado. Ele roda só na CI: pip install -r requirements-ml.txt")
@@ -547,6 +573,11 @@ def build_parser() -> argparse.ArgumentParser:
     zone.add_argument("--data", default=str(DEFAULT_DATA))
     zone.add_argument("--report-dir", default=None)
     zone.set_defaults(func=cmd_zone)
+
+    scale = sub.add_parser("scale", help="escala hospitalar: o motor com redes maiores")
+    scale.add_argument("--data", default=str(DEFAULT_DATA))
+    scale.add_argument("--report-dir", default=None)
+    scale.set_defaults(func=cmd_scale)
 
     boost = sub.add_parser("lightgbm", help="regressão logística contra LightGBM (só na CI)")
     boost.add_argument("--data", default=str(DEFAULT_DATA))

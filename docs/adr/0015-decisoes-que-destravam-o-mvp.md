@@ -29,6 +29,7 @@ A apresentação de 17/11 é guiada: o Victor conduz sozinho, como coordenador e
 
 - **A fase 2 do roteiro pode começar:** D2, D3 e D8 viram rotas e tabelas, D6 vira o prazo da organização da demonstração e D1 vira o comando que cria os logins.
 - **Quem cria os logins é o Victor,** com o comando preparado. O Claude Code não cria contas nem vê as senhas. As senhas ficam fora do Git, e os logins saem depois da apresentação (`usuarios-de-teste.py remover`).
+- **Em escala hospitalar, a consulta é o primeiro limite** (nota de 11/11, [medição](../resultados/metricas-escala.md)): as telas passaram a guardar o que não muda, e a notificação em vez de consulta (Realtime) é o passo seguinte em produção.
 - **Consultar a cada 3 segundos** é pouca carga com uma pessoa só conduzindo: duas janelas abertas fazem menos de uma consulta por segundo. A tela mostra o que mudou em até 3 segundos, e não na hora.
 - **A contestação passa a mexer no banco:** tabela nova, RLS e teste, pelo mesmo caminho das migrações do [ADR 0008](0008-banco-no-supabase.md).
 - **O gerador continua com os dois erros que a fonte pública mostrou** (mulheres na pediatria e médicos com 55 anos ou mais). Eles ficam declarados, com o cenário calibrado ao lado. Trocar a base só depois da Entrega 3, se houver tempo.

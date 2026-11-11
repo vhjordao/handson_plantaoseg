@@ -293,3 +293,108 @@ describe("chamadas do médico", () => {
     expect(contestacao.protocolo).toBe("CT-0001");
   });
 });
+
+describe("consulta a cada 3 segundos (escala hospitalar)", () => {
+  const MEDICO_DO_BANCO = {
+    id: "d1",
+    name_sim: "Ana Sim",
+    crm_sim: "CRM-SIM 1",
+    specialty: "pediatria",
+    secondary_specialty: null,
+  };
+
+  /** Um banco falso que responde às consultas da tela e conta as requisições. */
+  function bancoFalso(ofertas: OfertaDoBanco[]) {
+    return vi.spyOn(globalThis, "fetch").mockImplementation(async (entrada) => {
+      const url = String(entrada);
+      if (url.includes("/decision")) {
+        return json(200, { shift_id: "v1", approved_doctor_ids: ["d1"], skipped: [] });
+      }
+      if (url.includes("/offers?")) return json(200, ofertas);
+      if (url.includes("/doctors?")) return json(200, [MEDICO_DO_BANCO]);
+      if (url.includes("/shifts?")) return json(200, [VAGA]);
+      if (url.includes("/recommendations?")) {
+        return json(200, [
+          {
+            id: "r1",
+            shift_id: "v1",
+            doctor_id: "d1",
+            rank: 1,
+            features: { distance_km: 4.2 },
+            contributions: {},
+            alerts: [],
+          },
+        ]);
+      }
+      if (url.includes("/explanations?")) {
+        return json(200, [
+          { recommendation_id: "r1", text: "Perto.", factors_cited: [], source: "template" },
+        ]);
+      }
+      return json(200, []);
+    });
+  }
+
+  it("o médico: a primeira consulta faz 4 requisições e as seguintes, 1", async () => {
+    tokensValidos();
+    const fetch = bancoFalso([oferta({})]);
+    const api = new AdaptadorLive(CONFIG);
+    await api.listarOfertas("d1");
+    expect(fetch).toHaveBeenCalledTimes(4);
+    fetch.mockClear();
+    const [segunda] = await api.listarOfertas("d1");
+    expect(fetch).toHaveBeenCalledTimes(1);
+    // O que veio guardado é o mesmo que viria do banco.
+    expect(segunda?.porQue.texto).toBe("Perto.");
+  });
+
+  it("a cascata: a primeira consulta faz 6 requisições e as seguintes, 3 (uma delas na API)", async () => {
+    tokensValidos();
+    const fetch = bancoFalso([oferta({})]);
+    const api = new AdaptadorLive(CONFIG);
+    await api.obterCascata("v1");
+    expect(fetch).toHaveBeenCalledTimes(6);
+    fetch.mockClear();
+    const cascata = await api.obterCascata("v1");
+    expect(fetch).toHaveBeenCalledTimes(3);
+    expect(cascata.ofertas[0]?.medico.nome).toBe("Ana Sim");
+    const urls = fetch.mock.calls.map(([url]) => String(url));
+    expect(urls.filter((url) => url.includes("/decision"))).toHaveLength(1);
+  });
+
+  it("a lista pede só as 100 ofertas mais novas", async () => {
+    tokensValidos();
+    const fetch = bancoFalso([oferta({})]);
+    await new AdaptadorLive(CONFIG).listarOfertas("d1");
+    const url = String(fetch.mock.calls.find(([u]) => String(u).includes("/offers?"))?.[0]);
+    expect(url).toContain("order=sent_at.desc&limit=100");
+  });
+
+  it("com um histórico longo, o endereço das recomendações não cresce sem limite", async () => {
+    tokensValidos();
+    const historico = Array.from({ length: 100 }, (_, i) =>
+      oferta({ id: `o${i}`, shift_id: `vaga-${String(i).padStart(36, "0")}` }),
+    );
+    const fetch = bancoFalso(historico);
+    await new AdaptadorLive(CONFIG).listarOfertas("d1");
+    const consultas = fetch.mock.calls
+      .map(([url]) => String(url))
+      .filter((url) => url.includes("/recommendations?"));
+    expect(consultas.length).toBeGreaterThan(1);
+    for (const url of consultas) expect(url.length).toBeLessThan(2_000);
+  });
+
+  it("quem entra com outro login não recebe o que ficou guardado do anterior", async () => {
+    tokensValidos();
+    const fetch = bancoFalso([oferta({})]);
+    const api = new AdaptadorLive(CONFIG);
+    await api.listarOfertas("d1");
+    window.sessionStorage.setItem(
+      "ps_login",
+      JSON.stringify({ acesso: "A2", renovacao: "R2", expiraEm: Date.now() + 3_600_000 }),
+    );
+    fetch.mockClear();
+    await api.listarOfertas("d1");
+    expect(fetch).toHaveBeenCalledTimes(4);
+  });
+});
