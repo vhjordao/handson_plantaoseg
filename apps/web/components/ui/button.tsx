@@ -5,21 +5,23 @@ import { Slot } from "radix-ui";
 import { cn } from "@/lib/utils";
 
 /**
- * O primário de navegação é tinta (neutro). O botão que cria uma decisão humana é verde
- * (`decision`): a cor do botão já diz quem decide.
+ * O primário é o azul de ação. O botão que cria uma decisão humana é verde (`decision`):
+ * a cor do botão já diz quem decide. O secundário é papel com borda, para ficar sobre a página.
  */
 const buttonVariants = cva(
   // O rótulo pode quebrar em duas linhas (texto ampliado, espaçamento de texto: WCAG 1.4.4 e
   // 1.4.12); nunca passa da largura da tela. A altura mínima é a do alvo de toque.
-  "inline-flex items-center justify-center gap-2 rounded-campo border py-2 text-center font-semibold select-none transition-colors duration-150 min-h-[var(--alvo-min)] disabled:pointer-events-none disabled:opacity-60 aria-disabled:pointer-events-none aria-disabled:opacity-60 [&_svg]:size-5 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 rounded-campo border py-2 text-center font-semibold select-none transition-[background-color,border-color,box-shadow,color] duration-150 min-h-[var(--alvo-min)] disabled:pointer-events-none disabled:opacity-60 aria-disabled:pointer-events-none aria-disabled:opacity-60 [&_svg]:size-5 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        primary: "border-tinta bg-tinta text-sobre-tinta hover:bg-tinta/90",
-        decision: "border-humano bg-humano text-sobre-humano hover:bg-humano/90",
-        secondary: "border-tinta bg-transparent text-tinta hover:bg-tinta/10",
-        ghost: "border-transparent bg-transparent text-tinta hover:bg-tinta/10",
-        link: "min-h-0 border-transparent bg-transparent p-0 text-tinta underline underline-offset-4 hover:no-underline",
+        primary: "border-acento bg-acento text-sobre-acento shadow-botao hover:bg-acento-forte hover:border-acento-forte",
+        // O escuro é a ação principal do cabeçalho de uma página, como no modelo visual.
+        escuro: "border-tinta bg-tinta text-sobre-tinta shadow-cartao hover:bg-tinta/85",
+        decision: "border-humano bg-humano text-sobre-humano shadow-cartao hover:bg-humano/90",
+        secondary: "border-campo/70 bg-papel text-tinta shadow-cartao hover:border-tinta hover:bg-recuo",
+        ghost: "border-transparent bg-transparent text-tinta hover:bg-tinta/[0.06]",
+        link: "min-h-0 border-transparent bg-transparent p-0 text-acento underline underline-offset-4 hover:no-underline",
       },
       size: {
         sm: "px-3 text-sm",

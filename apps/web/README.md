@@ -62,7 +62,7 @@
 | TanStack Query | 5.105.3 | Estado assíncrono das telas de dados (UI-1) | Cache e estados de carga e erro | 0 |
 | Vitest, Testing Library, jsdom | 5.1.0, 16.3.3, 30.1.3 | Testes de componente | Rápido e sem navegador | 0 |
 | Playwright e `@axe-core/playwright` | 1.64.1 e 4.14.0 | Jornada e acessibilidade (axe) nos temas claro e escuro | Mede o que o usuário vê | 0 |
-| Atkinson Hyperlegible Next e Source Serif 4 | `next/font` | Interface e títulos | A Atkinson foi desenhada para leitura cansada; ambas ficam hospedadas com o site (o build baixa, o navegador não chama o Google) | 0 |
+| Atkinson Hyperlegible Next | `next/font` | Interface, títulos e números (uma família só desde a fase E) | Foi desenhada para leitura cansada; fica hospedada com o site (o build baixa, o navegador não chama o Google) | 0 |
 | Node.js | 26.x | Execução | A mesma versão na máquina, na CI e na Vercel | 0 |
 
 ## 6. Como rodar e testar

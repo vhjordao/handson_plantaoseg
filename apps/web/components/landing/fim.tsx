@@ -7,7 +7,7 @@ export function Fim() {
   return (
     <section aria-labelledby="titulo-fim" className="border-t border-divisor bg-papel">
       <div className="mx-auto flex w-full max-w-[1200px] flex-col items-start gap-5 px-4 py-14 sm:px-6 lg:py-20">
-        <h2 id="titulo-fim" className="font-serif text-3xl font-semibold">
+        <h2 id="titulo-fim" className="font-titulo text-3xl font-medium">
           {FIM.titulo}
         </h2>
         <p className="max-w-[56ch] text-lg text-tinta-suave">{FIM.texto}</p>

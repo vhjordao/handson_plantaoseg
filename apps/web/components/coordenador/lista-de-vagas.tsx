@@ -2,17 +2,17 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { ClipboardList } from "lucide-react";
+import { BellRing, ClipboardList, ListFilter } from "lucide-react";
 import { SuperficieVoz } from "@/components/dominio/superficie-voz";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
+import { CabecalhoDoPainel, Painel } from "@/components/ui/painel";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useVagas } from "@/lib/api/hooks";
 import { useEstadoApi } from "@/lib/api/provider";
 import type { StatusVaga, Vaga } from "@/lib/api/types";
 import { ROTULO_ESPECIALIDADE } from "@/lib/copy/rotulos";
-import { plural } from "@/lib/format/datas";
 import { cn } from "@/lib/utils";
 import { descreverVaga, EtiquetasDaVaga } from "./etiquetas-da-vaga";
 
@@ -51,26 +51,41 @@ function ResumoDeAcao({ vagas }: { vagas: Vaga[] }) {
   ].filter((item) => item.n > 0);
 
   return (
-    <section aria-labelledby="acao-titulo" className="rounded-cartao border border-divisor bg-papel p-4">
-      <h2 id="acao-titulo" className="font-serif text-xl font-semibold">
-        {itens.length > 0 ? "Exigem a sua ação" : "Nada exige a sua ação agora"}
-      </h2>
+    <Painel aria-labelledby="acao-titulo">
+      <CabecalhoDoPainel
+        icone={BellRing}
+        tom={itens.length > 0 ? "atencao" : "humano"}
+        id="acao-titulo"
+        titulo={itens.length > 0 ? "Exigem a sua ação" : "Nada exige a sua ação agora"}
+      />
       {itens.length > 0 ? (
-        <ul role="list" className="mt-2 flex flex-wrap gap-x-6 gap-y-2">
+        <ul role="list" className="mt-4 grid gap-2">
           {itens.map((item) => (
             <li key={item.id}>
               <Link
                 href={`?status=${item.id}`}
-                className="inline-flex min-h-[var(--alvo-min)] items-center text-base font-semibold underline underline-offset-4 hover:no-underline"
+                className="flex min-h-[var(--alvo-min)] items-center gap-3 rounded-campo border border-painel-borda bg-papel/70 px-3 py-2 text-base font-medium transition-[background-color] duration-150 hover:bg-papel"
               >
-                {plural(item.n, item.um, item.varios)}
+                <span className="numero-destaque text-2xl leading-none text-tinta">{item.n}</span>
+                <span className="underline underline-offset-4">{item.n === 1 ? item.um : item.varios}</span>
               </Link>
             </li>
           ))}
         </ul>
-      ) : null}
-    </section>
+      ) : (
+        <p className="mt-3 text-sm text-tinta-suave">Nenhuma vaga em risco, aguardando decisão ou em rascunho.</p>
+      )}
+    </Painel>
   );
+}
+
+/** O resumo "Exigem a sua ação" sozinho, para a coluna lateral da tela de Vagas. */
+export function ResumoDeAcaoDasVagas() {
+  const { falhou } = useEstadoApi();
+  const { data: vagas, isPending, isError } = useVagas();
+  if (falhou || isError) return null;
+  if (isPending || !vagas) return <Skeleton className="h-40 rounded-cartao" />;
+  return <ResumoDeAcao vagas={vagas} />;
 }
 
 function LinhaDeVaga({ vaga }: { vaga: Vaga }) {
@@ -81,7 +96,7 @@ function LinhaDeVaga({ vaga }: { vaga: Vaga }) {
     <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:gap-6">
       <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-          <h3 id={`vaga-${vaga.id}-titulo`} className="font-serif text-xl font-semibold">
+          <h3 id={`vaga-${vaga.id}-titulo`} className="font-titulo text-lg font-semibold">
             {vaga.especialidade ? ROTULO_ESPECIALIDADE[vaga.especialidade] : "Vaga sem especialidade"}
           </h3>
           <EtiquetasDaVaga vaga={vaga} />
@@ -119,7 +134,7 @@ function LinhaDeVaga({ vaga }: { vaga: Vaga }) {
       {corpo}
     </SuperficieVoz>
   ) : (
-    <li className="rounded-cartao border border-divisor bg-papel p-3 md:px-4">{corpo}</li>
+    <li className="rounded-cartao border border-painel-borda bg-papel/75 p-3 md:px-4">{corpo}</li>
   );
 }
 
@@ -168,15 +183,12 @@ export function ListaDeVagas() {
       : `Mostrando ${visiveis.length} de ${vagas.length} ${palavraVagas} (${escolhido.rotulo}).`;
 
   return (
-    <div className="grid gap-4">
-      <ResumoDeAcao vagas={vagas} />
-
-      <section aria-labelledby="lista-titulo" className="grid gap-4">
-        <h2 id="lista-titulo" className="sr-only">
-          Lista de vagas
-        </h2>
-        <nav aria-label="Filtrar as vagas">
-          <ul role="list" className="flex flex-wrap gap-2">
+    <Painel aria-labelledby="lista-titulo" className="grid gap-4">
+      <CabecalhoDoPainel icone={ClipboardList} tom="acao" id="lista-titulo" titulo="Lista de vagas" />
+      <div className="grid gap-2">
+        <nav aria-label="Filtrar as vagas" className="flex items-start gap-2">
+          <ListFilter aria-hidden="true" className="mt-3 hidden size-4 shrink-0 text-tinta-suave sm:block" />
+          <ul role="list" className="flex max-w-full flex-wrap gap-1.5">
             {FILTROS.map((filtro) => {
               const ativo = filtro.id === escolhido.id;
               const total = vagas.filter(filtro.serve).length;
@@ -186,10 +198,10 @@ export function ListaDeVagas() {
                     href={filtro.id === "todas" ? "/coordenador/vagas" : `?status=${filtro.id}`}
                     aria-current={ativo ? "true" : undefined}
                     className={cn(
-                      "inline-flex min-h-[var(--alvo-min)] items-center gap-2 rounded-campo border px-3 text-base",
+                      "inline-flex min-h-[var(--alvo-min)] items-center gap-2 rounded-full border px-3.5 text-sm transition-[background-color,color,box-shadow] duration-150",
                       ativo
-                        ? "border-tinta bg-papel font-semibold"
-                        : "border-transparent font-medium text-tinta-suave hover:bg-tinta/10 hover:text-tinta",
+                        ? "border-acento bg-acento font-semibold text-sobre-acento shadow-botao"
+                        : "border-painel-borda bg-papel/60 font-medium text-tinta hover:bg-papel",
                     )}
                   >
                     {filtro.rotulo}
@@ -200,9 +212,10 @@ export function ListaDeVagas() {
             })}
           </ul>
         </nav>
-        <p role="status" className="-mt-2 text-sm text-tinta-suave">
+        <p role="status" className="text-sm text-tinta-suave">
           {quantasVagas}
         </p>
+      </div>
 
         {visiveis.length === 0 ? (
           <EmptyState
@@ -218,13 +231,12 @@ export function ListaDeVagas() {
             que o sistema leu.
           </EmptyState>
         ) : (
-          <ul role="list" className="grid gap-3">
+          <ul role="list" className="grid gap-2.5">
             {visiveis.map((vaga) => (
               <LinhaDeVaga key={vaga.id} vaga={vaga} />
             ))}
           </ul>
         )}
-      </section>
-    </div>
+    </Painel>
   );
 }

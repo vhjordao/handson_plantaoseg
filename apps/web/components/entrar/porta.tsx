@@ -26,13 +26,13 @@ export function Porta({
     <section
       aria-labelledby={`${id}-titulo`}
       className={cn(
-        "flex min-w-0 flex-col gap-4 rounded-cartao bg-papel p-5 sm:p-6",
-        destaque ? "border-2 border-tinta" : "border border-divisor",
+        "flex min-w-0 flex-col gap-4 rounded-cartao bg-papel p-5 shadow-cartao sm:p-6",
+        destaque ? "border-2 border-acento" : "border border-divisor",
         className,
       )}
     >
       {/* Com a letra muito ampliada, até "Coordenador" quebra em vez de alargar a página. */}
-      <h2 id={`${id}-titulo`} className="font-serif text-2xl font-semibold [overflow-wrap:anywhere]">
+      <h2 id={`${id}-titulo`} className="font-titulo text-2xl font-semibold [overflow-wrap:anywhere]">
         {titulo}
       </h2>
       <p className="max-w-[40ch] text-tinta-suave [overflow-wrap:anywhere]">{descricao}</p>

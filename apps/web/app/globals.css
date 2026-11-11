@@ -1,33 +1,60 @@
 @import "tailwindcss";
 
 /*
- * Tokens do PlantãoSeguro (docs/design/direcao-de-arte.md).
+ * Tokens do PlantãoSeguro (docs/design/direcao-de-arte.md, revisão da fase E em 10/11/2026).
  * Fonte única das cores: `npm run check:contraste` lê este arquivo e confere os contrastes.
- * As três vozes: ia (tracejado, cobalto), humano (contínuo, verde) e regra (cinza).
+ * As três vozes continuam: ia (tracejado, anil), humano (contínuo, verde) e regra (cinza).
+ * O azul de ação (`acento`) é da interação: botão principal, item atual, foco e link.
  */
 :root {
-  --gaze: #f4f6f5;
+  --gaze: #e8ebef;
   --papel: #ffffff;
-  --tinta: #12202b;
-  --tinta-suave: #4a5967;
-  --ia: #2c4fd6;
-  --ia-tom: #eaeffd;
-  --ia-forte: #2340b0;
-  --fator-favor: #2c4fd6;
+  --painel-solido: #f5f6f8;
+  --recuo: #f0f2f5;
+  --tinta: #111a24;
+  --tinta-suave: #4b5868;
+  --acento: #1d60c6;
+  --acento-tom: #e3edfc;
+  --acento-forte: #1a57b5;
+  --ia: #4046c4;
+  --ia-tom: #eeeffd;
+  --ia-forte: #2f349f;
+  --fator-favor: #4046c4;
   --fator-contra: #a8467a;
   --humano: #0b6b4d;
-  --humano-tom: #e4f3ec;
+  --humano-tom: #e3f4ec;
   --atencao: #8a5300;
-  --atencao-tom: #fff1d6;
+  --atencao-tom: #fff3dc;
   --atencao-fundo: #f2b33d;
   --erro: #b42318;
-  --erro-tom: #fdecea;
-  --campo: #76858f;
-  --divisor: #d5dce1;
-  --foco: #12202b;
+  --erro-tom: #fdeceb;
+  --campo: #748191;
+  --divisor: #dde2e8;
+  --foco: #1d60c6;
   --sobre-tinta: #ffffff;
+  --sobre-acento: #ffffff;
   --sobre-humano: #ffffff;
-  --sobre-atencao: #12202b;
+  --sobre-atencao: #101d2b;
+
+
+  /* Painel do modelo: papel translúcido sobre a arte de fundo, com desfoque. */
+  --painel: rgb(255 255 255 / 0.62);
+  --painel-borda: rgb(255 255 255 / 0.85);
+  /* Minigráficos: tons pastel; o valor sempre vem também em texto ao lado. */
+  --grafico-rosa: #e7a6cf;
+  --grafico-verde: #8fd0a4;
+  --grafico-azul: #9dbff0;
+  --grafico-laranja: #f2c08f;
+  --grafico-coral: #f0a3b3;
+  --grafico-trilho: rgb(17 26 36 / 0.08);
+
+  /* Profundidade: sombras largas e muito suaves, quase só uma separação do fundo. */
+  --sombra-cartao: 0 1px 1px rgb(17 26 36 / 0.03), 0 8px 24px -14px rgb(17 26 36 / 0.14);
+  --sombra-flutuante: 0 2px 6px rgb(16 29 43 / 0.06), 0 18px 40px -12px rgb(16 29 43 / 0.22);
+  --sombra-botao: 0 1px 2px rgb(17 26 36 / 0.1), 0 4px 12px -4px rgb(42 114 221 / 0.45);
+  /* A luz difusa no alto da página: azul de ação e anil da IA, bem diluídos. */
+  --brilho-a: rgb(29 98 214 / 0.1);
+  --brilho-b: rgb(64 70 196 / 0.07);
 
   /* Alvo mínimo de toque: 40 px com mouse, 44 px com o dedo (WCAG 2.5.8). */
   --alvo-min: 2.5rem;
@@ -43,56 +70,94 @@
 /* Escuro: segue o sistema, ou data-theme="dark". */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --gaze: #0c141c;
-    --papel: #142230;
-    --tinta: #eaf0f5;
-    --tinta-suave: #9fb0bf;
-    --ia: #8ea6ff;
-    --ia-tom: #1a2547;
-    --ia-forte: #b6c4ff;
-    --fator-favor: #6f8bf0;
+    --gaze: #0a1118;
+    --papel: #121c27;
+    --painel-solido: #152029;
+    --recuo: #0f1821;
+    --tinta: #e8eef5;
+    --tinta-suave: #9eafc1;
+    --acento: #6ea8ff;
+    --acento-tom: #14294a;
+    --acento-forte: #b0cfff;
+    --ia: #a9adff;
+    --ia-tom: #1c1e48;
+    --ia-forte: #cacdff;
+    --fator-favor: #8d92f6;
     --fator-contra: #d0699f;
     --humano: #5fd3a3;
-    --humano-tom: #12372b;
+    --humano-tom: #11352a;
     --atencao: #f2b33d;
-    --atencao-tom: #3a2c10;
+    --atencao-tom: #392b10;
     --atencao-fundo: #f2b33d;
     --erro: #ff8a80;
-    --erro-tom: #3d1a17;
-    --campo: #5c7186;
-    --divisor: #24384a;
-    --foco: #eaf0f5;
-    --sobre-tinta: #0c141c;
-    --sobre-humano: #0c141c;
-    --sobre-atencao: #12202b;
+    --erro-tom: #3c1a17;
+    --campo: #5f748a;
+    --divisor: #22323f;
+    --foco: #6ea8ff;
+    --sobre-tinta: #0a1118;
+    --sobre-acento: #0a1118;
+    --sobre-humano: #0a121b;
+    --sobre-atencao: #101d2b;
+    --painel: rgb(21 32 43 / 0.66);
+    --painel-borda: rgb(255 255 255 / 0.06);
+    --grafico-rosa: #b46f9c;
+    --grafico-verde: #4f9d73;
+    --grafico-azul: #4f7fc4;
+    --grafico-laranja: #b98652;
+    --grafico-coral: #b56a7a;
+    --grafico-trilho: rgb(255 255 255 / 0.08);
+    --sombra-cartao: 0 0 0 1px rgb(255 255 255 / 0.02), 0 8px 24px -12px rgb(0 0 0 / 0.6);
+    --sombra-flutuante: 0 0 0 1px rgb(255 255 255 / 0.04), 0 20px 44px -12px rgb(0 0 0 / 0.75);
+    --sombra-botao: 0 1px 2px rgb(0 0 0 / 0.4);
+    --brilho-a: rgb(114 170 255 / 0.08);
+    --brilho-b: rgb(169 173 255 / 0.05);
     color-scheme: dark;
   }
 }
 
 :root[data-theme="dark"],
 [data-theme="dark"] {
-  --gaze: #0c141c;
-  --papel: #142230;
-  --tinta: #eaf0f5;
-  --tinta-suave: #9fb0bf;
-  --ia: #8ea6ff;
-  --ia-tom: #1a2547;
-  --ia-forte: #b6c4ff;
-  --fator-favor: #6f8bf0;
+  --gaze: #0a1118;
+  --papel: #121c27;
+  --painel-solido: #152029;
+  --recuo: #0f1821;
+  --tinta: #e8eef5;
+  --tinta-suave: #9eafc1;
+  --acento: #6ea8ff;
+  --acento-tom: #14294a;
+  --acento-forte: #b0cfff;
+  --ia: #a9adff;
+  --ia-tom: #1c1e48;
+  --ia-forte: #cacdff;
+  --fator-favor: #8d92f6;
   --fator-contra: #d0699f;
   --humano: #5fd3a3;
-  --humano-tom: #12372b;
+  --humano-tom: #11352a;
   --atencao: #f2b33d;
-  --atencao-tom: #3a2c10;
+  --atencao-tom: #392b10;
   --atencao-fundo: #f2b33d;
   --erro: #ff8a80;
-  --erro-tom: #3d1a17;
-  --campo: #5c7186;
-  --divisor: #24384a;
-  --foco: #eaf0f5;
-  --sobre-tinta: #0c141c;
-  --sobre-humano: #0c141c;
-  --sobre-atencao: #12202b;
+  --erro-tom: #3c1a17;
+  --campo: #5f748a;
+  --divisor: #22323f;
+  --foco: #6ea8ff;
+  --sobre-tinta: #0a1118;
+  --sobre-acento: #0a1118;
+  --sobre-humano: #0a121b;
+  --sobre-atencao: #101d2b;
+  --painel: rgb(21 32 43 / 0.66);
+  --painel-borda: rgb(255 255 255 / 0.06);
+  --grafico-rosa: #b46f9c;
+  --grafico-verde: #4f9d73;
+  --grafico-azul: #4f7fc4;
+  --grafico-laranja: #b98652;
+  --grafico-coral: #b56a7a;
+  --grafico-trilho: rgb(255 255 255 / 0.08);
+  --sombra-cartao: 0 0 0 1px rgb(255 255 255 / 0.02), 0 8px 24px -12px rgb(0 0 0 / 0.6);
+  --sombra-flutuante: 0 0 0 1px rgb(255 255 255 / 0.04), 0 20px 44px -12px rgb(0 0 0 / 0.75);
+  --sombra-botao: 0 1px 2px rgb(0 0 0 / 0.4);
+  --brilho-a: rgb(114 170 255 / 0.08);
+  --brilho-b: rgb(169 173 255 / 0.05);
   color-scheme: dark;
 }
 
@@ -106,8 +171,22 @@
 @theme inline {
   --color-gaze: var(--gaze);
   --color-papel: var(--papel);
+  --color-recuo: var(--recuo);
+  --color-painel: var(--painel);
+  --color-painel-borda: var(--painel-borda);
+  --color-painel-solido: var(--painel-solido);
+  --color-grafico-rosa: var(--grafico-rosa);
+  --color-grafico-verde: var(--grafico-verde);
+  --color-grafico-azul: var(--grafico-azul);
+  --color-grafico-laranja: var(--grafico-laranja);
+  --color-grafico-coral: var(--grafico-coral);
+  --color-grafico-trilho: var(--grafico-trilho);
   --color-tinta: var(--tinta);
   --color-tinta-suave: var(--tinta-suave);
+  --color-acento: var(--acento);
+  --color-acento-tom: var(--acento-tom);
+  --color-acento-forte: var(--acento-forte);
+  --color-sobre-acento: var(--sobre-acento);
   --color-ia: var(--ia);
   --color-ia-tom: var(--ia-tom);
   --color-ia-forte: var(--ia-forte);
@@ -129,12 +208,17 @@
 
   /* As classes das fontes ficam no <html> (app/layout.tsx), então o var() resolve. */
   --font-sans: var(--font-atkinson), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-source-serif), ui-serif, Georgia, serif;
+  /* Fustat: só nos títulos da página inicial, carregada só no layout público (app/(publico)/layout.tsx). */
+  --font-vitrine: var(--font-fustat), var(--font-atkinson), ui-sans-serif, system-ui, sans-serif;
 
   /* Raios por hierarquia: campo e botão, cartão, diálogo. */
-  --radius-campo: 6px;
-  --radius-cartao: 10px;
-  --radius-dialogo: 16px;
+  --radius-campo: 10px;
+  --radius-cartao: 16px;
+  --radius-dialogo: 22px;
+
+  --shadow-cartao: var(--sombra-cartao);
+  --shadow-flutuante: var(--sombra-flutuante);
+  --shadow-botao: var(--sombra-botao);
 
   /* Escala: 13, 14, 16, 18, 22, 28, 36, 48 (docs/design/direcao-de-arte.md). */
   --text-xs: 0.8125rem;
@@ -175,6 +259,11 @@
 
   body {
     background-color: var(--gaze);
+    /* A luz difusa fica presa ao alto da janela: some ao rolar, sem competir com o conteúdo. */
+    background-image:
+      radial-gradient(70rem 32rem at 100% -8rem, var(--brilho-a), transparent 70%),
+      radial-gradient(48rem 28rem at -10% -6rem, var(--brilho-b), transparent 70%);
+    background-repeat: no-repeat;
     color: var(--tinta);
     font-family: var(--font-sans);
     font-size: 1rem;
@@ -192,8 +281,9 @@
   h1,
   h2,
   h3 {
-    font-family: var(--font-serif);
+    font-family: var(--font-sans);
     font-weight: 600;
+    letter-spacing: -0.015em;
     text-wrap: balance;
     /*
      * Com a letra muito ampliada, uma palavra longa de título ("transparência") quebra em vez de
@@ -216,6 +306,47 @@
   button {
     touch-action: manipulation;
   }
+}
+
+/*
+ * Títulos e números de destaque: a mesma Atkinson Hyperlegible Next da interface, mais
+ * fechada. Uma família só; a hierarquia vem do peso e do tamanho.
+ */
+@utility font-titulo {
+  font-family: var(--font-sans);
+  letter-spacing: -0.015em;
+}
+
+/* Número grande de painel: leve e largo, como um mostrador. */
+@utility numero-destaque {
+  font-family: var(--font-sans);
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* A superfície neutra de sempre: papel, borda discreta, raio de cartão e sombra larga e suave. */
+@utility superficie {
+  border-radius: var(--radius-cartao);
+  border: 1px solid var(--painel-borda);
+  background-color: var(--painel);
+  -webkit-backdrop-filter: blur(22px) saturate(1.4);
+  backdrop-filter: blur(22px) saturate(1.4);
+  box-shadow: var(--sombra-cartao);
+}
+
+/* Quem não tem desfoque recebe o painel quase opaco, para o texto não perder contraste. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .superficie {
+    background-color: var(--painel-solido);
+  }
+}
+
+/* Barra translúcida (cabeçalhos fixos): o conteúdo passa por baixo, desfocado. */
+@utility vidro {
+  background-color: color-mix(in srgb, var(--gaze) 78%, transparent);
+  -webkit-backdrop-filter: saturate(1.4) blur(14px);
+  backdrop-filter: saturate(1.4) blur(14px);
 }
 
 /* Números em colunas e contadores alinham pelo mesmo traço. */
@@ -333,4 +464,187 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/*
+ * A arte de fundo (components/dominio/arte-de-fundo.tsx). Some aos poucos para a esquerda e
+ * para baixo, longe dos títulos, e fica mais fraca no escuro. No alto contraste do sistema e
+ * na impressão, some de vez.
+ */
+.arte-de-fundo {
+  --arte-azul: #7fb0ff;
+  --arte-azul-forte: #4a8ef0;
+  --arte-rosa: #ff8aa6;
+  opacity: 0.5;
+  -webkit-mask-image: radial-gradient(ellipse 62% 70% at 78% 30%, #000 22%, transparent 72%);
+  mask-image: radial-gradient(ellipse 62% 70% at 78% 30%, #000 22%, transparent 72%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .arte-de-fundo {
+    --arte-azul: #3f78d6;
+    --arte-azul-forte: #6ea8ff;
+    --arte-rosa: #d0577a;
+    opacity: 0.32;
+  }
+}
+
+:root[data-theme="dark"] .arte-de-fundo {
+  --arte-azul: #3f78d6;
+  --arte-azul-forte: #6ea8ff;
+  --arte-rosa: #d0577a;
+  opacity: 0.32;
+}
+
+@media (forced-colors: active), print {
+  .arte-de-fundo {
+    display: none;
+  }
+}
+
+/*
+ * O hero da página inicial ("vidro líquido"): fundo branco com luz azul no canto superior
+ * esquerdo, o orbe de vidro em CSS e a barra de navegação flutuante. Tudo sem imagem nem vídeo.
+ */
+.hero-vidro {
+  --hero-fundo: #ffffff;
+  --hero-luz-a: rgb(96 177 255 / 0.32);
+  --hero-luz-b: rgb(49 154 255 / 0.22);
+  background-color: var(--hero-fundo);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .hero-vidro {
+    --hero-fundo: #0a1118;
+    --hero-luz-a: rgb(96 177 255 / 0.16);
+    --hero-luz-b: rgb(49 154 255 / 0.12);
+  }
+}
+
+:root[data-theme="dark"] .hero-vidro {
+  --hero-fundo: #0a1118;
+  --hero-luz-a: rgb(96 177 255 / 0.16);
+  --hero-luz-b: rgb(49 154 255 / 0.12);
+}
+
+.hero-luz {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  pointer-events: none;
+}
+
+.orbe {
+  position: absolute;
+  aspect-ratio: 1;
+  border-radius: 9999px;
+  transform: scale(1.25);
+}
+
+.orbe > div {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+/* O corpo: azul elétrico, mais claro no alto e escuro na base, com a borda iluminada. */
+.orbe-esfera {
+  background:
+    radial-gradient(circle at 32% 26%, #bfe2ff 0%, rgb(120 196 255 / 0.9) 14%, transparent 42%),
+    radial-gradient(circle at 70% 78%, #0a3fae 0%, transparent 55%),
+    radial-gradient(circle at 50% 50%, #2f8fff 0%, #1764e8 48%, #0b3fb8 74%, #0a2f86 100%);
+  box-shadow:
+    inset 0 0 60px rgb(255 255 255 / 0.35),
+    inset -18px -30px 80px rgb(4 22 80 / 0.55),
+    0 40px 120px -20px rgb(23 100 232 / 0.55);
+}
+
+/* O véu: faixas de luz que giram devagar, como líquido dentro do vidro. */
+.orbe-veu {
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgb(120 220 255 / 0.55) 60deg,
+    transparent 120deg,
+    rgb(150 140 255 / 0.4) 200deg,
+    transparent 260deg,
+    rgb(96 177 255 / 0.5) 320deg,
+    transparent 360deg
+  );
+  filter: blur(26px);
+  mix-blend-mode: screen;
+  animation: orbe-girar 22s linear infinite;
+  will-change: transform;
+}
+
+/* O reflexo do vidro: um arco branco no alto e uma borda clara. */
+.orbe-brilho {
+  background:
+    radial-gradient(ellipse 46% 22% at 40% 14%, rgb(255 255 255 / 0.75), transparent 70%),
+    radial-gradient(circle at 50% 50%, transparent 66%, rgb(255 255 255 / 0.28) 70%, transparent 74%);
+}
+
+@keyframes orbe-girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* A barra flutuante: vidro forte, borda fina e um brilho por dentro, no alto. */
+.barra-vidro {
+  background-color: rgb(255 255 255 / 0.3);
+  -webkit-backdrop-filter: blur(50px) saturate(1.6);
+  backdrop-filter: blur(50px) saturate(1.6);
+  border: 1px solid rgb(0 0 0 / 0.1);
+  box-shadow:
+    inset 0 4px 4px 0 rgb(255 255 255 / 0.25),
+    0 10px 30px -12px rgb(16 29 43 / 0.18);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .barra-vidro {
+    background-color: rgb(17 28 40 / 0.55);
+    border-color: rgb(255 255 255 / 0.1);
+    box-shadow: inset 0 1px 0 0 rgb(255 255 255 / 0.06);
+  }
+}
+
+:root[data-theme="dark"] .barra-vidro {
+  background-color: rgb(17 28 40 / 0.55);
+  border-color: rgb(255 255 255 / 0.1);
+  box-shadow: inset 0 1px 0 0 rgb(255 255 255 / 0.06);
+}
+
+/* O botão de vidro azul da chamada principal: o azul de ação, quase opaco, para o texto passar de 4,5:1. */
+.botao-vidro-azul {
+  background-color: rgb(29 96 198 / 0.94);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  box-shadow:
+    inset 0 4px 4px 0 rgb(255 255 255 / 0.35),
+    0 10px 24px -10px rgb(29 96 198 / 0.7);
+}
+
+@media (forced-colors: active), print {
+  .orbe,
+  .hero-luz {
+    display: none;
+  }
+}
+
+/* No escuro, o botão de vidro usa o azul claro do tema, com o rótulo escuro (como o primário). */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .botao-vidro-azul {
+    background-color: rgb(110 168 255 / 0.95);
+    box-shadow:
+      inset 0 4px 4px 0 rgb(255 255 255 / 0.3),
+      0 10px 24px -10px rgb(110 168 255 / 0.5);
+  }
+}
+
+:root[data-theme="dark"] .botao-vidro-azul {
+  background-color: rgb(110 168 255 / 0.95);
+  box-shadow:
+    inset 0 4px 4px 0 rgb(255 255 255 / 0.3),
+    0 10px 24px -10px rgb(110 168 255 / 0.5);
 }

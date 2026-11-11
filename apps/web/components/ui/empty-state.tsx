@@ -1,6 +1,7 @@
 import * as React from "react";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { IconeEmCirculo } from "./painel";
 
 export interface EmptyStateProps extends Omit<React.ComponentProps<"div">, "title"> {
   icon: LucideIcon;
@@ -25,14 +26,14 @@ export function EmptyState({
     <div
       data-slot="empty-state"
       className={cn(
-        "flex flex-col items-start gap-3 rounded-cartao border border-divisor bg-papel p-6",
+        "flex flex-col items-start gap-3 superficie p-6",
         className,
       )}
       {...props}
     >
-      <Icone aria-hidden="true" className="size-7 text-tinta-suave" />
+      <IconeEmCirculo icone={Icone} tom="acao" />
       <Titulo
-        className={cn("font-serif font-semibold", headingLevel === "h1" ? "text-3xl" : "text-xl")}
+        className={cn("font-titulo font-semibold", headingLevel === "h1" ? "text-[1.75rem] leading-9 font-medium" : "text-lg")}
       >
         {title}
       </Titulo>

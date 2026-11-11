@@ -21,7 +21,7 @@ export function ComoFunciona() {
   return (
     <section id="como-funciona" aria-labelledby="titulo-como-funciona" className="border-t border-divisor">
       <div className="mx-auto w-full max-w-[1200px] px-4 py-14 sm:px-6 lg:py-20">
-        <h2 id="titulo-como-funciona" className="font-serif text-3xl font-semibold">
+        <h2 id="titulo-como-funciona" className="font-titulo text-3xl font-medium">
           Oito etapas, uma decisão humana
         </h2>
         <p className="mt-3 max-w-[64ch] text-lg text-tinta-suave">
@@ -29,12 +29,12 @@ export function ComoFunciona() {
           tracejado, a IA; contínuo, uma pessoa; fino e cinza, uma regra.
         </p>
 
-        <ol role="list" className="mt-10 grid gap-x-12 lg:grid-flow-col lg:grid-rows-4">
+        <ol role="list" className="mt-10 grid gap-3 lg:grid-flow-col lg:grid-cols-2 lg:grid-rows-4">
           {ETAPAS.map((etapa) => (
             <li
               key={etapa.numero}
               className={cn(
-                "relative grid grid-cols-[2rem_minmax(0,1fr)] gap-x-3 border-b border-divisor py-4 pr-2 pl-5",
+                "superficie relative grid grid-cols-[2.25rem_minmax(0,1fr)] gap-x-3 overflow-hidden py-4 pr-4 pl-5",
                 etapa.destaque && "bg-humano-tom",
               )}
             >
@@ -48,13 +48,13 @@ export function ComoFunciona() {
               />
               <span
                 aria-hidden="true"
-                className="tnum font-serif text-2xl leading-none font-semibold"
+                className="tnum inline-flex size-9 items-center justify-center rounded-full border border-divisor bg-papel text-lg font-semibold shadow-cartao"
               >
                 {etapa.numero}
               </span>
               <div>
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                  <h3 className="font-serif text-xl font-semibold">{etapa.titulo}</h3>
+                  <h3 className="font-titulo text-lg font-semibold">{etapa.titulo}</h3>
                   <VozTag voz={etapa.voz}>{etapa.quem}</VozTag>
                 </div>
                 <p className="mt-1">{etapa.texto}</p>

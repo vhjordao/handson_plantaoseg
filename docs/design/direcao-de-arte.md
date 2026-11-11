@@ -1,7 +1,7 @@
 # Direção de arte da plataforma PlantãoSeguro
 
 - **Responsável:** Victor Jordão com o Claude Code · **Branch:** `f3/web-plataforma` · **Data:** 03/11/2026, revisada em 04/11/2026
-- **Status:** plano de 03/11, com revisão contra o padrão genérico (seção 3). Valores de cor e de tipo são os **finais** quando constam em `apps/web/lib/tokens/cores.ts`; o script `npm run check:contraste` confere os contrastes.
+- **Status:** plano de 03/11, com revisão contra o padrão genérico (seção 3). **Revisado em 10 e 11/11/2026 na fase E (seção 6, com a segunda passada em 6.1 e o hero em 6.2):** cores, raios, sombras e tipografia mudaram; as três vozes continuam. Onde a seção 6 diverge das anteriores, vale a seção 6. Valores de cor e de tipo são os **finais** quando constam em `apps/web/lib/tokens/cores.ts`; o script `npm run check:contraste` confere os contrastes.
 - **Fontes:** [prompt v2](prompt-frontend.md) (regras), [referências](referencias.md) (o que foi visto e por quê) e a skill `frontend-design` (processo de duas passagens).
 
 ## 1. Conceito: rascunho a lápis, decisão a carimbo
@@ -264,3 +264,64 @@ O divisor (1,28:1 no claro, 1,54:1 no escuro) é decorativo, não carrega inform
 **Que acessório saiu** (a regra de Chanel): o menu de âncoras no celular (a página é uma rolagem só); a animação de entrada de cada seção (sobrou a revelação do hero e o fechamento do tracejado); o botão "Pular" do hero (só o "Aprovar e oferecer" funciona, e um botão que não faz nada é pior do que nenhum); e a faixa de demonstração fixa no celular (ela some na rolagem e volta a cada página).
 
 **Capturas** de 04/11/2026, tiradas do build de produção no Edge com `node scripts/capturar.mjs`, ficam em [`capturas/`](capturas/): a landing em 1440 px (tema claro, escuro e página inteira), 768 px (topo) e 390 px (topo e página inteira); `/entrar` em 1440 e 390 px; Vagas em 1440 px (claro e escuro), 768 e 390 px; Minha conta e Ofertas do médico em 390 px; o telão em 1920 por 1080 px no tema escuro; e a Ajuda em 1440 px. O que **não** foi capturado: telas de erro e de carregamento, e o celular real (só o tamanho emulado).
+
+## 6. Revisão da fase E (10/11/2026): o visual novo
+
+**Pedido do Victor (F.1):** uma evolução visual com uma tela de painel médico como referência de linguagem (fundo claro azulado, cartões brancos e arredondados, sombras muito suaves, azul como cor de interação, tipografia moderna sem serifa, números grandes e leves). Ele pediu para **não** copiar a tela, os componentes, os indicadores nem as funções da referência, e para manter as funções, as rotas e as regras do produto. Nenhum menu, página ou indicador novo entrou por causa da referência.
+
+**O que fica:** a gramática das três vozes (seção 1) e o momento memorável (o tracejado que fecha). A forma do traço, o rótulo e o ícone continuam carregando o significado.
+
+**O que mudou e por quê:**
+
+| Antes | Agora | Por quê |
+| --- | --- | --- |
+| Fundo gaze esverdeado `#F4F6F5`, sem sombra, "borda e tom" | Fundo cinza-azulado `#EDF1F6` com uma luz difusa azul e anil no alto da janela; cartões de papel com borda discreta e sombra larga e suave (`superficie`, `shadow-cartao`) | É a profundidade da referência: separa o cartão do fundo sem linha dura. A luz no alto faz o papel da imagem de fundo da referência sem pôr uma figura decorativa |
+| Raios 6, 10 e 16 px | 10, 18 e 24 px; etiquetas em pílula | Mais macio, ainda por hierarquia (campo, cartão, diálogo) |
+| Primário de navegação em tinta | Primário em **azul de ação** (`--acento`, `#1D62D6`), com sombra azulada; secundário em papel com borda | O pedido do Victor: azul nas ações principais, nas seleções e nos elementos interativos. O botão que cria decisão humana **continua verde**: a cor ainda diz quem decide |
+| Voz da IA em cobalto `#2C4FD6` | Voz da IA em **anil** `#4046C4` (tom `#EEEFFD`) | Com o azul virando a cor da interação, o cobalto ficaria igual ao botão. O anil separa "isto é da IA" de "isto é clicável" |
+| Item atual: borda de tinta | Item atual: fundo azul-claro, texto azul forte e um traço de 3 px (barra lateral e barra do celular); nas abas, nos filtros e no topo do médico, um bloco de papel elevado sobre uma calha | Segue a referência sem depender só da cor: mudam fundo, peso e forma. No alto contraste do sistema, o sublinhado grosso continua |
+| Títulos em Source Serif 4 | **Uma família só**: Atkinson Hyperlegible Next, títulos em 600 com o espaçamento um pouco fechado (`font-titulo`) e números de painel em 300 (`numero-destaque`) | A referência é toda sem serifa; a Atkinson fica pela razão de legibilidade, e a hierarquia vem do peso e do tamanho. Uma fonte a menos para baixar |
+| Cabeçalhos opacos | Cabeçalhos translúcidos com desfoque (`vidro`) | O conteúdo passa por baixo, como na referência, sem perder o contraste do texto |
+| Campos com borda simples | Campos com sombra interna leve e, no foco, borda azul e um halo azul-claro; anel de foco global em azul | O foco fica visível (3:1 conferido) e com o mesmo azul da interação |
+| Número da ordem sugerida solto | Número dentro de um marcador redondo | Reforça a sequência (é uma ordem de verdade) |
+
+**Tokens novos** em `apps/web/app/globals.css`: `--acento`, `--acento-tom`, `--acento-forte`, `--sobre-acento`, `--recuo` (fundo de calhas e áreas recuadas), `--sombra-cartao`, `--sombra-flutuante`, `--sombra-botao` e as duas luzes (`--brilho-a` e `--brilho-b`). Utilitários: `superficie`, `vidro`, `font-titulo` e `numero-destaque`. O `check:contraste` ganhou 8 pares (azul de ação e recuo), e todos passam nos dois temas; no claro, o azul de ação dá 5,6:1 sobre papel e 4,9:1 sobre a página.
+
+**Escuro:** fundo `#0A121B`, papel `#111C28`, azul de ação `#72AAFF`, anil `#A9ADFF`. As sombras viram quase só um fio de luz, porque sombra escura sobre fundo escuro não aparece.
+
+**O acessório que saiu:** a Source Serif 4.
+
+### 6.1 Segunda passada (10 e 11/11): fiel ao desenho do modelo
+
+**Pedido do Victor:** "quero que siga fiel a esse modelo, claro que o conteúdo do meu produto é outro". A primeira passada só trocou o acabamento. A segunda trouxe a **estrutura** do modelo, sempre com as funções, as rotas e os dados do PlantãoSeguro:
+
+| Do modelo | No PlantãoSeguro |
+| --- | --- |
+| Barra superior com o menu em pílulas e a pessoa à direita | A barra lateral do coordenador virou uma barra superior: marca, menu em pílulas (a página atual em azul cheio), **Ajuda** redonda e a pessoa com nome e cargo. O médico ganhou a mesma barra no computador e manteve a barra inferior no celular. Abaixo de 1024 px, o menu do coordenador vai para a gaveta |
+| Caminho ("MediCore / Patients / Details") | `Caminho`: "Coordenação › Vagas › Detalhes da vaga", montado a partir do menu. Do outro lado, o hospital e o relógio da simulação |
+| Título leve e ações à direita, a principal em botão escuro | `CabecalhoDePagina` e o botão `escuro` ("Nova vaga") |
+| Painéis translúcidos, com ícone em círculo e título | `superficie` virou papel translúcido com desfoque; `Painel`, `CabecalhoDoPainel`, `IconeEmCirculo` e `Fato` (rótulo e valor com ícone, numa lista de definição válida) |
+| Ilustração grande ao fundo | `ArteDeFundo`: a rede de plantão em SVG (um hospital no centro e fibras até os médicos, em azul e rosa), atrás dos painéis, sem custo de download |
+| Cartões pequenos com número leve, variação e minigráfico | Os indicadores da tela de Vagas: número, "57% a menos que o manual" e duas barras (manual contra modelo), sempre com "simulado" |
+| Mostrador de traços ("80% Health Score") | `AnelDeTracos`: "50 elegíveis de 300" na tela da vaga e o tempo que falta para responder na oferta do médico |
+| Perfil do paciente | O resumo da vaga (hospital, quando, urgência e pedido original) e o perfil do médico em "Minha conta" |
+| Linha do tempo com pílulas | A cascata de ofertas, com o estado de cada passo num círculo sobre o trilho |
+
+Nada de menu, página ou indicador novo entrou só porque estava no modelo: os números dos painéis já existiam na tela.
+
+### 6.2 O hero em "vidro líquido" (11/11)
+
+**Pedido do Victor:** um hero no formato de um prompt de "liquid glass" (barra flutuante de vidro, título grande em Fustat, selo de avaliação, botão de vidro azul, orbe em vídeo à direita e logos de clientes), "porém com o meu produto", com a análise do peso.
+
+| O prompt pedia | O que entrou | Por quê |
+| --- | --- | --- |
+| Fundo branco com luz azul (#60B1FF, #319AFF) no alto à esquerda | Igual, com as duas elipses desfocadas; no escuro, a mesma luz mais fraca | É CSS: não pesa |
+| Barra de vidro flutuante, a 30 px do topo, `blur(50px)`, borda e brilho interno | Igual (`barra-vidro`), com as âncoras, **Ajuda** e "Entrar" com seta | No celular a barra ocupa a largura e cabe numa linha (o teste exige menos de 80 px a 320 px) |
+| Título "Work smarter, achieve faster" em Fustat 75 px | "A IA sugere. Você decide." em Fustat 700, até 75 px, entrelinha 1,05 | O título é o do produto |
+| Fustat nos títulos e Inter no texto | Fustat só nos títulos da página inicial; o texto continua na Atkinson | A Fustat (um peso, só latino) custa cerca de 25 KB e só é baixada nas páginas públicas. A Inter seria uma terceira fonte para trocar a Atkinson, escolhida pela legibilidade |
+| "Rated 4.9/5 by 2700+ customers" com estrelas | "Testado em 392 vagas e 300 médicos sintéticos" | Não há clientes: uma nota seria inventada. O selo traz fatos da simulação |
+| Botão "Get Started Now" em `rgba(0,132,255,0.8)` | "Entrar no sistema" em vidro azul com o círculo e a seta, e o aumento de 2% ao passar o mouse | O azul do prompt com texto branco dá cerca de 3:1. O botão usa o azul de ação a 94%, acima de 4,5:1, e no escuro o azul claro com o rótulo escuro |
+| Orbe em vídeo da future.co, com `mix-blend-screen` e filtro de cor | Orbe em CSS (`Orbe`): esfera azul elétrica, reflexo, borda iluminada e um véu que gira devagar; a demonstração viva flutua sobre ele | O vídeo é de outro site, sem licença para usar, e pesaria de 1 a 3 MB, tocando sozinho no celular. Além disso, `screen` sobre fundo branco some. O orbe em CSS pesa menos de 2 KB, roda numa camada da placa de vídeo e fica parado com movimento reduzido |
+| "Trusted by" com cinco logos | "Construído com": Next.js, FastAPI, Supabase, n8n, Gemini e Vercel, em texto | Logos de empresas que não usam o produto seriam falsa prova social. As ferramentas são as que rodam o protótipo, e em texto não há marca de terceiros |
+
+**Peso, em resumo:** a página inicial ganhou só a Fustat (cerca de 25 KB, uma vez, com `display: swap`). Orbe, luzes e vidro são CSS. O que poderia pesar é o desfoque (`backdrop-filter`) em telas fracas, por isso ele fica em poucas camadas: a barra, os painéis e a demonstração. O vídeo pedido, que seria o item mais caro, não entrou.

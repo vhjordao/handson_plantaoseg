@@ -23,7 +23,7 @@ export function PainelDeMotivos({ vagaId, candidato }: { vagaId: string; candida
   const tituloId = React.useId();
 
   return (
-    <div className="mt-1 grid gap-4 rounded-cartao border border-divisor bg-papel p-4">
+    <div className="mt-1 grid gap-4 superficie p-4">
       <p className="font-semibold">{MOTIVOS.chance(formatarPercentual(candidato.score))}</p>
 
       <section aria-labelledby={`${tituloId}-pesou`} className="grid gap-2">

@@ -4,6 +4,7 @@ import * as React from "react";
 import { lerDataHora } from "@/lib/api/demo/datas";
 import { useApi } from "@/lib/api/provider";
 import type { DataHora } from "@/lib/api/types";
+import { AnelDeTracos } from "@/components/ui/anel-de-tracos";
 
 /** O relógio do sistema, de segundo em segundo, para o prazo da oferta andar na tela. */
 export function useRelogio(): DataHora | null {
@@ -48,5 +49,29 @@ export function TempoQueFalta({
   const falta = tempoQueFalta(expiraEm, agora);
   return (
     <span className={className}>{falta ? texto(falta.minutos, falta.segundos) : encerrado}</span>
+  );
+}
+
+/**
+ * O prazo da oferta num anel de traços, como o mostrador do modelo visual: os traços cheios são o
+ * tempo que ainda resta do prazo inteiro (`ttlMin`). O mesmo tempo já está em texto ao lado, então
+ * o anel inteiro fica fora da leitura de tela.
+ */
+export function AnelDoPrazo({ expiraEm, ttlMin }: { expiraEm: DataHora; ttlMin: number }) {
+  const agora = useRelogio();
+  if (!agora) return null;
+  const falta = tempoQueFalta(expiraEm, agora);
+  const restanteS = falta ? falta.minutos * 60 + falta.segundos : 0;
+  const proporcao = ttlMin > 0 ? restanteS / (ttlMin * 60) : 0;
+  const pouco = proporcao < 0.25;
+  return (
+    <div aria-hidden="true">
+      <AnelDeTracos proporcao={proporcao} tamanho={148} tracos={48} cor={pouco ? "atencao" : "acento"}>
+        <p className="numero-destaque text-[2rem] leading-none text-tinta">
+          {falta ? `${falta.minutos}:${String(falta.segundos).padStart(2, "0")}` : "0:00"}
+        </p>
+        <p className="mt-1 text-xs text-tinta-suave">{falta ? "para responder" : "prazo encerrado"}</p>
+      </AnelDeTracos>
+    </div>
   );
 }

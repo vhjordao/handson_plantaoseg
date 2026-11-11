@@ -17,13 +17,13 @@ export function Perguntas() {
   return (
     <section id="perguntas" aria-labelledby="titulo-perguntas" className="border-t border-divisor">
       <div className="mx-auto w-full max-w-[1200px] px-4 py-14 sm:px-6 lg:py-20">
-        <h2 id="titulo-perguntas" className="font-serif text-3xl font-semibold">
+        <h2 id="titulo-perguntas" className="font-titulo text-3xl font-medium">
           Perguntas, por tema
         </h2>
         <Tabs
           defaultValue={PERGUNTAS[0].id}
           orientation={listaNaVertical ? "vertical" : "horizontal"}
-          className="mt-8 grid gap-6 lg:grid-cols-[15rem_minmax(0,1fr)]"
+          className="superficie mt-8 grid gap-6 p-4 sm:p-6 lg:grid-cols-[15rem_minmax(0,1fr)]"
         >
           <TabsList aria-label="Temas das perguntas" className="lg:flex-col lg:overflow-visible">
             {PERGUNTAS.map((tema) => (

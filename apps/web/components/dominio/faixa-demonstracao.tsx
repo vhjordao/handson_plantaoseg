@@ -13,7 +13,7 @@ export function FaixaDemonstracao({ className }: { className?: string }) {
       role="region"
       aria-label="Aviso de demonstração"
       className={cn(
-        "flex items-center justify-center gap-2 bg-atencao-tom px-4 py-1.5 text-center text-sm font-medium text-atencao",
+        "flex items-center justify-center gap-2 border-b border-atencao/20 bg-atencao-tom px-4 py-1.5 text-center text-sm font-medium text-atencao",
         className,
       )}
     >

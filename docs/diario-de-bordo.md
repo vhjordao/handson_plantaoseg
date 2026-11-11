@@ -4,6 +4,28 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 11/11/2026 (quarta): fase E, fiel ao modelo e o hero em vidro líquido
+
+**Pedidos do Victor:** "quero que siga fiel a esse modelo, claro que o conteúdo do meu produto é outro" e, para a página inicial, um hero em "vidro líquido", "porém com o meu produto", com a análise do peso.
+
+**O que mudou:** a barra lateral do coordenador virou uma barra superior com o menu em pílulas; as telas ganharam painéis translúcidos com ícone em círculo, o caminho da página, a arte da rede de plantão ao fundo, indicadores com minigráficos, anéis de traços (a rede elegível da vaga e o prazo da oferta) e a cascata em linha do tempo. A página inicial abre com a barra de vidro flutuante, o título em Fustat, um selo com fatos da simulação, o botão de vidro azul e a demonstração viva sobre um orbe feito em CSS.
+
+**O que ficou de fora, e por quê:** o vídeo do orbe (é de outro site e pesaria de 1 a 3 MB), a nota de clientes e os logos de empresas (não há clientes; entraram fatos da simulação e as ferramentas do protótipo) e a fonte Inter (a Atkinson fica pela legibilidade). Detalhes na [direção de arte, seções 6.1 e 6.2](design/direcao-de-arte.md#61-segunda-passada-10-e-1111-fiel-ao-desenho-do-modelo).
+
+**Como foi conferido:** contraste dos pares nos dois temas, typecheck, lint, testes unitários, a suíte do Playwright (com o axe e a letra a 200% no celular) e capturas em 1440 e 390 px, no claro e no escuro.
+
+**Uso de IA:** o Claude Code adaptou o modelo e o prompt ao produto, escreveu os componentes e revisou as telas pelas capturas.
+
+## 10/11/2026 (terça), à noite: fase E, o visual novo
+
+**Pedido do Victor:** "Essa é a fase E do projeto, pulei a D por enquanto", com uma tela de painel médico como referência visual e a regra de não copiar a tela, os componentes nem as funções dela: o sistema continua o mesmo, com outro acabamento.
+
+**O que mudou (só a web, sem mudar API, banco nem regras):** fundo cinza-azulado com uma luz difusa no alto, cartões brancos mais arredondados com sombra suave, cabeçalhos translúcidos, azul de ação nos botões principais, nos itens atuais e no foco, e uma família de letra só (a Atkinson, em pesos diferentes). As três vozes ficam: a IA continua tracejada, agora em anil para não se confundir com o azul dos botões, e a decisão humana continua verde. Detalhe e motivos na [direção de arte, seção 6](design/direcao-de-arte.md#6-revisão-da-fase-e-10112026-o-visual-novo).
+
+**Como foi conferido:** contraste de todos os pares nos dois temas, typecheck, lint, testes unitários e a suíte do Playwright (jornada e acessibilidade com o axe, no computador e no celular), mais capturas das telas principais em 1440 e 390 px, no claro e no escuro.
+
+**Uso de IA:** o Claude Code analisou a estrutura da web, adaptou o pedido ao produto, escreveu os tokens e os componentes e revisou as telas pelas capturas.
+
 ## 10/11/2026 (terça), à noite: Supabase reativado e Gemini econômico
 
 **O que aconteceu:** ao publicar a 0.5.0, a API não subiu, porque o projeto do Supabase estava pausado (o plano gratuito pausa projetos parados). A versão anterior só parecia saudável porque tinha carregado os dados antes. Com o ok do Victor ("Sim, reative"), o Claude Code reativou o projeto pela API de gestão, e a API subiu com os dados e o Gemini. A conferência do Gemini deu 503 (alta demanda no Google), também da máquina local, com a mesma chave.

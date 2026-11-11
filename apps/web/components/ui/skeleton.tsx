@@ -10,7 +10,7 @@ export function Skeleton({ className, ...props }: React.ComponentProps<"div">) {
     <div
       aria-hidden="true"
       data-slot="skeleton"
-      className={cn("rounded-campo bg-divisor", className)}
+      className={cn("rounded-campo bg-divisor/70", className)}
       {...props}
     />
   );

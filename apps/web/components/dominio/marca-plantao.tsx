@@ -57,7 +57,7 @@ export function MarcaPlantao({
       <SimboloPlantao />
       <span
         className={cn(
-          "font-serif text-xl font-semibold tracking-tight text-tinta",
+          "font-titulo text-xl font-bold text-tinta",
           compacta && "@max-[22rem]:sr-only",
         )}
         translate="no"

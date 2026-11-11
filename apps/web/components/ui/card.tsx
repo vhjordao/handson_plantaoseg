@@ -6,7 +6,7 @@ export function Card({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card"
-      className={cn("rounded-cartao border border-divisor bg-papel", className)}
+      className={cn("superficie", className)}
       {...props}
     />
   );
