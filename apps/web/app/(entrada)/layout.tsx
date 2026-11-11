@@ -11,7 +11,7 @@ import { RodapePublico } from "@/components/layout/rodape-publico";
 export default function LayoutEntrada({ children }: LayoutProps<"/">) {
   return (
     <>
-      <ArteDeFundo variante="rede" />
+      <ArteDeFundo />
       <FaixaDemonstracao />
       <CabecalhoPublico enxuto />
       <main id="conteudo" tabIndex={-1} className="flex-1 outline-none">

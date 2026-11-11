@@ -4,6 +4,14 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 11/11/2026 (quarta), à noite: o fundo vira uma aurora
+
+**Pedido do Victor:** "o fundo da tela ficou bem ruim, não está fiel ao da imagem [...] se não for possível replicar dessa forma, vamos pensar em algo mais agradável aos olhos". O busto de vidro desenhado em SVG não chega perto de um render 3D. As opções eram gerar uma imagem com IA (com créditos do Figma) ou um fundo abstrato em CSS; ele escolheu o abstrato.
+
+**O que mudou:** o busto e a rede de plantão saíram. Em todas as telas da plataforma e da entrada, o fundo é uma aurora suave (azul, anil, rosa e ciano) com duas bolhas de vidro, só em CSS. Detalhes na [direção de arte, seção 6.3](design/direcao-de-arte.md#63-vozes-sem-tracejado-painel-do-médico-corpo-de-vidro-e-tema-1111).
+
+**Uso de IA:** o Claude Code propôs as duas saídas, montou a aurora e conferiu as telas nos dois temas e no celular.
+
 ## 11/11/2026 (quarta), à tarde: vozes sem tracejado, painel do médico e tema
 
 **Pedido do Victor:** trocar o tracejado por algo "mais estético como o do print", um painel do médico no formato do dashboard do modelo, com o corpo humano transparente ao fundo, o estilo "bem clean" e a opção de tema claro e escuro.
