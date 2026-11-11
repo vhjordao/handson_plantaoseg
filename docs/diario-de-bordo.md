@@ -4,6 +4,20 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 11/11/2026 (quarta), à noite: fase D, auditoria, contestações e equidade
+
+**Pedido do Victor:** "execute a fase D".
+
+**O que mudou (só a web, sem mudar API nem banco):**
+
+- **Auditoria:** a trilha em tabela (cartões no celular), filtro por vaga, CSV e o botão "Verificar a cadeia". No sistema real, o navegador refaz o hash de cada registro no formato do Postgres (o texto do `jsonb`, com as chaves por tamanho), e isso foi conferido contra cinco linhas reais do banco, lidas só para o teste. Como o coordenador não vê os registros de outra organização, a tela diz quantos ficam fora da visão, em vez de acusar quebra.
+- **Contestações:** a caixa do coordenador mostra o relato, a recomendação contestada (o lugar na ordem e o motivo) e o formulário da resposta, que vai para a trilha.
+- **Equidade:** a concentração (82,1% das ofertas com os 10% mais expostos só pelo modelo, 35,7% com o rodízio em uso), a disparidade por grupo (com o risco da zona em destaque), o cenário calibrado com dados públicos e a contagem real das ofertas feitas no sistema, cada uma com o rótulo certo.
+
+**Como foi conferido:** 238 testes unitários (cinco novos para a cadeia do banco e dois para o CSV) e a suíte do Playwright inteira (137), com um teste novo de ponta a ponta: o médico contesta, o coordenador responde, a auditoria confere a cadeia e exporta o CSV, e o médico vê a resposta. A conferência no sistema real, com o login, fica com o Victor.
+
+**Uso de IA:** o Claude Code leu as decisões, escreveu as telas, a verificação no formato do Postgres e os testes.
+
 ## 11/11/2026 (quarta), à noite: a página inicial em cartões mascarados
 
 **Pedido do Victor:** "Quero a landing page dessa forma", com um prompt pronto de uma clínica odontológica (splash com contador, barra com Menu e três seções em "cartões mascarados").

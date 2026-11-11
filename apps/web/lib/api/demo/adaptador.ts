@@ -8,6 +8,7 @@
  * toda resposta é uma cópia. As funções que mudam o estado rodam uma de cada vez (a cadeia de
  * hash depende da ordem) e só gravam no fim, de uma vez, para que ninguém veja meia operação.
  */
+import { contarOfertas } from "../contagem";
 import { carregarGrade, chaveDaGrade, obterMundo } from "../../demo/mundo";
 import type { Mundo } from "../../demo/schema";
 import {
@@ -55,6 +56,7 @@ import {
   type Unidade,
   type VerificacaoCadeia,
   type Vaga,
+  ContagemOfertas,
 } from "../types";
 import { z } from "zod";
 import { criarRegistro, verificarRegistros, type EntradaDeRegistro } from "./auditoria";
@@ -980,7 +982,7 @@ class ApiDemo implements PlantaoApiDemo {
 
   // --- Auditoria e indicadores ----------------------------------------------------------------
 
-  async listarAuditoria(filtro?: { vagaId?: string }): Promise<RegistroAuditoria[]> {
+  async listarAuditoria(filtro?: { vagaId?: string; limite?: number }): Promise<RegistroAuditoria[]> {
     await this.esperar();
     const vagaId = filtro?.vagaId;
     const registros = vagaId
@@ -988,7 +990,13 @@ class ApiDemo implements PlantaoApiDemo {
           (r) => r.entidadeId === vagaId || r.entidadeId.startsWith(`${vagaId}:`),
         )
       : this.dados.auditoria;
-    return copia(registros);
+    // Em ordem de seq; sem filtro, só os mais recentes (o limite), como no sistema real.
+    return copia(vagaId ? registros : registros.slice(-(filtro?.limite ?? 200)));
+  }
+
+  async contarOfertas(): Promise<ContagemOfertas> {
+    await this.esperar();
+    return contarOfertas(this.dados.ofertas.map((o) => o.medicoId));
   }
 
   async verificarCadeia(): Promise<VerificacaoCadeia> {

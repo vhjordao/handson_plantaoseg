@@ -496,8 +496,25 @@ export const VerificacaoCadeiaSchema = z.object({
   registros: z.number().int(),
   /** `seq` do primeiro registro que não confere, se houver. */
   primeiroInvalido: z.number().int().nullable(),
+  /**
+   * Registros da cadeia que esta sessão não vê (de outra organização, sob RLS). Neles o elo não
+   * pode ser conferido daqui; o hash de cada linha visível continua conferido. Só no sistema real.
+   */
+  lacunas: z.number().int().optional(),
 });
 export type VerificacaoCadeia = z.infer<typeof VerificacaoCadeiaSchema>;
+
+/** As ofertas feitas neste sistema, contadas por médico (D9): não é simulação. */
+export const ContagemOfertasSchema = z.object({
+  total: z.number().int(),
+  medicos: z.number().int(),
+  maximoPorMedico: z.number().int(),
+  /** Quantos médicos formam os 10% mais ofertados (arredondado para cima, no mínimo um). */
+  medicosNoTopo: z.number().int(),
+  /** Parcela das ofertas que foi para esses médicos; nula sem nenhuma oferta. */
+  parcelaDoTopo: z.number().nullable(),
+});
+export type ContagemOfertas = z.infer<typeof ContagemOfertasSchema>;
 
 export const IndicadoresSchema = z.object({
   /** Sempre "simulado": os números vêm de `docs/resultados/metricas-fluxo.md` e dos eventos da demonstração. */

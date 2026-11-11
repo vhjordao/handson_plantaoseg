@@ -211,3 +211,38 @@ export function useContestar() {
     onSuccess: refazer,
   });
 }
+
+// --- Fase D: auditoria, contestações do coordenador e equidade ----------------------------------
+
+export function useAuditoria(vagaId: string | null) {
+  const api = useApi();
+  return useQuery({
+    queryKey: [api?.modo, "auditoria", vagaId ?? "todas"],
+    queryFn: api ? () => api.listarAuditoria(vagaId ? { vagaId } : { limite: 200 }) : skipToken,
+    retry: (falhas, erro) => !(erro instanceof NaoImplementadoError) && falhas < 2,
+  });
+}
+
+/** A verificação da cadeia roda só quando a pessoa pede (lê a trilha inteira). */
+export function useVerificarCadeia() {
+  const apiCarregada = useApiCarregada();
+  return useMutation({ mutationFn: () => apiCarregada().verificarCadeia() });
+}
+
+export function useResponderContestacao() {
+  const apiCarregada = useApiCarregada();
+  const refazer = useRefazerLeituras();
+  return useMutation({
+    mutationFn: (input: { id: string; texto: string }) => apiCarregada().responderContestacao(input),
+    onSuccess: refazer,
+  });
+}
+
+export function useContagemOfertas() {
+  const api = useApi();
+  return useQuery({
+    queryKey: [api?.modo, "contagem-ofertas"],
+    queryFn: api ? () => api.contarOfertas() : skipToken,
+    retry: (falhas, erro) => !(erro instanceof NaoImplementadoError) && falhas < 2,
+  });
+}

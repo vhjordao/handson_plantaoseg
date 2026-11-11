@@ -34,7 +34,16 @@ O mapa de tudo o que falta para o PlantãoSeguro funcionar de ponta a ponta, do 
 
 **Onde está a fase E (11/11):** o Victor trouxe o modelo (F.1) e pediu a fase E antes da D. Está na `main` e no ar desde 11/11 (PR #38): a base nova (F.2) em cores, raios, sombras, tipografia, componentes e as cascas do coordenador e do médico, nos dois temas. Como as telas usam os componentes e os tokens, a página inicial, a entrada, o coordenador e o médico mudaram juntos (F.3 a F.6). A revisão está na [direção de arte, seção 6](design/direcao-de-arte.md#6-revisão-da-fase-e-10112026-o-visual-novo). Em 10 e 11/11, a pedido do Victor, uma segunda passada seguiu o desenho do modelo (barra superior com menu em pílulas, painéis translúcidos, anéis de traços e cascata em linha do tempo), e a página inicial ganhou o hero em "vidro líquido" ([seção 6.1 e 6.2](design/direcao-de-arte.md#61-segunda-passada-10-e-1111-fiel-ao-desenho-do-modelo)). O Victor aprovou com a CI verde, e a produção da Vercel saiu pronta no commit do merge. Ainda em 11/11, a pedido dele, as vozes deixaram o tracejado, o médico ganhou um painel inicial no formato do dashboard do modelo, a plataforma ganhou ao fundo uma malha suave em CSS, escolhida pelo Victor entre três propostas (depois de um corpo em SVG, de uma aurora e de uma imagem do Figma), e o botão de tema claro e escuro; depois, a página inicial passou ao formato de "cartões mascarados" ([seção 6.4](design/direcao-de-arte.md#64-a-página-inicial-em-cartões-mascarados-1111)) ([seção 6.3](design/direcao-de-arte.md#63-vozes-sem-tracejado-painel-do-médico-corpo-de-vidro-e-tema-1111)). Quando a fase D fizer auditoria, contestações e equidade, elas já nascem no visual novo (F.7); a revisão de celular, teclado, leitor de tela e Lighthouse em todas as telas fica para o 8.6 (F.8).
 
-**Próximo passo:** a fase D (auditoria, contestações e equidade, 6.1 a 6.3), já com os componentes do visual novo. O modelo chegou em 10/11, então o visual coube antes de 13/11 com o layout de cada tela, e não só a base.
+**Onde está a fase D (11/11):** o código está no PR da branch `f6/fase-d`, no visual novo (F.7):
+- **Auditoria (6.1):** a trilha do mais novo para o mais antigo, com filtro por vaga no endereço (`?vaga=`), exportação em CSV e verificação da cadeia no navegador. No sistema real, a trilha vem do banco sob RLS, e o hash de cada linha é recalculado no formato exato do Postgres (`jsonb`), conferido contra linhas reais do banco. A cadeia é uma só para o banco inteiro: os registros de outra organização viram lacuna, dita na tela, e não quebra.
+- **Contestações (6.2):** a caixa do coordenador, com o relato do médico, a recomendação contestada e a resposta, que fica na trilha.
+- **Equidade (6.3):** a concentração das ofertas e a disparidade por grupo, rotuladas "medidas em dados sintéticos"; ao lado, a contagem das ofertas feitas no sistema (D9) e o cenário calibrado com dados públicos (D11).
+
+Falta conferir as três no sistema real, com o login do coordenador.
+
+**Pendência da página inicial (11/11):** numa tela de computador com 900 px de altura, a seção 1 passa cerca de 30 px da janela, e o pé do título fica logo abaixo da dobra. A correção é descontar a altura do aviso e do cabeçalho (cerca de 8 rem, não 6). O Victor pediu para deixar nas pendências.
+
+**Próximo passo:** o Victor confere as fases C e D no sistema real, com os logins; depois vem a fase F (roteiro da demonstração, 5.1 a 5.4), que agora conta com o painel inicial do médico.
 
 ## 2. Onde estamos
 
@@ -48,7 +57,7 @@ O mapa de tudo o que falta para o PlantãoSeguro funcionar de ponta a ponta, do 
 | Decisões D1 a D11 | Aprovadas pelo Victor em 06/11 | [ADR 0015](adr/0015-decisoes-que-destravam-o-mvp.md) |
 | Web: página inicial, entrada com login, lista de vagas, nova vaga, sugestões e decisão | No link público, no sistema real com o login da demonstração; o modo de demonstração fica como plano B (3.7, no PR da fase B) | [ficha](../apps/web/README.md) |
 | Web: médico (ofertas, resposta, contestação) e a cascata na tela da vaga | Na `main` desde 10/11 (PR #36), no sistema real e no modo de demonstração (4.6); falta a conferência de ponta a ponta com os logins | [ficha](../apps/web/README.md) |
-| Web: auditoria, contestações do coordenador e equidade | Ainda "em construção" (fase D) | |
+| Web: auditoria, contestações do coordenador e equidade | No PR da fase D, nos dois modos; falta conferir no sistema real | [ficha](../apps/web/README.md) |
 | Web: visual novo (fase E) | Na `main` e no ar desde 11/11 (PR #38), nos dois temas e no celular | [direção de arte, seção 6](design/direcao-de-arte.md#6-revisão-da-fase-e-10112026-o-visual-novo) |
 | Documento da Entrega 3 | Na `main` desde 06/11, com PDF de 12 páginas; o envio é do Victor | [documento](04-entrega-3-validacao.md) |
 
@@ -130,9 +139,9 @@ O adaptador `live` liga a web ao sistema real.
 
 ### Fase 6: auditoria, contestações e equidade
 
-- [ ] **6.1** Auditoria: tabela da trilha, filtro por vaga, exportação CSV e verificação da cadeia no navegador.
-- [ ] **6.2** Contestações: a caixa do coordenador, com a resposta registrada.
-- [ ] **6.3** Equidade: concentração das ofertas e disparidade, com "medidas em dados sintéticos", mais a contagem das ofertas feitas no sistema e o cenário calibrado com dados públicos ao lado (D9 e D11).
+- [ ] **6.1** Auditoria: tabela da trilha, filtro por vaga, exportação CSV e verificação da cadeia no navegador. *Código no PR da fase D (11/11), nos dois modos; no real, o hash é refeito no formato do Postgres e conferido contra linhas reais. Falta a conferência com o login.*
+- [ ] **6.2** Contestações: a caixa do coordenador, com a resposta registrada. *Código no PR da fase D (11/11); o teste de ponta a ponta faz o médico contestar, o coordenador responder e a trilha registrar. Falta a conferência com o login.*
+- [ ] **6.3** Equidade: concentração das ofertas e disparidade, com "medidas em dados sintéticos", mais a contagem das ofertas feitas no sistema e o cenário calibrado com dados públicos ao lado (D9 e D11). *Código no PR da fase D (11/11): os números da simulação vêm dos relatórios de concentração, ranking e robustez, com a fonte ao lado. Falta a conferência com o login.*
 
 ### Fase 7: concentração das ofertas
 
@@ -153,7 +162,7 @@ Esta fase **não depende das anteriores** e pode começar já.
 - [x] **F.4** A entrada só com login, no visual novo (a função vem no 3.7). *Feito em 11/11 (PR #38): o login num painel, com os três passos do produto ao lado.*
 - [x] **F.5** As telas do coordenador: lista de vagas, nova vaga, sugestões e decisão. *Feito em 11/11 (PR #38): barra superior em pílulas, Vagas em grade com os indicadores, resumo e anel da rede na vaga e a cascata em linha do tempo.*
 - [x] **F.6** As telas do médico (feitas na fase 4). *Feito em 11/11 (PR #38): a oferta com o anel do prazo e "Minha conta" em painéis.*
-- [ ] **F.7** Auditoria, contestações e equidade (feitas na fase 6).
+- [x] **F.7** Auditoria, contestações e equidade (feitas na fase 6). *Feito em 11/11, no PR da fase D: as três nascem nos componentes do visual novo.*
 - [ ] **F.8** Celular, teclado, leitor de tela e Lighthouse em todas as telas (junto do 8.6).
 
 **Pronto quando:** todas as telas seguem a direção aprovada, nos dois temas e no celular, e os testes de jornada e de acessibilidade continuam passando.

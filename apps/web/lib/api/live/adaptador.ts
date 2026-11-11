@@ -8,12 +8,13 @@
  */
 import { CandidatoInvalidoError, EntradaInvalidaError, EstadoInvalidoError } from "../erros";
 import { removerDadosPessoais } from "../demo/privacidade";
-import { NaoImplementadoError, type PlantaoApi } from "../plantao-api";
+import type { PlantaoApi } from "../plantao-api";
 import {
   LIMITE_TEXTO_LIVRE,
   LIMITE_TEXTO_VAGA,
   type AprovarInput,
   type Cascata,
+  type ContagemOfertas,
   type ConfirmarVagaInput,
   type Contestacao,
   type DataHora,
@@ -40,6 +41,8 @@ import {
   type VerificacaoCadeia,
 } from "../types";
 import { chamarApi, lerTabela, type OpcoesHttp } from "./http";
+import { COLUNAS_DA_TRILHA, registroDoBanco, verificarTrilhaDoBanco, type RegistroDoBanco } from "./auditoria";
+import { contarOfertas } from "../contagem";
 import {
   estadoDaApi,
   fichaDaApi,
@@ -635,11 +638,38 @@ export class AdaptadorLive implements PlantaoApi {
 
   // --- Fase 6 -----------------------------------------------------------------------------------
 
-  listarAuditoria(): Promise<RegistroAuditoria[]> {
-    return Promise.reject(new NaoImplementadoError("listarAuditoria", this.modo));
+  async listarAuditoria(filtro?: { vagaId?: string; limite?: number }): Promise<RegistroAuditoria[]> {
+    const vagaId = filtro?.vagaId ? encodeURIComponent(filtro.vagaId) : null;
+    const recorte = vagaId
+      ? `&or=(entity_id.eq.${vagaId},entity_id.like.${vagaId}:*)`
+      : `&limit=${filtro?.limite ?? 200}`;
+    const linhas = await lerTabela<RegistroDoBanco>(
+      this.opcoes,
+      `audit_log?select=${COLUNAS_DA_TRILHA}&order=seq.desc${recorte}`,
+    );
+    // O banco devolve do mais novo para o mais antigo (para o limite pegar os recentes); a tela
+    // recebe em ordem de seq, como no modo de demonstração.
+    return linhas.map(registroDoBanco).reverse();
   }
-  verificarCadeia(): Promise<VerificacaoCadeia> {
-    return Promise.reject(new NaoImplementadoError("verificarCadeia", this.modo));
+
+  /** Lê a trilha visível inteira, em páginas de mil, e a confere no navegador. */
+  async verificarCadeia(): Promise<VerificacaoCadeia> {
+    const todas: RegistroDoBanco[] = [];
+    for (let ultimo = 0; ; ) {
+      const pagina = await lerTabela<RegistroDoBanco>(
+        this.opcoes,
+        `audit_log?select=${COLUNAS_DA_TRILHA}&order=seq.asc&seq=gt.${ultimo}&limit=1000`,
+      );
+      todas.push(...pagina);
+      if (pagina.length < 1000) break;
+      ultimo = pagina[pagina.length - 1].seq;
+    }
+    return verificarTrilhaDoBanco(todas);
+  }
+
+  async contarOfertas(): Promise<ContagemOfertas> {
+    const linhas = await lerTabela<{ doctor_id: string }>(this.opcoes, "offers?select=doctor_id&limit=10000");
+    return contarOfertas(linhas.map((l) => l.doctor_id));
   }
 
   /**
