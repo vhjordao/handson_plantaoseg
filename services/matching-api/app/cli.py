@@ -8,6 +8,7 @@ Uso, a partir de `services/matching-api`:
     python -m app.cli concentration # rodízio e limite contra a concentração (simulação)
     python -m app.cli zone        # medidas contra a exclusão por zona (simulação)
     python -m app.cli scale       # escala hospitalar: o motor com redes maiores (simulação)
+    python -m app.cli costs       # custo total, preço e retorno (premissas)
     python -m app.cli lightgbm    # regressão logística contra LightGBM (só na CI)
     python -m app.cli demo --yes  # vaga em texto livre -> top 5 -> aprovação -> auditoria
     python -m app.cli blind-review  # casos da revisão às cegas para as entrevistas
@@ -396,6 +397,28 @@ def cmd_lightgbm(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_costs(args: argparse.Namespace) -> int:
+    from app.costs import costs_chart, evaluate_costs, render_costs
+
+    metrics = evaluate_costs()
+    if args.report_dir:
+        report_dir = Path(args.report_dir)
+        report_dir.mkdir(parents=True, exist_ok=True)
+        (report_dir / "metricas-custos.md").write_text(render_costs(metrics), encoding="utf-8")
+        (report_dir / "metricas-custos.json").write_text(
+            json.dumps(metrics, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+        (report_dir / "fig-custos.svg").write_text(costs_chart(metrics), encoding="utf-8")
+    print("Custo total, preço e retorno (PREMISSAS, não previsão)")
+    for scenario, by_n in metrics["totals"].items():
+        row = by_n["1"]
+        print(
+            f"  {scenario}: recorrente R$ {row['recurring']:,.0f} por ano | "
+            f"ano 1 R$ {row['year1']:,.0f} | três anos R$ {row['three_years']:,.0f}"
+        )
+    return 0
+
+
 def cmd_walkthrough(args: argparse.Namespace) -> int:
     from app.walkthrough import render_walkthrough
 
@@ -583,6 +606,10 @@ def build_parser() -> argparse.ArgumentParser:
     boost.add_argument("--data", default=str(DEFAULT_DATA))
     boost.add_argument("--report-dir", default=None)
     boost.set_defaults(func=cmd_lightgbm)
+
+    costs = sub.add_parser("costs", help="custo total, preço e retorno (premissas)")
+    costs.add_argument("--report-dir", default=None)
+    costs.set_defaults(func=cmd_costs)
 
     demo = sub.add_parser("demo", help="fluxo completo para uma vaga em texto livre")
     demo.add_argument("--data", default=str(DEFAULT_DATA))
