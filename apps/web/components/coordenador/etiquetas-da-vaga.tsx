@@ -1,7 +1,7 @@
 import {
   Ban,
   CircleCheck,
-  CircleDashed,
+  Sparkles,
   FilePen,
   Send,
   TriangleAlert,
@@ -13,12 +13,12 @@ import { ROTULO_STATUS_VAGA, ROTULO_URGENCIA } from "@/lib/copy/rotulos";
 import { formatarIntervalo } from "@/lib/format/datas";
 
 /**
- * A etiqueta de cada estado. O tracejado é a voz da sugestão que espera uma decisão: a linha
- * inteira da vaga "Aguardando sua decisão" também é tracejada.
+ * A etiqueta de cada estado. O tom da IA marca a sugestão que espera uma decisão: a linha
+ * inteira da vaga "Aguardando sua decisão" também ganha o fundo da IA.
  */
 const ESTADO: Record<StatusVaga, { icone: LucideIcon; tone: NonNullable<BadgeProps["tone"]> }> = {
   rascunho: { icone: FilePen, tone: "neutro" },
-  aguardando_decisao: { icone: CircleDashed, tone: "ia" },
+  aguardando_decisao: { icone: Sparkles, tone: "ia" },
   oferta_em_andamento: { icone: Send, tone: "regra" },
   preenchida: { icone: CircleCheck, tone: "humano" },
   sem_cobertura: { icone: Ban, tone: "erro" },

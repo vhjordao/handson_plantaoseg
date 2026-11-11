@@ -4,6 +4,16 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 11/11/2026 (quarta), à tarde: vozes sem tracejado, painel do médico e tema
+
+**Pedido do Victor:** trocar o tracejado por algo "mais estético como o do print", um painel do médico no formato do dashboard do modelo, com o corpo humano transparente ao fundo, o estilo "bem clean" e a opção de tema claro e escuro.
+
+**O que mudou:** a IA deixou o tracejado e passou a ter fundo em degradê e a pílula "Sugestão da IA" com o ícone de brilho; a decisão humana fica verde, com o selo. O médico entra num painel com o perfil, o prazo da próxima resposta num anel, a pílula "Por que você", os números das ofertas e a linha do tempo. A plataforma ganhou um busto humano de vidro em SVG ao fundo e um botão de tema em todos os cabeçalhos. Detalhes na [direção de arte, seção 6.3](design/direcao-de-arte.md#63-vozes-sem-tracejado-painel-do-médico-corpo-de-vidro-e-tema-1111).
+
+**Como foi conferido:** contraste, typecheck, lint, testes unitários (os das vozes foram reescritos para o desenho novo) e a suíte do Playwright, com testes novos para o painel (largura a 320 px e letra a 200%) e para o botão de tema (troca e lembra depois de recarregar).
+
+**Uso de IA:** o Claude Code redesenhou as vozes, desenhou o busto em SVG, montou o painel com os dados que o médico já tinha e escreveu os testes.
+
 ## 11/11/2026 (quarta): fase E, fiel ao modelo e o hero em vidro líquido
 
 **Pedidos do Victor:** "quero que siga fiel a esse modelo, claro que o conteúdo do meu produto é outro" e, para a página inicial, um hero em "vidro líquido", "porém com o meu produto", com a análise do peso.

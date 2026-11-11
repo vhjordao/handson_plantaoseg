@@ -9,7 +9,7 @@ import { VozTag } from "./voz-tag";
 
 /**
  * Um campo lido do texto, para conferir. A voz segue a origem real: leitura por regras é cinza,
- * leitura pela IA é tracejada, e o campo que a pessoa mexeu ganha traço contínuo. Sem
+ * leitura pela IA ganha o fundo da IA, e o campo que a pessoa mexeu passa ao verde. Sem
  * percentual de confiança: o backend não o fornece. O texto é só exibido, nunca vira HTML.
  */
 export function CampoExtraido({

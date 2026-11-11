@@ -4,7 +4,8 @@ import { cn } from "@/lib/utils";
 
 /**
  * Etiqueta curta de estado. Sempre leva ícone e texto: a cor nunca é o único sinal.
- * `ia` usa contorno tracejado e `humano`, contínuo, como as vozes da interface.
+ * `ia` é o tom da IA; `iaVoz`, a pílula em degradê que diz "Sugestão da IA" (como o botão de
+ * "insights" do modelo visual); `humano`, o verde da decisão.
  */
 const badgeVariants = cva(
   "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-sm leading-5 font-medium [&_svg]:size-4 [&_svg]:shrink-0",
@@ -13,7 +14,9 @@ const badgeVariants = cva(
       tone: {
         neutro: "border-divisor bg-papel text-tinta-suave",
         // O texto usa o tom forte: no tema escuro o texto precisa de 7:1, e o tom comum só tem 6,5:1.
-        ia: "border-dashed border-ia bg-ia-tom text-ia-forte",
+        ia: "border-ia/30 bg-ia-tom text-ia-forte",
+        iaVoz:
+          "border-transparent bg-[linear-gradient(100deg,var(--acento),var(--ia))] text-sobre-acento shadow-botao",
         humano: "border-humano bg-humano-tom text-humano",
         regra: "border-campo bg-papel text-tinta-suave",
         atencao: "border-atencao bg-atencao-tom text-atencao",

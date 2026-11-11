@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { CorpoTranslucido } from "./corpo-translucido";
 
 /**
  * A arte de fundo: a rede de plantão vista de cima. Um hospital no centro e fibras que saem
@@ -61,16 +62,30 @@ function gerarRede(): { fibras: Fibra[]; centro: [number, number] } {
 
 const REDE = gerarRede();
 
-export function ArteDeFundo({ className }: { className?: string }) {
+/**
+ * `corpo` (padrão da plataforma): o busto de vidro, como a figura do modelo visual. `rede`: a
+ * rede de plantão, usada na entrada.
+ */
+export function ArteDeFundo({
+  className,
+  variante = "corpo",
+}: {
+  className?: string;
+  variante?: "corpo" | "rede";
+}) {
   const { fibras, centro } = REDE;
   return (
     <div
       aria-hidden="true"
+      data-variante={variante}
       className={cn(
         "arte-de-fundo pointer-events-none fixed top-0 right-0 -z-10 h-[min(100dvh,980px)] w-[min(64vw,1000px)] select-none",
         className,
       )}
     >
+      {variante === "corpo" ? (
+        <CorpoTranslucido />
+      ) : (
       <svg viewBox="0 0 1000 900" preserveAspectRatio="xMidYMin slice" className="size-full" focusable="false">
         <defs>
           <radialGradient id="arte-nucleo" cx="0.56" cy="0.4" r="0.45">
@@ -119,6 +134,7 @@ export function ArteDeFundo({ className }: { className?: string }) {
         <circle cx={centro[0]} cy={centro[1]} r="34" fill="var(--arte-azul)" opacity="0.25" filter="url(#arte-brilho)" />
         <circle cx={centro[0]} cy={centro[1]} r="11" fill="var(--arte-azul-forte)" opacity="0.8" />
       </svg>
+      )}
     </div>
   );
 }

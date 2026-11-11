@@ -66,9 +66,9 @@ export default async function Ajuda() {
           Como ler as telas
         </h2>
         <p className="mt-3 max-w-[62ch]">
-          Em toda a plataforma, a forma do contorno diz quem falou. O que a IA sugere é tracejado e
-          ainda não é decisão de ninguém. Quando uma pessoa confirma, o traço se fecha e um selo
-          diz quem decidiu e quando.
+          Em toda a plataforma, a etiqueta e a cor dizem quem falou. O que a IA sugere vem em azul,
+          com o ícone de brilho, e ainda não é decisão de ninguém. Quando uma pessoa confirma, o
+          bloco fica verde e um selo diz quem decidiu e quando.
         </p>
         <LegendaVozes className="mt-5" />
       </section>

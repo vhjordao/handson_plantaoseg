@@ -51,13 +51,13 @@ export function NavLink({
             : "font-medium text-tinta-suave hover:text-tinta"),
         // Pílulas do modelo: papel translúcido; a atual fica cheia de azul, em negrito e elevada.
         variante === "superior" &&
-          "min-h-[var(--alvo-min)] gap-2 rounded-campo border px-4 py-2 whitespace-nowrap",
+          "min-h-[var(--alvo-min)] gap-2 rounded-campo border px-3 py-2 whitespace-nowrap xl:px-3.5",
         variante === "superior" &&
           (ativo
             ? "border-acento bg-acento font-semibold text-sobre-acento shadow-botao"
             : "border-painel-borda bg-papel/55 font-medium text-tinta hover:bg-papel/90"),
         variante === "inferior" &&
-          "min-h-14 min-w-0 flex-1 flex-col justify-center gap-0.5 rounded-campo px-2 py-1 text-center text-sm",
+          "min-h-14 min-w-0 flex-1 flex-col justify-center gap-0.5 rounded-campo px-1 py-1 text-center text-xs",
         variante === "inferior" &&
           (ativo
             ? "bg-acento-tom font-semibold text-acento-forte shadow-[inset_0_-3px_0_var(--acento)]"

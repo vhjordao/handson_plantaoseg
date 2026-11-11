@@ -23,8 +23,8 @@ import { PainelDeMotivos } from "./painel-de-motivos";
 const noMeioDaFrase = (texto: string) => texto.charAt(0).toLowerCase() + texto.slice(1);
 
 /**
- * A tela mais importante: a ordem sugerida e a decisão. Enquanto ninguém decidiu, o contorno é
- * tracejado. Quando a pessoa confirma, o tracejado fecha, a cor passa ao verde e o selo assenta:
+ * A tela mais importante: a ordem sugerida e a decisão. Enquanto ninguém decidiu, o bloco tem o
+ * fundo da IA. Quando a pessoa confirma, o fundo passa ao verde e o selo assenta:
  * é o único movimento que a interface conta como seu. Nenhum nome vem marcado.
  */
 export function OrdemSugerida({

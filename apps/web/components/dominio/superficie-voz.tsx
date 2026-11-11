@@ -11,10 +11,11 @@ export interface SuperficieVozProps extends React.ComponentProps<"div"> {
 }
 
 /**
- * A superfície de uma voz. A IA tem contorno tracejado de cobalto; a pessoa, contínuo e verde;
- * a regra, uma linha fina cinza. Quando `voz` muda de "ia" para "humano", as lacunas do traço
- * se fecham (ver `.contorno-rect` em globals.css). A forma do traço, o rótulo e o ícone carregam
- * o significado; a cor só o reforça.
+ * A superfície de uma voz. A IA tem fundo em degradê azul e anil, com borda suave e um brilho
+ * no alto (como o cartão de "insights" do modelo visual); a pessoa, fundo verde e borda verde;
+ * a regra, papel com uma linha fina cinza. Quando `voz` muda de "ia" para "humano", o fundo
+ * passa ao verde e o selo assenta. O rótulo e o ícone de cada voz carregam o significado; a cor
+ * só o reforça (WCAG 1.4.1). Os estilos ficam em globals.css (`.voz-ia`, `.voz-humano`).
  */
 export function SuperficieVoz({
   voz,
@@ -29,18 +30,13 @@ export function SuperficieVoz({
       data-voz={voz}
       className={cn(
         "relative rounded-cartao",
-        voz === "ia" && "bg-ia-tom",
-        voz === "humano" && "bg-humano-tom",
+        voz === "ia" && "voz-ia",
+        voz === "humano" && "voz-humano",
         voz === "regra" && "border border-campo/60 bg-painel shadow-cartao backdrop-blur-xl",
         className,
       )}
       {...props}
     >
-      {voz !== "regra" ? (
-        <svg className="contorno" aria-hidden="true" focusable="false">
-          <rect className="contorno-rect" x="0" y="0" width="100%" height="100%" rx="16" ry="16" />
-        </svg>
-      ) : null}
       {children}
     </Tag>
   );

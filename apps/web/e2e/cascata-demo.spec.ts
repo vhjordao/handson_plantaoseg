@@ -24,7 +24,8 @@ async function entrarComoQuemTemOferta(page: Page, nome: string) {
   await expect(porta.getByText(nome)).toBeVisible({ timeout: 10_000 });
   await expect(porta.getByText("Tem oferta esperando resposta")).toBeVisible();
   await porta.getByRole("button", { name: "Entrar como médico" }).click();
-  await page.waitForURL("**/medico/ofertas");
+  await page.waitForURL(/\/medico$/);
+  await page.goto("/medico/ofertas");
 }
 
 test("plano B: o 1º deixa o prazo passar, o 2º recusa e o 3º aceita, e a vaga fecha", async ({ page }) => {

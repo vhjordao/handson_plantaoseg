@@ -66,7 +66,7 @@ test.describe("entrada só com login (3.7)", () => {
     await expect(page).toHaveURL(/\/entrar\?papel=medico/);
   });
 
-  test("entrar como médico sorteia uma persona, deixa sortear outra e abre as ofertas", async ({ page }) => {
+  test("entrar como médico sorteia uma persona, deixa sortear outra e abre o painel inicial", async ({ page }) => {
     await page.goto("/entrar/demonstracao");
     const entrar = page.getByRole("button", { name: "Entrar como médico" });
     await expect(entrar).toBeEnabled({ timeout: 10_000 });
@@ -75,7 +75,9 @@ test.describe("entrada só com login (3.7)", () => {
     await page.getByRole("button", { name: "Sortear outra" }).click();
     await expect(cartao.locator("p.font-semibold").first()).not.toHaveText(antes ?? "");
     await entrar.click();
-    await page.waitForURL("**/medico/ofertas");
+    await page.waitForURL(/\/medico$/);
+    await expect(page.getByRole("heading", { level: 1, name: /^Olá, / })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Próxima resposta" })).toBeVisible({ timeout: 10_000 });
     await expect(page.getByRole("navigation", { name: "Principal" }).first()).toBeVisible();
     await expect(page.getByRole("link", { name: "Minha conta" }).first()).toBeVisible();
   });

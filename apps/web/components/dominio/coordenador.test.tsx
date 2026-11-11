@@ -241,7 +241,7 @@ describe("CampoExtraido", () => {
     expect(controle).toHaveAccessibleDescription(/Está no texto.*Modelo Centro/);
   });
 
-  it("a leitura pela IA é tracejada", () => {
+  it("a leitura pela IA tem a voz da IA", () => {
     const { container } = campo({ fonte: "llm" });
     expect(container.firstElementChild).toHaveAttribute("data-voz", "ia");
   });

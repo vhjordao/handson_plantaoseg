@@ -8,26 +8,27 @@ import { SuperficieVoz } from "./superficie-voz";
 import { IconeDaVoz, VozTag } from "./voz-tag";
 
 describe("SuperficieVoz", () => {
-  it("a voz da IA tem contorno tracejado (SVG) e a decisão humana também, mas contínua", () => {
+  it("a voz da IA tem o fundo da IA, e decidir troca para o fundo da decisão humana", () => {
     const { container, rerender } = render(<SuperficieVoz voz="ia">sugestão</SuperficieVoz>);
     const raiz = container.firstElementChild as HTMLElement;
     expect(raiz).toHaveAttribute("data-voz", "ia");
-    expect(raiz.querySelector("svg.contorno rect.contorno-rect")).not.toBeNull();
+    expect(raiz).toHaveClass("voz-ia");
 
-    // Mudar a voz é o que fecha o tracejado (a transição está em globals.css).
+    // Mudar a voz é o que leva o bloco ao verde (a transição está em globals.css).
     rerender(<SuperficieVoz voz="humano">sugestão</SuperficieVoz>);
     expect(container.firstElementChild).toHaveAttribute("data-voz", "humano");
+    expect(container.firstElementChild).toHaveClass("voz-humano");
   });
 
-  it("a regra do sistema é só uma linha fina, sem contorno de destaque", () => {
+  it("a regra do sistema é só uma linha fina, sem o fundo de destaque", () => {
     const { container } = render(<SuperficieVoz voz="regra">limite</SuperficieVoz>);
-    expect(container.querySelector("svg.contorno")).toBeNull();
+    expect(container.firstElementChild).not.toHaveClass("voz-ia");
     expect(container.firstElementChild).toHaveClass("border");
   });
 
-  it("o contorno decorativo fica escondido do leitor de tela", () => {
+  it("não há mais contorno tracejado em SVG", () => {
     const { container } = render(<SuperficieVoz voz="ia">x</SuperficieVoz>);
-    expect(container.querySelector("svg.contorno")).toHaveAttribute("aria-hidden", "true");
+    expect(container.querySelector("svg")).toBeNull();
   });
 
   it("aceita outra etiqueta HTML, como li dentro de uma lista", () => {
@@ -115,7 +116,7 @@ describe("LegendaVozes", () => {
     render(<LegendaVozes />);
     const lista = screen.getByRole("list", { name: "Como ler as telas" });
     expect(lista.querySelectorAll("li")).toHaveLength(3);
-    expect(lista).toHaveTextContent("Traço tracejado");
-    expect(lista).toHaveTextContent("Traço contínuo e selo");
+    expect(lista).toHaveTextContent("Azul, com o brilho da IA");
+    expect(lista).toHaveTextContent("Verde e selo");
   });
 });

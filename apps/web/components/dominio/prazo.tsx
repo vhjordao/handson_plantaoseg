@@ -57,7 +57,15 @@ export function TempoQueFalta({
  * tempo que ainda resta do prazo inteiro (`ttlMin`). O mesmo tempo já está em texto ao lado, então
  * o anel inteiro fica fora da leitura de tela.
  */
-export function AnelDoPrazo({ expiraEm, ttlMin }: { expiraEm: DataHora; ttlMin: number }) {
+export function AnelDoPrazo({
+  expiraEm,
+  ttlMin,
+  tamanho = 148,
+}: {
+  expiraEm: DataHora;
+  ttlMin: number;
+  tamanho?: number;
+}) {
   const agora = useRelogio();
   if (!agora) return null;
   const falta = tempoQueFalta(expiraEm, agora);
@@ -66,7 +74,7 @@ export function AnelDoPrazo({ expiraEm, ttlMin }: { expiraEm: DataHora; ttlMin: 
   const pouco = proporcao < 0.25;
   return (
     <div aria-hidden="true">
-      <AnelDeTracos proporcao={proporcao} tamanho={148} tracos={48} cor={pouco ? "atencao" : "acento"}>
+      <AnelDeTracos proporcao={proporcao} tamanho={tamanho} tracos={48} cor={pouco ? "atencao" : "acento"}>
         <p className="numero-destaque text-[2rem] leading-none text-tinta">
           {falta ? `${falta.minutos}:${String(falta.segundos).padStart(2, "0")}` : "0:00"}
         </p>

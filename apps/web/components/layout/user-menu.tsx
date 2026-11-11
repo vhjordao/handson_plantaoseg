@@ -34,7 +34,7 @@ export function UserMenu({
           </span>
           <span className="hidden min-w-0 text-left leading-tight sm:grid">
             <span className="max-w-[14rem] truncate">{nome}</span>
-            <span className="hidden max-w-[14rem] truncate text-xs font-normal text-tinta-suave xl:block">
+            <span className="hidden max-w-[14rem] truncate text-xs font-normal text-tinta-suave 2xl:block">
               {descricao}
             </span>
           </span>

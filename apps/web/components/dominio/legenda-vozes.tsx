@@ -5,7 +5,7 @@ import { VozTag } from "./voz-tag";
 const ORDEM: ChaveVoz[] = ["ia", "humano", "regra"];
 
 /**
- * Ensina a ler a interface: o que o traço tracejado, o contínuo e o cinza querem dizer.
+ * Ensina a ler a interface: o que o azul da IA, o verde da decisão e o cinza da regra querem dizer.
  */
 export function LegendaVozes({ className }: { className?: string }) {
   return (

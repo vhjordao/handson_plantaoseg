@@ -84,7 +84,7 @@ test.describe("sem rolagem horizontal a 320 px (1.4.10)", () => {
     test.skip(isMobile, "o teste cria o próprio tamanho de tela e roda uma vez só");
     const medico = await paginaNaLargura(browser, 320, 640);
     await entrarComoMedico(medico);
-    for (const rota of ["/medico/ofertas", "/medico/contestacoes", "/medico/conta"]) {
+    for (const rota of ["/medico", "/medico/ofertas", "/medico/contestacoes", "/medico/conta"]) {
       await medico.goto(rota);
       await medico.waitForTimeout(300);
       expect(await rolagemHorizontal(medico), rota).toBeLessThanOrEqual(0);
@@ -126,7 +126,7 @@ test.describe("sem rolagem horizontal a 320 px (1.4.10)", () => {
     const medico = await paginaNaLargura(browser, 390, 844);
     await ampliar(medico);
     await entrarComoMedico(medico);
-    await semExcesso(medico, ["/medico/ofertas", "/medico/contestacoes", "/medico/conta"]);
+    await semExcesso(medico, ["/medico", "/medico/ofertas", "/medico/contestacoes", "/medico/conta"]);
     await medico.context().close();
 
     const coordenador = await paginaNaLargura(browser, 390, 844);

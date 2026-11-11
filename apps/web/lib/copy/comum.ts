@@ -29,12 +29,12 @@ export const ACOES = {
 export const VOZES = {
   ia: {
     rotulo: "Sugestão da IA",
-    legenda: "Traço tracejado",
+    legenda: "Azul, com o brilho da IA",
     explicacao: "A IA sugeriu e ainda ninguém decidiu.",
   },
   humano: {
     rotulo: "Decisão humana",
-    legenda: "Traço contínuo e selo",
+    legenda: "Verde e selo",
     explicacao: "Uma pessoa responsável assumiu a decisão.",
   },
   regra: {

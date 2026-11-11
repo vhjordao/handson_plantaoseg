@@ -5,6 +5,7 @@ import { ArteDeFundo } from "@/components/dominio/arte-de-fundo";
 import { FaixaDemonstracao } from "@/components/dominio/faixa-demonstracao";
 import { MarcaPlantao, SimboloPlantao } from "@/components/dominio/marca-plantao";
 import { BotaoAjuda } from "@/components/layout/botao-ajuda";
+import { BotaoTema } from "@/components/layout/botao-tema";
 import { Caminho } from "@/components/layout/caminho";
 import { MenuMobile } from "@/components/layout/menu-mobile";
 import { NavLink } from "@/components/layout/nav-link";
@@ -63,7 +64,7 @@ export function CascaCoordenador({
           </Link>
           <nav aria-label="Principal" className="hidden min-w-0 flex-1 justify-center lg:flex">
             <Suspense fallback={null}>
-              <ul className="flex items-center gap-1.5">
+              <ul className="flex items-center gap-1">
                 {itensDaArea("coordenador").map((item) => (
                   <li key={item.id}>
                     <NavLink area="coordenador" id={item.id} variante="superior" />
@@ -73,6 +74,7 @@ export function CascaCoordenador({
             </Suspense>
           </nav>
           <div className="flex-1 lg:hidden" />
+          <BotaoTema />
           <BotaoAjuda />
           <UserMenu nome={persona.nome} descricao={`${persona.cargo}, ${persona.unidade.nome}`} />
         </div>
