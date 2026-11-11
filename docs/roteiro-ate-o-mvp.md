@@ -32,9 +32,9 @@ O mapa de tudo o que falta para o PlantãoSeguro funcionar de ponta a ponta, do 
 
 **Onde está a fase C (10/11):** o código está no PR da branch `f4/tela-medico`: no sistema real, o médico vê as ofertas com o "Por que você" e o prazo andando, aceita ou recusa com um dos quatro motivos e confirmação, contesta e acompanha a resposta, e o coordenador vê a cascata na tela da vaga, atualizada a cada 3 segundos. O modo de demonstração faz o mesmo caminho sem o servidor (4.6), numa aba só: o botão "Passar o prazo desta oferta" faz o papel do n8n, e a porta do médico mostra primeiro quem tem oferta esperando. Falta a conferência de ponta a ponta no sistema real ("o 1º recusa, o 2º deixa passar, o 3º aceita"), que precisa dos logins do Victor.
 
-**Onde está a fase E (10/11):** o Victor trouxe o modelo (F.1) e pediu a fase E antes da D. O código está no PR da branch `fE/visual-novo`: a base nova (F.2) em cores, raios, sombras, tipografia, componentes e as cascas do coordenador e do médico, nos dois temas. Como as telas usam os componentes e os tokens, a página inicial, a entrada, o coordenador e o médico mudaram juntos (F.3 a F.6). A revisão está na [direção de arte, seção 6](design/direcao-de-arte.md#6-revisão-da-fase-e-10112026-o-visual-novo). Em 10 e 11/11, a pedido do Victor, uma segunda passada seguiu o desenho do modelo (barra superior com menu em pílulas, painéis translúcidos, anéis de traços e cascata em linha do tempo), e a página inicial ganhou o hero em "vidro líquido" ([seção 6.1 e 6.2](design/direcao-de-arte.md#61-segunda-passada-10-e-1111-fiel-ao-desenho-do-modelo)). Quando a fase D fizer auditoria, contestações e equidade, elas já nascem no visual novo (F.7). Falta o Victor aprovar o visual na pré-visualização.
+**Onde está a fase E (11/11):** o Victor trouxe o modelo (F.1) e pediu a fase E antes da D. Está na `main` e no ar desde 11/11 (PR #38): a base nova (F.2) em cores, raios, sombras, tipografia, componentes e as cascas do coordenador e do médico, nos dois temas. Como as telas usam os componentes e os tokens, a página inicial, a entrada, o coordenador e o médico mudaram juntos (F.3 a F.6). A revisão está na [direção de arte, seção 6](design/direcao-de-arte.md#6-revisão-da-fase-e-10112026-o-visual-novo). Em 10 e 11/11, a pedido do Victor, uma segunda passada seguiu o desenho do modelo (barra superior com menu em pílulas, painéis translúcidos, anéis de traços e cascata em linha do tempo), e a página inicial ganhou o hero em "vidro líquido" ([seção 6.1 e 6.2](design/direcao-de-arte.md#61-segunda-passada-10-e-1111-fiel-ao-desenho-do-modelo)). O Victor aprovou com a CI verde, e a produção da Vercel saiu pronta no commit do merge. Quando a fase D fizer auditoria, contestações e equidade, elas já nascem no visual novo (F.7); a revisão de celular, teclado, leitor de tela e Lighthouse em todas as telas fica para o 8.6 (F.8).
 
-**Ponto de atenção:** o visual novo vem depois das fases C e D. Para caber antes de 13/11, o modelo do Victor precisa chegar até cerca de 10/11. Se chegar depois, entra só a base (cores, tipografia e componentes), sem refazer o layout de cada tela ([seção 9](#9-riscos-e-o-que-cortar-primeiro)).
+**Próximo passo:** a fase D (auditoria, contestações e equidade, 6.1 a 6.3), já com os componentes do visual novo. O modelo chegou em 10/11, então o visual coube antes de 13/11 com o layout de cada tela, e não só a base.
 
 ## 2. Onde estamos
 
@@ -47,8 +47,9 @@ O mapa de tudo o que falta para o PlantãoSeguro funcionar de ponta a ponta, do 
 | Gemini | Ligado no servidor desde 10/11 e lendo os pedidos da tela (3.8), em custo zero, com teto diário de 100, teto de 10 por minuto e pedido repetido sem nova chamada (0.5.1) | [ADR 0003](adr/0003-llm-do-produto-gemini.md) |
 | Decisões D1 a D11 | Aprovadas pelo Victor em 06/11 | [ADR 0015](adr/0015-decisoes-que-destravam-o-mvp.md) |
 | Web: página inicial, entrada com login, lista de vagas, nova vaga, sugestões e decisão | No link público, no sistema real com o login da demonstração; o modo de demonstração fica como plano B (3.7, no PR da fase B) | [ficha](../apps/web/README.md) |
-| Web: médico (ofertas, resposta, contestação) e a cascata na tela da vaga | No PR da fase C, no sistema real e no modo de demonstração (4.6) | [ficha](../apps/web/README.md) |
-| Web: auditoria, contestações do coordenador e equidade | Ainda "em construção" | |
+| Web: médico (ofertas, resposta, contestação) e a cascata na tela da vaga | Na `main` desde 10/11 (PR #36), no sistema real e no modo de demonstração (4.6); falta a conferência de ponta a ponta com os logins | [ficha](../apps/web/README.md) |
+| Web: auditoria, contestações do coordenador e equidade | Ainda "em construção" (fase D) | |
+| Web: visual novo (fase E) | Na `main` e no ar desde 11/11 (PR #38), nos dois temas e no celular | [direção de arte, seção 6](design/direcao-de-arte.md#6-revisão-da-fase-e-10112026-o-visual-novo) |
 | Documento da Entrega 3 | Na `main` desde 06/11, com PDF de 12 páginas; o envio é do Victor | [documento](04-entrega-3-validacao.md) |
 
 **O que falta, em uma frase:** a jornada do coordenador já passa pela API e pelo banco, mas a tela do médico e a cascata na tela ainda não existem. Por isso, na tela, o médico não recebe oferta e a cascata não aparece.
@@ -148,10 +149,10 @@ Esta fase **não depende das anteriores** e pode começar já.
 
 - [x] **F.1** O Victor traz o modelo visual que tem em mente, até cerca de 10/11. O Claude Code não propõe direção por conta própria. *Feito em 10/11: uma tela de painel médico como referência de linguagem, sem copiar a estrutura nem as funções.*
 - [x] **F.2** O modelo vira a base: cores e espaços como variáveis, tipografia, componentes e as cascas do coordenador e do médico, nos temas claro e escuro. *Feito em 10/11, no PR da fase E ([direção de arte, seção 6](design/direcao-de-arte.md#6-revisão-da-fase-e-10112026-o-visual-novo)).*
-- [ ] **F.3** A página inicial e a ajuda, contando o produto como a apresentação conta.
-- [ ] **F.4** A entrada só com login, no visual novo (a função vem no 3.7).
-- [ ] **F.5** As telas do coordenador: lista de vagas, nova vaga, sugestões e decisão.
-- [ ] **F.6** As telas do médico (feitas na fase 4).
+- [x] **F.3** A página inicial e a ajuda, contando o produto como a apresentação conta. *Feito em 11/11 (PR #38): o hero em "vidro líquido" e as seções em painéis ([seção 6.2](design/direcao-de-arte.md#62-o-hero-em-vidro-líquido-1111)).*
+- [x] **F.4** A entrada só com login, no visual novo (a função vem no 3.7). *Feito em 11/11 (PR #38): o login num painel, com os três passos do produto ao lado.*
+- [x] **F.5** As telas do coordenador: lista de vagas, nova vaga, sugestões e decisão. *Feito em 11/11 (PR #38): barra superior em pílulas, Vagas em grade com os indicadores, resumo e anel da rede na vaga e a cascata em linha do tempo.*
+- [x] **F.6** As telas do médico (feitas na fase 4). *Feito em 11/11 (PR #38): a oferta com o anel do prazo e "Minha conta" em painéis.*
 - [ ] **F.7** Auditoria, contestações e equidade (feitas na fase 6).
 - [ ] **F.8** Celular, teclado, leitor de tela e Lighthouse em todas as telas (junto do 8.6).
 
