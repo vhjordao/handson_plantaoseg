@@ -59,6 +59,8 @@ Na PoC **não há dado pessoal real**. Em produção, a LGPD se aplica: base leg
 | Controles | Supervisão humana, explicabilidade, auditoria, monitoramento de viés, neutralidade econômica, dados pessoais fora do LLM |
 | Revisão | A cada mudança de modelo, de variáveis ou de segmento, e ao menos semestral |
 
+**Revalidada em 11/11/2026** contra o texto da resolução, fator por fator, em [classificação de risco](conformidade/classificacao-de-risco.md): o médio risco se sustenta, e a nota lista o que faria o risco subir. A análise da LGPD está em [lgpd.md](conformidade/lgpd.md).
+
 ## 5. Esboço da avaliação de impacto algorítmico (Anexo I, XIII)
 
 | Pergunta | Resposta na PoC |

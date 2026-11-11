@@ -4,6 +4,20 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 11/11/2026 (quarta), à noite: feedback da Entrega 3, LGPD e classificação de risco
+
+**Pedido do Victor:** "LGPD e risco".
+
+**O que foi lido:** o texto compilado da Lei 13.709/2018 no Planalto (definições, princípios, bases legais, direitos, art. 20, art. 33, relatório de impacto, segurança, incidentes, retenção e sanções) e o texto da Res. CFM 2.454 (art. 12 e 13 e os anexos II e III), extraído do PDF do DOU hospedado pela Fiocruz com o `pdftotext`. Das normas da ANPD (comunicação de incidentes e transferência internacional), só os resumos oficiais.
+
+**O que mudou:** duas notas em `docs/conformidade`, [lgpd.md](conformidade/lgpd.md) e [classificacao-de-risco.md](conformidade/classificacao-de-risco.md), e a leitura que o documento da Entrega 3 dizia não ter sido feita. A web ganhou, em "Minha conta", o nível de risco, o controlador, os direitos do titular e o botão "Baixar os meus dados" (acesso, art. 18, II); a ajuda e o FAQ tinham dois textos vencidos ("a tela do médico está em construção" e a contestação "ainda em construção"), corrigidos.
+
+**Resultado:** o **médio risco se sustenta** pelos fatores do art. 12 e pelo Anexo II; o baixo risco da Entrega 1 ignorava o impacto sobre quem é ranqueado. O art. 20 da LGPD provavelmente não se aplica (a decisão não é unicamente automatizada), mas passa a valer e o risco sobe se a oferta virar automática. O hospital é o controlador e a plataforma, a operadora; treinar um modelo para vários hospitais a tornaria controladora, e a saída é um modelo por hospital. A trilha imutável precisa de prazo de retenção e de uma forma de anonimizar o pseudônimo (art. 12, 15 e 16).
+
+**O que continua aberto:** tudo o que está marcado "validar com jurídico", o prazo de retenção, o plano de resposta a incidentes (3 dias úteis, resumo da ANPD), o teste de invasão e o relatório de impacto completo.
+
+**Uso de IA:** o Claude Code leu a lei e a resolução, confrontou cada ponto com o sistema, escreveu os textos, a tela e o teste, e deixou à vista o que não pôde confirmar.
+
 ## 11/11/2026 (quarta), à noite: feedback da Entrega 3, custo total e preço
 
 **Pedido do Victor:** "Custo total e preço".

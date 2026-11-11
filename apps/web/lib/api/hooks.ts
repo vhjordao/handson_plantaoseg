@@ -160,6 +160,21 @@ export function useFeedbackDaExplicacao() {
 
 // --- Médico e cascata (fase 4) --------------------------------------------------------------------
 
+/** Reúne o que o médico pode baixar sobre si (LGPD, art. 18, II): as ofertas e as contestações. */
+export function useMeusDados(medicoId: string) {
+  const apiCarregada = useApiCarregada();
+  return useMutation({
+    mutationFn: async () => {
+      const api = apiCarregada();
+      const [ofertas, contestacoes] = await Promise.all([
+        api.listarOfertas(medicoId),
+        api.listarContestacoes({ medicoId }),
+      ]);
+      return { ofertas, contestacoes };
+    },
+  });
+}
+
 /** Sem Realtime (D7 do ADR 0015): as telas da cascata e das ofertas consultam a cada 3 segundos. */
 export const INTERVALO_DE_CONSULTA_MS = 3_000;
 

@@ -330,9 +330,14 @@ export const PERGUNTAS: TemaDePerguntas[] = [
           "O texto da vaga é tratado como entrada hostil. Trechos que parecem instruções são detectados e, nesse caso, o modelo de linguagem nem é chamado. Em testes com dados sintéticos, as 60 tentativas de injeção foram sinalizadas, sem falso alarme em 340 pedidos normais.",
       },
       {
+        pergunta: "Que nível de risco o sistema tem?",
+        resposta:
+          "Médio, de forma preliminar, pela Res. CFM 2.454/2026: ele ordena pessoas e apoia uma decisão operacional importante, mas não executa nada sozinho, porque sem a aprovação do coordenador nenhuma oferta sai. A classificação formal é do hospital, e a análise está no repositório (docs/conformidade).",
+      },
+      {
         pergunta: "Posso contestar uma recomendação?",
         resposta:
-          "Sim, no desenho: o médico contesta e vê a resposta do coordenador. Ela ainda está em construção e entra no produto com registro no banco e na trilha de auditoria.",
+          "Sim. Em cada oferta, o médico contesta a recomendação, o coordenador responde por escrito, e a contestação e a resposta ficam na trilha de auditoria.",
       },
     ],
   },
