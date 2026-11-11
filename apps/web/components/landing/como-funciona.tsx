@@ -21,7 +21,7 @@ export function ComoFunciona() {
   return (
     <section id="como-funciona" aria-labelledby="titulo-como-funciona" className="border-t border-divisor">
       <div className="mx-auto w-full max-w-[1200px] px-4 py-14 sm:px-6 lg:py-20">
-        <h2 id="titulo-como-funciona" className="font-serif text-3xl font-semibold">
+        <h2 id="titulo-como-funciona" className="font-titulo text-3xl font-semibold">
           Oito etapas, uma decisão humana
         </h2>
         <p className="mt-3 max-w-[64ch] text-lg text-tinta-suave">
@@ -48,13 +48,13 @@ export function ComoFunciona() {
               />
               <span
                 aria-hidden="true"
-                className="tnum font-serif text-2xl leading-none font-semibold"
+                className="tnum font-titulo text-2xl leading-none font-semibold"
               >
                 {etapa.numero}
               </span>
               <div>
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                  <h3 className="font-serif text-xl font-semibold">{etapa.titulo}</h3>
+                  <h3 className="font-titulo text-xl font-semibold">{etapa.titulo}</h3>
                   <VozTag voz={etapa.voz}>{etapa.quem}</VozTag>
                 </div>
                 <p className="mt-1">{etapa.texto}</p>

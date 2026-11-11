@@ -60,10 +60,10 @@ export function CartaoDaOferta({
   const especialidade = ROTULO_ESPECIALIDADE[oferta.vaga.especialidade];
 
   return (
-    <article aria-labelledby={tituloId} className="rounded-cartao border border-divisor bg-papel p-5">
+    <article aria-labelledby={tituloId} className="superficie p-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h3 id={tituloId} className="font-serif text-2xl font-semibold">
+          <h3 id={tituloId} className="font-titulo text-2xl font-semibold">
             {especialidade}, {oferta.vaga.unidade.nome}
           </h3>
           <p className="mt-1 text-tinta-suave">

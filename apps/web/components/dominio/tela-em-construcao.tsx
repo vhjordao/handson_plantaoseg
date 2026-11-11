@@ -7,7 +7,7 @@ import { Alert } from "@/components/ui/alert";
 export function TelaEmConstrucao({ titulo, descricao }: { titulo: string; descricao: string }) {
   return (
     <div className="mx-auto w-full max-w-[720px]">
-      <h1 className="font-serif text-3xl font-semibold">{titulo}</h1>
+      <h1 className="font-titulo text-3xl font-semibold">{titulo}</h1>
       <Alert tone="info" title="Esta tela ainda está em construção" className="mt-5">
         {descricao}
       </Alert>

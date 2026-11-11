@@ -32,6 +32,8 @@ O mapa de tudo o que falta para o PlantãoSeguro funcionar de ponta a ponta, do 
 
 **Onde está a fase C (10/11):** o código está no PR da branch `f4/tela-medico`: no sistema real, o médico vê as ofertas com o "Por que você" e o prazo andando, aceita ou recusa com um dos quatro motivos e confirmação, contesta e acompanha a resposta, e o coordenador vê a cascata na tela da vaga, atualizada a cada 3 segundos. O modo de demonstração faz o mesmo caminho sem o servidor (4.6), numa aba só: o botão "Passar o prazo desta oferta" faz o papel do n8n, e a porta do médico mostra primeiro quem tem oferta esperando. Falta a conferência de ponta a ponta no sistema real ("o 1º recusa, o 2º deixa passar, o 3º aceita"), que precisa dos logins do Victor.
 
+**Onde está a fase E (10/11):** o Victor trouxe o modelo (F.1) e pediu a fase E antes da D. O código está no PR da branch `fE/visual-novo`: a base nova (F.2) em cores, raios, sombras, tipografia, componentes e as cascas do coordenador e do médico, nos dois temas. Como as telas usam os componentes e os tokens, a página inicial, a entrada, o coordenador e o médico mudaram juntos (F.3 a F.6). A revisão está na [direção de arte, seção 6](design/direcao-de-arte.md#6-revisão-da-fase-e-10112026-o-visual-novo). Quando a fase D fizer auditoria, contestações e equidade, elas já nascem no visual novo (F.7). Falta o Victor aprovar o visual na pré-visualização.
+
 **Ponto de atenção:** o visual novo vem depois das fases C e D. Para caber antes de 13/11, o modelo do Victor precisa chegar até cerca de 10/11. Se chegar depois, entra só a base (cores, tipografia e componentes), sem refazer o layout de cada tela ([seção 9](#9-riscos-e-o-que-cortar-primeiro)).
 
 ## 2. Onde estamos
@@ -144,8 +146,8 @@ Esta fase **não depende das anteriores** e pode começar já.
 
 *Pedido do Victor em 06/11: "melhorar o frontend por completo, desde a landing page até as páginas de dentro do produto".* O visual parte de um modelo que o Victor vai trazer. Por isso a trilha vem depois das fases 4 e 6 (fase E da seção 1): as telas novas são feitas no visual de hoje, e o modelo entra pela base, que muda todas as telas de uma vez. Não muda regra nem dado: a decisão humana, os rótulos de simulação, a acessibilidade e o modo de demonstração continuam.
 
-- [ ] **F.1** O Victor traz o modelo visual que tem em mente, até cerca de 10/11. O Claude Code não propõe direção por conta própria.
-- [ ] **F.2** O modelo vira a base: cores e espaços como variáveis, tipografia, componentes e as cascas do coordenador e do médico, nos temas claro e escuro.
+- [x] **F.1** O Victor traz o modelo visual que tem em mente, até cerca de 10/11. O Claude Code não propõe direção por conta própria. *Feito em 10/11: uma tela de painel médico como referência de linguagem, sem copiar a estrutura nem as funções.*
+- [x] **F.2** O modelo vira a base: cores e espaços como variáveis, tipografia, componentes e as cascas do coordenador e do médico, nos temas claro e escuro. *Feito em 10/11, no PR da fase E ([direção de arte, seção 6](design/direcao-de-arte.md#6-revisão-da-fase-e-10112026-o-visual-novo)).*
 - [ ] **F.3** A página inicial e a ajuda, contando o produto como a apresentação conta.
 - [ ] **F.4** A entrada só com login, no visual novo (a função vem no 3.7).
 - [ ] **F.5** As telas do coordenador: lista de vagas, nova vaga, sugestões e decisão.

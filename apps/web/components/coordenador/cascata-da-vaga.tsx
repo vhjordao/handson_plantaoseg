@@ -85,7 +85,7 @@ export function CascataDaVaga({ vaga }: { vaga: Vaga }) {
 
   return (
     <SuperficieVoz as="section" voz="humano" aria-labelledby="cascata-titulo" className="p-5">
-      <h2 id="cascata-titulo" className="font-serif text-2xl font-semibold">
+      <h2 id="cascata-titulo" className="font-titulo text-2xl font-semibold">
         {CASCATA.titulo}
       </h2>
       <p className="mt-1 max-w-[70ch] text-tinta-suave">{CASCATA.descricao}</p>

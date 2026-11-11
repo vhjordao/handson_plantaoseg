@@ -40,7 +40,7 @@ export function Opcoes<T extends string>({
           <label
             key={opcao.valor}
             htmlFor={id}
-            className="flex min-h-[var(--alvo-min)] cursor-pointer items-center gap-3 rounded-campo border border-campo bg-papel px-3 py-2 has-[:checked]:border-tinta has-[:checked]:font-semibold"
+            className="flex min-h-[var(--alvo-min)] cursor-pointer items-center gap-3 rounded-campo border border-campo bg-papel px-3.5 py-2 transition-[border-color,background-color] duration-150 hover:border-tinta-suave has-[:checked]:border-2 has-[:checked]:border-acento has-[:checked]:bg-acento-tom has-[:checked]:font-semibold"
           >
             <input
               id={id}

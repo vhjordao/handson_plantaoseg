@@ -33,7 +33,7 @@ describe("Button", () => {
       </>,
     );
     expect(screen.getByRole("button", { name: "Aprovar e oferecer" })).toHaveClass("bg-humano");
-    expect(screen.getByRole("button", { name: "Entrar" })).toHaveClass("bg-tinta");
+    expect(screen.getByRole("button", { name: "Entrar" })).toHaveClass("bg-acento");
   });
 
   it("carregando desabilita o clique, avisa por aria-busy e mantém o texto", async () => {

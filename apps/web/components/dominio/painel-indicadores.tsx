@@ -20,14 +20,14 @@ function Indicador({
   return (
     <div className="grid gap-1 px-4 py-3">
       <dt className="text-sm text-tinta-suave">{titulo}</dt>
-      <dd className="tnum font-serif text-3xl leading-none font-semibold">
+      <dd className="numero-destaque text-4xl leading-none text-tinta">
         {valor}
         {simulado ? (
           // O espaço de verdade (e não uma margem) deixa "simulado" descer para a linha de baixo
           // quando o número, ampliado, ocupa a largura toda.
           <>
             {" "}
-            <span className="font-sans text-sm font-normal text-tinta-suave">simulado</span>
+            <span className="text-sm font-normal tracking-normal text-tinta-suave">simulado</span>
           </>
         ) : null}
       </dd>
@@ -45,10 +45,10 @@ export function PainelIndicadores({ indicadores }: { indicadores: Indicadores })
   return (
     <section
       aria-labelledby="indicadores-titulo"
-      className="rounded-cartao border border-divisor bg-papel"
+      className="superficie"
     >
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-divisor px-4 py-3">
-        <h2 id="indicadores-titulo" className="font-serif text-xl font-semibold">
+        <h2 id="indicadores-titulo" className="font-titulo text-xl font-semibold">
           Indicadores da demonstração
         </h2>
         <Badge tone="neutro">Simulado</Badge>
@@ -108,7 +108,7 @@ export function PainelIndicadores({ indicadores }: { indicadores: Indicadores })
 
 export function PainelIndicadoresCarregando() {
   return (
-    <div role="status" className="rounded-cartao border border-divisor bg-papel p-4">
+    <div role="status" className="superficie p-4">
       <span className="sr-only">Carregando os indicadores…</span>
       <Skeleton className="h-6 w-64" />
       <div className="mt-4 grid gap-3 sm:grid-cols-3">

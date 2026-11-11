@@ -52,7 +52,7 @@ export function MenuMobile({
               <Link
                 href="/ajuda"
                 onClick={() => setAberto(false)}
-                className="flex min-h-[var(--alvo-min)] items-center gap-3 rounded-campo px-3 py-2 text-base font-medium hover:bg-tinta/10"
+                className="flex min-h-[var(--alvo-min)] items-center gap-3 rounded-campo px-3 py-2 text-base font-medium hover:bg-tinta/[0.06]"
               >
                 <CircleHelp aria-hidden="true" className="size-5" />
                 Ajuda

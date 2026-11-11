@@ -1,33 +1,47 @@
 @import "tailwindcss";
 
 /*
- * Tokens do PlantãoSeguro (docs/design/direcao-de-arte.md).
+ * Tokens do PlantãoSeguro (docs/design/direcao-de-arte.md, revisão da fase E em 10/11/2026).
  * Fonte única das cores: `npm run check:contraste` lê este arquivo e confere os contrastes.
- * As três vozes: ia (tracejado, cobalto), humano (contínuo, verde) e regra (cinza).
+ * As três vozes continuam: ia (tracejado, anil), humano (contínuo, verde) e regra (cinza).
+ * O azul de ação (`acento`) é da interação: botão principal, item atual, foco e link.
  */
 :root {
-  --gaze: #f4f6f5;
+  --gaze: #edf1f6;
   --papel: #ffffff;
-  --tinta: #12202b;
-  --tinta-suave: #4a5967;
-  --ia: #2c4fd6;
-  --ia-tom: #eaeffd;
-  --ia-forte: #2340b0;
-  --fator-favor: #2c4fd6;
+  --recuo: #f5f7fb;
+  --tinta: #101d2b;
+  --tinta-suave: #4a596a;
+  --acento: #1d62d6;
+  --acento-tom: #e9f0fc;
+  --acento-forte: #1650b2;
+  --ia: #4046c4;
+  --ia-tom: #eeeffd;
+  --ia-forte: #2f349f;
+  --fator-favor: #4046c4;
   --fator-contra: #a8467a;
   --humano: #0b6b4d;
-  --humano-tom: #e4f3ec;
+  --humano-tom: #e3f4ec;
   --atencao: #8a5300;
-  --atencao-tom: #fff1d6;
+  --atencao-tom: #fff3dc;
   --atencao-fundo: #f2b33d;
   --erro: #b42318;
-  --erro-tom: #fdecea;
-  --campo: #76858f;
-  --divisor: #d5dce1;
-  --foco: #12202b;
+  --erro-tom: #fdeceb;
+  --campo: #758396;
+  --divisor: #dfe5ed;
+  --foco: #1d62d6;
   --sobre-tinta: #ffffff;
+  --sobre-acento: #ffffff;
   --sobre-humano: #ffffff;
-  --sobre-atencao: #12202b;
+  --sobre-atencao: #101d2b;
+
+  /* Profundidade: sombras largas e muito suaves, quase só uma separação do fundo. */
+  --sombra-cartao: 0 1px 2px rgb(16 29 43 / 0.04), 0 6px 20px -8px rgb(16 29 43 / 0.1);
+  --sombra-flutuante: 0 2px 6px rgb(16 29 43 / 0.06), 0 18px 40px -12px rgb(16 29 43 / 0.22);
+  --sombra-botao: 0 1px 2px rgb(16 29 43 / 0.08), 0 2px 8px -2px rgb(29 98 214 / 0.35);
+  /* A luz difusa no alto da página: azul de ação e anil da IA, bem diluídos. */
+  --brilho-a: rgb(29 98 214 / 0.1);
+  --brilho-b: rgb(64 70 196 / 0.07);
 
   /* Alvo mínimo de toque: 40 px com mouse, 44 px com o dedo (WCAG 2.5.8). */
   --alvo-min: 2.5rem;
@@ -43,56 +57,76 @@
 /* Escuro: segue o sistema, ou data-theme="dark". */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --gaze: #0c141c;
-    --papel: #142230;
-    --tinta: #eaf0f5;
-    --tinta-suave: #9fb0bf;
-    --ia: #8ea6ff;
-    --ia-tom: #1a2547;
-    --ia-forte: #b6c4ff;
-    --fator-favor: #6f8bf0;
+    --gaze: #0a121b;
+    --papel: #111c28;
+    --recuo: #0e1822;
+    --tinta: #e8eef5;
+    --tinta-suave: #9eafc1;
+    --acento: #72aaff;
+    --acento-tom: #13294a;
+    --acento-forte: #b0cfff;
+    --ia: #a9adff;
+    --ia-tom: #1c1e48;
+    --ia-forte: #cacdff;
+    --fator-favor: #8d92f6;
     --fator-contra: #d0699f;
     --humano: #5fd3a3;
-    --humano-tom: #12372b;
+    --humano-tom: #11352a;
     --atencao: #f2b33d;
-    --atencao-tom: #3a2c10;
+    --atencao-tom: #392b10;
     --atencao-fundo: #f2b33d;
     --erro: #ff8a80;
-    --erro-tom: #3d1a17;
-    --campo: #5c7186;
-    --divisor: #24384a;
-    --foco: #eaf0f5;
-    --sobre-tinta: #0c141c;
-    --sobre-humano: #0c141c;
-    --sobre-atencao: #12202b;
+    --erro-tom: #3c1a17;
+    --campo: #5f748a;
+    --divisor: #213244;
+    --foco: #72aaff;
+    --sobre-tinta: #0a121b;
+    --sobre-acento: #0a121b;
+    --sobre-humano: #0a121b;
+    --sobre-atencao: #101d2b;
+    --sombra-cartao: 0 0 0 1px rgb(255 255 255 / 0.02), 0 8px 24px -12px rgb(0 0 0 / 0.6);
+    --sombra-flutuante: 0 0 0 1px rgb(255 255 255 / 0.04), 0 20px 44px -12px rgb(0 0 0 / 0.75);
+    --sombra-botao: 0 1px 2px rgb(0 0 0 / 0.4);
+    --brilho-a: rgb(114 170 255 / 0.08);
+    --brilho-b: rgb(169 173 255 / 0.05);
     color-scheme: dark;
   }
 }
 
 :root[data-theme="dark"],
 [data-theme="dark"] {
-  --gaze: #0c141c;
-  --papel: #142230;
-  --tinta: #eaf0f5;
-  --tinta-suave: #9fb0bf;
-  --ia: #8ea6ff;
-  --ia-tom: #1a2547;
-  --ia-forte: #b6c4ff;
-  --fator-favor: #6f8bf0;
+  --gaze: #0a121b;
+  --papel: #111c28;
+  --recuo: #0e1822;
+  --tinta: #e8eef5;
+  --tinta-suave: #9eafc1;
+  --acento: #72aaff;
+  --acento-tom: #13294a;
+  --acento-forte: #b0cfff;
+  --ia: #a9adff;
+  --ia-tom: #1c1e48;
+  --ia-forte: #cacdff;
+  --fator-favor: #8d92f6;
   --fator-contra: #d0699f;
   --humano: #5fd3a3;
-  --humano-tom: #12372b;
+  --humano-tom: #11352a;
   --atencao: #f2b33d;
-  --atencao-tom: #3a2c10;
+  --atencao-tom: #392b10;
   --atencao-fundo: #f2b33d;
   --erro: #ff8a80;
-  --erro-tom: #3d1a17;
-  --campo: #5c7186;
-  --divisor: #24384a;
-  --foco: #eaf0f5;
-  --sobre-tinta: #0c141c;
-  --sobre-humano: #0c141c;
-  --sobre-atencao: #12202b;
+  --erro-tom: #3c1a17;
+  --campo: #5f748a;
+  --divisor: #213244;
+  --foco: #72aaff;
+  --sobre-tinta: #0a121b;
+  --sobre-acento: #0a121b;
+  --sobre-humano: #0a121b;
+  --sobre-atencao: #101d2b;
+  --sombra-cartao: 0 0 0 1px rgb(255 255 255 / 0.02), 0 8px 24px -12px rgb(0 0 0 / 0.6);
+  --sombra-flutuante: 0 0 0 1px rgb(255 255 255 / 0.04), 0 20px 44px -12px rgb(0 0 0 / 0.75);
+  --sombra-botao: 0 1px 2px rgb(0 0 0 / 0.4);
+  --brilho-a: rgb(114 170 255 / 0.08);
+  --brilho-b: rgb(169 173 255 / 0.05);
   color-scheme: dark;
 }
 
@@ -106,8 +140,13 @@
 @theme inline {
   --color-gaze: var(--gaze);
   --color-papel: var(--papel);
+  --color-recuo: var(--recuo);
   --color-tinta: var(--tinta);
   --color-tinta-suave: var(--tinta-suave);
+  --color-acento: var(--acento);
+  --color-acento-tom: var(--acento-tom);
+  --color-acento-forte: var(--acento-forte);
+  --color-sobre-acento: var(--sobre-acento);
   --color-ia: var(--ia);
   --color-ia-tom: var(--ia-tom);
   --color-ia-forte: var(--ia-forte);
@@ -129,12 +168,15 @@
 
   /* As classes das fontes ficam no <html> (app/layout.tsx), então o var() resolve. */
   --font-sans: var(--font-atkinson), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-source-serif), ui-serif, Georgia, serif;
 
   /* Raios por hierarquia: campo e botão, cartão, diálogo. */
-  --radius-campo: 6px;
-  --radius-cartao: 10px;
-  --radius-dialogo: 16px;
+  --radius-campo: 10px;
+  --radius-cartao: 18px;
+  --radius-dialogo: 24px;
+
+  --shadow-cartao: var(--sombra-cartao);
+  --shadow-flutuante: var(--sombra-flutuante);
+  --shadow-botao: var(--sombra-botao);
 
   /* Escala: 13, 14, 16, 18, 22, 28, 36, 48 (docs/design/direcao-de-arte.md). */
   --text-xs: 0.8125rem;
@@ -175,6 +217,11 @@
 
   body {
     background-color: var(--gaze);
+    /* A luz difusa fica presa ao alto da janela: some ao rolar, sem competir com o conteúdo. */
+    background-image:
+      radial-gradient(70rem 32rem at 100% -8rem, var(--brilho-a), transparent 70%),
+      radial-gradient(48rem 28rem at -10% -6rem, var(--brilho-b), transparent 70%);
+    background-repeat: no-repeat;
     color: var(--tinta);
     font-family: var(--font-sans);
     font-size: 1rem;
@@ -192,8 +239,9 @@
   h1,
   h2,
   h3 {
-    font-family: var(--font-serif);
+    font-family: var(--font-sans);
     font-weight: 600;
+    letter-spacing: -0.015em;
     text-wrap: balance;
     /*
      * Com a letra muito ampliada, uma palavra longa de título ("transparência") quebra em vez de
@@ -216,6 +264,38 @@
   button {
     touch-action: manipulation;
   }
+}
+
+/*
+ * Títulos e números de destaque: a mesma Atkinson Hyperlegible Next da interface, mais
+ * fechada. Uma família só; a hierarquia vem do peso e do tamanho.
+ */
+@utility font-titulo {
+  font-family: var(--font-sans);
+  letter-spacing: -0.015em;
+}
+
+/* Número grande de painel: leve e largo, como um mostrador. */
+@utility numero-destaque {
+  font-family: var(--font-sans);
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* A superfície neutra de sempre: papel, borda discreta, raio de cartão e sombra larga e suave. */
+@utility superficie {
+  border-radius: var(--radius-cartao);
+  border: 1px solid var(--divisor);
+  background-color: var(--papel);
+  box-shadow: var(--sombra-cartao);
+}
+
+/* Barra translúcida (cabeçalhos fixos): o conteúdo passa por baixo, desfocado. */
+@utility vidro {
+  background-color: color-mix(in srgb, var(--gaze) 78%, transparent);
+  -webkit-backdrop-filter: saturate(1.4) blur(14px);
+  backdrop-filter: saturate(1.4) blur(14px);
 }
 
 /* Números em colunas e contadores alinham pelo mesmo traço. */

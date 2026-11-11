@@ -21,7 +21,7 @@ export default async function Entrar({ searchParams }: PageProps<"/entrar">) {
 
   return (
     <div className="mx-auto w-full max-w-[1200px] px-4 py-10 sm:px-6 lg:py-16">
-      <h1 className="font-serif text-4xl font-semibold lg:text-5xl">Entrar</h1>
+      <h1 className="font-titulo text-4xl font-semibold lg:text-5xl">Entrar</h1>
       <p className="mt-3 max-w-[60ch] text-lg text-tinta-suave">
         Entre com o e-mail e a senha do seu login. {AVISO_DADOS_REAIS}
       </p>

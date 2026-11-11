@@ -64,7 +64,7 @@ export function SugestaoCard({
   if (estado.tipo === "pulado") {
     return (
       <li className="grid grid-cols-[2rem_minmax(0,1fr)] gap-x-3 border-t border-divisor px-4 py-3 md:px-5">
-        <span aria-hidden="true" className="tnum font-serif text-xl text-tinta-suave">
+        <span aria-hidden="true" className="tnum font-titulo text-xl text-tinta-suave">
           {candidato.posicao}
         </span>
         <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
@@ -107,7 +107,7 @@ export function SugestaoCard({
     >
       <div className="flex flex-wrap items-start justify-between gap-x-3 gap-y-1">
         <div className="flex min-w-0 gap-3">
-          <span aria-hidden="true" className="tnum w-8 shrink-0 font-serif text-2xl leading-8 font-semibold">
+          <span aria-hidden="true" className="tnum inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-divisor bg-papel text-lg font-semibold text-ia-forte shadow-cartao">
             {candidato.posicao}
           </span>
           <div className="min-w-0">

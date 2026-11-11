@@ -73,7 +73,7 @@ export default async function EntrarNaDemonstracao({
 
   return (
     <div className="mx-auto w-full max-w-[1200px] px-4 py-10 sm:px-6 lg:py-16">
-      <h1 className="font-serif text-4xl font-semibold lg:text-5xl">Modo de demonstração</h1>
+      <h1 className="font-titulo text-4xl font-semibold lg:text-5xl">Modo de demonstração</h1>
       <p className="mt-3 max-w-[60ch] text-lg text-tinta-suave">
         Sem senha e sem servidor: você entra com uma pessoa fictícia, e nada passa pela API nem
         pelo banco. {AVISO_DADOS_REAIS}

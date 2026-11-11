@@ -41,7 +41,7 @@ export function ErrorSummary({
       className={cn("rounded-cartao border-2 border-erro bg-erro-tom p-4 text-tinta", className)}
     >
       <div role="alert">
-        <h2 className="flex items-center gap-2 font-serif text-xl font-semibold text-erro">
+        <h2 className="flex items-center gap-2 font-titulo text-xl font-semibold text-erro">
           <CircleAlert aria-hidden="true" className="size-5 shrink-0" />
           {titulo}
         </h2>

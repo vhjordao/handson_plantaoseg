@@ -18,7 +18,7 @@ const ANCORAS = [
  */
 export function CabecalhoPublico({ enxuto = false }: { enxuto?: boolean }) {
   return (
-    <header className="sticky top-0 z-40 border-b border-divisor bg-gaze">
+    <header className="vidro sticky top-0 z-40 border-b border-divisor">
       <div className="@container mx-auto flex min-h-16 w-full max-w-[1200px] flex-wrap items-center justify-between gap-x-2 gap-y-2 px-4 py-2 sm:gap-x-4 sm:px-6">
         <Link
           href="/"

@@ -17,7 +17,7 @@ export function Perguntas() {
   return (
     <section id="perguntas" aria-labelledby="titulo-perguntas" className="border-t border-divisor">
       <div className="mx-auto w-full max-w-[1200px] px-4 py-14 sm:px-6 lg:py-20">
-        <h2 id="titulo-perguntas" className="font-serif text-3xl font-semibold">
+        <h2 id="titulo-perguntas" className="font-titulo text-3xl font-semibold">
           Perguntas, por tema
         </h2>
         <Tabs

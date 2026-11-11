@@ -11,7 +11,7 @@ export function Dores() {
       className="border-t border-divisor"
     >
       <div className="mx-auto w-full max-w-[1200px] px-4 py-14 sm:px-6 lg:py-20">
-        <h2 id="titulo-dores" className="font-serif text-3xl font-semibold">
+        <h2 id="titulo-dores" className="font-titulo text-3xl font-semibold">
           O que queremos resolver
         </h2>
         <p className="mt-3 max-w-[60ch] text-lg text-tinta-suave">
@@ -23,7 +23,7 @@ export function Dores() {
               key={dor.dor}
               className="grid gap-2 py-5 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)_minmax(0,1.2fr)] md:items-start md:gap-8"
             >
-              <h3 className="font-serif text-xl font-semibold">{dor.dor}</h3>
+              <h3 className="font-titulo text-xl font-semibold">{dor.dor}</h3>
               <p>
                 {dor.resposta}
                 {dor.detalhe ? (

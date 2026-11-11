@@ -41,8 +41,8 @@ export function CascaCoordenador({
     <>
       <FaixaDemonstracao />
       <div className="flex flex-1">
-        <aside className="sticky top-0 hidden h-dvh w-16 shrink-0 flex-col border-r border-divisor bg-papel md:flex lg:w-[248px]">
-          <div className="flex h-14 items-center justify-center border-b border-divisor px-3 lg:justify-start lg:px-4">
+        <aside className="sticky top-0 hidden h-dvh w-[72px] shrink-0 flex-col border-r border-divisor bg-papel/85 md:flex lg:w-[256px]">
+          <div className="flex h-16 items-center justify-center px-3 lg:justify-start lg:px-5">
             <Link
               href="/coordenador/vagas"
               aria-label="PlantãoSeguro, início da plataforma"
@@ -56,7 +56,7 @@ export function CascaCoordenador({
               </span>
             </Link>
           </div>
-          <nav aria-label="Principal" className="flex-1 overflow-y-auto p-2">
+          <nav aria-label="Principal" className="flex-1 overflow-y-auto px-3 py-2">
             <Suspense fallback={null}>
               <ul className="grid gap-1">
                 {itensDaArea("coordenador").map((item) => (
@@ -70,7 +70,7 @@ export function CascaCoordenador({
         </aside>
 
         <div className="flex min-w-0 flex-1 flex-col">
-          <header className="sticky top-0 z-30 flex min-h-14 flex-wrap items-center gap-2 border-b border-divisor bg-gaze px-3 py-1 sm:px-4">
+          <header className="vidro sticky top-0 z-30 flex min-h-16 flex-wrap items-center gap-2 border-b border-divisor px-3 py-1.5 sm:px-6">
             <Suspense fallback={null}>
               <MenuMobile area="coordenador" className="md:hidden" />
             </Suspense>
@@ -92,7 +92,11 @@ export function CascaCoordenador({
             <UserMenu nome={persona.nome} descricao={`${persona.cargo}, ${persona.unidade.nome}`} />
           </header>
 
-          <main id="conteudo" tabIndex={-1} className="flex-1 p-4 outline-none md:p-6">
+          <main
+            id="conteudo"
+            tabIndex={-1}
+            className="mx-auto w-full max-w-[1320px] flex-1 p-4 outline-none md:p-6 lg:p-8"
+          >
             <p className="mb-4 text-sm text-tinta-suave sm:hidden">
               {hospital}. {agora}.
             </p>

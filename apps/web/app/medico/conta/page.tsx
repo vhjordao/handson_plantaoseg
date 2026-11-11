@@ -50,7 +50,7 @@ export default async function MinhaConta() {
   return (
     <div className="grid gap-8">
       <div>
-        <h1 className="font-serif text-3xl font-semibold">Minha conta e transparência</h1>
+        <h1 className="font-titulo text-3xl font-semibold">Minha conta e transparência</h1>
         <p className="mt-2 text-tinta-suave">
           O que o sistema sabe sobre você, o que usa e o que nunca usa.
         </p>
@@ -58,7 +58,7 @@ export default async function MinhaConta() {
 
       {medico ? (
         <Card className="p-4">
-          <h2 className="font-serif text-xl font-semibold">{medico.nome}</h2>
+          <h2 className="font-titulo text-xl font-semibold">{medico.nome}</h2>
           <p className="mt-1 text-tinta-suave">
             {ROTULO_ESPECIALIDADE[medico.especialidade]}
             {medico.especialidadeSecundaria
@@ -73,7 +73,7 @@ export default async function MinhaConta() {
       ) : null}
 
       <section aria-labelledby="conta-usa">
-        <h2 id="conta-usa" className="font-serif text-xl font-semibold">
+        <h2 id="conta-usa" className="font-titulo text-xl font-semibold">
           O que o sistema usa para sugerir você
         </h2>
         <ul role="list" className="mt-3 divide-y divide-divisor border-y border-divisor">
@@ -87,7 +87,7 @@ export default async function MinhaConta() {
       </section>
 
       <section aria-labelledby="conta-nao-usa">
-        <h2 id="conta-nao-usa" className="font-serif text-xl font-semibold">
+        <h2 id="conta-nao-usa" className="font-titulo text-xl font-semibold">
           O que o sistema não usa
         </h2>
         <ul role="list" className="mt-3 divide-y divide-divisor border-y border-divisor">
@@ -101,7 +101,7 @@ export default async function MinhaConta() {
       </section>
 
       <section aria-labelledby="conta-revisao">
-        <h2 id="conta-revisao" className="font-serif text-xl font-semibold">
+        <h2 id="conta-revisao" className="font-titulo text-xl font-semibold">
           Como pedir revisão humana
         </h2>
         <p className="mt-2 max-w-[62ch]">

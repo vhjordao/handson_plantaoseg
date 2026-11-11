@@ -117,7 +117,7 @@ export function OrdemSugerida({
       <div className="grid grid-cols-1 gap-3 p-4 md:px-5">
         <div>
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <h2 id="ordem-titulo" ref={tituloRef} tabIndex={-1} className="font-serif text-xl font-semibold outline-none">
+            <h2 id="ordem-titulo" ref={tituloRef} tabIndex={-1} className="font-titulo text-xl font-semibold outline-none">
               {ORDEM.titulo(recomendacao.candidatos.length, recomendacao.totalElegiveis)}
             </h2>
             <VozTag voz={decisao ? "humano" : "ia"} />

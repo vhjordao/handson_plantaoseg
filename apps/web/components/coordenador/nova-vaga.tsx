@@ -204,12 +204,12 @@ export function NovaVaga({ rascunhoId }: { rascunhoId: string | null }) {
     <div className="mx-auto grid w-full max-w-[760px] grid-cols-1 gap-6">
       <ErrorSummary erros={erros} />
       <InicioDaVaga>
-        <h1 className="font-serif text-3xl font-semibold">{NOVA_VAGA.titulo}</h1>
+        <h1 className="font-titulo text-3xl font-semibold">{NOVA_VAGA.titulo}</h1>
         <p className="mt-1 max-w-[60ch] text-tinta-suave">{NOVA_VAGA.apresentacao}</p>
       </InicioDaVaga>
 
-      <section aria-labelledby="escrever-titulo" className="grid grid-cols-1 gap-4">
-        <h2 id="escrever-titulo" className="font-serif text-xl font-semibold">
+      <section aria-labelledby="escrever-titulo" className="superficie grid grid-cols-1 gap-4 p-5 sm:p-6">
+        <h2 id="escrever-titulo" className="font-titulo text-xl font-semibold">
           {NOVA_VAGA.tituloEscrever}
         </h2>
         {rascunho ? <Alert tone="info">{NOVA_VAGA.continuandoRascunho}</Alert> : null}
@@ -282,10 +282,10 @@ export function NovaVaga({ rascunhoId }: { rascunhoId: string | null }) {
       </section>
 
       {conferencia ? (
-        <form noValidate onSubmit={(evento) => void confirmarAVaga(evento)} aria-labelledby="conferir-titulo" className="grid grid-cols-1 gap-4 border-t border-divisor pt-6">
+        <form noValidate onSubmit={(evento) => void confirmarAVaga(evento)} aria-labelledby="conferir-titulo" className="superficie grid grid-cols-1 gap-4 p-5 sm:p-6">
           <div>
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <h2 id="conferir-titulo" ref={conferirRef} tabIndex={-1} className="font-serif text-xl font-semibold outline-none">
+              <h2 id="conferir-titulo" ref={conferirRef} tabIndex={-1} className="font-titulo text-xl font-semibold outline-none">
                 {leitura ? NOVA_VAGA.tituloConferir : NOVA_VAGA.tituloPreencher}
               </h2>
               {leitura ? (
@@ -315,7 +315,7 @@ export function NovaVaga({ rascunhoId }: { rascunhoId: string | null }) {
           ) : null}
 
           {leitura ? (
-            <div className="rounded-cartao border border-divisor bg-papel p-3">
+            <div className="superficie p-3">
               <p className="mb-1 text-sm text-tinta-suave">{NOVA_VAGA.oQueFoiLido}</p>
               <TextoComTrechos
                 texto={leitura.texto}

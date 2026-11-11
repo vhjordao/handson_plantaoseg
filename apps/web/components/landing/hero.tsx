@@ -20,7 +20,7 @@ export function Hero() {
       <div className="flex flex-col gap-6 lg:pt-6">
         <h1
           id="titulo-hero"
-          className="font-serif text-[clamp(2.75rem,8vw,4.5rem)] leading-[1.04] font-semibold tracking-tight"
+          className="font-titulo text-[clamp(2.75rem,8vw,4.5rem)] leading-[1.04] font-semibold tracking-tight"
         >
           {HERO.titulo.map((linha) => (
             <span key={linha} className="block">

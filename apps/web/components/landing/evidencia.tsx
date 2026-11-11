@@ -12,7 +12,7 @@ export function Evidencia() {
   return (
     <section id="evidencia" aria-labelledby="titulo-evidencia" className="border-t border-divisor">
       <div className="mx-auto w-full max-w-[1200px] px-4 py-14 sm:px-6 lg:py-20">
-        <h2 id="titulo-evidencia" className="max-w-[28ch] font-serif text-3xl font-semibold">
+        <h2 id="titulo-evidencia" className="max-w-[28ch] font-titulo text-3xl font-semibold">
           {EVIDENCIA.titulo}
         </h2>
 
@@ -32,7 +32,7 @@ export function Evidencia() {
                       style={{ width: `${(barra.minutos / MAXIMO) * 100}%` }}
                     />
                   </div>
-                  <span className="tnum w-12 shrink-0 text-right font-serif text-xl font-semibold">
+                  <span className="tnum w-12 shrink-0 text-right font-titulo text-xl font-semibold">
                     {formatarInteiro(barra.minutos)}
                   </span>
                 </div>
@@ -51,7 +51,7 @@ export function Evidencia() {
               </li>
             ) : (
               <li key={achado.titulo}>
-                <h3 className="font-serif text-xl font-semibold">{achado.titulo}</h3>
+                <h3 className="font-titulo text-xl font-semibold">{achado.titulo}</h3>
                 <p className="mt-1 text-tinta-suave">{achado.texto}</p>
               </li>
             ),

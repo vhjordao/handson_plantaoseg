@@ -54,9 +54,9 @@ export function EntrarComLogin({ de }: { de?: string }) {
   return (
     <section
       aria-labelledby="titulo-login"
-      className="mt-10 max-w-[44rem] rounded-cartao border border-divisor bg-papel p-5"
+      className="mt-10 max-w-[44rem] superficie p-5"
     >
-      <h2 id="titulo-login" className="font-serif text-2xl font-semibold">
+      <h2 id="titulo-login" className="font-titulo text-2xl font-semibold">
         E-mail e senha
       </h2>
       <p className="mt-2 text-tinta-suave">

@@ -22,7 +22,7 @@ export function TelaDeOfertas({ medicoId }: { medicoId: string }) {
 
   const cabecalho = (
     <header>
-      <h1 className="font-serif text-3xl font-semibold">{OFERTAS.titulo}</h1>
+      <h1 className="font-titulo text-3xl font-semibold">{OFERTAS.titulo}</h1>
       <p className="mt-2 max-w-[70ch] text-tinta-suave">{OFERTAS.descricao}</p>
     </header>
   );
@@ -80,7 +80,7 @@ export function TelaDeOfertas({ medicoId }: { medicoId: string }) {
       {regiaoDeAviso}
 
       <section aria-labelledby="ofertas-abertas" className="grid gap-4">
-        <h2 id="ofertas-abertas" className="font-serif text-2xl font-semibold">
+        <h2 id="ofertas-abertas" className="font-titulo text-2xl font-semibold">
           {abertas.length > 0 ? OFERTAS.abertasTitulo : OFERTAS.semAbertasTitulo}
         </h2>
         {abertas.length > 0 ? (
@@ -100,7 +100,7 @@ export function TelaDeOfertas({ medicoId }: { medicoId: string }) {
       </section>
 
       <section aria-labelledby="ofertas-encerradas" className="grid gap-4">
-        <h2 id="ofertas-encerradas" className="font-serif text-2xl font-semibold">
+        <h2 id="ofertas-encerradas" className="font-titulo text-2xl font-semibold">
           {OFERTAS.historicoTitulo}
         </h2>
         {encerradas.length > 0 ? (

@@ -51,8 +51,8 @@ function ResumoDeAcao({ vagas }: { vagas: Vaga[] }) {
   ].filter((item) => item.n > 0);
 
   return (
-    <section aria-labelledby="acao-titulo" className="rounded-cartao border border-divisor bg-papel p-4">
-      <h2 id="acao-titulo" className="font-serif text-xl font-semibold">
+    <section aria-labelledby="acao-titulo" className="superficie p-4">
+      <h2 id="acao-titulo" className="font-titulo text-xl font-semibold">
         {itens.length > 0 ? "Exigem a sua ação" : "Nada exige a sua ação agora"}
       </h2>
       {itens.length > 0 ? (
@@ -81,7 +81,7 @@ function LinhaDeVaga({ vaga }: { vaga: Vaga }) {
     <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:gap-6">
       <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-          <h3 id={`vaga-${vaga.id}-titulo`} className="font-serif text-xl font-semibold">
+          <h3 id={`vaga-${vaga.id}-titulo`} className="font-titulo text-xl font-semibold">
             {vaga.especialidade ? ROTULO_ESPECIALIDADE[vaga.especialidade] : "Vaga sem especialidade"}
           </h3>
           <EtiquetasDaVaga vaga={vaga} />
@@ -119,7 +119,7 @@ function LinhaDeVaga({ vaga }: { vaga: Vaga }) {
       {corpo}
     </SuperficieVoz>
   ) : (
-    <li className="rounded-cartao border border-divisor bg-papel p-3 md:px-4">{corpo}</li>
+    <li className="superficie p-3 md:px-4">{corpo}</li>
   );
 }
 
@@ -176,7 +176,7 @@ export function ListaDeVagas() {
           Lista de vagas
         </h2>
         <nav aria-label="Filtrar as vagas">
-          <ul role="list" className="flex flex-wrap gap-2">
+          <ul role="list" className="flex w-fit max-w-full flex-wrap gap-1 rounded-campo border border-divisor bg-recuo p-1">
             {FILTROS.map((filtro) => {
               const ativo = filtro.id === escolhido.id;
               const total = vagas.filter(filtro.serve).length;
@@ -186,10 +186,10 @@ export function ListaDeVagas() {
                     href={filtro.id === "todas" ? "/coordenador/vagas" : `?status=${filtro.id}`}
                     aria-current={ativo ? "true" : undefined}
                     className={cn(
-                      "inline-flex min-h-[var(--alvo-min)] items-center gap-2 rounded-campo border px-3 text-base",
+                      "inline-flex min-h-[var(--alvo-min)] items-center gap-2 rounded-[8px] border px-3 text-base transition-[background-color,color,box-shadow] duration-150",
                       ativo
-                        ? "border-tinta bg-papel font-semibold"
-                        : "border-transparent font-medium text-tinta-suave hover:bg-tinta/10 hover:text-tinta",
+                        ? "border-divisor bg-papel font-semibold text-acento-forte shadow-cartao"
+                        : "border-transparent font-medium text-tinta-suave hover:text-tinta",
                     )}
                   >
                     {filtro.rotulo}

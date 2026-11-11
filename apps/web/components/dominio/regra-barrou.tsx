@@ -33,7 +33,7 @@ export function RegraBarrou({
     <SuperficieVoz as="section" voz="regra" aria-labelledby="fora-titulo" className={className}>
       <div className="grid gap-2 p-4">
         <VozTag voz="regra" className="justify-self-start" />
-        <h2 id="fora-titulo" className="font-serif text-xl font-semibold">
+        <h2 id="fora-titulo" className="font-titulo text-xl font-semibold">
           {QUEM_FICOU_DE_FORA.titulo}
         </h2>
         <p className="text-sm text-tinta-suave">

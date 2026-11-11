@@ -88,7 +88,7 @@ export function HeroDemo() {
       className="rounded-dialogo border border-divisor bg-papel p-4 sm:p-5"
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="font-serif text-xl font-semibold">Nova vaga</h2>
+        <h2 className="font-titulo text-xl font-semibold">Nova vaga</h2>
         <Badge tone="neutro">Exemplo da simulação</Badge>
       </div>
 
@@ -158,7 +158,7 @@ export function HeroDemo() {
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div className="flex items-baseline gap-3">
                     <span
-                      className="tnum font-serif text-2xl leading-none font-semibold"
+                      className="tnum font-titulo text-2xl leading-none font-semibold"
                       aria-hidden="true"
                     >
                       {sugestao.posicao}

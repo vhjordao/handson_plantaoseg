@@ -7,7 +7,7 @@ export function Label({ className, ...props }: React.ComponentProps<"label">) {
 }
 
 const controle =
-  "w-full rounded-campo border border-campo bg-papel px-3 py-2 text-base text-tinta placeholder:text-tinta-suave disabled:opacity-60 aria-[invalid=true]:border-2 aria-[invalid=true]:border-erro";
+  "w-full rounded-campo border border-campo bg-papel px-3.5 py-2 text-base text-tinta shadow-[inset_0_1px_2px_rgb(16_29_43/0.05)] transition-[border-color,box-shadow] duration-150 placeholder:text-tinta-suave hover:border-tinta-suave focus-visible:border-acento focus-visible:shadow-[0_0_0_4px_var(--acento-tom)] disabled:opacity-60 aria-[invalid=true]:border-2 aria-[invalid=true]:border-erro";
 
 export function Input({ className, ...props }: React.ComponentProps<"input">) {
   return (

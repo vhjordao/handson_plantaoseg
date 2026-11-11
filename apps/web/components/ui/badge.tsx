@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
  * `ia` usa contorno tracejado e `humano`, contínuo, como as vozes da interface.
  */
 const badgeVariants = cva(
-  "inline-flex items-center gap-1.5 rounded-campo border px-2 py-0.5 text-sm leading-5 font-medium [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-sm leading-5 font-medium [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       tone: {

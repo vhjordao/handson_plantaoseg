@@ -15,7 +15,7 @@ export const DialogTrigger = DialogPrimitive.Trigger;
 export const DialogClose = DialogPrimitive.Close;
 
 const dialogContentVariants = cva(
-  "fixed z-50 flex max-h-[90dvh] flex-col overflow-y-auto border border-divisor bg-papel text-tinta outline-none",
+  "fixed z-50 flex max-h-[90dvh] flex-col overflow-y-auto border border-divisor bg-papel text-tinta shadow-flutuante outline-none",
   {
     variants: {
       side: {
@@ -46,7 +46,7 @@ export function DialogContent({
 }: DialogContentProps) {
   return (
     <DialogPrimitive.Portal>
-      <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-tinta/55" />
+      <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-tinta/45 backdrop-blur-[3px]" />
       <DialogPrimitive.Content
         data-slot="dialog"
         className={cn(dialogContentVariants({ side }), className)}
@@ -55,7 +55,7 @@ export function DialogContent({
         {children}
         <DialogPrimitive.Close
           aria-label={closeLabel}
-          className="absolute top-3 right-3 inline-flex size-[var(--alvo-min)] items-center justify-center rounded-campo text-tinta hover:bg-tinta/10"
+          className="absolute top-3 right-3 inline-flex size-[var(--alvo-min)] items-center justify-center rounded-full text-tinta hover:bg-tinta/[0.06]"
         >
           <X aria-hidden="true" className="size-5" />
         </DialogPrimitive.Close>
@@ -70,7 +70,7 @@ export function DialogTitle({
 }: React.ComponentProps<typeof DialogPrimitive.Title>) {
   return (
     <DialogPrimitive.Title
-      className={cn("pr-12 font-serif text-xl leading-tight font-semibold", className)}
+      className={cn("pr-12 font-titulo text-xl leading-tight font-semibold", className)}
       {...props}
     />
   );

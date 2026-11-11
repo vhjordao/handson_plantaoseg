@@ -38,7 +38,7 @@ export function SuperficieVoz({
     >
       {voz !== "regra" ? (
         <svg className="contorno" aria-hidden="true" focusable="false">
-          <rect className="contorno-rect" x="0" y="0" width="100%" height="100%" rx="10" ry="10" />
+          <rect className="contorno-rect" x="0" y="0" width="100%" height="100%" rx="18" ry="18" />
         </svg>
       ) : null}
       {children}

@@ -27,9 +27,11 @@ export function UserMenu({
       <DropdownMenuTrigger asChild>
         <button
           type="button"
-          className="inline-flex min-h-[var(--alvo-min)] items-center gap-2 rounded-campo border border-campo bg-papel px-3 text-base font-medium hover:bg-tinta/10"
+          className="inline-flex min-h-[var(--alvo-min)] items-center gap-2 rounded-full border border-divisor bg-papel py-1 pr-3 pl-1 text-base font-medium shadow-cartao transition-[border-color,background-color] duration-150 hover:border-campo hover:bg-recuo"
         >
-          <UserRound aria-hidden="true" className="size-5 shrink-0" />
+          <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-acento-tom text-acento-forte">
+            <UserRound aria-hidden="true" className="size-[18px]" />
+          </span>
           <span className="hidden max-w-[16rem] truncate sm:inline">{nome}</span>
           <span className="sr-only sm:hidden">Menu de {nome}</span>
           <ChevronDown aria-hidden="true" className="size-4 shrink-0" />

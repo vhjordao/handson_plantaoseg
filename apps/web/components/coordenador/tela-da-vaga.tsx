@@ -89,7 +89,7 @@ export function TelaDaVaga({ vagaId, jaExistia }: { vagaId: string; jaExistia: b
   const cabecalho = (
     <InicioDaVaga>
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-        <h1 className="font-serif text-3xl font-semibold">
+        <h1 className="font-titulo text-3xl font-semibold">
           {vaga.especialidade ? ROTULO_ESPECIALIDADE[vaga.especialidade] : "Vaga sem especialidade"}
         </h1>
         <EtiquetasDaVaga vaga={vaga} />

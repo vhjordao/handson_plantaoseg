@@ -29,8 +29,8 @@ export function CascaMedico({
   return (
     <>
       <FaixaDemonstracao />
-      <header className="sticky top-0 z-30 border-b border-divisor bg-gaze">
-        <div className="@container mx-auto flex min-h-14 w-full max-w-[960px] flex-wrap items-center justify-between gap-2 px-3 py-1 sm:px-4">
+      <header className="vidro sticky top-0 z-30 border-b border-divisor">
+        <div className="@container mx-auto flex min-h-16 w-full max-w-[960px] flex-wrap items-center justify-between gap-2 px-3 py-1.5 sm:px-4">
           <Link
             href="/medico/ofertas"
             aria-label="PlantãoSeguro, início da plataforma"
@@ -48,9 +48,9 @@ export function CascaMedico({
             />
           </div>
         </div>
-        <nav aria-label="Principal" className="hidden border-t border-divisor md:block">
+        <nav aria-label="Principal" className="hidden md:block">
           <Suspense fallback={null}>
-            <ul className="mx-auto flex w-full max-w-[960px] gap-1 px-4">
+            <ul className="mx-auto flex w-full max-w-[960px] gap-1 px-4 pb-2">
               {itensDaArea("medico").map((item) => (
                 <li key={item.id}>
                   <NavLink area="medico" id={item.id} variante="superior" />
@@ -64,7 +64,7 @@ export function CascaMedico({
       <main
         id="conteudo"
         tabIndex={-1}
-        className="mx-auto w-full max-w-[640px] flex-1 p-4 pb-28 outline-none md:pb-10"
+        className="mx-auto w-full max-w-[680px] flex-1 p-4 pb-28 outline-none md:pt-8 md:pb-12"
       >
         <ApiProvider modo={modo} papel="medico">
           {children}
@@ -74,10 +74,10 @@ export function CascaMedico({
       <nav
         aria-label="Principal"
         data-barra-inferior
-        className="fixed inset-x-0 bottom-0 z-30 border-t border-divisor bg-papel pb-[env(safe-area-inset-bottom)] md:hidden"
+        className="fixed inset-x-0 bottom-0 z-30 border-t border-divisor bg-papel/95 px-2 pt-1.5 pb-[max(0.375rem,env(safe-area-inset-bottom))] shadow-flutuante backdrop-blur md:hidden"
       >
         <Suspense fallback={null}>
-          <ul className="flex">
+          <ul className="flex gap-1">
             {itensDaArea("medico").map((item) => (
               <li key={item.id} className="flex min-w-0 flex-1">
                 <NavLink area="medico" id={item.id} variante="inferior" />

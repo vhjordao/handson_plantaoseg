@@ -18,7 +18,7 @@ export function TelaDeContestacoes({ medicoId }: { medicoId: string }) {
 
   const cabecalho = (
     <header>
-      <h1 className="font-serif text-3xl font-semibold">{CONTESTACOES.titulo}</h1>
+      <h1 className="font-titulo text-3xl font-semibold">{CONTESTACOES.titulo}</h1>
       <p className="mt-2 max-w-[70ch] text-tinta-suave">{CONTESTACOES.descricao}</p>
     </header>
   );
@@ -55,7 +55,7 @@ export function TelaDeContestacoes({ medicoId }: { medicoId: string }) {
           <li key={c.id}>
             <article
               aria-labelledby={`contestacao-${c.id}`}
-              className="rounded-cartao border border-divisor bg-papel p-5"
+              className="superficie p-5"
             >
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>

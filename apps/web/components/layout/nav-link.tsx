@@ -39,20 +39,28 @@ export function NavLink({
       onClick={aoNavegar}
       title={recolhivel ? item.rotulo : undefined}
       className={cn(
-        "flex items-center rounded-campo text-base transition-colors duration-150",
+        "flex items-center text-base transition-[background-color,color,box-shadow] duration-150",
         recolhivel && "max-lg:justify-center max-lg:px-0",
+        // Item atual: muda o fundo, o peso e a cor, e ganha um traço de 3 px (lateral e inferior)
+        // ou vira um bloco de papel elevado (superior, como as abas). A cor sozinha nunca é o sinal.
         variante === "lateral" &&
-          "min-h-[var(--alvo-min)] gap-3 border-l-4 px-3 py-2 hover:bg-tinta/10",
+          "min-h-[var(--alvo-min)] gap-3 rounded-campo px-3 py-2 hover:bg-tinta/[0.06]",
         variante === "lateral" &&
-          (ativo ? "border-tinta bg-tinta/10 font-semibold" : "border-transparent font-medium"),
+          (ativo
+            ? "bg-acento-tom font-semibold text-acento-forte shadow-[inset_3px_0_0_var(--acento)]"
+            : "font-medium text-tinta-suave hover:text-tinta"),
         variante === "superior" &&
-          "min-h-[var(--alvo-min)] gap-2 border-b-4 px-3 py-2 hover:bg-tinta/10",
+          "min-h-[var(--alvo-min)] gap-2 rounded-campo border px-4 py-2",
         variante === "superior" &&
-          (ativo ? "border-tinta font-semibold" : "border-transparent font-medium"),
+          (ativo
+            ? "border-divisor bg-papel font-semibold text-acento-forte shadow-cartao"
+            : "border-transparent font-medium text-tinta-suave hover:bg-tinta/[0.06] hover:text-tinta"),
         variante === "inferior" &&
-          "min-h-14 min-w-0 flex-1 flex-col justify-center gap-0.5 border-t-4 px-2 py-1 text-center text-sm hover:bg-tinta/10",
+          "min-h-14 min-w-0 flex-1 flex-col justify-center gap-0.5 rounded-campo px-2 py-1 text-center text-sm",
         variante === "inferior" &&
-          (ativo ? "border-tinta font-semibold" : "border-transparent font-medium text-tinta-suave"),
+          (ativo
+            ? "bg-acento-tom font-semibold text-acento-forte shadow-[inset_0_-3px_0_var(--acento)]"
+            : "font-medium text-tinta-suave"),
       )}
     >
       <Icone aria-hidden="true" className="size-5 shrink-0" />

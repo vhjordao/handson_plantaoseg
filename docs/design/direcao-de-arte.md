@@ -1,7 +1,7 @@
 # Direção de arte da plataforma PlantãoSeguro
 
 - **Responsável:** Victor Jordão com o Claude Code · **Branch:** `f3/web-plataforma` · **Data:** 03/11/2026, revisada em 04/11/2026
-- **Status:** plano de 03/11, com revisão contra o padrão genérico (seção 3). Valores de cor e de tipo são os **finais** quando constam em `apps/web/lib/tokens/cores.ts`; o script `npm run check:contraste` confere os contrastes.
+- **Status:** plano de 03/11, com revisão contra o padrão genérico (seção 3). **Revisado em 10/11/2026 na fase E (seção 6):** cores, raios, sombras e tipografia mudaram; as três vozes continuam. Onde a seção 6 diverge das anteriores, vale a seção 6. Valores de cor e de tipo são os **finais** quando constam em `apps/web/lib/tokens/cores.ts`; o script `npm run check:contraste` confere os contrastes.
 - **Fontes:** [prompt v2](prompt-frontend.md) (regras), [referências](referencias.md) (o que foi visto e por quê) e a skill `frontend-design` (processo de duas passagens).
 
 ## 1. Conceito: rascunho a lápis, decisão a carimbo
@@ -264,3 +264,29 @@ O divisor (1,28:1 no claro, 1,54:1 no escuro) é decorativo, não carrega inform
 **Que acessório saiu** (a regra de Chanel): o menu de âncoras no celular (a página é uma rolagem só); a animação de entrada de cada seção (sobrou a revelação do hero e o fechamento do tracejado); o botão "Pular" do hero (só o "Aprovar e oferecer" funciona, e um botão que não faz nada é pior do que nenhum); e a faixa de demonstração fixa no celular (ela some na rolagem e volta a cada página).
 
 **Capturas** de 04/11/2026, tiradas do build de produção no Edge com `node scripts/capturar.mjs`, ficam em [`capturas/`](capturas/): a landing em 1440 px (tema claro, escuro e página inteira), 768 px (topo) e 390 px (topo e página inteira); `/entrar` em 1440 e 390 px; Vagas em 1440 px (claro e escuro), 768 e 390 px; Minha conta e Ofertas do médico em 390 px; o telão em 1920 por 1080 px no tema escuro; e a Ajuda em 1440 px. O que **não** foi capturado: telas de erro e de carregamento, e o celular real (só o tamanho emulado).
+
+## 6. Revisão da fase E (10/11/2026): o visual novo
+
+**Pedido do Victor (F.1):** uma evolução visual com uma tela de painel médico como referência de linguagem (fundo claro azulado, cartões brancos e arredondados, sombras muito suaves, azul como cor de interação, tipografia moderna sem serifa, números grandes e leves). Ele pediu para **não** copiar a tela, os componentes, os indicadores nem as funções da referência, e para manter as funções, as rotas e as regras do produto. Nenhum menu, página ou indicador novo entrou por causa da referência.
+
+**O que fica:** a gramática das três vozes (seção 1) e o momento memorável (o tracejado que fecha). A forma do traço, o rótulo e o ícone continuam carregando o significado.
+
+**O que mudou e por quê:**
+
+| Antes | Agora | Por quê |
+| --- | --- | --- |
+| Fundo gaze esverdeado `#F4F6F5`, sem sombra, "borda e tom" | Fundo cinza-azulado `#EDF1F6` com uma luz difusa azul e anil no alto da janela; cartões de papel com borda discreta e sombra larga e suave (`superficie`, `shadow-cartao`) | É a profundidade da referência: separa o cartão do fundo sem linha dura. A luz no alto faz o papel da imagem de fundo da referência sem pôr uma figura decorativa |
+| Raios 6, 10 e 16 px | 10, 18 e 24 px; etiquetas em pílula | Mais macio, ainda por hierarquia (campo, cartão, diálogo) |
+| Primário de navegação em tinta | Primário em **azul de ação** (`--acento`, `#1D62D6`), com sombra azulada; secundário em papel com borda | O pedido do Victor: azul nas ações principais, nas seleções e nos elementos interativos. O botão que cria decisão humana **continua verde**: a cor ainda diz quem decide |
+| Voz da IA em cobalto `#2C4FD6` | Voz da IA em **anil** `#4046C4` (tom `#EEEFFD`) | Com o azul virando a cor da interação, o cobalto ficaria igual ao botão. O anil separa "isto é da IA" de "isto é clicável" |
+| Item atual: borda de tinta | Item atual: fundo azul-claro, texto azul forte e um traço de 3 px (barra lateral e barra do celular); nas abas, nos filtros e no topo do médico, um bloco de papel elevado sobre uma calha | Segue a referência sem depender só da cor: mudam fundo, peso e forma. No alto contraste do sistema, o sublinhado grosso continua |
+| Títulos em Source Serif 4 | **Uma família só**: Atkinson Hyperlegible Next, títulos em 600 com o espaçamento um pouco fechado (`font-titulo`) e números de painel em 300 (`numero-destaque`) | A referência é toda sem serifa; a Atkinson fica pela razão de legibilidade, e a hierarquia vem do peso e do tamanho. Uma fonte a menos para baixar |
+| Cabeçalhos opacos | Cabeçalhos translúcidos com desfoque (`vidro`) | O conteúdo passa por baixo, como na referência, sem perder o contraste do texto |
+| Campos com borda simples | Campos com sombra interna leve e, no foco, borda azul e um halo azul-claro; anel de foco global em azul | O foco fica visível (3:1 conferido) e com o mesmo azul da interação |
+| Número da ordem sugerida solto | Número dentro de um marcador redondo | Reforça a sequência (é uma ordem de verdade) |
+
+**Tokens novos** em `apps/web/app/globals.css`: `--acento`, `--acento-tom`, `--acento-forte`, `--sobre-acento`, `--recuo` (fundo de calhas e áreas recuadas), `--sombra-cartao`, `--sombra-flutuante`, `--sombra-botao` e as duas luzes (`--brilho-a` e `--brilho-b`). Utilitários: `superficie`, `vidro`, `font-titulo` e `numero-destaque`. O `check:contraste` ganhou 8 pares (azul de ação e recuo), e todos passam nos dois temas; no claro, o azul de ação dá 5,6:1 sobre papel e 4,9:1 sobre a página.
+
+**Escuro:** fundo `#0A121B`, papel `#111C28`, azul de ação `#72AAFF`, anil `#A9ADFF`. As sombras viram quase só um fio de luz, porque sombra escura sobre fundo escuro não aparece.
+
+**O acessório que saiu:** a Source Serif 4.

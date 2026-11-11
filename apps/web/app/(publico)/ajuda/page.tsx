@@ -56,13 +56,13 @@ export default async function Ajuda() {
         </Button>
       ) : null}
 
-      <h1 className="mt-2 font-serif text-4xl font-semibold">Ajuda</h1>
+      <h1 className="mt-2 font-titulo text-4xl font-semibold">Ajuda</h1>
       <p className="mt-3 max-w-[60ch] text-lg text-tinta-suave">
         Como ler as telas, o que é de verdade e o que é simulado, e as perguntas mais comuns.
       </p>
 
       <section aria-labelledby="ajuda-vozes" className="mt-12">
-        <h2 id="ajuda-vozes" className="font-serif text-2xl font-semibold">
+        <h2 id="ajuda-vozes" className="font-titulo text-2xl font-semibold">
           Como ler as telas
         </h2>
         <p className="mt-3 max-w-[62ch]">
@@ -74,20 +74,20 @@ export default async function Ajuda() {
       </section>
 
       <section aria-labelledby="ajuda-simulado" className="mt-12">
-        <h2 id="ajuda-simulado" className="font-serif text-2xl font-semibold">
+        <h2 id="ajuda-simulado" className="font-titulo text-2xl font-semibold">
           O que é de verdade e o que é simulado
         </h2>
         <div className="mt-4 grid gap-8 md:grid-cols-3">
           <div>
-            <h3 className="font-serif text-xl font-semibold">De verdade</h3>
+            <h3 className="font-titulo text-xl font-semibold">De verdade</h3>
             <Lista itens={REAL} />
           </div>
           <div>
-            <h3 className="font-serif text-xl font-semibold">Simulado</h3>
+            <h3 className="font-titulo text-xl font-semibold">Simulado</h3>
             <Lista itens={SIMULADO} />
           </div>
           <div>
-            <h3 className="font-serif text-xl font-semibold">Ainda não existe</h3>
+            <h3 className="font-titulo text-xl font-semibold">Ainda não existe</h3>
             <Lista itens={AINDA_NAO} />
           </div>
         </div>
@@ -107,12 +107,12 @@ export default async function Ajuda() {
       </section>
 
       <section aria-labelledby="ajuda-perguntas" className="mt-12">
-        <h2 id="ajuda-perguntas" className="font-serif text-2xl font-semibold">
+        <h2 id="ajuda-perguntas" className="font-titulo text-2xl font-semibold">
           Perguntas frequentes
         </h2>
         {PERGUNTAS.map((tema) => (
           <div key={tema.id} className="mt-6">
-            <h3 className="font-serif text-xl font-semibold">{tema.titulo}</h3>
+            <h3 className="font-titulo text-xl font-semibold">{tema.titulo}</h3>
             <Accordion type="single" collapsible className="mt-2 border-t border-divisor">
               {tema.itens.map((item, indice) => (
                 <AccordionItem key={item.pergunta} value={`${tema.id}-${indice}`}>
@@ -128,7 +128,7 @@ export default async function Ajuda() {
       </section>
 
       <section aria-labelledby="ajuda-problema" className="mt-12">
-        <h2 id="ajuda-problema" className="font-serif text-2xl font-semibold">
+        <h2 id="ajuda-problema" className="font-titulo text-2xl font-semibold">
           Algo não funcionou?
         </h2>
         <p className="mt-3 max-w-[62ch]">
