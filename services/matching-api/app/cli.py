@@ -7,6 +7,7 @@ Uso, a partir de `services/matching-api`:
     python -m app.cli flow        # fluxo recomendado contra o processo manual (simulação)
     python -m app.cli concentration # rodízio e limite contra a concentração (simulação)
     python -m app.cli zone        # medidas contra a exclusão por zona (simulação)
+    python -m app.cli lightgbm    # regressão logística contra LightGBM (só na CI)
     python -m app.cli demo --yes  # vaga em texto livre -> top 5 -> aprovação -> auditoria
     python -m app.cli blind-review  # casos da revisão às cegas para as entrevistas
     python -m app.cli robustness    # teste de premissas e simulação de lançamento
@@ -18,6 +19,7 @@ Tudo é simulação com dados sintéticos; nada tem validade médica ou legal.
 """
 
 import argparse
+import importlib.util
 import json
 import shutil
 import sys
@@ -342,6 +344,32 @@ def cmd_zone(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_lightgbm(args: argparse.Namespace) -> int:
+    if importlib.util.find_spec("lightgbm") is None:
+        print("LightGBM não instalado. Ele roda só na CI: pip install -r requirements-ml.txt")
+        return 2
+    from app.ml_compare import evaluate_lightgbm, lightgbm_chart, render_lightgbm
+
+    _, params = _load(Path(args.data))
+    metrics = evaluate_lightgbm(params)
+    if args.report_dir:
+        report_dir = Path(args.report_dir)
+        report_dir.mkdir(parents=True, exist_ok=True)
+        (report_dir / "metricas-lightgbm.md").write_text(render_lightgbm(metrics), encoding="utf-8")
+        (report_dir / "metricas-lightgbm.json").write_text(
+            json.dumps(metrics, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+        (report_dir / "fig-lightgbm.svg").write_text(lightgbm_chart(metrics), encoding="utf-8")
+    print("Regressão logística contra LightGBM (SIMULAÇÃO, dados sintéticos)")
+    for r in metrics["rows"]:
+        print(
+            f"  {r['world']}: top-5 logística {_pt(r['top5_logistic'] * 100)}% | "
+            f"LightGBM {_pt(r['top5_boost'] * 100)}% | diferença {_pt(r['gain'] * 100)} pontos"
+        )
+    print(f"  Troca pelos critérios: {'sim' if metrics['decision']['swap'] else 'não'}")
+    return 0
+
+
 def cmd_walkthrough(args: argparse.Namespace) -> int:
     from app.walkthrough import render_walkthrough
 
@@ -519,6 +547,11 @@ def build_parser() -> argparse.ArgumentParser:
     zone.add_argument("--data", default=str(DEFAULT_DATA))
     zone.add_argument("--report-dir", default=None)
     zone.set_defaults(func=cmd_zone)
+
+    boost = sub.add_parser("lightgbm", help="regressão logística contra LightGBM (só na CI)")
+    boost.add_argument("--data", default=str(DEFAULT_DATA))
+    boost.add_argument("--report-dir", default=None)
+    boost.set_defaults(func=cmd_lightgbm)
 
     demo = sub.add_parser("demo", help="fluxo completo para uma vaga em texto livre")
     demo.add_argument("--data", default=str(DEFAULT_DATA))
