@@ -4,6 +4,22 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 12/11/2026 (quinta): comparação com a Flexzo e a tela de credenciais do médico
+
+**Pedido do Victor:** conferir se o produto tem as funcionalidades do aplicativo estrangeiro de referência; depois, "Faça a tela de credenciais do médico (CRM, validade, status), mesmo sintética", com previsão de vagas, float pool e escala em evolução futura, cada uma ligada à fala da apresentação.
+
+**O que foi lido:** o [site da Flexzo](https://www.flexzo.ai/us/) e notas de imprensa da própria empresa, em 12/11. É o que ela diz de si; nada foi conferido no produto dela. O site não fala de check-in, ponto nem pagamento.
+
+**Resultado da comparação:** o núcleo está coberto (vaga publicada, ordem sugerida por IA e ofertas em sequência). Faltavam a conferência de credenciais (só existia a regra do CRM ativo, sem tela), o float pool, a escala, o aplicativo de celular e a previsão de vagas. O que o PlantãoSeguro tem e ela não mostra: explicação por recomendação, contestação, trilha de auditoria e medida de equidade.
+
+**O que mudou:** a tela de credenciais (4.7), em `/medico/conta/credenciais`, nos dois modos. No sistema real, o status do CRM vem do cadastro, que o médico já podia ler da própria linha; nada mudou no banco, na API nem no servidor. **A validade é simulada**, porque o banco não guarda essa data, e a tela diz isso. O roteiro ganhou a tabela das três funcionalidades que ficam para depois, com o momento da demonstração e a frase de cada uma, e as perguntas do professor ganharam a 2.7.
+
+**Uma decisão de desenho, a confirmar com o Victor:** a tela não virou aba do menu. As cinco abas com nome pedem 680 px, e a barra superior do médico tem 574; para caber, seria preciso deixar as abas só com ícone ou tirar uma. Ficou dentro de "Minha conta", com o caminho "Médico › Minha conta › Credenciais".
+
+**Achado no caminho, não corrigido:** entre 768 e cerca de 1.200 px de largura, as quatro abas de hoje já não cabem na barra superior do médico e passam por cima do logotipo e dos botões. Em tela de notebook cheia não aparece.
+
+**Uso de IA:** o Claude Code leu o site, fez a comparação, escreveu a tela, os testes e os textos; o Victor escolheu o que entra e o que fica para depois.
+
 ## 12/11/2026 (quinta): feedback da Entrega 3, perguntas prováveis do professor
 
 **Pedido do Victor:** "Sim, fazer agora", as perguntas prováveis para a apresentação de 17/11.

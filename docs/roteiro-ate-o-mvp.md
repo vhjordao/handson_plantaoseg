@@ -41,6 +41,8 @@ O mapa de tudo o que falta para o PlantãoSeguro funcionar de ponta a ponta, do 
 
 Falta conferir as três no sistema real, com o login do coordenador.
 
+**Credenciais do médico (12/11):** depois de comparar o produto com a Flexzo, a referência de fora, o Victor pediu a tela de credenciais do médico (4.7), que é a conferência de cadastro que ela anuncia. Está no PR da branch `f8/credenciais`: em "Minha conta", "Ver as minhas credenciais" abre o registro no CRM, o status do cadastro e a validade, que é simulada e dita assim na tela. Previsão de vagas, float pool e escala ficam como evolução futura, cada uma ligada a um momento da fala ([seção 8](#8-fora-do-mvp)).
+
 **Pendência da página inicial (11/11):** numa tela de computador com 900 px de altura, a seção 1 passa cerca de 30 px da janela, e o pé do título fica logo abaixo da dobra. A correção é descontar a altura do aviso e do cabeçalho (cerca de 8 rem, não 6). O Victor pediu para deixar nas pendências.
 
 **Próximo passo:** o Victor confere as fases C e D no sistema real, com os logins; depois vem a fase F (roteiro da demonstração, 5.1 a 5.4), que agora conta com o painel inicial do médico.
@@ -125,6 +127,8 @@ O adaptador `live` liga a web ao sistema real.
 - [ ] **4.4** "Minha conta": o que o sistema usa e não usa sobre o médico, e como pedir revisão humana. *No PR da fase C: a página já existia; agora mostra o médico do login e leva às contestações.*
 - [ ] **4.5** Na tela da vaga, o coordenador acompanha a cascata: quem recebeu, quem recusou, quem deixou o prazo passar e o tempo que falta (a tela consulta o sistema a cada 3 segundos, D7). *Código no PR da fase C (10/11, branch `f4/tela-medico`), no sistema real; falta a conferência de ponta a ponta.*
 - [x] **4.6** O modo de demonstração simula as ofertas e a cascata, para o plano B (5.4) fazer o mesmo caminho sem o servidor. *Feito em 10/11, no PR da fase C: a aprovação envia a 1ª oferta; recusa, aceite, prazo e contestação seguem a regra do sistema real; tudo numa aba só, porque o estado da demonstração fica no `sessionStorage` e o cookie de sessão vale para o navegador inteiro. O relógio da demonstração só anda pelo botão "Passar o prazo desta oferta", e ele é um só: as vagas de exemplo com oferta aberta também andam. Um teste no navegador percorre o plano B inteiro.*
+
+- [ ] **4.7** Credenciais do médico: o registro no CRM, o status do cadastro e a validade, com o efeito de cada situação nas recomendações. *Código no PR da branch `f8/credenciais` (12/11), nos dois modos. No sistema real, o status vem do cadastro (`doctors.crm_status`, que o médico lê da própria linha, sob RLS); no modo de demonstração, as personas têm o CRM ativo. A validade é simulada, porque o banco não guarda essa data, e a tela diz isso. Fica dentro de "Minha conta", porque a barra superior do médico não comporta uma quinta aba com nome. Falta conferir com o login do médico.*
 
 **Pronto quando:** o cenário "o 1º recusa, o 2º deixa passar, o 3º aceita" acontece de verdade, com o n8n, e aparece nas duas telas.
 
@@ -244,7 +248,20 @@ O documento acadêmico anda junto com o produto e usa o que ele mede.
 - **O telão.** A página sai do site no 3.7 (decisão do Victor em 06/11).
 - Telegram, check-in, pagamento, kit da Comissão de IA e Langfuse ficam como evolução futura ([ADR 0002](adr/0002-escopo-da-poc.md)).
 - A previsão de vagas só entra se sobrar tempo, e só no documento.
+- Float pool, escala e previsão de vagas, que a referência de fora anuncia, ficam como evolução futura (tabela abaixo).
 - As entrevistas com coordenadores e plantonistas e a revisão às cegas das recomendações. O kit fica para um piloto futuro.
+
+### O que a referência de fora faz e nós deixamos para depois
+
+Em 12/11 o produto foi comparado com a Flexzo (Reino Unido e EUA), a referência da Entrega 1. A lista dela vem do [site](https://www.flexzo.ai/us/) e de notas da própria empresa, lidos em 12/11/2026: é o que ela diz de si, não o que foi conferido no produto. O núcleo está coberto (vaga publicada, ordem sugerida por IA e ofertas em sequência), e a conferência de credenciais ganhou tela (4.7). Três funcionalidades ficam como evolução futura. Cada uma tem um momento na demonstração e uma resposta pronta, para não parecer esquecimento:
+
+| Funcionalidade | O que é | O que existe hoje | Em que momento da fala | O que dizer |
+| --- | --- | --- | --- | --- |
+| **Previsão de vagas** | Avisar antes quais plantões tendem a ficar descobertos | A etiqueta "Em risco" na lista de vagas, que é uma regra: vaga aberta a menos de 24 h do início. A previsão da Entrega 1 (meta de recall 0,7) não foi medida (E.5) | Na lista de vagas, ao mostrar o filtro "Em risco" | "Hoje o risco é uma regra de relógio. A previsão anteciparia isso em dias, e só entra depois de medida contra um baseline, como fizemos com o ranking." Pergunta [5.5](apresentacao/perguntas-do-professor.md#55-o-que-vocês-fariam-com-mais-tempo) |
+| **Float pool** | Oferecer primeiro ao quadro de reserva do próprio hospital e só depois à rede de fora | Uma rede só: o cadastro não separa quem é do quadro do hospital de quem é de fora | Na tela da vaga, em "Ordem sugerida" e "Quem ficou de fora" | "Seria uma regra em código, visível e auditável, como as outras, e não um peso escondido no modelo. Precisa do vínculo do médico no cadastro e de validação com o jurídico." Pergunta [2.7](apresentacao/perguntas-do-professor.md#27-a-referência-de-fora-faz-mais-do-que-vocês-o-que-falta) |
+| **Escala** | Montar a escala do mês inteiro, e não só cobrir o furo | O coordenador digita a vaga em texto livre; a plataforma cobre o plantão descoberto e não monta a escala | Em "Nova vaga", ao digitar o pedido | "Não refazemos a escala que o hospital já tem: a integração com escala, ponto e financeiro é a fase 3 da implantação, depois de 6 meses. O furo da escala viraria a vaga, sem digitar." Perguntas [5.4](apresentacao/perguntas-do-professor.md#54-como-os-dados-entrariam-num-hospital-real) e [2.7](apresentacao/perguntas-do-professor.md#27-a-referência-de-fora-faz-mais-do-que-vocês-o-que-falta) |
+
+A contratação permanente e os outros setores que a Flexzo atende (clínica geral, farmácia, enfermagem) estão fora do segmento do projeto ([ADR 0001](adr/0001-segmento-inicial.md)), e o aplicativo de celular foi trocado pela web responsiva ([ADR 0011](adr/0011-web-responsiva-sem-pwa.md)).
 
 ## 9. Riscos e o que cortar primeiro
 
