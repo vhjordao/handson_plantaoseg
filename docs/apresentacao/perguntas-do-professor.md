@@ -21,7 +21,7 @@ Preparação para a apresentação de **17/11/2026** e para a conversa depois de
 | Concentração | Os 10% mais expostos recebem 82,1% das ofertas só pelo modelo e **35,7% com o rodízio**; custo de 1,8 ponto | [concentração](../resultados/metricas-concentracao.md) |
 | Zona | Zona menos exposta: **0,07** do proporcional com o rodízio. Nenhuma medida cumpre os critérios | [zona](../resultados/metricas-zona.md) |
 | Custo | Um hospital sozinho: **R$ 69 mil por ano, R$ 159 mil no primeiro ano**; a tecnologia é só R$ 4 mil | [custos](../resultados/metricas-custos.md) |
-| Preço | Fecha a partir de cerca de **30 vagas por dia** sozinho (17 com 3 hospitais, 13 com 10); hospital grande, cerca de R$ 13 mil por mês | [custos](../resultados/metricas-custos.md) |
+| Preço | Fecha a partir de cerca de **30 vagas por dia** sozinho (17 com 3 hospitais, 13 com 10); hospital grande: R$ 16 mil por mês sozinho, R$ 13 mil com 3 hospitais na plataforma e R$ 12 mil com 10 | [custos](../resultados/metricas-custos.md) |
 | Escala | Motor: 4 ms a 130 ms de 300 a 9.000 médicos. O limite é a consulta das telas, que caiu de 4 para 1 requisição | [escala](../resultados/metricas-escala.md) |
 | Carga real (04/11) | 126.803 chamadas, 0 falhas; p95 de 518 ms no fluxo completo | [carga](../resultados/metricas-carga-api.md) |
 | Risco | **Médio (preliminar)**, Res. CFM 2.454 | [classificação](../conformidade/classificacao-de-risco.md) |
