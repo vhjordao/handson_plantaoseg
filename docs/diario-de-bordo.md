@@ -4,6 +4,16 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 12/11/2026 (quinta): feedback da Entrega 3, perguntas prováveis do professor
+
+**Pedido do Victor:** "Sim, fazer agora", as perguntas prováveis para a apresentação de 17/11.
+
+**O que mudou (só documento):** [perguntas-do-professor.md](apresentacao/perguntas-do-professor.md), com a cola de uma página (os números de cada experimento e onde estão), 28 perguntas por área da Entrega 3 e uma tabela de perguntas armadilha. Cada resposta tem o que dizer, os números e a fonte. As regras de honestidade vêm no topo: tudo é simulação, não dizer "em conformidade", não dizer que a zona foi resolvida e dizer quando o resultado contrariou o esperado (a zona e o LightGBM).
+
+**Como foi conferido:** cada número citado foi procurado no arquivo de resultados de onde vem, e os links relativos foram testados. A conferência achou um erro meu: o tempo de recomendar com 9.000 médicos é de 130 ms no relatório publicado, e eu tinha escrito 133 de uma rodada anterior. Também corrigi três frases que diziam mais do que o sistema faz (a justificativa é para o alerta de jornada, e não para fugir da ordem; a taxa de aceite pesa pouco, mas pesa; o vídeo do plano B ainda não existe).
+
+**Uso de IA:** o Claude Code reuniu os números, escreveu as respostas e as conferiu contra as fontes; o Victor lê e ensaia.
+
 ## 11/11/2026 (quarta), à noite: feedback da Entrega 3, LGPD e classificação de risco
 
 **Pedido do Victor:** "LGPD e risco".
