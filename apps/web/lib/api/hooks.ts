@@ -209,6 +209,16 @@ export function useContestacoes(filtro?: { medicoId?: string }) {
   });
 }
 
+/** As credenciais do próprio médico: o CRM, o status do cadastro e a validade simulada. */
+export function useCredenciais(medicoId: string) {
+  const api = useApi();
+  return useQuery({
+    queryKey: [api?.modo, "credenciais", medicoId],
+    queryFn: api ? () => api.obterCredenciais(medicoId) : skipToken,
+    retry: (falhas, erro) => !(erro instanceof NaoImplementadoError) && falhas < 2,
+  });
+}
+
 export function useResponderOferta() {
   const apiCarregada = useApiCarregada();
   const refazer = useRefazerLeituras();

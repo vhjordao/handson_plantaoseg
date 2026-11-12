@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { EntradaInvalidaError, EstadoInvalidoError } from "../erros";
-import { CascataSchema, ContestacaoSchema, OfertaSchema } from "../types";
+import { CascataSchema, ContestacaoSchema, CredenciaisSchema, OfertaSchema } from "../types";
 import { AdaptadorLive } from "./adaptador";
 import { limparLogin } from "./autenticacao";
 import type { OpcoesHttp } from "./http";
@@ -208,6 +208,44 @@ describe("contestação do banco", () => {
 });
 
 describe("chamadas do médico", () => {
+  it("as credenciais leem a própria linha, com o status do CRM, e marcam a fonte como cadastro", async () => {
+    tokensValidos();
+    const fetch = vi.spyOn(globalThis, "fetch").mockImplementation(async () =>
+      json(200, [
+        {
+          id: "d1",
+          name_sim: "Ana Lima",
+          crm_sim: "SIM-SP-000083",
+          crm_status: "suspended",
+          specialty: "pediatria",
+          secondary_specialty: null,
+        },
+      ]),
+    );
+    const api = new AdaptadorLive(CONFIG);
+    const credenciais = await api.obterCredenciais("d1");
+    const url = String(fetch.mock.calls[0]?.[0]);
+    expect(url).toContain("/banco/doctors?select=");
+    expect(url).toContain("crm_status");
+    expect(url).toContain("id=eq.d1");
+    expect(CredenciaisSchema.safeParse(credenciais).success).toBe(true);
+    expect(credenciais).toMatchObject({
+      uf: "SP",
+      statusCrm: "suspenso",
+      situacao: "suspensa",
+      elegivel: false,
+      fonteDoStatus: "cadastro",
+    });
+    expect(credenciais.medico.crm).toBe("SIM-SP-000083");
+  });
+
+  it("sem a linha do médico (a RLS não abriu), as credenciais não inventam um cadastro", async () => {
+    tokensValidos();
+    vi.spyOn(globalThis, "fetch").mockImplementation(async () => json(200, []));
+    const api = new AdaptadorLive(CONFIG);
+    await expect(api.obterCredenciais("d1")).rejects.toThrow(/não existe/);
+  });
+
   it("aceitar manda 'accepted' sem motivo", async () => {
     tokensValidos();
     const fetch = vi

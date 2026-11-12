@@ -26,6 +26,18 @@ export function formatarHora(valor: DataHora): string {
   return minuto === 0 ? `${hora}h` : `${hora}h${String(minuto).padStart(2, "0")}`;
 }
 
+const DIA_MES_ANO = new Intl.DateTimeFormat("pt-BR", {
+  day: "2-digit",
+  month: "2-digit",
+  year: "numeric",
+  timeZone: "UTC",
+});
+
+/** "31/01/2027". Para prazos longos, em que o ano importa. */
+export function formatarData(valor: DataHora): string {
+  return DIA_MES_ANO.format(paraData(valor));
+}
+
 /** "sexta, 02/10". Sem o "-feira": é como se escreve e se fala na escala. */
 export function formatarDia(valor: DataHora): string {
   const data = paraData(valor);

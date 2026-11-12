@@ -113,6 +113,37 @@ export const MedicoSchema = z.object({
 });
 export type Medico = z.infer<typeof MedicoSchema>;
 
+/** `doctors.crm_status` (`active`, `suspended`, `expired`). Só o ativo é elegível (`crm_inactive`). */
+export const STATUS_CRM = ["ativo", "suspenso", "vencido"] as const;
+export const StatusCrmSchema = z.enum(STATUS_CRM);
+export type StatusCrm = z.infer<typeof StatusCrmSchema>;
+
+/** O que a tela diz de uma credencial: junta o status do cadastro e a validade. */
+export const SITUACOES_CREDENCIAL = ["em_dia", "vence_em_breve", "suspensa", "vencida"] as const;
+export const SituacaoCredencialSchema = z.enum(SITUACOES_CREDENCIAL);
+export type SituacaoCredencial = z.infer<typeof SituacaoCredencialSchema>;
+
+/**
+ * As credenciais do médico (a conferência de cadastro que a Flexzo chama de vetting). O status
+ * do CRM vem do cadastro; a validade é **simulada**: o banco não guarda essa data.
+ */
+export const CredenciaisSchema = z.object({
+  medico: MedicoSchema,
+  /** A UF do registro, lida do `crm_sim` ("SIM-SP-000083"); `null` se o formato for outro. */
+  uf: z.string().nullable(),
+  statusCrm: StatusCrmSchema,
+  situacao: SituacaoCredencialSchema,
+  /** Meia-noite do dia em que a validade simulada termina. */
+  validaAte: DataHoraSchema,
+  /** Dias até `validaAte`; negativo quando já passou. */
+  diasRestantes: z.number().int(),
+  /** O status ativo é o que deixa o médico entrar na recomendação. */
+  elegivel: z.boolean(),
+  /** De onde veio o status: do cadastro no banco ou da persona da demonstração. */
+  fonteDoStatus: z.enum(["cadastro", "demonstracao"]),
+});
+export type Credenciais = z.infer<typeof CredenciaisSchema>;
+
 /** `policy_config`: limites do hospital. Configuração do projeto, não norma verificada. */
 export const PoliticaSchema = z.object({
   maxHorasContinuas: z.number(),

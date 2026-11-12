@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ListChecks, MessageSquareWarning, ShieldCheck, UserLock } from "lucide-react";
+import { BadgeCheck, ListChecks, MessageSquareWarning, ShieldCheck, UserLock } from "lucide-react";
 import { BaixarMeusDados } from "@/components/medico/baixar-meus-dados";
 import { CabecalhoDoPainel, Painel } from "@/components/ui/painel";
 import { ROTULO_ESPECIALIDADE } from "@/lib/copy/rotulos";
@@ -103,6 +103,15 @@ export default async function MinhaConta() {
               : ""}
           </p>
           <p className="text-tinta-suave">{medico.crm}</p>
+          <p className="mt-2">
+            <Link
+              href="/medico/conta/credenciais"
+              className="inline-flex min-h-[var(--alvo-min)] items-center gap-2 font-semibold underline underline-offset-4 hover:no-underline"
+            >
+              <BadgeCheck aria-hidden="true" className="size-[18px] shrink-0" />
+              Ver as minhas credenciais
+            </Link>
+          </p>
           <p className="mt-2 text-sm text-tinta-suave">
             Persona fictícia. Os dados desta demonstração são todos sintéticos.
           </p>

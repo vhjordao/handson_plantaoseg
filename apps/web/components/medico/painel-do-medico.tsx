@@ -3,6 +3,7 @@
 import Link from "next/link";
 import {
   ArrowRight,
+  BadgeCheck,
   CalendarClock,
   CheckCircle2,
   CircleHelp,
@@ -51,6 +52,7 @@ function iniciais(nome: string): string {
 /** O cartão do perfil, no lugar da foto do paciente do modelo: as iniciais, porque os dados são fictícios. */
 function Perfil({ medico }: { medico: Medico }) {
   const atalhos = [
+    { href: "/medico/conta/credenciais", rotulo: "Credenciais", icone: BadgeCheck },
     { href: "/medico/conta", rotulo: "Minha conta", icone: UserRound },
     { href: "/medico/contestacoes", rotulo: "Contestações", icone: MessageSquareWarning },
     { href: "/ajuda", rotulo: "Ajuda", icone: CircleHelp },

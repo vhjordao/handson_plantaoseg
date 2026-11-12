@@ -107,6 +107,62 @@ export const CONTESTACOES = {
   naDemonstracao: "As contestações não estão disponíveis neste modo. Entre com o login para vê-las.",
 } as const;
 
+export const CREDENCIAIS = {
+  titulo: "Credenciais",
+  descricao:
+    "O que o sistema confere no seu cadastro antes de sugerir o seu nome: o registro no CRM, o status e a validade.",
+  carregando: "Carregando as suas credenciais…",
+  erroTitulo: "Não foi possível carregar as credenciais",
+  erro: "O sistema não respondeu. Tente de novo em instantes.",
+  naDemonstracao: "As credenciais não estão disponíveis neste modo. Entre com o login para vê-las.",
+  crmTitulo: "Registro no CRM",
+  registro: "Número do registro",
+  uf: "Estado do registro",
+  status: "Status no cadastro",
+  validade: "Validade",
+  validaAte: (dia: string) => `Válido até ${dia}`,
+  venceu: (dia: string) => `Venceu em ${dia}`,
+  faltam: (dias: number) => (dias === 1 ? "Falta 1 dia" : `Faltam ${dias} dias`),
+  passou: (dias: number) => (dias === 1 ? "Há 1 dia" : `Há ${dias} dias`),
+  validadeSimulada: "Data simulada",
+  especialidadesTitulo: "Especialidades no cadastro",
+  principal: "Principal",
+  secundaria: "Secundária",
+  semSecundaria: "Nenhuma especialidade secundária no cadastro.",
+  usoDaEspecialidade:
+    "A regra de especialidade compara a vaga com a principal; a secundária só vale se a política do hospital permitir.",
+  efeitoTitulo: "O que isso muda nas recomendações",
+  simulacaoTitulo: "Simulação",
+  simulacao:
+    "O CRM é fictício (prefixo SIM) e a validade é uma data simulada: o banco guarda o status do registro, mas não essa data. Num hospital de verdade, a situação do registro viria da consulta ao CFM e do credenciamento do hospital. Nada aqui tem validade legal.",
+  fonte: {
+    cadastro: "Status lido do seu cadastro no banco.",
+    demonstracao: "Persona da demonstração: todas têm o CRM simulado ativo.",
+  },
+} as const;
+
+/** O rótulo e a frase de cada situação. A cor nunca é o único sinal: o texto diz o estado. */
+export const SITUACAO_CREDENCIAL = {
+  em_dia: {
+    rotulo: "Em dia",
+    efeito: "Com o CRM ativo, o seu nome pode entrar nas recomendações. As outras regras (especialidade, disponibilidade, distância e jornada) continuam valendo.",
+  },
+  vence_em_breve: {
+    rotulo: "Vence em breve",
+    efeito: "O CRM está ativo e o seu nome pode entrar nas recomendações. A validade termina em até 60 dias: vale renovar antes, porque registro vencido fica de fora.",
+  },
+  suspensa: {
+    rotulo: "Suspenso",
+    efeito: "Com o CRM suspenso, o sistema não sugere o seu nome. Para a coordenação, você aparece entre os que ficaram de fora, com a regra que barrou.",
+  },
+  vencida: {
+    rotulo: "Vencido",
+    efeito: "Com o CRM vencido, o sistema não sugere o seu nome. Para a coordenação, você aparece entre os que ficaram de fora, com a regra que barrou.",
+  },
+} as const;
+
+export const ROTULO_STATUS_CRM = { ativo: "Ativo", suspenso: "Suspenso", vencido: "Vencido" } as const;
+
 export const ENTRADA_DO_MEDICO = {
   temOferta: "Tem oferta esperando resposta",
 } as const;
