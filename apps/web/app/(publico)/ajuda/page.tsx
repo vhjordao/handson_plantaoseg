@@ -27,7 +27,7 @@ const SIMULADO = [
 
 const AINDA_NAO = [
   "O modelo de linguagem (Gemini) foi testado à parte, com textos sintéticos: nesta demonstração, a leitura da vaga é por regras.",
-  "A tela do médico (aceite, recusa e contestação) e o acompanhamento da cascata estão em construção. A cascata automática já roda no servidor, com o n8n, fora desta demonstração.",
+  "A cascata automática (o n8n que chama o próximo médico) roda só no servidor: no modo de demonstração, as ofertas e a cascata são simuladas numa aba só.",
   "O rastro de pagamentos e o check-in ficam para uma versão futura.",
 ];
 

@@ -12,7 +12,7 @@ O professor sugeriu conferir os **textos oficiais vigentes**, interpretar as obr
 | Res. CFM 2.460/2026 | [PDF no portal do CFM](https://portal.cfm.org.br/wp-content/uploads/2026/06/2460_2026.pdf) (DOU de 15/06/2026, Seção 1, p. 200) | Idem | Texto e exposição de motivos |
 | Res. CFM 2.462/2026 | [PDF no portal do CFM](https://sistemas.cfm.org.br/normas/arquivos/resolucoes/BR/2026/2462_2026.pdf) (DOU de 02/06/2026, Seção 1, p. 121) | Idem | **O PDF traz aviso de suspensão judicial** (ver seção 4) |
 
-Não foram lidos: LGPD (Lei 13.709/2018), o Tema 1.389 do STF, os pareceres de jornada e a decisão judicial que suspendeu a 2.462.
+Não foram lidos: o Tema 1.389 do STF, os pareceres de jornada e a decisão judicial que suspendeu a 2.462. **A LGPD (Lei 13.709/2018) foi lida em 11/11/2026**, e a análise está em [lgpd.md](lgpd.md); a classificação de risco foi revalidada contra o texto da 2.454 em [classificacao-de-risco.md](classificacao-de-risco.md).
 
 ## 2. Res. CFM 2.454/2026: inteligência artificial na medicina
 
@@ -63,7 +63,7 @@ Efeito no projeto: o controle "rastro de pagamentos" (tabela `payments`, prazos 
 2. A classificação de risco: baixo (proposta da Entrega 1) ou médio (leitura do Anexo II acima).
 3. O enquadramento da plataforma e da **assinatura fixa** frente aos Art. 2º, 4º §2º e 6º da 2.460.
 4. A situação atual da suspensão da 2.462 e se a plataforma se enquadra como "empresa intermediadora".
-5. LGPD: base legal e transferência internacional se um dia houver dado real e LLM de provedor estrangeiro (ADR 0003).
+5. LGPD: a leitura está feita ([lgpd.md](lgpd.md)); falta o jurídico validar o enquadramento de controlador e operador, as bases legais, se o art. 20 se aplica e a transferência internacional se um dia houver dado real e LLM de provedor estrangeiro (ADR 0003).
 6. Contratação de médicos em hospital privado (Tema 1.389 do STF, ainda pendente).
 7. Limites de jornada: 24 h contínuas e 11 h de descanso são **configuração do projeto**, não norma verificada.
 
@@ -77,6 +77,8 @@ Efeito no projeto: o controle "rastro de pagamentos" (tabela `payments`, prazos 
 | Monitoramento de viés (2.454, Anexo III II) | Tabela de participação no top-5 | `docs/resultados/metricas-ranking.md` | **Construído em simulação** |
 | Neutralidade econômica (2.460, Art. 1º e 2º) | Lista fechada de variáveis e teste na CI | `app/ranking/features.py` | **Construído** |
 | Dados pessoais fora do LLM (2.454, Art. 16 e 17) | Prompt sem nome, CRM e telefone; trilha sem dado pessoal | `tests/test_llm.py`, `tests/test_audit.py` | **Construído** |
-| Contestabilidade (2.454, Anexo I XX) | Contestação do médico com resposta registrada | Desenho em `docs/solucao-ia.md` | Desenhado, **não construído** |
+| Contestabilidade (2.454, Anexo I XX) | Contestação do médico com resposta registrada | Tabela `contestations`, rotas da API e telas do médico e do coordenador | **Construído** (fases 2, 4 e 6) |
+| Nível de risco informado ao usuário (2.454, Art. 13) | "Minha conta" e a ajuda mostram "médio (preliminar)" | `apps/web/app/medico/conta/page.tsx` | **Construído** |
+| Acesso do titular (LGPD, Art. 18, II) | "Baixar os meus dados" em "Minha conta" | `apps/web/lib/format/meus-dados.ts` | **Construído** |
 | Avaliação de impacto algorítmico (2.454, Anexo I XIII) | Documento periódico | Esboço em `docs/seguranca-ameacas.md` | Desenhado, **não construído** |
 | Rastro de pagamentos | Tabela `payments`, prazos | Dicionário de dados, 4.11 | Evolução futura; base normativa a rever |

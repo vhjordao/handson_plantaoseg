@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ListChecks, MessageSquareWarning, ShieldCheck } from "lucide-react";
+import { ListChecks, MessageSquareWarning, ShieldCheck, UserLock } from "lucide-react";
+import { BaixarMeusDados } from "@/components/medico/baixar-meus-dados";
 import { CabecalhoDoPainel, Painel } from "@/components/ui/painel";
 import { ROTULO_ESPECIALIDADE } from "@/lib/copy/rotulos";
 import { encontrarPersona, personaDoLogin } from "@/lib/session/personas";
@@ -35,6 +36,26 @@ const NAO_USADOS = [
   [
     "A carga recente (plantões dos últimos 30 dias)",
     "Não ordena: só gera um alerta de jornada para o coordenador.",
+  ],
+] as const;
+
+/** O nível de risco (Res. CFM 2.454, art. 13) e o que a LGPD pede que o titular saiba. */
+const DADOS_E_DIREITOS = [
+  [
+    "Nível de risco: médio (preliminar)",
+    "O sistema ordena pessoas e apoia uma decisão operacional importante, mas não executa nada sozinho: sem a aprovação do coordenador, nenhuma oferta sai. A classificação formal é do hospital.",
+  ],
+  [
+    "Quem responde pelos seus dados",
+    "O hospital, que decide sobre o tratamento. A plataforma trata os dados por instrução dele. O contato do encarregado do hospital vem no contrato; nesta demonstração não há hospital real.",
+  ],
+  [
+    "O que fica guardado",
+    "O seu cadastro, a disponibilidade que você declarou, as ofertas e as suas respostas, as contestações e uma trilha de auditoria que só traz um pseudônimo. Nenhum dado de paciente. O prazo de guarda ainda não foi definido e será combinado com o hospital antes de qualquer dado real.",
+  ],
+  [
+    "Seus direitos (LGPD, art. 18)",
+    "Acesso: baixe os seus dados abaixo. Correção, eliminação e informação sobre com quem os dados são compartilhados: peça ao encarregado do hospital. Revisão humana de uma recomendação: use a contestação.",
   ],
 ] as const;
 
@@ -115,6 +136,19 @@ export default async function MinhaConta() {
         </ul>
       </Painel>
       </div>
+
+      <Painel aria-labelledby="conta-dados">
+        <CabecalhoDoPainel icone={UserLock} tom="humano" id="conta-dados" titulo="Seus dados e seus direitos" />
+        <dl className="mt-3 grid max-w-[68ch] gap-3">
+          {DADOS_E_DIREITOS.map(([titulo, texto]) => (
+            <div key={titulo}>
+              <dt className="font-semibold">{titulo}</dt>
+              <dd className="text-tinta-suave">{texto}</dd>
+            </div>
+          ))}
+        </dl>
+        {medico ? <BaixarMeusDados medico={medico} /> : null}
+      </Painel>
 
       <Painel aria-labelledby="conta-revisao">
         <CabecalhoDoPainel icone={MessageSquareWarning} tom="acao" id="conta-revisao" titulo="Como pedir revisão humana" />
