@@ -25,6 +25,7 @@ Preparação para a apresentação de **17/11/2026** e para a conversa depois de
 | Escala | Motor: 4 ms a 130 ms de 300 a 9.000 médicos. O limite é a consulta das telas, que caiu de 4 para 1 requisição | [escala](../resultados/metricas-escala.md) |
 | Carga real (04/11) | 126.803 chamadas, 0 falhas; p95 de 518 ms no fluxo completo | [carga](../resultados/metricas-carga-api.md) |
 | Risco | **Médio (preliminar)**, Res. CFM 2.454 | [classificação](../conformidade/classificacao-de-risco.md) |
+| Leitura do pedido pelo Gemini | **54 de 54 certos** quando ele respondeu; com o limite de 6 s da API, **22 de 24** pedidos naturais contra 20 das regras; 16 de 56 respostas passaram de 6 s | [extração](../resultados/metricas-extracao.md) |
 | Injeção de prompt | 60 de 60 sinalizados, 0 de 340 normais por engano; no Gemini real, nenhum dos 10 tipos foi obedecido | [solução de IA](../solucao-ia.md) |
 
 ---
@@ -76,6 +77,14 @@ Preparação para a apresentação de **17/11/2026** e para a conversa depois de
 **O que dizer.** O Gemini só lê o pedido e escreve o motivo; não tem ferramentas, não tem segredos, devolve esquema fechado, e o texto suspeito nem chega a ele. Quem decide é o coordenador. Nos 400 pedidos sintéticos, 60 de 60 ataques foram sinalizados e nenhum pedido normal por engano; no Gemini real, nenhum dos 10 tipos foi obedecido. O que resta é um ataque novo. Se o Gemini cai ou passa do teto diário de 100 chamadas, a leitura segue pelas regras.
 
 **Onde:** [solução de IA, seção 4](../solucao-ia.md), [teste manual do Gemini](../teste-manual-gemini.md).
+
+### 1.8 "O Gemini lê bem o pedido? O que ele acrescenta às regras?"
+
+**O que dizer.** Medimos em 60 pedidos com a resposta certa conhecida: 36 do gerador e 24 escritos à mão, fora dos modelos de frase. Quando o Gemini lê, acerta: 54 de 54. Nas regras, os pedidos do gerador saem 100% (o texto vem de modelos de frase que elas conhecem, e dizemos isso), e nos naturais saem 20 de 24; os 4 erros são urgência dita de outro jeito ("sem pressa", "alta" solto) e notação compacta ("19h/7h"), que o Gemini lê. Mas há o outro lado: 4 chamadas ficaram sem resposta, a validação barrou 2 respostas que inventaram um plantão de mais de 24 h, e 16 de 56 respostas passaram de 6 s, o limite em que a API desiste e usa as regras. Com esse limite, o sistema acerta 22 de 24 nos naturais, contra 20 das regras. **O Gemini acrescenta pouco e é lento às vezes; o que sustenta o fluxo são as regras e a conferência do coordenador.**
+
+**Números.** 54 de 54; 22 de 24 contra 20 de 24; 0 campos inventados. **Onde:** [extração](../resultados/metricas-extracao.md).
+
+**Se insistir.** O conjunto é pequeno, de uma rodada, e os 24 textos naturais foram escritos por quem projetou as regras, com o Claude Code: não substituem pedidos de coordenadores reais.
 
 ---
 

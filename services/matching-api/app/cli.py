@@ -397,6 +397,50 @@ def cmd_lightgbm(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_extraction(args: argparse.Namespace) -> int:
+    import os
+
+    from app.extraction_eval import evaluate_extraction, render_extraction
+    from app.llm.client import MODELO_PADRAO, GeminiClient
+
+    key = os.environ.get("GEMINI_API_KEY", "")
+    if not key:
+        print("Defina GEMINI_API_KEY: sem chave não há o que medir.", file=sys.stderr)
+        return 2
+    model = args.model or os.environ.get("LLM_MODEL_EXTRACAO", MODELO_PADRAO)
+    dataset, _ = _load(Path(args.data))
+    # Mais folga que a da API: aqui se mede o modelo, inclusive o que ele demora. Sem pausa de
+    # falha, para ver o resultado de cada pedido, e o ritmo é o da pausa entre pedidos.
+    client = GeminiClient(
+        key, model, timeout_ms=30_000, pausa_s=0, teto_diario=args.limit, teto_por_minuto=12
+    )
+    metrics = evaluate_extraction(
+        dataset,
+        client,
+        model=model,
+        run_date=date.today(),
+        per_style=args.per_style,
+        pause_s=args.pause,
+        progress=print,
+    )
+    if args.report_dir:
+        report_dir = Path(args.report_dir)
+        report_dir.mkdir(parents=True, exist_ok=True)
+        report = render_extraction(metrics)
+        (report_dir / "metricas-extracao.md").write_text(report, encoding="utf-8")
+        (report_dir / "metricas-extracao.json").write_text(
+            json.dumps(metrics, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+    print("Leitura do pedido: Gemini contra as regras (textos sintéticos ou escritos para o teste)")
+    for name, block in metrics["sets"].items():
+        for method, agg in block["methods"].items():
+            print(
+                f"  {name} / {method}: {agg['all_right']} de {agg['answered']} pedidos 100% certos"
+                f" | campos {agg['fields_right']} de {agg['fields_total']}"
+            )
+    return 0
+
+
 def cmd_costs(args: argparse.Namespace) -> int:
     from app.costs import costs_chart, evaluate_costs, render_costs
 
@@ -606,6 +650,17 @@ def build_parser() -> argparse.ArgumentParser:
     boost.add_argument("--data", default=str(DEFAULT_DATA))
     boost.add_argument("--report-dir", default=None)
     boost.set_defaults(func=cmd_lightgbm)
+
+    extraction = sub.add_parser(
+        "extraction", help="leitura do pedido: Gemini contra as regras (precisa de GEMINI_API_KEY)"
+    )
+    extraction.add_argument("--data", default=str(DEFAULT_DATA))
+    extraction.add_argument("--report-dir", default=None)
+    extraction.add_argument("--model", default=None)
+    extraction.add_argument("--per-style", type=int, default=12)
+    extraction.add_argument("--pause", type=float, default=6.5, help="segundos entre pedidos")
+    extraction.add_argument("--limit", type=int, default=100, help="teto de pedidos ao Gemini")
+    extraction.set_defaults(func=cmd_extraction)
 
     costs = sub.add_parser("costs", help="custo total, preço e retorno (premissas)")
     costs.add_argument("--report-dir", default=None)

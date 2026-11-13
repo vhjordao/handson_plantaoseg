@@ -4,6 +4,20 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 13/11/2026 (sexta): quanto a IA acerta ao ler o pedido
+
+**Pedido do Victor:** "como posso mostrar que funcionou bem o uso da IA", e depois "Sim, montar" a avaliação da leitura do pedido pelo Gemini.
+
+**A lacuna:** o ranking tem evidência forte (vence o baseline em 17 de 17 cenários), mas a leitura do pedido pelo Gemini, o uso generativo do projeto, só tinha 3 pedidos normais testados. O professor pede, para IA generativa, critérios de qualidade e exemplos de avaliação.
+
+**O que mudou:** `python -m app.cli extraction` ([relatório](resultados/metricas-extracao.md)), com 60 pedidos de gabarito conhecido: 36 do gerador e 24 escritos à mão, fora dos modelos de frase, e quatro leituras (regras, Gemini, sistema e sistema com o limite de 6 s da API). Os 24 naturais foram fixados antes de ver o resultado das regras, para não ajustar o teste.
+
+**Resultado:** o Gemini acertou **54 de 54** pedidos que leu; as regras, 36 de 36 nos sintéticos (circularidade, como se esperava) e 20 de 24 nos naturais; com o limite da API, o sistema acerta 22 de 24 nos naturais. **O que contrariou o esperado:** 16 de 56 respostas passaram de 6 s, 4 chamadas ficaram sem resposta e a validação barrou 2 respostas que inventaram um plantão de mais de 24 h. O Gemini acrescenta pouco, e a demonstração precisa lidar com o dia em que ele demora.
+
+**Ambiente:** a chamada falhou com `CERTIFICATE_VERIFY_FAILED`, porque o antivírus (Norton) inspeciona o HTTPS e usa uma raiz que só o Windows conhece. Resolvido com um pacote de certificados fora do repositório, sem desligar a verificação (nota em [teste-manual-gemini.md](teste-manual-gemini.md)). Foram cerca de 61 chamadas na camada gratuita (60 da avaliação e uma de teste), com a chave do `.env`, e só texto sintético.
+
+**Uso de IA:** o Claude Code escreveu o comando, os 24 pedidos naturais e o relatório, e rodou a avaliação; o Victor pediu a avaliação.
+
 ## 12/11/2026 (quinta): comparação com a Flexzo e a tela de credenciais do médico
 
 **Pedido do Victor:** conferir se o produto tem as funcionalidades do aplicativo estrangeiro de referência; depois, "Faça a tela de credenciais do médico (CRM, validade, status), mesmo sintética", com previsão de vagas, float pool e escala em evolução futura, cada uma ligada à fala da apresentação.

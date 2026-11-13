@@ -43,6 +43,9 @@ concentracao: ## Rodízio e limite de exposição contra a concentração das of
 zona: ## Medidas contra a exclusão por zona (simulação; leva cerca de um minuto)
 	$(CLI) zone --report-dir ../../docs/resultados
 
+extracao: ## Leitura do pedido: Gemini contra as regras (precisa de GEMINI_API_KEY; usa a cota gratuita, cerca de 10 min)
+	$(CLI) extraction --report-dir ../../docs/resultados
+
 robustez: ## Teste de premissas e simulação de lançamento (simulação; leva alguns minutos)
 	$(CLI) robustness --report-dir ../../docs/resultados
 
