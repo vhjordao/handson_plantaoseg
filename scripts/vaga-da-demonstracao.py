@@ -60,11 +60,15 @@ def main() -> int:
     days = [date.fromisoformat(args.dia)]
     if args.buscar:
         days = [now.date() + timedelta(days=offset) for offset in range(1, 8)]
-    print(f"Agora: {now:%d/%m/%Y %H:%M}. {unit.name}, {ESPECIALIDADE_DO_ROTEIRO}, noturno, banco limpo.")
+    print(
+        f"Agora: {now:%d/%m/%Y %H:%M}. {unit.name}, {ESPECIALIDADE_DO_ROTEIRO}, "
+        "noturno, banco limpo."
+    )
     print(f"Logins da demonstração: {', '.join(logins.values())}\n")
     for day in days:
         starts = datetime.combine(day, time(19))
-        fields = ShiftFields(unit.id, ESPECIALIDADE_DO_ROTEIRO, starts, starts + timedelta(hours=12), "high")
+        ends = starts + timedelta(hours=12)
+        fields = ShiftFields(unit.id, ESPECIALIDADE_DO_ROTEIRO, starts, ends, "high")
         rec = recommend(dataset, store, model, fields, now, top_k=5, exposure={})
         marks = []
         for candidate in rec.candidates:
