@@ -4,6 +4,16 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 13/11/2026 (sexta): a fase G fica de fora
+
+**Pedido do Victor:** "nao precisa da fase G".
+
+**O que muda:** a fase G (segurança, caminho completo no servidor, reinício, acessibilidade, vídeo de plano B e congelar o código) deixa de valer, e os itens 8.1 a 8.4, 8.6, 8.7 e 8.9 do [roteiro](roteiro-ate-o-mvp.md) ficam riscados, com a data. Continuam valendo o 8.5 (o Gemini no ensaio) e o 8.8 (limpar o banco), que são da fase H. O [roteiro da demonstração](apresentacao/roteiro-da-demonstracao.md) e as [perguntas do professor](apresentacao/perguntas-do-professor.md) deixam de falar em vídeo gravado.
+
+**O que isso deixa de pé, sem rodeio:** o plano B é só o modo de demonstração, que roda sem o servidor mas precisa que o site abra; não há revisão de segurança dedicada, nem reinício do servidor testado, nem teste de acessibilidade das telas novas, e o código não tem congelamento (mudar algo depois de um ensaio pede outro ensaio). A renovação do servidor e o MFA do n8n (8.2) também ficaram de fora: o servidor da apresentação vale um mês, e pará-lo é da fase I.
+
+**Uso de IA:** o Claude Code registrou a decisão nos documentos; a decisão é do Victor.
+
 ## 13/11/2026 (sexta): fase F, o roteiro da demonstração
 
 **Pedido do Victor:** "Fase F: roteiro da demonstração".
