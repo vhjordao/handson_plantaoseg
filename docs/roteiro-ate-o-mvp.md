@@ -45,7 +45,7 @@ Falta conferir as três no sistema real, com o login do coordenador.
 
 **Pendência da página inicial (11/11):** numa tela de computador com 900 px de altura, a seção 1 passa cerca de 30 px da janela, e o pé do título fica logo abaixo da dobra. A correção é descontar a altura do aviso e do cabeçalho (cerca de 8 rem, não 6). O Victor pediu para deixar nas pendências.
 
-**Próximo passo:** o Victor confere as fases C e D no sistema real, com os logins; depois vem a fase F (roteiro da demonstração, 5.1 a 5.4), que agora conta com o painel inicial do médico.
+**Próximo passo:** o Victor confere as fases C e D e faz o primeiro ensaio do [roteiro da demonstração](apresentacao/roteiro-da-demonstracao.md) no sistema real, com os logins (5.5). **A fase F está escrita (13/11)**; depois vem a fase G: o vídeo do plano B, a segurança e o congelamento do código.
 
 ## 2. Onde estamos
 
@@ -134,10 +134,11 @@ O adaptador `live` liga a web ao sistema real.
 
 ### Fase 5: a demonstração guiada
 
-- [ ] **5.1** O roteiro: qual pedido digitar, quais médicos aprovar e em que ordem, quem recusa, quem deixa passar e quem aceita, e o que mostrar em cada tela.
-- [ ] **5.2** O estado de partida: a vaga do roteiro recomenda os médicos que têm login, e o banco começa limpo de testes anteriores. Com o rodízio ([ADR 0017](adr/0017-rodizio-entre-equivalentes-na-api.md)), as recomendações dos ensaios na mesma semana mudam a ordem: rodar o `limpar-demonstracao` antes do dia zera essa contagem.
-- [ ] **5.3** As janelas: coordenador e médico lado a lado, ou o médico no celular, com a tela do celular projetada. *Atenção (10/11): o cookie de sessão vale para o navegador inteiro, então duas abas do mesmo navegador viram o mesmo papel. No sistema real, lado a lado pede uma janela anônima, outro navegador ou o celular. No modo de demonstração, o caminho é numa aba só (4.6).*
-- [ ] **5.4** O que fazer se algo falhar no meio: em que momento trocar para o modo de demonstração, que faz o mesmo caminho sem o servidor.
+- [x] **5.1** O roteiro: qual pedido digitar, quais médicos aprovar e em que ordem, quem recusa, quem deixa passar e quem aceita, e o que mostrar em cada tela. *Escrito em 13/11: [roteiro da demonstração](apresentacao/roteiro-da-demonstracao.md). A vaga é a do Hospital Modelo Centro, pediatria, noite de quarta, em que os três médicos com login aparecem em 2º, 4º e 5º (4 de 84 combinações testadas servem); o 1º da cascata recusa, o 2º aceita e o 3º fica na fila. O "deixa passar" só cabe no modo de demonstração, porque o prazo real é de 2 minutos.*
+- [x] **5.2** O estado de partida: a vaga do roteiro recomenda os médicos que têm login, e o banco começa limpo de testes anteriores. Com o rodízio ([ADR 0017](adr/0017-rodizio-entre-equivalentes-na-api.md)), as recomendações dos ensaios na mesma semana mudam a ordem: rodar o `limpar-demonstracao` antes do dia zera essa contagem. *Documentado em 13/11, com o script [`vaga-da-demonstracao.py`](../scripts/vaga-da-demonstracao.py), que confere a ordem com o motor e o banco limpo. Rodar o `limpar-demonstracao` é do Victor.*
+- [x] **5.3** As janelas: coordenador e médico lado a lado, ou o médico no celular, com a tela do celular projetada. *Atenção (10/11): o cookie de sessão vale para o navegador inteiro, então duas abas do mesmo navegador viram o mesmo papel. No sistema real, lado a lado pede uma janela anônima, outro navegador ou o celular. No modo de demonstração, o caminho é numa aba só (4.6).* *Escrito em 13/11: coordenador no navegador normal, o 1º médico numa janela anônima e o 2º em outro navegador (ou no celular), com os logins feitos 10 minutos antes.*
+- [x] **5.4** O que fazer se algo falhar no meio: em que momento trocar para o modo de demonstração, que faz o mesmo caminho sem o servidor. *Escrito em 13/11: passou de 10 segundos sem resposta, troca para o modo de demonstração, com os exemplos e não o texto digitado; o n8n só entra quando o prazo vence, então uma falha nele não afeta o roteiro.*
+- [ ] **5.5** O ensaio no sistema real, com os logins: confirmar que os três nomes aparecem em 2º, 4º e 5º, cronometrar os 5 minutos e rodar o `limpar-demonstracao` depois de cada ensaio. *Do Victor; as fases C e D também esperam esta conferência.*
 
 **Pronto quando:** o Victor percorre o roteiro inteiro, sozinho, sem consultar ninguém.
 

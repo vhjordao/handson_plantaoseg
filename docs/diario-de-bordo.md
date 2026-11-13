@@ -4,6 +4,20 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 13/11/2026 (sexta): fase F, o roteiro da demonstração
+
+**Pedido do Victor:** "Fase F: roteiro da demonstração".
+
+**O que mudou (só documento e um script):** [roteiro-da-demonstracao.md](apresentacao/roteiro-da-demonstracao.md), com a cola de bolso, o estado de partida, as janelas, o passo a passo de 5 minutos (clique, frase e o que a plateia vê), o que fazer se algo falhar e o plano B. O script `scripts/vaga-da-demonstracao.py` roda o motor da API sobre os mesmos dados e pesos, com o banco limpo, e mostra onde os três médicos com login aparecem.
+
+**A escolha da vaga:** os logins da demonstração são os três primeiros médicos das personas e moram perto do Hospital Modelo Centro. Das 84 combinações de unidade, especialidade, dia e período testadas, só 4 põem os três entre os cinco primeiros, todas no Centro, pediatria, à noite. A de quarta (18/11) os põe em 2º, 4º e 5º, sem alerta de jornada, e a ordem não mudou em sete horários testados de 14 a 17/11. O 1º da cascata recusa, o 2º aceita e o 3º fica na fila.
+
+**O que contrariou o esperado:** o "deixa passar" não cabe no sistema real, porque o prazo da oferta é de 2 minutos e a demonstração dura 5. Ele fica para o modo de demonstração, que tem o botão "Passar o prazo desta oferta". Também: sem o banco limpo, o rodízio muda a ordem, e a auditoria se abre filtrada pela vaga, porque a trilha é só de inserção e guarda os ensaios.
+
+**O que falta:** **não foi percorrido no sistema real**, porque os logins são do Victor (item 5.5). Falta também o vídeo do plano B (fase G).
+
+**Uso de IA:** o Claude Code calculou a vaga com o motor, conferiu os rótulos contra o código da web e escreveu o roteiro; o Victor ensaia e decide.
+
 ## 13/11/2026 (sexta): quanto a IA acerta ao ler o pedido
 
 **Pedido do Victor:** "como posso mostrar que funcionou bem o uso da IA", e depois "Sim, montar" a avaliação da leitura do pedido pelo Gemini.
