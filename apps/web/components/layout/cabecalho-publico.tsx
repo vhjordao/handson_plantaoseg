@@ -4,6 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { CircleHelp } from "lucide-react";
 import { Dialog as DialogPrimitive } from "radix-ui";
+import { LogoPlantao } from "@/components/dominio/marca-plantao";
 import { BotaoTema } from "@/components/layout/botao-tema";
 import { ACOES } from "@/lib/copy/comum";
 import { cn } from "@/lib/utils";
@@ -18,17 +19,22 @@ const LINKS = [
 
 const CURVA = "ease-[cubic-bezier(0.76,0,0.24,1)]";
 
-/** A marca em duas linhas, com a frase do produto embaixo. */
+/** O logo e a marca em duas linhas, com a frase do produto embaixo. */
 function Logo() {
   return (
     // O nome acessível é o próprio texto visível (WCAG 2.5.3); "página inicial" fica só para o leitor de tela.
-    <Link href="/" className="flex shrink-0 flex-col rounded-md text-tinta">
-      <span className="text-base leading-none font-extrabold tracking-tight uppercase sm:text-lg md:text-2xl">Plantão</span>
-      <span className="-mt-0.5 text-base leading-none font-extrabold tracking-tight uppercase sm:text-lg md:-mt-1 md:text-2xl">
-        Seguro
-      </span>
-      <span className="mt-1 hidden text-[10px] leading-none font-medium min-[400px]:block md:mt-1.5 md:text-[11px]">
-        a IA sugere, você decide
+    <Link href="/" className="flex shrink-0 items-center gap-2.5 rounded-md text-tinta md:gap-3">
+      {/* Abaixo de 400 px o logo sai, para o cabeçalho caber numa linha (WCAG 2.4.11): a 360 px ele
+          precisava de cerca de 340 px e tinha 328. O nome fica, e a frase entra no mesmo ponto. */}
+      <LogoPlantao className="hidden size-9 min-[400px]:block sm:size-10 md:size-12" />
+      <span className="flex flex-col">
+        <span className="text-base leading-none font-extrabold tracking-tight uppercase sm:text-lg md:text-2xl">Plantão</span>
+        <span className="-mt-0.5 text-base leading-none font-extrabold tracking-tight uppercase sm:text-lg md:-mt-1 md:text-2xl">
+          Seguro
+        </span>
+        <span className="mt-1 hidden text-[10px] leading-none font-medium min-[400px]:block md:mt-1.5 md:text-[11px]">
+          a IA sugere, você decide
+        </span>
       </span>
       <span className="sr-only">, página inicial</span>
     </Link>
