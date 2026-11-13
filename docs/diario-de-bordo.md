@@ -18,6 +18,16 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 **Uso de IA:** o Claude Code calculou a vaga com o motor, conferiu os rótulos contra o código da web e escreveu o roteiro; o Victor ensaia e decide.
 
+## 13/11/2026 (sexta): o logo novo no produto
+
+**Pedido do Victor:** "Coloque o logo novo no produto".
+
+**O que mudou:** o logo B escolhido em 11/11, a cruz em dois tons sobre um quadrado anil, entrou no lugar do anel em todos os pontos da marca: o cabeçalho do coordenador e o do médico (no celular, só o logo), o cabeçalho do site (ao lado do nome em duas linhas), o menu do celular, o rodapé, a página de erro e o ícone da aba. O nome passou a ter **Plantão** em negrito e Seguro em peso normal. O fundo anil vem de um token novo, `--logo-fundo`, mais claro no tema escuro. O anel das vozes continua nos selos de decisão humana, onde ele significa "a pessoa decidiu".
+
+**Como foi conferido:** tipos, lint e os 263 testes da web passam, com um teste novo da marca (logo decorativo, as duas partes do nome); no navegador, o site e a tela do coordenador no tema claro, e o coordenador no celular e no tema escuro, sem erro no console.
+
+**Uso de IA:** o Claude Code aplicou o desenho que o Victor escolheu e conferiu as telas; a escolha do logo é do Victor.
+
 ## 13/11/2026 (sexta): quanto a IA acerta ao ler o pedido
 
 **Pedido do Victor:** "como posso mostrar que funcionou bem o uso da IA", e depois "Sim, montar" a avaliação da leitura do pedido pelo Gemini.

@@ -18,6 +18,8 @@ A plataforma tem um trabalho que nenhum painel de saúde genérico tem: **mostra
 
 **Marca.** Um anel com metade tracejada (a IA sugere) e metade em arco contínuo (a pessoa decide). Wordmark em Source Serif 4 semibold. Sem cruz médica e sem escudo.
 
+> **Atualização de 13/11/2026: o logo novo.** Entre quatro opções mostradas em 11/11, o Victor escolheu a **cruz em dois tons**: um quadrado anil com cantos arredondados (`#4046c4`, `#5a60e0` no tema escuro, no token `--logo-fundo`), a barra vertical verde clara (`#8fe3bf`) e a horizontal branca. O nome tem **Plantão** em negrito e Seguro em peso normal. Está em `LogoPlantao` e `MarcaPlantao` (`apps/web/components/dominio/marca-plantao.tsx`), nos cabeçalhos do coordenador, do médico e do site, e no ícone da aba (`app/icon.svg`). O anel das vozes deixou de ser o logo e continua só onde tem sentido: nos selos de decisão humana. A regra "sem cruz médica" acima foi revista por essa escolha.
+
 ## 2. Plano (primeira passagem)
 
 ### 2.1 Cores base (nomeadas)

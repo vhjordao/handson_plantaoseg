@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { ArteDeFundo } from "@/components/dominio/arte-de-fundo";
 import { FaixaDemonstracao } from "@/components/dominio/faixa-demonstracao";
-import { MarcaPlantao, SimboloPlantao } from "@/components/dominio/marca-plantao";
+import { LogoPlantao, MarcaPlantao } from "@/components/dominio/marca-plantao";
 import { BotaoAjuda } from "@/components/layout/botao-ajuda";
 import { BotaoTema } from "@/components/layout/botao-tema";
 import { Caminho } from "@/components/layout/caminho";
@@ -42,7 +42,7 @@ export function CascaMedico({
             className="inline-flex min-h-[var(--alvo-min)] shrink-0 items-center rounded-campo"
           >
             <span className="sm:hidden">
-              <SimboloPlantao />
+              <LogoPlantao />
             </span>
             <span className="hidden sm:inline-flex">
               <MarcaPlantao />

@@ -84,15 +84,22 @@ describe("SeloDecisaoHumana", () => {
 
 describe("MarcaPlantao", () => {
   it("compacta: o nome continua no HTML (para o leitor de tela) e só some da tela em telas estreitas", () => {
-    render(<MarcaPlantao compacta />);
-    const nome = screen.getByText("PlantãoSeguro");
-    expect(nome).toBeInTheDocument();
+    const { container } = render(<MarcaPlantao compacta />);
+    const nome = container.querySelector("[data-marca]");
+    expect(nome).toHaveTextContent(/^PlantãoSeguro$/);
     expect(nome).toHaveClass("@max-[22rem]:sr-only");
   });
 
   it("sem compacta, o nome aparece sempre", () => {
-    render(<MarcaPlantao />);
-    expect(screen.getByText("PlantãoSeguro")).not.toHaveClass("@max-[22rem]:sr-only");
+    const { container } = render(<MarcaPlantao />);
+    expect(container.querySelector("[data-marca]")).not.toHaveClass("@max-[22rem]:sr-only");
+  });
+
+  it("o logo é decorativo e o nome tem Plantão em negrito e Seguro em peso normal", () => {
+    const { container } = render(<MarcaPlantao />);
+    expect(container.querySelector("svg")).toHaveAttribute("aria-hidden", "true");
+    expect(screen.getByText("Plantão")).toHaveClass("font-bold");
+    expect(screen.getByText("Seguro")).toHaveClass("font-normal");
   });
 });
 
