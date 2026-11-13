@@ -1,6 +1,6 @@
 # Teste do Gemini com a chave real (plano e registro)
 
-**Objetivo:** verificar, com uma chave real, o que os testes só provam com clientes falsos: (1) o Gemini extrai bem os campos de um pedido normal e (2) como ele reage aos 10 tipos de ataque de injeção de prompt. **Status: executado em 05/11/2026**, numa manhã só; o registro está no fim. O modelo escolhido é o `gemini-3.1-flash-lite`.
+**Objetivo:** verificar, com uma chave real, o que os testes só provam com clientes falsos: (1) o Gemini extrai bem os campos de um pedido normal e (2) como ele reage aos 10 tipos de ataque de injeção de prompt. **Status: executado em 05/11/2026**, numa manhã só; o registro está no fim. O modelo escolhido é o `gemini-3.1-flash-lite`. **Quanto ele acerta foi medido em 13/11/2026, em 60 pedidos com gabarito:** veja [metricas-extracao.md](resultados/metricas-extracao.md) (`make extracao`).
 
 ## Antes de começar
 
@@ -133,3 +133,19 @@ O prazo mínimo de 10 s do serviço, a tela que desiste em 6 s, os motivos fora 
 - Se o Gemini obedecer a um ataque e a validação **não** barrar, é uma falha de desenho: registre o caso e reforce o esquema.
 - Se o Gemini errar um campo de pedido normal mas a validação aceitar, é a razão de o coordenador **sempre conferir** os campos.
 - A demora de cada chamada sai na tabela do comando. Na camada gratuita não há custo.
+
+## Se der `CERTIFICATE_VERIFY_FAILED` no Windows
+
+Em 13/11/2026 a chamada falhou com `ConnectError` e `CERTIFICATE_VERIFY_FAILED` na máquina do Victor: o antivírus (Norton Web/Mail Shield) inspeciona o HTTPS e assina com uma raiz própria, que está no repositório de certificados do Windows mas não no pacote `certifi` do Python. O `curl` funciona e o Python não. **Não desligue a verificação**: a chave do Gemini vai nessa conexão. Monte um pacote com o `certifi` e as raízes do Windows e aponte `SSL_CERT_FILE` para ele só na rodada:
+
+```python
+import ssl, certifi
+pems = [open(certifi.where(), encoding="ascii").read()]
+for store in ("ROOT", "CA"):
+    for der, enc, trust in ssl.enum_certificates(store):
+        if enc == "x509_asn" and (trust is True or "1.3.6.1.5.5.7.3.1" in trust):
+            pems.append(ssl.DER_cert_to_PEM_cert(der))
+open("ca-bundle.pem", "w", encoding="ascii").write("\n".join(pems))
+```
+
+Guarde o arquivo fora do repositório. Dentro do contêiner da API no servidor o problema não existe.

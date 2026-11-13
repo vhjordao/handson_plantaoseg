@@ -1,0 +1,4656 @@
+{
+  "meta": {
+    "model": "gemini-3.1-flash-lite",
+    "run_date": "2026-11-13",
+    "seed": 20261113,
+    "per_style": 12,
+    "cases": 60,
+    "natural_today": "2026-10-01",
+    "product_limit_ms": 6000,
+    "pause_s": 6.5
+  },
+  "sets": {
+    "sintetico": {
+      "n": 36,
+      "methods": {
+        "regras": {
+          "cases": 36,
+          "answered": 36,
+          "all_right": 36,
+          "fields_right": 180,
+          "fields_total": 180,
+          "invented": 0,
+          "per_field": {
+            "unit_id": [
+              36,
+              36
+            ],
+            "specialty": [
+              36,
+              36
+            ],
+            "starts_at": [
+              36,
+              36
+            ],
+            "ends_at": [
+              36,
+              36
+            ],
+            "urgency": [
+              36,
+              36
+            ]
+          }
+        },
+        "gemini": {
+          "cases": 36,
+          "answered": 33,
+          "all_right": 33,
+          "fields_right": 165,
+          "fields_total": 165,
+          "invented": 0,
+          "per_field": {
+            "unit_id": [
+              33,
+              33
+            ],
+            "specialty": [
+              33,
+              33
+            ],
+            "starts_at": [
+              33,
+              33
+            ],
+            "ends_at": [
+              33,
+              33
+            ],
+            "urgency": [
+              33,
+              33
+            ]
+          }
+        },
+        "sistema": {
+          "cases": 36,
+          "answered": 36,
+          "all_right": 36,
+          "fields_right": 180,
+          "fields_total": 180,
+          "invented": 0,
+          "per_field": {
+            "unit_id": [
+              36,
+              36
+            ],
+            "specialty": [
+              36,
+              36
+            ],
+            "starts_at": [
+              36,
+              36
+            ],
+            "ends_at": [
+              36,
+              36
+            ],
+            "urgency": [
+              36,
+              36
+            ]
+          }
+        },
+        "sistema_api": {
+          "cases": 36,
+          "answered": 36,
+          "all_right": 36,
+          "fields_right": 180,
+          "fields_total": 180,
+          "invented": 0,
+          "per_field": {
+            "unit_id": [
+              36,
+              36
+            ],
+            "specialty": [
+              36,
+              36
+            ],
+            "starts_at": [
+              36,
+              36
+            ],
+            "ends_at": [
+              36,
+              36
+            ],
+            "urgency": [
+              36,
+              36
+            ]
+          }
+        }
+      },
+      "by_style": {
+        "formal": {
+          "n": 12,
+          "methods": {
+            "regras": {
+              "cases": 12,
+              "answered": 12,
+              "all_right": 12,
+              "fields_right": 60,
+              "fields_total": 60,
+              "invented": 0,
+              "per_field": {
+                "unit_id": [
+                  12,
+                  12
+                ],
+                "specialty": [
+                  12,
+                  12
+                ],
+                "starts_at": [
+                  12,
+                  12
+                ],
+                "ends_at": [
+                  12,
+                  12
+                ],
+                "urgency": [
+                  12,
+                  12
+                ]
+              }
+            },
+            "gemini": {
+              "cases": 12,
+              "answered": 10,
+              "all_right": 10,
+              "fields_right": 50,
+              "fields_total": 50,
+              "invented": 0,
+              "per_field": {
+                "unit_id": [
+                  10,
+                  10
+                ],
+                "specialty": [
+                  10,
+                  10
+                ],
+                "starts_at": [
+                  10,
+                  10
+                ],
+                "ends_at": [
+                  10,
+                  10
+                ],
+                "urgency": [
+                  10,
+                  10
+                ]
+              }
+            },
+            "sistema": {
+              "cases": 12,
+              "answered": 12,
+              "all_right": 12,
+              "fields_right": 60,
+              "fields_total": 60,
+              "invented": 0,
+              "per_field": {
+                "unit_id": [
+                  12,
+                  12
+                ],
+                "specialty": [
+                  12,
+                  12
+                ],
+                "starts_at": [
+                  12,
+                  12
+                ],
+                "ends_at": [
+                  12,
+                  12
+                ],
+                "urgency": [
+                  12,
+                  12
+                ]
+              }
+            },
+            "sistema_api": {
+              "cases": 12,
+              "answered": 12,
+              "all_right": 12,
+              "fields_right": 60,
+              "fields_total": 60,
+              "invented": 0,
+              "per_field": {
+                "unit_id": [
+                  12,
+                  12
+                ],
+                "specialty": [
+                  12,
+                  12
+                ],
+                "starts_at": [
+                  12,
+                  12
+                ],
+                "ends_at": [
+                  12,
+                  12
+                ],
+                "urgency": [
+                  12,
+                  12
+                ]
+              }
+            }
+          }
+        },
+        "abreviado": {
+          "n": 12,
+          "methods": {
+            "regras": {
+              "cases": 12,
+              "answered": 12,
+              "all_right": 12,
+              "fields_right": 60,
+              "fields_total": 60,
+              "invented": 0,
+              "per_field": {
+                "unit_id": [
+                  12,
+                  12
+                ],
+                "specialty": [
+                  12,
+                  12
+                ],
+                "starts_at": [
+                  12,
+                  12
+                ],
+                "ends_at": [
+                  12,
+                  12
+                ],
+                "urgency": [
+                  12,
+                  12
+                ]
+              }
+            },
+            "gemini": {
+              "cases": 12,
+              "answered": 12,
+              "all_right": 12,
+              "fields_right": 60,
+              "fields_total": 60,
+              "invented": 0,
+              "per_field": {
+                "unit_id": [
+                  12,
+                  12
+                ],
+                "specialty": [
+                  12,
+                  12
+                ],
+                "starts_at": [
+                  12,
+                  12
+                ],
+                "ends_at": [
+                  12,
+                  12
+                ],
+                "urgency": [
+                  12,
+                  12
+                ]
+              }
+            },
+            "sistema": {
+              "cases": 12,
+              "answered": 12,
+              "all_right": 12,
+              "fields_right": 60,
+              "fields_total": 60,
+              "invented": 0,
+              "per_field": {
+                "unit_id": [
+                  12,
+                  12
+                ],
+                "specialty": [
+                  12,
+                  12
+                ],
+                "starts_at": [
+                  12,
+                  12
+                ],
+                "ends_at": [
+                  12,
+                  12
+                ],
+                "urgency": [
+                  12,
+                  12
+                ]
+              }
+            },
+            "sistema_api": {
+              "cases": 12,
+              "answered": 12,
+              "all_right": 12,
+              "fields_right": 60,
+              "fields_total": 60,
+              "invented": 0,
+              "per_field": {
+                "unit_id": [
+                  12,
+                  12
+                ],
+                "specialty": [
+                  12,
+                  12
+                ],
+                "starts_at": [
+                  12,
+                  12
+                ],
+                "ends_at": [
+                  12,
+                  12
+                ],
+                "urgency": [
+                  12,
+                  12
+                ]
+              }
+            }
+          }
+        },
+        "com_erros": {
+          "n": 12,
+          "methods": {
+            "regras": {
+              "cases": 12,
+              "answered": 12,
+              "all_right": 12,
+              "fields_right": 60,
+              "fields_total": 60,
+              "invented": 0,
+              "per_field": {
+                "unit_id": [
+                  12,
+                  12
+                ],
+                "specialty": [
+                  12,
+                  12
+                ],
+                "starts_at": [
+                  12,
+                  12
+                ],
+                "ends_at": [
+                  12,
+                  12
+                ],
+                "urgency": [
+                  12,
+                  12
+                ]
+              }
+            },
+            "gemini": {
+              "cases": 12,
+              "answered": 11,
+              "all_right": 11,
+              "fields_right": 55,
+              "fields_total": 55,
+              "invented": 0,
+              "per_field": {
+                "unit_id": [
+                  11,
+                  11
+                ],
+                "specialty": [
+                  11,
+                  11
+                ],
+                "starts_at": [
+                  11,
+                  11
+                ],
+                "ends_at": [
+                  11,
+                  11
+                ],
+                "urgency": [
+                  11,
+                  11
+                ]
+              }
+            },
+            "sistema": {
+              "cases": 12,
+              "answered": 12,
+              "all_right": 12,
+              "fields_right": 60,
+              "fields_total": 60,
+              "invented": 0,
+              "per_field": {
+                "unit_id": [
+                  12,
+                  12
+                ],
+                "specialty": [
+                  12,
+                  12
+                ],
+                "starts_at": [
+                  12,
+                  12
+                ],
+                "ends_at": [
+                  12,
+                  12
+                ],
+                "urgency": [
+                  12,
+                  12
+                ]
+              }
+            },
+            "sistema_api": {
+              "cases": 12,
+              "answered": 12,
+              "all_right": 12,
+              "fields_right": 60,
+              "fields_total": 60,
+              "invented": 0,
+              "per_field": {
+                "unit_id": [
+                  12,
+                  12
+                ],
+                "specialty": [
+                  12,
+                  12
+                ],
+                "starts_at": [
+                  12,
+                  12
+                ],
+                "ends_at": [
+                  12,
+                  12
+                ],
+                "urgency": [
+                  12,
+                  12
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "natural": {
+      "n": 24,
+      "methods": {
+        "regras": {
+          "cases": 24,
+          "answered": 24,
+          "all_right": 20,
+          "fields_right": 95,
+          "fields_total": 100,
+          "invented": 0,
+          "per_field": {
+            "unit_id": [
+              24,
+              24
+            ],
+            "specialty": [
+              24,
+              24
+            ],
+            "starts_at": [
+              15,
+              16
+            ],
+            "ends_at": [
+              15,
+              16
+            ],
+            "urgency": [
+              17,
+              20
+            ]
+          }
+        },
+        "gemini": {
+          "cases": 24,
+          "answered": 21,
+          "all_right": 21,
+          "fields_right": 91,
+          "fields_total": 91,
+          "invented": 0,
+          "per_field": {
+            "unit_id": [
+              21,
+              21
+            ],
+            "specialty": [
+              21,
+              21
+            ],
+            "starts_at": [
+              16,
+              16
+            ],
+            "ends_at": [
+              16,
+              16
+            ],
+            "urgency": [
+              17,
+              17
+            ]
+          }
+        },
+        "sistema": {
+          "cases": 24,
+          "answered": 24,
+          "all_right": 24,
+          "fields_right": 100,
+          "fields_total": 100,
+          "invented": 0,
+          "per_field": {
+            "unit_id": [
+              24,
+              24
+            ],
+            "specialty": [
+              24,
+              24
+            ],
+            "starts_at": [
+              16,
+              16
+            ],
+            "ends_at": [
+              16,
+              16
+            ],
+            "urgency": [
+              20,
+              20
+            ]
+          }
+        },
+        "sistema_api": {
+          "cases": 24,
+          "answered": 24,
+          "all_right": 22,
+          "fields_right": 98,
+          "fields_total": 100,
+          "invented": 0,
+          "per_field": {
+            "unit_id": [
+              24,
+              24
+            ],
+            "specialty": [
+              24,
+              24
+            ],
+            "starts_at": [
+              16,
+              16
+            ],
+            "ends_at": [
+              16,
+              16
+            ],
+            "urgency": [
+              18,
+              20
+            ]
+          }
+        }
+      }
+    }
+  },
+  "status": {
+    "ok": 54,
+    "sem_resposta": 4,
+    "barrada_duracao_invalida": 2
+  },
+  "latency": {
+    "median_ms": 1666,
+    "p95_ms": 26153,
+    "max_ms": 28980,
+    "within_product_limit": 40,
+    "answered": 56
+  },
+  "cases": [
+    {
+      "id": "3b2a343c-6341-424e-bd8e-37bcaae52abe",
+      "set": "sintetico",
+      "style": "formal",
+      "text": "Preciso de um pediatra para o plantão noturno de domingo, 19h às 7h, Hospital Modelo Sul, urgência alta.",
+      "today": "2026-04-18",
+      "expected": {
+        "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+        "specialty": "pediatria",
+        "starts_at": "2026-04-19T19:00:00",
+        "ends_at": "2026-04-20T07:00:00",
+        "urgency": "high"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "pediatria",
+          "starts_at": "2026-04-19T19:00:00",
+          "ends_at": "2026-04-20T07:00:00",
+          "urgency": "high"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 2763,
+        "raw": "{ \"unit\": \"Hospital Modelo Sul\", \"specialty\": \"pediatria\", \"starts_at\": \"2026-04-19T19:00:00\", \"ends_at\": \"2026-04-20T07:00:00\", \"urgency\": \"high\" }",
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "pediatria",
+          "starts_at": "2026-04-19T19:00:00",
+          "ends_at": "2026-04-20T07:00:00",
+          "urgency": "high"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "06a6391f-da68-4153-b741-3c483f3b9f93",
+      "set": "sintetico",
+      "style": "formal",
+      "text": "Preciso de um pediatra para o plantão noturno de sábado, 19h às 7h, Hospital Modelo Centro, urgência baixa.",
+      "today": "2026-08-26",
+      "expected": {
+        "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+        "specialty": "pediatria",
+        "starts_at": "2026-08-29T19:00:00",
+        "ends_at": "2026-08-30T07:00:00",
+        "urgency": "low"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+          "specialty": "pediatria",
+          "starts_at": "2026-08-29T19:00:00",
+          "ends_at": "2026-08-30T07:00:00",
+          "urgency": "low"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 8846,
+        "raw": "{ \"unit\": \"Hospital Modelo Centro\", \"specialty\": \"pediatria\", \"starts_at\": \"2026-08-29T19:00:00\", \"ends_at\": \"2026-08-30T07:00:00\", \"urgency\": \"low\" }",
+        "fields": {
+          "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+          "specialty": "pediatria",
+          "starts_at": "2026-08-29T19:00:00",
+          "ends_at": "2026-08-30T07:00:00",
+          "urgency": "low"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "de6afdf0-9f34-45ea-ad2c-9c301bc7b12c",
+      "set": "sintetico",
+      "style": "formal",
+      "text": "Preciso de um médico clínico para o plantão noturno de sexta, 19h às 7h, Hospital Modelo Centro, urgência média.",
+      "today": "2026-04-13",
+      "expected": {
+        "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+        "specialty": "clinica_medica",
+        "starts_at": "2026-04-17T19:00:00",
+        "ends_at": "2026-04-18T07:00:00",
+        "urgency": "medium"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-04-17T19:00:00",
+          "ends_at": "2026-04-18T07:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "sem_resposta",
+        "ms": 29631,
+        "raw": "falha ao chamar o Gemini: ServerError 504",
+        "fields": null,
+        "score": null
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "2a1abc67-ff91-406b-92f9-ec3b581e9e0d",
+      "set": "sintetico",
+      "style": "formal",
+      "text": "Preciso de um pediatra para o plantão noturno de domingo, 19h às 7h, Hospital Modelo Sul, urgência baixa.",
+      "today": "2026-07-03",
+      "expected": {
+        "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+        "specialty": "pediatria",
+        "starts_at": "2026-07-05T19:00:00",
+        "ends_at": "2026-07-06T07:00:00",
+        "urgency": "low"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "pediatria",
+          "starts_at": "2026-07-05T19:00:00",
+          "ends_at": "2026-07-06T07:00:00",
+          "urgency": "low"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 1110,
+        "raw": "{ \"unit\": \"Hospital Modelo Sul\", \"specialty\": \"pediatria\", \"starts_at\": \"2026-07-05T19:00:00\", \"ends_at\": \"2026-07-06T07:00:00\", \"urgency\": \"low\" }",
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "pediatria",
+          "starts_at": "2026-07-05T19:00:00",
+          "ends_at": "2026-07-06T07:00:00",
+          "urgency": "low"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "69c45a8e-1e15-4277-a577-a03344f5e762",
+      "set": "sintetico",
+      "style": "formal",
+      "text": "Preciso de um médico clínico para o plantão noturno de domingo, 19h às 7h, Hospital Modelo Sul, urgência alta.",
+      "today": "2026-02-18",
+      "expected": {
+        "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+        "specialty": "clinica_medica",
+        "starts_at": "2026-02-22T19:00:00",
+        "ends_at": "2026-02-23T07:00:00",
+        "urgency": "high"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-02-22T19:00:00",
+          "ends_at": "2026-02-23T07:00:00",
+          "urgency": "high"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 1629,
+        "raw": "{ \"unit\": \"Hospital Modelo Sul\", \"specialty\": \"clinica_medica\", \"starts_at\": \"2026-02-22T19:00:00\", \"ends_at\": \"2026-02-23T07:00:00\", \"urgency\": \"high\" }",
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-02-22T19:00:00",
+          "ends_at": "2026-02-23T07:00:00",
+          "urgency": "high"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "f952a944-8f0d-4400-85d8-47e8cd1a1ea5",
+      "set": "sintetico",
+      "style": "formal",
+      "text": "Preciso de um médico clínico para o plantão noturno de terça, 19h às 7h, Hospital Modelo Sul, urgência média.",
+      "today": "2026-04-18",
+      "expected": {
+        "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+        "specialty": "clinica_medica",
+        "starts_at": "2026-04-21T19:00:00",
+        "ends_at": "2026-04-22T07:00:00",
+        "urgency": "medium"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-04-21T19:00:00",
+          "ends_at": "2026-04-22T07:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 4687,
+        "raw": "{ \"unit\": \"Hospital Modelo Sul\", \"specialty\": \"clinica_medica\", \"starts_at\": \"2026-04-21T19:00:00\", \"ends_at\": \"2026-04-22T07:00:00\", \"urgency\": \"medium\" }",
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-04-21T19:00:00",
+          "ends_at": "2026-04-22T07:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "b0f3252a-8df4-4412-8879-4917486545f9",
+      "set": "sintetico",
+      "style": "formal",
+      "text": "Preciso de um pediatra para o plantão diurno de sábado, 7h às 19h, Hospital Modelo Sul, urgência baixa.",
+      "today": "2026-09-13",
+      "expected": {
+        "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+        "specialty": "pediatria",
+        "starts_at": "2026-09-19T07:00:00",
+        "ends_at": "2026-09-19T19:00:00",
+        "urgency": "low"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "pediatria",
+          "starts_at": "2026-09-19T07:00:00",
+          "ends_at": "2026-09-19T19:00:00",
+          "urgency": "low"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 1654,
+        "raw": "{ \"unit\": \"Hospital Modelo Sul\", \"specialty\": \"pediatria\", \"starts_at\": \"2026-09-19T07:00:00\", \"ends_at\": \"2026-09-19T19:00:00\", \"urgency\": \"low\" }",
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "pediatria",
+          "starts_at": "2026-09-19T07:00:00",
+          "ends_at": "2026-09-19T19:00:00",
+          "urgency": "low"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "f88563c1-ad6e-4d65-9bd5-9e837c01a53f",
+      "set": "sintetico",
+      "style": "formal",
+      "text": "Preciso de um médico clínico para o plantão diurno de sábado, 7h às 19h, Hospital Modelo Centro, urgência média.",
+      "today": "2026-08-26",
+      "expected": {
+        "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+        "specialty": "clinica_medica",
+        "starts_at": "2026-08-29T07:00:00",
+        "ends_at": "2026-08-29T19:00:00",
+        "urgency": "medium"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-08-29T07:00:00",
+          "ends_at": "2026-08-29T19:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 6373,
+        "raw": "{ \"unit\": \"Hospital Modelo Centro\", \"specialty\": \"clinica_medica\", \"starts_at\": \"2026-08-29T07:00:00\", \"ends_at\": \"2026-08-29T19:00:00\", \"urgency\": \"medium\" }",
+        "fields": {
+          "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-08-29T07:00:00",
+          "ends_at": "2026-08-29T19:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "033aee11-5064-48b1-86f6-caa39d3a8bea",
+      "set": "sintetico",
+      "style": "formal",
+      "text": "Preciso de um pediatra para o plantão noturno de domingo, 19h às 7h, Hospital Modelo Centro, urgência alta.",
+      "today": "2026-01-17",
+      "expected": {
+        "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+        "specialty": "pediatria",
+        "starts_at": "2026-01-18T19:00:00",
+        "ends_at": "2026-01-19T07:00:00",
+        "urgency": "high"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+          "specialty": "pediatria",
+          "starts_at": "2026-01-18T19:00:00",
+          "ends_at": "2026-01-19T07:00:00",
+          "urgency": "high"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 28980,
+        "raw": "{ \"unit\": \"Hospital Modelo Centro\", \"specialty\": \"pediatria\", \"starts_at\": \"2026-01-18T19:00:00\", \"ends_at\": \"2026-01-19T07:00:00\", \"urgency\": \"high\" }",
+        "fields": {
+          "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+          "specialty": "pediatria",
+          "starts_at": "2026-01-18T19:00:00",
+          "ends_at": "2026-01-19T07:00:00",
+          "urgency": "high"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "7729157d-dd61-4a32-8765-e68f6c3e2087",
+      "set": "sintetico",
+      "style": "formal",
+      "text": "Preciso de um pediatra para o plantão noturno de quarta, 19h às 7h, Hospital Modelo Norte, urgência baixa.",
+      "today": "2025-09-30",
+      "expected": {
+        "unit_id": "d89739ca-9755-4f36-8454-ce39cb12cfda",
+        "specialty": "pediatria",
+        "starts_at": "2025-10-01T19:00:00",
+        "ends_at": "2025-10-02T07:00:00",
+        "urgency": "low"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "d89739ca-9755-4f36-8454-ce39cb12cfda",
+          "specialty": "pediatria",
+          "starts_at": "2025-10-01T19:00:00",
+          "ends_at": "2025-10-02T07:00:00",
+          "urgency": "low"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "sem_resposta",
+        "ms": 29727,
+        "raw": "falha ao chamar o Gemini: ServerError 504",
+        "fields": null,
+        "score": null
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "19ae2d79-4f3b-4fe0-abd0-795c216e989d",
+      "set": "sintetico",
+      "style": "formal",
+      "text": "Preciso de um médico clínico para o plantão noturno de hoje, 19h às 7h, Hospital Modelo Sul, urgência média.",
+      "today": "2026-06-01",
+      "expected": {
+        "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+        "specialty": "clinica_medica",
+        "starts_at": "2026-06-01T19:00:00",
+        "ends_at": "2026-06-02T07:00:00",
+        "urgency": "medium"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-06-01T19:00:00",
+          "ends_at": "2026-06-02T07:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 1443,
+        "raw": "{\"unit\": \"Hospital Modelo Sul\", \"specialty\": \"clinica_medica\", \"starts_at\": \"2026-06-01T19:00:00\", \"ends_at\": \"2026-06-02T07:00:00\", \"urgency\": \"medium\"}",
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-06-01T19:00:00",
+          "ends_at": "2026-06-02T07:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "83518cd0-1fcb-4ed4-bd00-0d938bca271c",
+      "set": "sintetico",
+      "style": "formal",
+      "text": "Preciso de um médico clínico para o plantão noturno de sexta, 19h às 7h, Hospital Modelo Sul, urgência média.",
+      "today": "2025-10-23",
+      "expected": {
+        "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+        "specialty": "clinica_medica",
+        "starts_at": "2025-10-24T19:00:00",
+        "ends_at": "2025-10-25T07:00:00",
+        "urgency": "medium"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "clinica_medica",
+          "starts_at": "2025-10-24T19:00:00",
+          "ends_at": "2025-10-25T07:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 10830,
+        "raw": "{\"unit\": \"Hospital Modelo Sul\", \"specialty\": \"clinica_medica\", \"starts_at\": \"2025-10-24T19:00:00\", \"ends_at\": \"2025-10-25T07:00:00\", \"urgency\": \"medium\"}",
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "clinica_medica",
+          "starts_at": "2025-10-24T19:00:00",
+          "ends_at": "2025-10-25T07:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "24cdbf06-dced-4e84-9a70-a5e277a9d5a6",
+      "set": "sintetico",
+      "style": "abreviado",
+      "text": "pediatra noturno sáb 19-7 H. Modelo Sul urg alta",
+      "today": "2026-05-08",
+      "expected": {
+        "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+        "specialty": "pediatria",
+        "starts_at": "2026-05-09T19:00:00",
+        "ends_at": "2026-05-10T07:00:00",
+        "urgency": "high"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "pediatria",
+          "starts_at": "2026-05-09T19:00:00",
+          "ends_at": "2026-05-10T07:00:00",
+          "urgency": "high"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 6169,
+        "raw": "{ \"unit\": \"Hospital Modelo Sul\", \"specialty\": \"pediatria\", \"starts_at\": \"2026-05-09T19:00:00\", \"ends_at\": \"2026-05-10T07:00:00\", \"urgency\": \"high\" }",
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "pediatria",
+          "starts_at": "2026-05-09T19:00:00",
+          "ends_at": "2026-05-10T07:00:00",
+          "urgency": "high"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "1ceb2b11-cfe6-4a8a-b6e5-23bb6ee5391f",
+      "set": "sintetico",
+      "style": "abreviado",
+      "text": "pediatra diurno sáb 7-19 H. Modelo Norte urg baixa",
+      "today": "2026-01-02",
+      "expected": {
+        "unit_id": "d89739ca-9755-4f36-8454-ce39cb12cfda",
+        "specialty": "pediatria",
+        "starts_at": "2026-01-03T07:00:00",
+        "ends_at": "2026-01-03T19:00:00",
+        "urgency": "low"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "d89739ca-9755-4f36-8454-ce39cb12cfda",
+          "specialty": "pediatria",
+          "starts_at": "2026-01-03T07:00:00",
+          "ends_at": "2026-01-03T19:00:00",
+          "urgency": "low"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 1264,
+        "raw": "{ \"unit\": \"Hospital Modelo Norte\", \"specialty\": \"pediatria\", \"starts_at\": \"2026-01-03T07:00:00\", \"ends_at\": \"2026-01-03T19:00:00\", \"urgency\": \"low\" }",
+        "fields": {
+          "unit_id": "d89739ca-9755-4f36-8454-ce39cb12cfda",
+          "specialty": "pediatria",
+          "starts_at": "2026-01-03T07:00:00",
+          "ends_at": "2026-01-03T19:00:00",
+          "urgency": "low"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "0ed9530a-d92b-4b31-9566-776bd2af12f6",
+      "set": "sintetico",
+      "style": "abreviado",
+      "text": "médico clínico noturno sáb 19-7 H. Modelo Sul urg média",
+      "today": "2026-03-13",
+      "expected": {
+        "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+        "specialty": "clinica_medica",
+        "starts_at": "2026-03-14T19:00:00",
+        "ends_at": "2026-03-15T07:00:00",
+        "urgency": "medium"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-03-14T19:00:00",
+          "ends_at": "2026-03-15T07:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 6282,
+        "raw": "{ \"unit\": \"Hospital Modelo Sul\", \"specialty\": \"clinica_medica\", \"starts_at\": \"2026-03-14T19:00:00\", \"ends_at\": \"2026-03-15T07:00:00\", \"urgency\": \"medium\" }",
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-03-14T19:00:00",
+          "ends_at": "2026-03-15T07:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "703cd7eb-4ef7-4887-9eaf-98627caa85c3",
+      "set": "sintetico",
+      "style": "abreviado",
+      "text": "médico clínico noturno sex 19-7 H. Modelo Sul urg alta",
+      "today": "2026-04-19",
+      "expected": {
+        "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+        "specialty": "clinica_medica",
+        "starts_at": "2026-04-24T19:00:00",
+        "ends_at": "2026-04-25T07:00:00",
+        "urgency": "high"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-04-24T19:00:00",
+          "ends_at": "2026-04-25T07:00:00",
+          "urgency": "high"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 1066,
+        "raw": "{ \"unit\": \"Hospital Modelo Sul\", \"specialty\": \"clinica_medica\", \"starts_at\": \"2026-04-24T19:00:00\", \"ends_at\": \"2026-04-25T07:00:00\", \"urgency\": \"high\" }",
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-04-24T19:00:00",
+          "ends_at": "2026-04-25T07:00:00",
+          "urgency": "high"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "b2dd9231-cd24-4afc-b0cc-17961eabbec8",
+      "set": "sintetico",
+      "style": "abreviado",
+      "text": "médico clínico noturno sex 19-7 H. Modelo Centro urg média",
+      "today": "2026-04-09",
+      "expected": {
+        "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+        "specialty": "clinica_medica",
+        "starts_at": "2026-04-10T19:00:00",
+        "ends_at": "2026-04-11T07:00:00",
+        "urgency": "medium"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-04-10T19:00:00",
+          "ends_at": "2026-04-11T07:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 9900,
+        "raw": "{ \"unit\": \"Hospital Modelo Centro\", \"specialty\": \"clinica_medica\", \"starts_at\": \"2026-04-10T19:00:00\", \"ends_at\": \"2026-04-11T07:00:00\", \"urgency\": \"medium\" }",
+        "fields": {
+          "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-04-10T19:00:00",
+          "ends_at": "2026-04-11T07:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "1d88d007-7c80-4048-a7f4-d87e3103406e",
+      "set": "sintetico",
+      "style": "abreviado",
+      "text": "médico clínico diurno dom 7-19 H. Modelo Centro urg média",
+      "today": "2026-09-11",
+      "expected": {
+        "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+        "specialty": "clinica_medica",
+        "starts_at": "2026-09-13T07:00:00",
+        "ends_at": "2026-09-13T19:00:00",
+        "urgency": "medium"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-09-13T07:00:00",
+          "ends_at": "2026-09-13T19:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 1677,
+        "raw": "{ \"unit\": \"Hospital Modelo Centro\", \"specialty\": \"clinica_medica\", \"starts_at\": \"2026-09-13T07:00:00\", \"ends_at\": \"2026-09-13T19:00:00\", \"urgency\": \"medium\" }",
+        "fields": {
+          "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-09-13T07:00:00",
+          "ends_at": "2026-09-13T19:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "d31d7265-059a-4a49-bd0a-a0f525c2baac",
+      "set": "sintetico",
+      "style": "abreviado",
+      "text": "pediatra noturno sex 19-7 H. Modelo Norte urg média",
+      "today": "2025-11-11",
+      "expected": {
+        "unit_id": "d89739ca-9755-4f36-8454-ce39cb12cfda",
+        "specialty": "pediatria",
+        "starts_at": "2025-11-14T19:00:00",
+        "ends_at": "2025-11-15T07:00:00",
+        "urgency": "medium"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "d89739ca-9755-4f36-8454-ce39cb12cfda",
+          "specialty": "pediatria",
+          "starts_at": "2025-11-14T19:00:00",
+          "ends_at": "2025-11-15T07:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 982,
+        "raw": "{ \"unit\": \"Hospital Modelo Norte\", \"specialty\": \"pediatria\", \"starts_at\": \"2025-11-14T19:00:00\", \"ends_at\": \"2025-11-15T07:00:00\", \"urgency\": \"medium\" }",
+        "fields": {
+          "unit_id": "d89739ca-9755-4f36-8454-ce39cb12cfda",
+          "specialty": "pediatria",
+          "starts_at": "2025-11-14T19:00:00",
+          "ends_at": "2025-11-15T07:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "55e0057b-420f-499f-bfb8-a4b495e80bac",
+      "set": "sintetico",
+      "style": "abreviado",
+      "text": "pediatra noturno sex 19-7 H. Modelo Sul urg baixa",
+      "today": "2026-04-22",
+      "expected": {
+        "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+        "specialty": "pediatria",
+        "starts_at": "2026-04-24T19:00:00",
+        "ends_at": "2026-04-25T07:00:00",
+        "urgency": "low"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "pediatria",
+          "starts_at": "2026-04-24T19:00:00",
+          "ends_at": "2026-04-25T07:00:00",
+          "urgency": "low"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 2430,
+        "raw": "{\"unit\": \"Hospital Modelo Sul\", \"specialty\": \"pediatria\", \"starts_at\": \"2026-04-24T19:00:00\", \"ends_at\": \"2026-04-25T07:00:00\", \"urgency\": \"low\"}",
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "pediatria",
+          "starts_at": "2026-04-24T19:00:00",
+          "ends_at": "2026-04-25T07:00:00",
+          "urgency": "low"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "060f241e-6ea0-41c8-9a70-bd1f083c667d",
+      "set": "sintetico",
+      "style": "abreviado",
+      "text": "médico clínico noturno qui 19-7 H. Modelo Sul urg alta",
+      "today": "2026-09-15",
+      "expected": {
+        "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+        "specialty": "clinica_medica",
+        "starts_at": "2026-09-17T19:00:00",
+        "ends_at": "2026-09-18T07:00:00",
+        "urgency": "high"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-09-17T19:00:00",
+          "ends_at": "2026-09-18T07:00:00",
+          "urgency": "high"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 1020,
+        "raw": "{ \"unit\": \"Hospital Modelo Sul\", \"specialty\": \"clinica_medica\", \"starts_at\": \"2026-09-17T19:00:00\", \"ends_at\": \"2026-09-18T07:00:00\", \"urgency\": \"high\" }",
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-09-17T19:00:00",
+          "ends_at": "2026-09-18T07:00:00",
+          "urgency": "high"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "551e9c1a-d6ab-4e6c-9c1b-92e2dc6a4c0f",
+      "set": "sintetico",
+      "style": "abreviado",
+      "text": "médico clínico diurno sáb 7-19 H. Modelo Centro urg média",
+      "today": "2026-05-08",
+      "expected": {
+        "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+        "specialty": "clinica_medica",
+        "starts_at": "2026-05-09T07:00:00",
+        "ends_at": "2026-05-09T19:00:00",
+        "urgency": "medium"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-05-09T07:00:00",
+          "ends_at": "2026-05-09T19:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 8989,
+        "raw": "{\"unit\": \"Hospital Modelo Centro\", \"specialty\": \"clinica_medica\", \"starts_at\": \"2026-05-09T07:00:00\", \"ends_at\": \"2026-05-09T19:00:00\", \"urgency\": \"medium\"}",
+        "fields": {
+          "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-05-09T07:00:00",
+          "ends_at": "2026-05-09T19:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "9c2cfee7-ba74-461c-a1f3-485c2b24eadd",
+      "set": "sintetico",
+      "style": "abreviado",
+      "text": "pediatra noturno dom 19-7 H. Modelo Sul urg baixa",
+      "today": "2026-06-20",
+      "expected": {
+        "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+        "specialty": "pediatria",
+        "starts_at": "2026-06-21T19:00:00",
+        "ends_at": "2026-06-22T07:00:00",
+        "urgency": "low"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "pediatria",
+          "starts_at": "2026-06-21T19:00:00",
+          "ends_at": "2026-06-22T07:00:00",
+          "urgency": "low"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 4918,
+        "raw": "{ \"unit\": \"Hospital Modelo Sul\", \"specialty\": \"pediatria\", \"starts_at\": \"2026-06-21T19:00:00\", \"ends_at\": \"2026-06-22T07:00:00\", \"urgency\": \"low\" }",
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "pediatria",
+          "starts_at": "2026-06-21T19:00:00",
+          "ends_at": "2026-06-22T07:00:00",
+          "urgency": "low"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "04459943-dd77-447f-bab5-a084568f43c3",
+      "set": "sintetico",
+      "style": "abreviado",
+      "text": "pediatra diurno dom 7-19 H. Modelo Centro urg média",
+      "today": "2025-11-07",
+      "expected": {
+        "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+        "specialty": "pediatria",
+        "starts_at": "2025-11-09T07:00:00",
+        "ends_at": "2025-11-09T19:00:00",
+        "urgency": "medium"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+          "specialty": "pediatria",
+          "starts_at": "2025-11-09T07:00:00",
+          "ends_at": "2025-11-09T19:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 6581,
+        "raw": "{ \"unit\": \"Hospital Modelo Centro\", \"specialty\": \"pediatria\", \"starts_at\": \"2025-11-09T07:00:00\", \"ends_at\": \"2025-11-09T19:00:00\", \"urgency\": \"medium\" }",
+        "fields": {
+          "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+          "specialty": "pediatria",
+          "starts_at": "2025-11-09T07:00:00",
+          "ends_at": "2025-11-09T19:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "8ad7a99e-0c4e-4125-9f30-297878b44a13",
+      "set": "sintetico",
+      "style": "com_erros",
+      "text": "Preciso de um pediatara para o plantao noturno de quinta, 19h às 7h, Hosp. Modelo Norte, urgência média.",
+      "today": "2026-07-07",
+      "expected": {
+        "unit_id": "d89739ca-9755-4f36-8454-ce39cb12cfda",
+        "specialty": "pediatria",
+        "starts_at": "2026-07-09T19:00:00",
+        "ends_at": "2026-07-10T07:00:00",
+        "urgency": "medium"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "d89739ca-9755-4f36-8454-ce39cb12cfda",
+          "specialty": "pediatria",
+          "starts_at": "2026-07-09T19:00:00",
+          "ends_at": "2026-07-10T07:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 6459,
+        "raw": "{ \"unit\": \"Hospital Modelo Norte\", \"specialty\": \"pediatria\", \"starts_at\": \"2026-07-09T19:00:00\", \"ends_at\": \"2026-07-10T07:00:00\", \"urgency\": \"medium\" }",
+        "fields": {
+          "unit_id": "d89739ca-9755-4f36-8454-ce39cb12cfda",
+          "specialty": "pediatria",
+          "starts_at": "2026-07-09T19:00:00",
+          "ends_at": "2026-07-10T07:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "bb96de3d-2a15-4c67-af13-f74658734ec6",
+      "set": "sintetico",
+      "style": "com_erros",
+      "text": "Preciso de um médico clínico para o plantão noturnu de quinta, 19h às 7h, Hosp. Modelo Sul, urgencia média.",
+      "today": "2026-07-29",
+      "expected": {
+        "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+        "specialty": "clinica_medica",
+        "starts_at": "2026-07-30T19:00:00",
+        "ends_at": "2026-07-31T07:00:00",
+        "urgency": "medium"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-07-30T19:00:00",
+          "ends_at": "2026-07-31T07:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 3942,
+        "raw": "{ \"unit\": \"Hospital Modelo Sul\", \"specialty\": \"clinica_medica\", \"starts_at\": \"2026-07-30T19:00:00\", \"ends_at\": \"2026-07-31T07:00:00\", \"urgency\": \"medium\" }",
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-07-30T19:00:00",
+          "ends_at": "2026-07-31T07:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "ab2755d0-e34e-4fa6-97a8-c006b5d61a91",
+      "set": "sintetico",
+      "style": "com_erros",
+      "text": "Preciso de um médico clínico para o plantao noturno de sábado, 19h às 7h, Hospital Modelo Centro, urgência média.",
+      "today": "2026-09-22",
+      "expected": {
+        "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+        "specialty": "clinica_medica",
+        "starts_at": "2026-09-26T19:00:00",
+        "ends_at": "2026-09-27T07:00:00",
+        "urgency": "medium"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-09-26T19:00:00",
+          "ends_at": "2026-09-27T07:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 4002,
+        "raw": "{ \"unit\": \"Hospital Modelo Centro\", \"specialty\": \"clinica_medica\", \"starts_at\": \"2026-09-26T19:00:00\", \"ends_at\": \"2026-09-27T07:00:00\", \"urgency\": \"medium\" }",
+        "fields": {
+          "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-09-26T19:00:00",
+          "ends_at": "2026-09-27T07:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "853a3def-ca3b-418f-9b8a-af1cf837cad8",
+      "set": "sintetico",
+      "style": "com_erros",
+      "text": "Preciso de um médico clínico para o plantao noturnu de sábado, 19h as 7h, Hosp. Modelo Sul, urgência baixa.",
+      "today": "2026-02-20",
+      "expected": {
+        "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+        "specialty": "clinica_medica",
+        "starts_at": "2026-02-21T19:00:00",
+        "ends_at": "2026-02-22T07:00:00",
+        "urgency": "low"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-02-21T19:00:00",
+          "ends_at": "2026-02-22T07:00:00",
+          "urgency": "low"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 991,
+        "raw": "{ \"unit\": \"Hospital Modelo Sul\", \"specialty\": \"clinica_medica\", \"starts_at\": \"2026-02-21T19:00:00\", \"ends_at\": \"2026-02-22T07:00:00\", \"urgency\": \"low\" }",
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-02-21T19:00:00",
+          "ends_at": "2026-02-22T07:00:00",
+          "urgency": "low"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "18c4c4b1-e50a-4fcd-ab15-97c918e245b7",
+      "set": "sintetico",
+      "style": "com_erros",
+      "text": "Preciso de um pediatara para o plantao noturnu de sesta, 19h as 7h, Hospital Modelo Centro, urgência média.",
+      "today": "2026-02-04",
+      "expected": {
+        "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+        "specialty": "pediatria",
+        "starts_at": "2026-02-06T19:00:00",
+        "ends_at": "2026-02-07T07:00:00",
+        "urgency": "medium"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+          "specialty": "pediatria",
+          "starts_at": "2026-02-06T19:00:00",
+          "ends_at": "2026-02-07T07:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "sem_resposta",
+        "ms": 4813,
+        "raw": "falha ao chamar o Gemini: ServerError 503",
+        "fields": null,
+        "score": null
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "b85a0ba8-ab8d-4dc9-b4b2-a686fc8350bc",
+      "set": "sintetico",
+      "style": "com_erros",
+      "text": "Preciso de um pediatara para o plantão noturnu de terça, 19h as 7h, Hosp. Modelo Sul, urgencia média.",
+      "today": "2026-02-01",
+      "expected": {
+        "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+        "specialty": "pediatria",
+        "starts_at": "2026-02-03T19:00:00",
+        "ends_at": "2026-02-04T07:00:00",
+        "urgency": "medium"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "pediatria",
+          "starts_at": "2026-02-03T19:00:00",
+          "ends_at": "2026-02-04T07:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 6219,
+        "raw": "{ \"unit\": \"Hospital Modelo Sul\", \"specialty\": \"pediatria\", \"starts_at\": \"2026-02-03T19:00:00\", \"ends_at\": \"2026-02-04T07:00:00\", \"urgency\": \"medium\" }",
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "pediatria",
+          "starts_at": "2026-02-03T19:00:00",
+          "ends_at": "2026-02-04T07:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "9ceaf289-2d6e-444d-9aee-95f3330d0c3a",
+      "set": "sintetico",
+      "style": "com_erros",
+      "text": "Preciso de um médico clínico para o plantao noturno de hoje, 19h às 7h, Hospital Modelo Centro, urgencia média.",
+      "today": "2025-10-24",
+      "expected": {
+        "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+        "specialty": "clinica_medica",
+        "starts_at": "2025-10-24T19:00:00",
+        "ends_at": "2025-10-25T07:00:00",
+        "urgency": "medium"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+          "specialty": "clinica_medica",
+          "starts_at": "2025-10-24T19:00:00",
+          "ends_at": "2025-10-25T07:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 964,
+        "raw": "{ \"unit\": \"Hospital Modelo Centro\", \"specialty\": \"clinica_medica\", \"starts_at\": \"2025-10-24T19:00:00\", \"ends_at\": \"2025-10-25T07:00:00\", \"urgency\": \"medium\" }",
+        "fields": {
+          "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+          "specialty": "clinica_medica",
+          "starts_at": "2025-10-24T19:00:00",
+          "ends_at": "2025-10-25T07:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "90d90fa2-8576-477c-823c-8fd9e4ff1591",
+      "set": "sintetico",
+      "style": "com_erros",
+      "text": "Preciso de um pediatra para o plantao noturno de hoje, 19h as 7h, Hospital Modelo Norte, urgencia média.",
+      "today": "2026-06-07",
+      "expected": {
+        "unit_id": "d89739ca-9755-4f36-8454-ce39cb12cfda",
+        "specialty": "pediatria",
+        "starts_at": "2026-06-07T19:00:00",
+        "ends_at": "2026-06-08T07:00:00",
+        "urgency": "medium"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "d89739ca-9755-4f36-8454-ce39cb12cfda",
+          "specialty": "pediatria",
+          "starts_at": "2026-06-07T19:00:00",
+          "ends_at": "2026-06-08T07:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 1014,
+        "raw": "{ \"unit\": \"Hospital Modelo Norte\", \"specialty\": \"pediatria\", \"starts_at\": \"2026-06-07T19:00:00\", \"ends_at\": \"2026-06-08T07:00:00\", \"urgency\": \"medium\" }",
+        "fields": {
+          "unit_id": "d89739ca-9755-4f36-8454-ce39cb12cfda",
+          "specialty": "pediatria",
+          "starts_at": "2026-06-07T19:00:00",
+          "ends_at": "2026-06-08T07:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "87322403-f08c-4813-a2ae-59b76464a010",
+      "set": "sintetico",
+      "style": "com_erros",
+      "text": "Preciso de um médico clínico para o plantao noturno de quinta, 19h às 7h, Hospital Modelo Centro, urgência alta.",
+      "today": "2026-02-25",
+      "expected": {
+        "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+        "specialty": "clinica_medica",
+        "starts_at": "2026-02-26T19:00:00",
+        "ends_at": "2026-02-27T07:00:00",
+        "urgency": "high"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-02-26T19:00:00",
+          "ends_at": "2026-02-27T07:00:00",
+          "urgency": "high"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 1175,
+        "raw": "{ \"unit\": \"Hospital Modelo Centro\", \"specialty\": \"clinica_medica\", \"starts_at\": \"2026-02-26T19:00:00\", \"ends_at\": \"2026-02-27T07:00:00\", \"urgency\": \"high\" }",
+        "fields": {
+          "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-02-26T19:00:00",
+          "ends_at": "2026-02-27T07:00:00",
+          "urgency": "high"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "43a6afcc-ebce-44cc-ad3d-71078b4884f3",
+      "set": "sintetico",
+      "style": "com_erros",
+      "text": "Preciso de um pediatara para o plantao noturnu de quarta, 19h as 7h, Hospital Modelo Centro, urgência alta.",
+      "today": "2025-11-03",
+      "expected": {
+        "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+        "specialty": "pediatria",
+        "starts_at": "2025-11-05T19:00:00",
+        "ends_at": "2025-11-06T07:00:00",
+        "urgency": "high"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+          "specialty": "pediatria",
+          "starts_at": "2025-11-05T19:00:00",
+          "ends_at": "2025-11-06T07:00:00",
+          "urgency": "high"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 878,
+        "raw": "{ \"unit\": \"Hospital Modelo Centro\", \"specialty\": \"pediatria\", \"starts_at\": \"2025-11-05T19:00:00\", \"ends_at\": \"2025-11-06T07:00:00\", \"urgency\": \"high\" }",
+        "fields": {
+          "unit_id": "bbdd76e8-0991-4455-a96d-99f4dd919733",
+          "specialty": "pediatria",
+          "starts_at": "2025-11-05T19:00:00",
+          "ends_at": "2025-11-06T07:00:00",
+          "urgency": "high"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "52084abd-5fab-4e9f-8c7e-4fe702721b77",
+      "set": "sintetico",
+      "style": "com_erros",
+      "text": "Preciso de um médico clínico para o plantao diurno de domingo, 7h as 19h, Hosp. Modelo Norte, urgência média.",
+      "today": "2026-03-11",
+      "expected": {
+        "unit_id": "d89739ca-9755-4f36-8454-ce39cb12cfda",
+        "specialty": "clinica_medica",
+        "starts_at": "2026-03-15T07:00:00",
+        "ends_at": "2026-03-15T19:00:00",
+        "urgency": "medium"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "d89739ca-9755-4f36-8454-ce39cb12cfda",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-03-15T07:00:00",
+          "ends_at": "2026-03-15T19:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 3546,
+        "raw": "{ \"unit\": \"Hospital Modelo Norte\", \"specialty\": \"clinica_medica\", \"starts_at\": \"2026-03-15T07:00:00\", \"ends_at\": \"2026-03-15T19:00:00\", \"urgency\": \"medium\" }",
+        "fields": {
+          "unit_id": "d89739ca-9755-4f36-8454-ce39cb12cfda",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-03-15T07:00:00",
+          "ends_at": "2026-03-15T19:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "233b0582-daaa-4540-a8ca-109ce171af49",
+      "set": "sintetico",
+      "style": "com_erros",
+      "text": "Preciso de um pediatara para o plantao noturnu de hoje, 19h as 7h, Hosp. Modelo Sul, urgencia baixa.",
+      "today": "2026-07-21",
+      "expected": {
+        "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+        "specialty": "pediatria",
+        "starts_at": "2026-07-21T19:00:00",
+        "ends_at": "2026-07-22T07:00:00",
+        "urgency": "low"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "pediatria",
+          "starts_at": "2026-07-21T19:00:00",
+          "ends_at": "2026-07-22T07:00:00",
+          "urgency": "low"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 1004,
+        "raw": "{\"unit\": \"Hospital Modelo Sul\", \"specialty\": \"pediatria\", \"starts_at\": \"2026-07-21T19:00:00\", \"ends_at\": \"2026-07-22T07:00:00\", \"urgency\": \"low\"}",
+        "fields": {
+          "unit_id": "1f99fc83-4521-4a6f-a274-8d16430f55e4",
+          "specialty": "pediatria",
+          "starts_at": "2026-07-21T19:00:00",
+          "ends_at": "2026-07-22T07:00:00",
+          "urgency": "low"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "N01",
+      "set": "natural",
+      "style": "natural",
+      "text": "Pessoal, preciso de pediatra pro Centro amanhã à noite, das 19 às 7. Urgente!",
+      "today": "2026-10-01",
+      "expected": {
+        "unit_id": "centro",
+        "specialty": "pediatria",
+        "starts_at": "2026-10-02T19:00:00",
+        "ends_at": "2026-10-03T07:00:00",
+        "urgency": "high"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "centro",
+          "specialty": "pediatria",
+          "starts_at": "2026-10-02T19:00:00",
+          "ends_at": "2026-10-03T07:00:00",
+          "urgency": "high"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 935,
+        "raw": "{ \"unit\": \"Hospital Modelo Centro\", \"specialty\": \"pediatria\", \"starts_at\": \"2026-10-02T19:00:00\", \"ends_at\": \"2026-10-03T07:00:00\", \"urgency\": \"high\" }",
+        "fields": {
+          "unit_id": "centro",
+          "specialty": "pediatria",
+          "starts_at": "2026-10-02T19:00:00",
+          "ends_at": "2026-10-03T07:00:00",
+          "urgency": "high"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "N02",
+      "set": "natural",
+      "style": "natural",
+      "text": "Furou o clínico do Norte no sábado, plantão diurno 7h-19h",
+      "today": "2026-10-01",
+      "expected": {
+        "unit_id": "norte",
+        "specialty": "clinica_medica",
+        "starts_at": "2026-10-03T07:00:00",
+        "ends_at": "2026-10-03T19:00:00"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "norte",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-10-03T07:00:00",
+          "ends_at": "2026-10-03T19:00:00",
+          "urgency": null
+        },
+        "score": {
+          "right": 4,
+          "total": 4,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 1488,
+        "raw": "{ \"unit\": \"Hospital Modelo Norte\", \"specialty\": \"clinica_medica\", \"starts_at\": \"2026-10-03T07:00:00\", \"ends_at\": \"2026-10-03T19:00:00\", \"urgency\": null }",
+        "fields": {
+          "unit_id": "norte",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-10-03T07:00:00",
+          "ends_at": "2026-10-03T19:00:00",
+          "urgency": null
+        },
+        "score": {
+          "right": 4,
+          "total": 4,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 4,
+          "total": 4,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 4,
+          "total": 4,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "N03",
+      "set": "natural",
+      "style": "natural",
+      "text": "Alguém pro Sul na segunda de dia, 7 às 19, clínica médica, sem urgência",
+      "today": "2026-10-01",
+      "expected": {
+        "unit_id": "sul",
+        "specialty": "clinica_medica",
+        "starts_at": "2026-10-05T07:00:00",
+        "ends_at": "2026-10-05T19:00:00",
+        "urgency": "low"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "sul",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-10-05T07:00:00",
+          "ends_at": "2026-10-05T19:00:00",
+          "urgency": null
+        },
+        "score": {
+          "right": 4,
+          "total": 5,
+          "wrong": [
+            "urgency"
+          ],
+          "invented": [],
+          "all_right": false
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 1054,
+        "raw": "{ \"unit\": \"Hospital Modelo Sul\", \"specialty\": \"clinica_medica\", \"starts_at\": \"2026-10-05T07:00:00\", \"ends_at\": \"2026-10-05T19:00:00\", \"urgency\": \"low\" }",
+        "fields": {
+          "unit_id": "sul",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-10-05T07:00:00",
+          "ends_at": "2026-10-05T19:00:00",
+          "urgency": "low"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "N04",
+      "set": "natural",
+      "style": "natural",
+      "text": "Hospital Modelo Centro precisa de pediatra hoje 19h até 7h da manhã, urgência alta",
+      "today": "2026-10-01",
+      "expected": {
+        "unit_id": "centro",
+        "specialty": "pediatria",
+        "starts_at": "2026-10-01T19:00:00",
+        "ends_at": "2026-10-02T07:00:00",
+        "urgency": "high"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "centro",
+          "specialty": "pediatria",
+          "starts_at": "2026-10-01T19:00:00",
+          "ends_at": "2026-10-02T07:00:00",
+          "urgency": "high"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 1048,
+        "raw": "{ \"unit\": \"Hospital Modelo Centro\", \"specialty\": \"pediatria\", \"starts_at\": \"2026-10-01T19:00:00\", \"ends_at\": \"2026-10-02T07:00:00\", \"urgency\": \"high\" }",
+        "fields": {
+          "unit_id": "centro",
+          "specialty": "pediatria",
+          "starts_at": "2026-10-01T19:00:00",
+          "ends_at": "2026-10-02T07:00:00",
+          "urgency": "high"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "N05",
+      "set": "natural",
+      "style": "natural",
+      "text": "pediatra plantão 12h noturno dom Norte",
+      "today": "2026-10-01",
+      "expected": {
+        "unit_id": "norte",
+        "specialty": "pediatria"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "norte",
+          "specialty": "pediatria",
+          "starts_at": "2026-10-04T19:00:00",
+          "ends_at": "2026-10-05T07:00:00",
+          "urgency": null
+        },
+        "score": {
+          "right": 2,
+          "total": 2,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 951,
+        "raw": "{ \"unit\": \"Hospital Modelo Norte\", \"specialty\": \"pediatria\", \"starts_at\": \"2026-10-04T19:00:00\", \"ends_at\": \"2026-10-05T07:00:00\", \"urgency\": null }",
+        "fields": {
+          "unit_id": "norte",
+          "specialty": "pediatria",
+          "starts_at": "2026-10-04T19:00:00",
+          "ends_at": "2026-10-05T07:00:00",
+          "urgency": null
+        },
+        "score": {
+          "right": 2,
+          "total": 2,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 2,
+          "total": 2,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 2,
+          "total": 2,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "N06",
+      "set": "natural",
+      "style": "natural",
+      "text": "Preciso cobrir quinta que vem, clínico, Sul, 19-7, urgência média",
+      "today": "2026-10-01",
+      "expected": {
+        "unit_id": "sul",
+        "specialty": "clinica_medica",
+        "starts_at": "2026-10-08T19:00:00",
+        "ends_at": "2026-10-09T07:00:00",
+        "urgency": "medium"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "sul",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-10-08T19:00:00",
+          "ends_at": "2026-10-09T07:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 2309,
+        "raw": "{ \"unit\": \"Hospital Modelo Sul\", \"specialty\": \"clinica_medica\", \"starts_at\": \"2026-10-08T19:00:00\", \"ends_at\": \"2026-10-09T07:00:00\", \"urgency\": \"medium\" }",
+        "fields": {
+          "unit_id": "sul",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-10-08T19:00:00",
+          "ends_at": "2026-10-09T07:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "N07",
+      "set": "natural",
+      "style": "natural",
+      "text": "Urgente!! pediatra Centro agora à noite",
+      "today": "2026-10-01",
+      "expected": {
+        "unit_id": "centro",
+        "specialty": "pediatria",
+        "urgency": "high"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "centro",
+          "specialty": "pediatria",
+          "starts_at": null,
+          "ends_at": null,
+          "urgency": "high"
+        },
+        "score": {
+          "right": 3,
+          "total": 3,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "sem_resposta",
+        "ms": 29700,
+        "raw": "falha ao chamar o Gemini: ServerError 504",
+        "fields": null,
+        "score": null
+      },
+      "sistema": {
+        "score": {
+          "right": 3,
+          "total": 3,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 3,
+          "total": 3,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "N08",
+      "set": "natural",
+      "style": "natural",
+      "text": "Falta médico no Norte sábado.",
+      "today": "2026-10-01",
+      "expected": {
+        "unit_id": "norte",
+        "specialty": null,
+        "urgency": null
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "norte",
+          "specialty": null,
+          "starts_at": null,
+          "ends_at": null,
+          "urgency": null
+        },
+        "score": {
+          "right": 3,
+          "total": 3,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 1176,
+        "raw": "{ \"unit\": \"Hospital Modelo Norte\", \"specialty\": null, \"starts_at\": \"2026-10-03T00:00:00\", \"ends_at\": \"2026-10-03T23:59:59\", \"urgency\": null }",
+        "fields": {
+          "unit_id": "norte",
+          "specialty": null,
+          "starts_at": "2026-10-03T00:00:00",
+          "ends_at": "2026-10-03T23:59:59",
+          "urgency": null
+        },
+        "score": {
+          "right": 3,
+          "total": 3,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 3,
+          "total": 3,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 3,
+          "total": 3,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "N09",
+      "set": "natural",
+      "style": "natural",
+      "text": "Boa tarde, tem como arrumar um pediatra para o fim de semana no Sul?",
+      "today": "2026-10-01",
+      "expected": {
+        "unit_id": "sul",
+        "specialty": "pediatria",
+        "urgency": null
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "sul",
+          "specialty": "pediatria",
+          "starts_at": null,
+          "ends_at": null,
+          "urgency": null
+        },
+        "score": {
+          "right": 3,
+          "total": 3,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "barrada_duracao_invalida",
+        "ms": 2353,
+        "raw": "{\"unit\": \"Hospital Modelo Sul\", \"specialty\": \"pediatria\", \"starts_at\": \"2026-10-03T00:00:00\", \"ends_at\": \"2026-10-04T23:59:59\", \"urgency\": null}",
+        "fields": null,
+        "score": null
+      },
+      "sistema": {
+        "score": {
+          "right": 3,
+          "total": 3,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 3,
+          "total": 3,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "N10",
+      "set": "natural",
+      "style": "natural",
+      "text": "plantão de terça, 19h às 07h, pediatria, H. Modelo Norte, urgência baixa",
+      "today": "2026-10-01",
+      "expected": {
+        "unit_id": "norte",
+        "specialty": "pediatria",
+        "starts_at": "2026-10-06T19:00:00",
+        "ends_at": "2026-10-07T07:00:00",
+        "urgency": "low"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "norte",
+          "specialty": "pediatria",
+          "starts_at": "2026-10-06T19:00:00",
+          "ends_at": "2026-10-07T07:00:00",
+          "urgency": "low"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 1063,
+        "raw": "{ \"unit\": \"Hospital Modelo Norte\", \"specialty\": \"pediatria\", \"starts_at\": \"2026-10-06T19:00:00\", \"ends_at\": \"2026-10-07T07:00:00\", \"urgency\": \"low\" }",
+        "fields": {
+          "unit_id": "norte",
+          "specialty": "pediatria",
+          "starts_at": "2026-10-06T19:00:00",
+          "ends_at": "2026-10-07T07:00:00",
+          "urgency": "low"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "N11",
+      "set": "natural",
+      "style": "natural",
+      "text": "Vaga aberta: clínica médica, Centro, quarta-feira, diurno das 7 às 19. Sem pressa.",
+      "today": "2026-10-01",
+      "expected": {
+        "unit_id": "centro",
+        "specialty": "clinica_medica",
+        "starts_at": "2026-10-07T07:00:00",
+        "ends_at": "2026-10-07T19:00:00",
+        "urgency": "low"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "centro",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-10-07T07:00:00",
+          "ends_at": "2026-10-07T19:00:00",
+          "urgency": null
+        },
+        "score": {
+          "right": 4,
+          "total": 5,
+          "wrong": [
+            "urgency"
+          ],
+          "invented": [],
+          "all_right": false
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 23499,
+        "raw": "{ \"unit\": \"Hospital Modelo Centro\", \"specialty\": \"clinica_medica\", \"starts_at\": \"2026-10-07T07:00:00\", \"ends_at\": \"2026-10-07T19:00:00\", \"urgency\": \"low\" }",
+        "fields": {
+          "unit_id": "centro",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-10-07T07:00:00",
+          "ends_at": "2026-10-07T19:00:00",
+          "urgency": "low"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 4,
+          "total": 5,
+          "wrong": [
+            "urgency"
+          ],
+          "invented": [],
+          "all_right": false
+        }
+      }
+    },
+    {
+      "id": "N12",
+      "set": "natural",
+      "style": "natural",
+      "text": "Preciso de um pediatra",
+      "today": "2026-10-01",
+      "expected": {
+        "unit_id": null,
+        "specialty": "pediatria",
+        "starts_at": null,
+        "ends_at": null,
+        "urgency": null
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": null,
+          "specialty": "pediatria",
+          "starts_at": null,
+          "ends_at": null,
+          "urgency": null
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 2118,
+        "raw": "{\"unit\": null, \"specialty\": \"pediatria\", \"starts_at\": null, \"ends_at\": null, \"urgency\": null}",
+        "fields": {
+          "unit_id": null,
+          "specialty": "pediatria",
+          "starts_at": null,
+          "ends_at": null,
+          "urgency": null
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "N13",
+      "set": "natural",
+      "style": "natural",
+      "text": "me ajuda a cobrir o plantão do dia 12/10, 19h às 7h, clínico, Centro, alta",
+      "today": "2026-10-01",
+      "expected": {
+        "unit_id": "centro",
+        "specialty": "clinica_medica",
+        "starts_at": "2026-10-12T19:00:00",
+        "ends_at": "2026-10-13T07:00:00",
+        "urgency": "high"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "centro",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-10-12T19:00:00",
+          "ends_at": "2026-10-13T07:00:00",
+          "urgency": null
+        },
+        "score": {
+          "right": 4,
+          "total": 5,
+          "wrong": [
+            "urgency"
+          ],
+          "invented": [],
+          "all_right": false
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 26153,
+        "raw": "{ \"unit\": \"Hospital Modelo Centro\", \"specialty\": \"clinica_medica\", \"starts_at\": \"2026-10-12T19:00:00\", \"ends_at\": \"2026-10-13T07:00:00\", \"urgency\": \"high\" }",
+        "fields": {
+          "unit_id": "centro",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-10-12T19:00:00",
+          "ends_at": "2026-10-13T07:00:00",
+          "urgency": "high"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 4,
+          "total": 5,
+          "wrong": [
+            "urgency"
+          ],
+          "invented": [],
+          "all_right": false
+        }
+      }
+    },
+    {
+      "id": "N14",
+      "set": "natural",
+      "style": "natural",
+      "text": "plantão noturno de sexta no Norte, pediatria, entra 19h sai 7h",
+      "today": "2026-10-01",
+      "expected": {
+        "unit_id": "norte",
+        "specialty": "pediatria",
+        "starts_at": "2026-10-02T19:00:00",
+        "ends_at": "2026-10-03T07:00:00",
+        "urgency": null
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "norte",
+          "specialty": "pediatria",
+          "starts_at": "2026-10-02T19:00:00",
+          "ends_at": "2026-10-03T07:00:00",
+          "urgency": null
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 28340,
+        "raw": "{\"unit\": \"Hospital Modelo Norte\", \"specialty\": \"pediatria\", \"starts_at\": \"2026-10-02T19:00:00\", \"ends_at\": \"2026-10-03T07:00:00\", \"urgency\": null}",
+        "fields": {
+          "unit_id": "norte",
+          "specialty": "pediatria",
+          "starts_at": "2026-10-02T19:00:00",
+          "ends_at": "2026-10-03T07:00:00",
+          "urgency": null
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "N15",
+      "set": "natural",
+      "style": "natural",
+      "text": "Pediatra, Sul, hoje, 7h às 19h, urgencia alta pf",
+      "today": "2026-10-01",
+      "expected": {
+        "unit_id": "sul",
+        "specialty": "pediatria",
+        "starts_at": "2026-10-01T07:00:00",
+        "ends_at": "2026-10-01T19:00:00",
+        "urgency": "high"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "sul",
+          "specialty": "pediatria",
+          "starts_at": "2026-10-01T07:00:00",
+          "ends_at": "2026-10-01T19:00:00",
+          "urgency": "high"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 942,
+        "raw": "{ \"unit\": \"Hospital Modelo Sul\", \"specialty\": \"pediatria\", \"starts_at\": \"2026-10-01T07:00:00\", \"ends_at\": \"2026-10-01T19:00:00\", \"urgency\": \"high\" }",
+        "fields": {
+          "unit_id": "sul",
+          "specialty": "pediatria",
+          "starts_at": "2026-10-01T07:00:00",
+          "ends_at": "2026-10-01T19:00:00",
+          "urgency": "high"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "N16",
+      "set": "natural",
+      "style": "natural",
+      "text": "Clínico médico para amanhã de manhã, Centro, urgência média",
+      "today": "2026-10-01",
+      "expected": {
+        "unit_id": "centro",
+        "specialty": "clinica_medica",
+        "urgency": "medium"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "centro",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-10-02T07:00:00",
+          "ends_at": "2026-10-02T19:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 3,
+          "total": 3,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 883,
+        "raw": "{\"unit\": \"Hospital Modelo Centro\", \"specialty\": \"clinica_medica\", \"starts_at\": \"2026-10-02T08:00:00\", \"ends_at\": \"2026-10-02T12:00:00\", \"urgency\": \"medium\"}",
+        "fields": {
+          "unit_id": "centro",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-10-02T08:00:00",
+          "ends_at": "2026-10-02T12:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 3,
+          "total": 3,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 3,
+          "total": 3,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 3,
+          "total": 3,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "N17",
+      "set": "natural",
+      "style": "natural",
+      "text": "Quem pode cobrir o Sul na madrugada de domingo? Precisa ser pediatra.",
+      "today": "2026-10-01",
+      "expected": {
+        "unit_id": "sul",
+        "specialty": "pediatria",
+        "urgency": null
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "sul",
+          "specialty": "pediatria",
+          "starts_at": null,
+          "ends_at": null,
+          "urgency": null
+        },
+        "score": {
+          "right": 3,
+          "total": 3,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 1010,
+        "raw": "{ \"unit\": \"Hospital Modelo Sul\", \"specialty\": \"pediatria\", \"starts_at\": \"2026-10-04T00:00:00\", \"ends_at\": \"2026-10-04T06:00:00\", \"urgency\": null }",
+        "fields": {
+          "unit_id": "sul",
+          "specialty": "pediatria",
+          "starts_at": "2026-10-04T00:00:00",
+          "ends_at": "2026-10-04T06:00:00",
+          "urgency": null
+        },
+        "score": {
+          "right": 3,
+          "total": 3,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 3,
+          "total": 3,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 3,
+          "total": 3,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "N18",
+      "set": "natural",
+      "style": "natural",
+      "text": "Sábado e domingo à noite, pediatra, Norte",
+      "today": "2026-10-01",
+      "expected": {
+        "unit_id": "norte",
+        "specialty": "pediatria",
+        "urgency": null
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "norte",
+          "specialty": "pediatria",
+          "starts_at": "2026-10-03T19:00:00",
+          "ends_at": "2026-10-04T07:00:00",
+          "urgency": null
+        },
+        "score": {
+          "right": 3,
+          "total": 3,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "barrada_duracao_invalida",
+        "ms": 1521,
+        "raw": "{ \"unit\": \"Hospital Modelo Norte\", \"specialty\": \"pediatria\", \"starts_at\": \"2026-10-03T18:00:00\", \"ends_at\": \"2026-10-05T06:00:00\", \"urgency\": null }",
+        "fields": null,
+        "score": null
+      },
+      "sistema": {
+        "score": {
+          "right": 3,
+          "total": 3,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 3,
+          "total": 3,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "N19",
+      "set": "natural",
+      "style": "natural",
+      "text": "urgencia alta - pediatria - centro - sex 19h/7h",
+      "today": "2026-10-01",
+      "expected": {
+        "unit_id": "centro",
+        "specialty": "pediatria",
+        "starts_at": "2026-10-02T19:00:00",
+        "ends_at": "2026-10-03T07:00:00",
+        "urgency": "high"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "centro",
+          "specialty": "pediatria",
+          "starts_at": null,
+          "ends_at": null,
+          "urgency": "high"
+        },
+        "score": {
+          "right": 3,
+          "total": 5,
+          "wrong": [
+            "starts_at",
+            "ends_at"
+          ],
+          "invented": [],
+          "all_right": false
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 955,
+        "raw": "{ \"unit\": \"Hospital Modelo Centro\", \"specialty\": \"pediatria\", \"starts_at\": \"2026-10-02T19:00:00\", \"ends_at\": \"2026-10-03T07:00:00\", \"urgency\": \"high\" }",
+        "fields": {
+          "unit_id": "centro",
+          "specialty": "pediatria",
+          "starts_at": "2026-10-02T19:00:00",
+          "ends_at": "2026-10-03T07:00:00",
+          "urgency": "high"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "N20",
+      "set": "natural",
+      "style": "natural",
+      "text": "Preciso urgente de médico clínico. Não sei ainda qual hospital nem o horário.",
+      "today": "2026-10-01",
+      "expected": {
+        "unit_id": null,
+        "specialty": "clinica_medica",
+        "starts_at": null,
+        "ends_at": null,
+        "urgency": "high"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": null,
+          "specialty": "clinica_medica",
+          "starts_at": null,
+          "ends_at": null,
+          "urgency": "high"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 1103,
+        "raw": "{ \"unit\": null, \"specialty\": \"clinica_medica\", \"starts_at\": null, \"ends_at\": null, \"urgency\": \"high\" }",
+        "fields": {
+          "unit_id": null,
+          "specialty": "clinica_medica",
+          "starts_at": null,
+          "ends_at": null,
+          "urgency": "high"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "N21",
+      "set": "natural",
+      "style": "natural",
+      "text": "Cobrir o plantão da próxima segunda, 19h às 7h, pediatra, Norte, urgência baixa",
+      "today": "2026-10-01",
+      "expected": {
+        "unit_id": "norte",
+        "specialty": "pediatria",
+        "starts_at": "2026-10-05T19:00:00",
+        "ends_at": "2026-10-06T07:00:00",
+        "urgency": "low"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "norte",
+          "specialty": "pediatria",
+          "starts_at": "2026-10-05T19:00:00",
+          "ends_at": "2026-10-06T07:00:00",
+          "urgency": "low"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 1091,
+        "raw": "{ \"unit\": \"Hospital Modelo Norte\", \"specialty\": \"pediatria\", \"starts_at\": \"2026-10-05T19:00:00\", \"ends_at\": \"2026-10-06T07:00:00\", \"urgency\": \"low\" }",
+        "fields": {
+          "unit_id": "norte",
+          "specialty": "pediatria",
+          "starts_at": "2026-10-05T19:00:00",
+          "ends_at": "2026-10-06T07:00:00",
+          "urgency": "low"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "N22",
+      "set": "natural",
+      "style": "natural",
+      "text": "Clínica médica no HM Sul, quarta, plantão diurno 7-19, urgência média",
+      "today": "2026-10-01",
+      "expected": {
+        "unit_id": "sul",
+        "specialty": "clinica_medica",
+        "starts_at": "2026-10-07T07:00:00",
+        "ends_at": "2026-10-07T19:00:00",
+        "urgency": "medium"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "sul",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-10-07T07:00:00",
+          "ends_at": "2026-10-07T19:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 4275,
+        "raw": "{ \"unit\": \"Hospital Modelo Sul\", \"specialty\": \"clinica_medica\", \"starts_at\": \"2026-10-07T07:00:00\", \"ends_at\": \"2026-10-07T19:00:00\", \"urgency\": \"medium\" }",
+        "fields": {
+          "unit_id": "sul",
+          "specialty": "clinica_medica",
+          "starts_at": "2026-10-07T07:00:00",
+          "ends_at": "2026-10-07T19:00:00",
+          "urgency": "medium"
+        },
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 5,
+          "total": 5,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "N23",
+      "set": "natural",
+      "style": "natural",
+      "text": "Preciso de pediatra no Hospital Modelo Leste amanhã 19h às 7h",
+      "today": "2026-10-01",
+      "expected": {
+        "unit_id": null,
+        "specialty": "pediatria",
+        "starts_at": "2026-10-02T19:00:00",
+        "ends_at": "2026-10-03T07:00:00"
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": null,
+          "specialty": "pediatria",
+          "starts_at": "2026-10-02T19:00:00",
+          "ends_at": "2026-10-03T07:00:00",
+          "urgency": null
+        },
+        "score": {
+          "right": 4,
+          "total": 4,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 17052,
+        "raw": "{ \"unit\": null, \"specialty\": \"pediatria\", \"starts_at\": \"2026-10-02T19:00:00\", \"ends_at\": \"2026-10-03T07:00:00\", \"urgency\": null }",
+        "fields": {
+          "unit_id": null,
+          "specialty": "pediatria",
+          "starts_at": "2026-10-02T19:00:00",
+          "ends_at": "2026-10-03T07:00:00",
+          "urgency": null
+        },
+        "score": {
+          "right": 4,
+          "total": 4,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 4,
+          "total": 4,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 4,
+          "total": 4,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    },
+    {
+      "id": "N24",
+      "set": "natural",
+      "style": "natural",
+      "text": "cardiologista para o Centro sábado à noite",
+      "today": "2026-10-01",
+      "expected": {
+        "unit_id": "centro",
+        "specialty": null
+      },
+      "flags": [],
+      "regras": {
+        "fields": {
+          "unit_id": "centro",
+          "specialty": null,
+          "starts_at": "2026-10-03T19:00:00",
+          "ends_at": "2026-10-04T07:00:00",
+          "urgency": null
+        },
+        "score": {
+          "right": 2,
+          "total": 2,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "gemini": {
+        "status": "ok",
+        "ms": 10789,
+        "raw": "{\"unit\": \"Hospital Modelo Centro\", \"specialty\": null, \"starts_at\": \"2026-10-03T18:00:00\", \"ends_at\": \"2026-10-04T06:00:00\", \"urgency\": null}",
+        "fields": {
+          "unit_id": "centro",
+          "specialty": null,
+          "starts_at": "2026-10-03T18:00:00",
+          "ends_at": "2026-10-04T06:00:00",
+          "urgency": null
+        },
+        "score": {
+          "right": 2,
+          "total": 2,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema": {
+        "score": {
+          "right": 2,
+          "total": 2,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      },
+      "sistema_api": {
+        "score": {
+          "right": 2,
+          "total": 2,
+          "wrong": [],
+          "invented": [],
+          "all_right": true
+        }
+      }
+    }
+  ]
+}
