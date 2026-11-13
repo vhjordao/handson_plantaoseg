@@ -90,6 +90,26 @@ test.describe("entrada só com login (3.7)", () => {
     await expect(page.getByText("O valor do plantão e o pagamento")).toBeVisible();
   });
 
+  test("Credenciais mostra o CRM, o status e a validade simulada, e Minha conta leva até lá", async ({ page }) => {
+    await entrarComoMedico(page);
+    await page.goto("/medico/conta");
+    await page.getByRole("link", { name: "Ver as minhas credenciais" }).click();
+    await page.waitForURL("**/medico/conta/credenciais");
+    // O caminho diz onde a pessoa está, e Minha conta continua marcada no menu.
+    await expect(page.getByRole("navigation", { name: "Você está em" })).toContainText("Credenciais");
+    await expect(
+      page.getByRole("navigation", { name: "Principal" }).first().getByRole("link", { name: "Minha conta" }),
+    ).toHaveAttribute("aria-current", "page");
+    await expect(page.getByRole("heading", { level: 1, name: "Credenciais" })).toBeVisible();
+    const registro = page.getByRole("region", { name: "Registro no CRM" });
+    await expect(registro).toBeVisible({ timeout: 10_000 });
+    await expect(registro.getByText(/^SIM-SP-\d{6}$/)).toBeVisible();
+    await expect(registro.getByText("Ativo", { exact: true })).toBeVisible();
+    await expect(registro.getByText(/^Válido até \d{2}\/\d{2}\/\d{4}$/)).toBeVisible();
+    await expect(registro.getByText(/Data simulada\./)).toBeVisible();
+    await expect(page.getByRole("region", { name: "Simulação" })).toContainText("Nada aqui tem validade legal.");
+  });
+
   test("com ?papel=medico, a porta do médico vem primeiro (posição visual)", async ({ page }) => {
     await page.goto("/entrar/demonstracao?papel=medico");
     const [m, c] = await Promise.all([
@@ -143,6 +163,13 @@ test.describe("entrada só com login (3.7)", () => {
             await page.goto("/medico/conta");
           },
           titulo: /^Minha conta \| PlantãoSeguro$/,
+        },
+        {
+          ir: async () => {
+            await page.goto("/medico/conta/credenciais");
+            await expect(page.getByRole("region", { name: "Registro no CRM" })).toBeVisible({ timeout: 10_000 });
+          },
+          titulo: /^Credenciais \| PlantãoSeguro$/,
         },
       ];
       for (const { ir, titulo } of rotas) {

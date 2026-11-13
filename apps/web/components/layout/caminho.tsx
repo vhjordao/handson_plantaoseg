@@ -10,6 +10,11 @@ const RAIZ: Record<AreaDeNavegacao, { rotulo: string; href: string }> = {
   medico: { rotulo: "Médico", href: "/medico" },
 };
 
+/** As páginas que ficam dentro de um item do menu e têm nome próprio. */
+const SUBPAGINAS: Record<string, string> = {
+  "/medico/conta/credenciais": "Credenciais",
+};
+
 /**
  * O caminho até a página atual ("Coordenação › Vagas › Detalhes da vaga"), montado a partir do
  * menu: não precisa de configuração por página. Só os passos anteriores são links.
@@ -21,7 +26,11 @@ export function Caminho({ area }: { area: AreaDeNavegacao }) {
   if (item) {
     const maisFundo = caminho !== item.href && caminho.startsWith(`${item.href}/`);
     passos.push({ rotulo: item.rotulo, href: maisFundo ? item.href : undefined });
-    if (maisFundo) passos.push({ rotulo: area === "coordenador" ? "Detalhes da vaga" : "Detalhes" });
+    if (maisFundo) {
+      passos.push({
+        rotulo: SUBPAGINAS[caminho] ?? (area === "coordenador" ? "Detalhes da vaga" : "Detalhes"),
+      });
+    }
   }
 
   return (

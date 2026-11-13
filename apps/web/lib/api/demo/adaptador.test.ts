@@ -12,7 +12,7 @@ import {
   NaoEncontradoError,
   SemRecomendacaoError,
 } from "../erros";
-import { LIMITE_TEXTO_LIVRE, LIMITE_TEXTO_VAGA } from "../types";
+import { CredenciaisSchema, LIMITE_TEXTO_LIVRE, LIMITE_TEXTO_VAGA } from "../types";
 import type { ConfirmarVagaInput, EventoPlantao, RegistroAuditoria } from "../types";
 import { criarApiDemo } from "./index";
 import { somarMinutos } from "./datas";
@@ -115,6 +115,29 @@ describe("relógio, personas e leitura", () => {
     const exemplo = mundo.exemplosTexto.find((e) => e.estilo === "adversarial")!;
     const leitura = await api.lerVaga(exemplo.texto);
     expect(leitura).toMatchObject({ fonte: "regras", sinais: ["ignorar_instrucoes"], erroIA: null });
+  });
+});
+
+describe("credenciais do médico", () => {
+  it("cada persona de médico tem o CRM simulado ativo, com a validade à frente do relógio", async () => {
+    const api = criarApiDemo();
+    const medicos = await api.listarPersonas("medico");
+    expect(medicos.length).toBeGreaterThan(0);
+    for (const persona of medicos) {
+      const credenciais = await api.obterCredenciais(persona.id);
+      expect(CredenciaisSchema.safeParse(credenciais).success).toBe(true);
+      expect(credenciais.statusCrm).toBe("ativo");
+      expect(credenciais.elegivel).toBe(true);
+      expect(credenciais.fonteDoStatus).toBe("demonstracao");
+      expect(credenciais.uf).toBe("SP");
+      expect(credenciais.validaAte > api.agora()).toBe(true);
+    }
+  });
+
+  it("um id que não é de médico não tem credenciais", async () => {
+    const api = criarApiDemo();
+    const [coordenador] = await api.listarPersonas("coordenador");
+    await expect(api.obterCredenciais(coordenador!.id)).rejects.toThrow(/não existe/);
   });
 });
 

@@ -9,6 +9,7 @@
  * hash depende da ordem) e só gravam no fim, de uma vez, para que ninguém veja meia operação.
  */
 import { contarOfertas } from "../contagem";
+import { montarCredenciais } from "../credenciais";
 import { carregarGrade, chaveDaGrade, obterMundo } from "../../demo/mundo";
 import type { Mundo } from "../../demo/schema";
 import {
@@ -57,6 +58,7 @@ import {
   type VerificacaoCadeia,
   type Vaga,
   ContagemOfertas,
+  Credenciais,
 } from "../types";
 import { z } from "zod";
 import { criarRegistro, verificarRegistros, type EntradaDeRegistro } from "./auditoria";
@@ -992,6 +994,14 @@ class ApiDemo implements PlantaoApiDemo {
       : this.dados.auditoria;
     // Em ordem de seq; sem filtro, só os mais recentes (o limite), como no sistema real.
     return copia(vagaId ? registros : registros.slice(-(filtro?.limite ?? 200)));
+  }
+
+  /** As personas são médicos que o sistema recomenda: todos com o CRM simulado ativo. */
+  async obterCredenciais(medicoId: string): Promise<Credenciais> {
+    await this.esperar();
+    const persona = this.mundo.personas.find((p) => p.papel === "medico" && p.id === medicoId);
+    if (persona?.papel !== "medico") throw new NaoEncontradoError("O médico");
+    return montarCredenciais(copia(persona.medico), "ativo", this.relogio.agora(), "demonstracao");
   }
 
   async contarOfertas(): Promise<ContagemOfertas> {

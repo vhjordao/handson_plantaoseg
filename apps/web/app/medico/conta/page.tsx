@@ -103,6 +103,15 @@ export default async function MinhaConta() {
               : ""}
           </p>
           <p className="text-tinta-suave">{medico.crm}</p>
+          {/* Sem ícone e com quebra em qualquer ponto: com a letra a 200%, a coluna fica estreita. */}
+          <p className="mt-2">
+            <Link
+              href="/medico/conta/credenciais"
+              className="inline-block py-2 font-semibold underline underline-offset-4 [overflow-wrap:anywhere] hover:no-underline"
+            >
+              Ver as minhas credenciais
+            </Link>
+          </p>
           <p className="mt-2 text-sm text-tinta-suave">
             Persona fictícia. Os dados desta demonstração são todos sintéticos.
           </p>

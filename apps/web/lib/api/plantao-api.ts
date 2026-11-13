@@ -12,6 +12,7 @@ import type {
   ConfirmarVagaInput,
   ContestarInput,
   ContagemOfertas,
+  Credenciais,
   Contestacao,
   Decisao,
   DesfazerPuloInput,
@@ -99,6 +100,10 @@ export interface PlantaoApi {
   contestar(input: ContestarInput): Promise<Contestacao>;
   listarContestacoes(filtro?: { medicoId?: string }): Promise<Contestacao[]>;
   responderContestacao(input: { id: string; texto: string }): Promise<Contestacao>;
+
+  // --- Credenciais (médico) -------------------------------------------------
+  /** O CRM, o status do cadastro e a validade simulada do próprio médico. */
+  obterCredenciais(medicoId: string): Promise<Credenciais>;
 
   // --- Auditoria e indicadores (UI-3) --------------------------------------
   /** Em ordem de `seq`. Sem filtro por vaga, só os `limite` mais recentes (200 por padrão). */

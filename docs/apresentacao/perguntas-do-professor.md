@@ -117,6 +117,14 @@ Preparação para a apresentação de **17/11/2026** e para a conversa depois de
 
 **Onde:** [Entrega 3, seção 3.3](../04-entrega-3-validacao.md).
 
+### 2.7 "A referência de fora faz mais do que vocês. O que falta?"
+
+**O que dizer.** Comparamos com a Flexzo em 12/11. O núcleo está coberto: vaga publicada, ordem sugerida por IA e ofertas em sequência. A conferência de credenciais, que ela anuncia como diferencial, aparece na tela do médico: registro no CRM, status do cadastro e validade, esta última **simulada**. Ficaram de fora, por escolha, três coisas: **previsão de vagas** (hoje o "Em risco" é uma regra de 24 horas, e a previsão não foi medida), **float pool** (o cadastro não separa o quadro do hospital da rede de fora) e **escala** (cobrimos o plantão descoberto, não montamos a escala do mês). O que temos e ela não mostra é o que as regras brasileiras pedem: explicação por recomendação, contestação, trilha de auditoria e medida de equidade.
+
+**Cuidado:** a lista da Flexzo vem do site e de notas da própria empresa. É o que ela diz de si, não o que conferimos no produto.
+
+**Onde:** [roteiro até o MVP, seção 8](../roteiro-ate-o-mvp.md#8-fora-do-mvp), com o momento da demonstração em que cada uma aparece.
+
 ---
 
 ## 3. Experiência do usuário
@@ -213,7 +221,7 @@ Preparação para a apresentação de **17/11/2026** e para a conversa depois de
 
 ### 5.5 "O que vocês fariam com mais tempo?"
 
-**O que dizer.** Primeiro, o **piloto em paralelo** (3 meses, com o sistema só calculando), para medir a linha de base real e o V. Depois: teste de usabilidade com coordenadores reais; relatório de impacto completo e parecer jurídico; o plano para hospitais pequenos; e, na técnica, Realtime, API com mais de um processo e a comparação dos modelos com dados reais.
+**O que dizer.** Primeiro, o **piloto em paralelo** (3 meses, com o sistema só calculando), para medir a linha de base real e o V. Depois: teste de usabilidade com coordenadores reais; relatório de impacto completo e parecer jurídico; o plano para hospitais pequenos; e, na técnica, Realtime, API com mais de um processo e a comparação dos modelos com dados reais. No produto, o que a referência de fora já anuncia: previsão de vagas, float pool e integração com a escala do hospital ([2.7](#27-a-referência-de-fora-faz-mais-do-que-vocês-o-que-falta)).
 
 ---
 

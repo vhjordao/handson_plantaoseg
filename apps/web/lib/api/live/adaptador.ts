@@ -6,7 +6,12 @@
  * Cobre a jornada do coordenador (fase 3) e a do médico com a cascata (fase 4). A auditoria na
  * tela chega na fase 6: até lá, ela diz que ainda não existe neste modo.
  */
-import { CandidatoInvalidoError, EntradaInvalidaError, EstadoInvalidoError } from "../erros";
+import {
+  CandidatoInvalidoError,
+  EntradaInvalidaError,
+  EstadoInvalidoError,
+  NaoEncontradoError,
+} from "../erros";
 import { removerDadosPessoais } from "../demo/privacidade";
 import type { PlantaoApi } from "../plantao-api";
 import {
@@ -15,6 +20,7 @@ import {
   type AprovarInput,
   type Cascata,
   type ContagemOfertas,
+  type Credenciais,
   type ConfirmarVagaInput,
   type Contestacao,
   type DataHora,
@@ -44,6 +50,7 @@ import { lerTokens } from "./autenticacao";
 import { chamarApi, lerTabela, type OpcoesHttp } from "./http";
 import { COLUNAS_DA_TRILHA, registroDoBanco, verificarTrilhaDoBanco, type RegistroDoBanco } from "./auditoria";
 import { contarOfertas } from "../contagem";
+import { STATUS_CRM_DO_BANCO, montarCredenciais } from "../credenciais";
 import {
   estadoDaApi,
   fichaDaApi,
@@ -756,6 +763,17 @@ export class AdaptadorLive implements PlantaoApi {
       ultimo = pagina[pagina.length - 1].seq;
     }
     return verificarTrilhaDoBanco(todas);
+  }
+
+  /** O médico lê a própria linha (RLS): o status vem do cadastro e a validade é simulada. */
+  async obterCredenciais(medicoId: string): Promise<Credenciais> {
+    const [linha] = await lerTabela<MedicoDoBanco & { crm_status: string }>(
+      this.opcoes,
+      `doctors?select=${COLUNAS_DO_MEDICO},crm_status&id=eq.${encodeURIComponent(medicoId)}`,
+    );
+    const status = linha ? STATUS_CRM_DO_BANCO[linha.crm_status] : undefined;
+    if (!linha || !status) throw new NaoEncontradoError("O cadastro do médico");
+    return montarCredenciais(medicoDoBanco(linha), status, this.agora(), "cadastro");
   }
 
   async contarOfertas(): Promise<ContagemOfertas> {
