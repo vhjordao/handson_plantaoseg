@@ -20,7 +20,7 @@ Fase F do [roteiro até o MVP](../roteiro-ate-o-mvp.md) (itens 5.1 a 5.4). É o 
 
 O rodízio entre equivalentes ([ADR 0017](../adr/0017-rodizio-entre-equivalentes-na-api.md)) conta quantas vezes cada médico apareceu no top-5 nos últimos 7 dias. Os ensaios e as conferências das fases C e D contam, e **mudam a ordem da vaga do roteiro**. Por isso o banco começa limpo.
 
-**Na véspera (16/11), depois de congelar o código, e na manhã de 17/11, depois do último ensaio:**
+**Na véspera (16/11) e na manhã de 17/11, depois do último ensaio:**
 
 ```
 py -3.12 scripts/usuarios-de-teste.py limpar-demonstracao --env C:\dev\handson_plantaoseg\.env
@@ -44,7 +44,7 @@ A saída esperada é `serve` e `2: Felipe Ferraz Siqueira | 4: Felipe Barros Tav
 - [ ] Os quatro logins entram (o coordenador e os três médicos). As senhas ficam com o Victor.
 - [ ] A chamada única ao Gemini responde (`avaliacao --rapido`, em [teste-manual-gemini.md](../teste-manual-gemini.md)). Se demorar, o roteiro segue: a leitura sai pelas regras.
 - [ ] O prazo da oferta é de 2 minutos na rede simulada (a migração de 06/11 já o fixou; o comando `prazo` só mexe na organização de teste).
-- [ ] O vídeo do plano B está no computador (fase G, ainda por fazer).
+- [ ] O modo de demonstração abre e percorre o caminho. **Não há vídeo gravado do plano B** (a fase G foi dispensada em 13/11): o plano B é o modo de demonstração.
 
 ## 3. A janela de cada pessoa (5.3)
 
@@ -111,12 +111,12 @@ O primeiro passo chama o Gemini. Em 13/11, de 56 respostas, 16 passaram de 6 s (
 5. **Passar o prazo desta oferta** faz o papel do n8n: serve para mostrar o "deixa passar".
 6. O relógio da demonstração é quinta, 01/10/2026, 9h, e a vaga é outra; **os nomes e o caminho são os mesmos do real**. Diga: "A demonstração roda sem o servidor, com os mesmos dados."
 
-Quando existir, o **vídeo do plano B** (fase G) cobre o caso do computador sem internet.
+**Não há vídeo do plano B.** O modo de demonstração roda no navegador, sem o servidor, mas ainda precisa que o site abra: sem internet nenhuma, não há plano B. Leve o roteiro no papel e, se for preciso, conte o caminho em voz alta.
 
 ## 7. O que ainda não foi feito
 
 - **O ensaio no sistema real** (seção 8): precisa dos logins do Victor.
-- **O vídeo do plano B e a limpeza do banco no dia** (fases G e H).
+- **A limpeza do banco no dia** (fase H). Sem vídeo do plano B: a fase G foi dispensada em 13/11.
 - **A conferência das fases C e D** com o login, que continua pendente: a cascata e a auditoria só foram vistas por teste, e o roteiro depende das duas.
 
 ## 8. O ensaio

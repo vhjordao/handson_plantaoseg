@@ -218,7 +218,7 @@ Preparação para a apresentação de **17/11/2026** e para a conversa depois de
 
 ### 5.3 "E se cair no meio da demonstração?"
 
-**O que dizer.** Há plano B: se a API não responde, a tela oferece o **modo de demonstração**, que faz o mesmo caminho sem o servidor (as ofertas e a cascata são simuladas numa aba só); se o Gemini cai, a leitura segue pelas regras; e o vídeo gravado do roteiro e a limpeza do banco antes do ensaio estão previstos na fase G, ainda por fazer.
+**O que dizer.** Há plano B: se a API não responde, a tela oferece o **modo de demonstração**, que faz o mesmo caminho sem o servidor (as ofertas e a cascata são simuladas numa aba só); se o Gemini cai, a leitura segue pelas regras; e a limpeza do banco antes do ensaio está prevista na fase H. Não há vídeo gravado do roteiro.
 
 **Onde:** [roteiro até o MVP, fases F a H](../roteiro-ate-o-mvp.md).
 

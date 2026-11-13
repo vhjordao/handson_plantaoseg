@@ -22,7 +22,7 @@ O mapa de tudo o que falta para o PlantãoSeguro funcionar de ponta a ponta, do 
 | **D. Auditoria, contestações e equidade** | As três telas com os dados do sistema (6.1 a 6.3), no visual de hoje | Claude Code | As três mostram dados reais, com os rótulos de simulação |
 | **E. O visual novo** | O Victor traz o modelo (F.1); ele vira a base (F.2), e as telas são ajustadas uma a uma (F.3 a F.8) | Victor e Claude Code | Todas as telas no visual novo, nos dois temas e no celular, com os testes passando |
 | **F. Roteiro da demonstração** | Pedido, quem recusa, quem deixa passar e quem aceita, as janelas e quando trocar para o modo de demonstração (5.1 a 5.4) | Victor e Claude Code | O Victor percorre o roteiro sozinho, sem consultar ninguém |
-| **G. Pronto para o palco** | Segurança, caminho completo no servidor, reinício, acessibilidade, vídeo de plano B e congelar o código (8.1 a 8.4, 8.6, 8.7 e 8.9); MFA do n8n (8.2, Victor) | Claude Code e Victor | Código congelado em 13/11, com o vídeo e o modo de demonstração prontos |
+| **G. Pronto para o palco (dispensada em 13/11)** | Segurança, caminho completo no servidor, reinício, acessibilidade, vídeo de plano B e congelar o código (8.1 a 8.4, 8.6, 8.7 e 8.9); MFA do n8n (8.2, Victor) | Claude Code e Victor | Código congelado em 13/11, com o vídeo e o modo de demonstração prontos |
 | **H. Ensaio e apresentação** | Limpar os dados de teste (8.8, também zera a contagem do rodízio), ensaio com o plano B e o Gemini (8.5 e 9.1), slides e pitch (E.9) e a apresentação (9.2) | Victor e grupo | 17/11 |
 | **I. Depois da apresentação** | Chave do Gemini fora e apagada, logins e dados de teste removidos, servidor parado e tokens revogados (10.1 a 10.4) | Victor | Nada do projeto fica ligado |
 
@@ -45,7 +45,7 @@ Falta conferir as três no sistema real, com o login do coordenador.
 
 **Pendência da página inicial (11/11):** numa tela de computador com 900 px de altura, a seção 1 passa cerca de 30 px da janela, e o pé do título fica logo abaixo da dobra. A correção é descontar a altura do aviso e do cabeçalho (cerca de 8 rem, não 6). O Victor pediu para deixar nas pendências.
 
-**Próximo passo:** o Victor confere as fases C e D e faz o primeiro ensaio do [roteiro da demonstração](apresentacao/roteiro-da-demonstracao.md) no sistema real, com os logins (5.5). **A fase F está escrita (13/11)**; depois vem a fase G: o vídeo do plano B, a segurança e o congelamento do código.
+**Próximo passo:** o Victor confere as fases C e D e faz o primeiro ensaio do [roteiro da demonstração](apresentacao/roteiro-da-demonstracao.md) no sistema real, com os logins (5.5). **A fase F está escrita (13/11)**; **a fase G foi dispensada pelo Victor em 13/11** (sem vídeo do plano B, sem revisão de segurança dedicada, sem reinício do servidor e sem congelar o código). Depois vem a fase H: limpar o banco, ensaiar e apresentar.
 
 ## 2. Onde estamos
 
@@ -180,15 +180,15 @@ Esta fase **não depende das anteriores** e pode começar já.
 
 ### Fase 8: pronto para o palco
 
-- [ ] **8.1** Cabeçalhos de segurança na web e no Traefik, e o endereço do site no Supabase (`site_url`).
-- [ ] **8.2** MFA no n8n e a renovação do servidor desligada (Victor).
-- [ ] **8.3** O caminho completo testado no servidor, do jeito do roteiro, inclusive a cascata com o prazo curto.
-- [ ] **8.4** Reiniciar o servidor e conferir que tudo volta sozinho.
+- [ ] ~~**8.1** Cabeçalhos de segurança na web e no Traefik, e o endereço do site no Supabase (`site_url`).~~ *Dispensado pelo Victor em 13/11 (fase G).*
+- [ ] ~~**8.2** MFA no n8n e a renovação do servidor desligada (Victor).~~ *Dispensado pelo Victor em 13/11 (fase G).*
+- [ ] ~~**8.3** O caminho completo testado no servidor, do jeito do roteiro, inclusive a cascata com o prazo curto.~~ *Dispensado pelo Victor em 13/11 (fase G).*
+- [ ] ~~**8.4** Reiniciar o servidor e conferir que tudo volta sozinho.~~ *Dispensado pelo Victor em 13/11 (fase G).*
 - [ ] **8.5** Gemini no ensaio: a chave já está no servidor desde o 3.8; conferir uma chamada, o teto do dia e a memória com `docker stats` ([passo a passo](../infra/README.md)), e o que fazer se ele cair (a leitura segue pelas regras).
-- [ ] **8.6** Acessibilidade e Lighthouse nas telas novas, e ensaio nos aparelhos da apresentação.
-- [ ] **8.7** Plano B: vídeo gravado do roteiro inteiro e o modo de demonstração pronto para trocar.
+- [ ] ~~**8.6** Acessibilidade e Lighthouse nas telas novas, e ensaio nos aparelhos da apresentação.~~ *Dispensado pelo Victor em 13/11 (fase G).*
+- [ ] ~~**8.7** Plano B: vídeo gravado do roteiro inteiro e o modo de demonstração pronto para trocar.~~ *Dispensado pelo Victor em 13/11 (fase G).*
 - [ ] **8.8** Limpar os dados de teste do banco (Victor roda `usuarios-de-teste.py limpar`).
-- [ ] **8.9** Congelar o código: depois disso, só correção.
+- [ ] ~~**8.9** Congelar o código: depois disso, só correção.~~ *Dispensado pelo Victor em 13/11 (fase G).*
 
 ### Fase 9: ensaio e apresentação
 
