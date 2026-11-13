@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BadgeCheck, ListChecks, MessageSquareWarning, ShieldCheck, UserLock } from "lucide-react";
+import { ListChecks, MessageSquareWarning, ShieldCheck, UserLock } from "lucide-react";
 import { BaixarMeusDados } from "@/components/medico/baixar-meus-dados";
 import { CabecalhoDoPainel, Painel } from "@/components/ui/painel";
 import { ROTULO_ESPECIALIDADE } from "@/lib/copy/rotulos";
@@ -103,12 +103,12 @@ export default async function MinhaConta() {
               : ""}
           </p>
           <p className="text-tinta-suave">{medico.crm}</p>
+          {/* Sem ícone e com quebra em qualquer ponto: com a letra a 200%, a coluna fica estreita. */}
           <p className="mt-2">
             <Link
               href="/medico/conta/credenciais"
-              className="inline-flex min-h-[var(--alvo-min)] items-center gap-2 font-semibold underline underline-offset-4 hover:no-underline"
+              className="inline-block py-2 font-semibold underline underline-offset-4 [overflow-wrap:anywhere] hover:no-underline"
             >
-              <BadgeCheck aria-hidden="true" className="size-[18px] shrink-0" />
               Ver as minhas credenciais
             </Link>
           </p>
