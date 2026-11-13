@@ -15,8 +15,9 @@
  * um salto de `seq` (linhas de outra organização), o elo não pode ser conferido daqui, e isso é
  * dito como lacuna, não como quebra.
  */
-import type { RegistroAuditoria, VerificacaoCadeia } from "../types";
+import type { DataHora, RegistroAuditoria, VerificacaoCadeia } from "../types";
 import { sha256Hex } from "../demo/sha256";
+import { localDoBanco } from "./tempo";
 
 /** Uma linha de `audit_log` como a tela pede ao banco. */
 export interface RegistroDoBanco {
@@ -85,11 +86,22 @@ export function hashDoRegistro(r: RegistroDoBanco): Promise<string> {
   return sha256Hex(textoDoHash(r));
 }
 
+/**
+ * O horário do registro na hora local de São Paulo, sem fuso, como a tela usa em toda parte. O
+ * banco devolve o instante com fuso ("2026-11-04T19:50:49.004102+00:00", ou "+00" no texto do
+ * Postgres); passado cru, a tela acrescentava um "Z" e a data ficava inválida, e a formatação
+ * derrubava a página da auditoria (13/11/2026).
+ */
+export function horarioDaTela(occurredAt: string): DataHora {
+  const utc = horarioDoHash(occurredAt); // "2026-11-04T19:50:49.004102Z"
+  return localDoBanco(`${utc.slice(0, 23)}Z`);
+}
+
 /** A linha do banco no formato da tela. */
 export function registroDoBanco(r: RegistroDoBanco): RegistroAuditoria {
   return {
     seq: r.seq,
-    ocorridoEm: r.occurred_at,
+    ocorridoEm: horarioDaTela(r.occurred_at),
     papelAtor: r.actor_role,
     atorPseudoId: r.actor_pseudo_id,
     acao: r.action as RegistroAuditoria["acao"],

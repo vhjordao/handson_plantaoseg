@@ -1,6 +1,15 @@
 import { describe, expect, it } from "vitest";
 import linhas from "./__fixtures__/trilha-do-banco.json";
-import { hashDoRegistro, horarioDoHash, textoDoHash, verificarTrilhaDoBanco, type RegistroDoBanco } from "./auditoria";
+import { formatarDiaHora } from "@/lib/format/datas";
+import {
+  hashDoRegistro,
+  horarioDaTela,
+  horarioDoHash,
+  registroDoBanco,
+  textoDoHash,
+  verificarTrilhaDoBanco,
+  type RegistroDoBanco,
+} from "./auditoria";
 
 // Linhas reais da trilha do banco (dados sintéticos, só pseudônimos), lidas em 11/11/2026 junto
 // com o texto que o próprio Postgres resume no hash (`texto_no_banco`).
@@ -19,6 +28,17 @@ describe("trilha do sistema real", () => {
     expect(horarioDoHash("2026-11-04 19:50:49.004102+00")).toBe("2026-11-04T19:50:49.004102Z");
     expect(horarioDoHash("2026-11-04T19:50:49.0041+00:00")).toBe("2026-11-04T19:50:49.004100Z");
     expect(horarioDoHash("2026-11-04T16:50:49-03:00")).toBe("2026-11-04T19:50:49.000000Z");
+  });
+
+  it("entrega à tela a hora local de São Paulo, sem fuso, que a formatação aceita", () => {
+    // O defeito de 13/11: o instante com fuso ia cru para a tela, e a página caía.
+    expect(horarioDaTela("2026-11-04 19:50:49.004102+00")).toBe("2026-11-04T16:50:49");
+    expect(horarioDaTela("2026-11-04T19:50:49.004102+00:00")).toBe("2026-11-04T16:50:49");
+    for (const linha of doBanco) {
+      const { ocorridoEm } = registroDoBanco(linha);
+      expect(() => formatarDiaHora(ocorridoEm)).not.toThrow();
+    }
+    expect(formatarDiaHora(registroDoBanco(doBanco[0]).ocorridoEm)).toBe("quarta, 04/11, 16h50");
   });
 
   it("confere o começo da cadeia e conta como lacuna o que esta sessão não vê", async () => {
