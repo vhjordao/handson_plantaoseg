@@ -24,7 +24,9 @@ function Logo() {
   return (
     // O nome acessível é o próprio texto visível (WCAG 2.5.3); "página inicial" fica só para o leitor de tela.
     <Link href="/" className="flex shrink-0 items-center gap-2.5 rounded-md text-tinta md:gap-3">
-      <LogoPlantao className="size-9 sm:size-10 md:size-12" />
+      {/* Abaixo de 400 px o logo sai, para o cabeçalho caber numa linha (WCAG 2.4.11): a 360 px ele
+          precisava de cerca de 340 px e tinha 328. O nome fica, e a frase entra no mesmo ponto. */}
+      <LogoPlantao className="hidden size-9 min-[400px]:block sm:size-10 md:size-12" />
       <span className="flex flex-col">
         <span className="text-base leading-none font-extrabold tracking-tight uppercase sm:text-lg md:text-2xl">Plantão</span>
         <span className="-mt-0.5 text-base leading-none font-extrabold tracking-tight uppercase sm:text-lg md:-mt-1 md:text-2xl">
