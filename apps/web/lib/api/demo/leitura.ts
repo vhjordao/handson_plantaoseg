@@ -60,12 +60,17 @@ const ESPACOS_NO_INICIO = new RegExp(`^${ESP}+`, "u");
 const ESPACOS_NO_FIM = new RegExp(`${ESP}+$`, "u");
 const SO_DIGITO = /^\p{Nd}$/u;
 
-/** `guardrails.INJECTION_PATTERNS`: (código, padrão aplicado ao texto sem acento e minúsculo). */
+/** `guardrails.INJECTION_PATTERNS`: (código, padrão aplicado ao texto preparado para a detecção). */
 const PADROES_DE_INJECAO: ReadonlyArray<readonly [string, RegExp]> = [
   [
     "ignorar_instrucoes",
     rx(
-      `(ignor${PAL}*|desconsider${PAL}*|esqueca)${ESP}+(todas${ESP}+)?(as${ESP}+)?(regras|instrucoes|anteriores|previous|prior)`,
+      `(ignor${PAL}*|desconsider${PAL}*|esquec${PAL}*)${ESP}+(todas${ESP}+)?(as${ESP}+)?` +
+        `(regras|instrucoes|anteriores|previous|prior|orientacoes)` +
+        `|(ignor${PAL}*|desconsider${PAL}*|esquec${PAL}*)${ESP}+(tudo|o que|the above|all|everything)` +
+        `|nao siga${ESP}+(as${ESP}+|os${ESP}+)?(orientacoes|instrucoes|regras)` +
+        `|${B}novas?${ESP}+instruc|${B}override${B}|instrucoes anteriores|(estao|foram)${ESP}+cancelad` +
+        `|a partir de agora,?${ESP}+(voce|responda|ignore|aja|seja|so)${B}`,
     ),
   ],
   [
@@ -74,18 +79,105 @@ const PADROES_DE_INJECAO: ReadonlyArray<readonly [string, RegExp]> = [
   ],
   [
     "pagamento",
-    rx("r\\$|valor do plantao|menor valor|ordene por valor|pagamento|remuneracao"),
+    rx(
+      "r\\$|valor do plantao|menor valor|ordene por valor|pagamento|remuneracao" +
+        `|cobra${PAL}*${ESP}+menos|mais barat|desconto|aceitar menos|${B}preco${B}`,
+    ),
   ],
   [
     "forjar_campos",
-    rx(`\\{${ESP}*"|"${ESP}*(unit|specialty|starts_at|approved)${ESP}*"${ESP}*:`),
+    rx(`\\{${ESP}*["']|["']${ESP}*(unit|specialty|starts_at|ends_at|urgency|approved)${ESP}*["']${ESP}*:`),
   ],
-  ["papel_falso", rx("voce agora e|you are now|aja como|finja ser|administrador do sistema")],
-  ["sem_revisao", rx("sem (revisao|aprovacao)|aprove (todas|tudo)")],
-  ["dados_pessoais", rx(`(liste|mostre|informe)${ESP}+(o${ESP}+)?(nome|crm|telefone)`)],
-  ["vazar_prompt", rx("system prompt|prompt do sistema|instrucoes iniciais")],
-  ["idioma_trocado", rx("answer in english|reveal |disregard|ignore previous")],
+  [
+    "papel_falso",
+    rx(
+      `voce agora e|you are now|aja como|finja|pretend|${B}act as${B}` +
+        `|administrador do sistema|modo (desenvolvedor|administrador|deus)|developer mode` +
+        `|${B}dan${B}|sem (limites|restricoes)|assistente sem`,
+    ),
+  ],
+  ["sem_revisao", rx("sem (revisao|aprovacao)|aprove (todas|tudo|o primeiro|automaticamente)|autorizou tudo")],
+  [
+    "dados_pessoais",
+    rx(`(liste|mostre|informe|envie|mande)${ESP}+(o${ESP}+|a${ESP}+)?(nome|crm|telefone|lista de medicos|contato)`),
+  ],
+  [
+    "vazar_prompt",
+    rx(
+      `system prompt|prompt do sistema|instrucoes iniciais|${B}(seu|teu)${ESP}+prompt` +
+        `|repita${ESP}+(palavra por palavra|suas|as suas|o que)|regras${ESP}+(internas|ocultas)` +
+        "|hidden rules|configuracao interna",
+    ),
+  ],
+  [
+    "idioma_trocado",
+    rx("answer in english|reveal |disregard|ignore previous|ignore (all|the above|everything)|output the|from now on"),
+  ],
+  [
+    "delimitador_falso",
+    rx(
+      `</?${ESP}*pedido${ESP}*>|<\\|${ESP}*im_(start|end)${ESP}*\\|>` +
+        `|\\[/?${ESP}*(system|inst|sistema)${ESP}*\\]|#{2,}${ESP}*(instruc|system|sistema)` +
+        `|(^|[\\n.!?;]${ESP}*)(sistema|system|assistente|assistant|usuario|user)${ESP}*:`,
+    ),
+  ],
+  ["codificacao", rx(`base64|rot13|decodifiqu|${B}decode${B}`)],
+  [
+    "favorecimento",
+    rx(
+      `(priorize|prioriza|prefira|chame primeiro|chamar primeiro|escolha)${ESP}+` +
+        `(a${ESP}+|o${ESP}+|ao${ESP}+|para${ESP}+)?(dr|dra|doutor|doutora)${B}` +
+        `|amig${PAL}*${ESP}+d[ao]${ESP}+(diretor|diretoria|chefe|gestor)|independente${PAL}* da ordem`,
+    ),
+  ],
+  [
+    "criterio_discriminatorio",
+    rx(
+      `${B}so${ESP}+(quero${ESP}+)?(homens|mulheres|jovens|brancos|brancas)${B}` +
+        `|${B}(nao|evite|evitar|sem)${ESP}+(chame${ESP}+|chamar${ESP}+|quero${ESP}+)?(ninguem${ESP}+)?(${PAL}+${ESP}+){0,2}` +
+        `(mulheres|homens|gravid${PAL}*|gestante${PAL}*|idos${PAL}*|negr${PAL}*|deficien${PAL}*|mais de ${DIG}+ anos)${B}` +
+        `|${B}(nao chame|nao chamar|evite|sem)${ESP}+(ninguem${ESP}+)?(da|de|do)${ESP}+zona${B}`,
+    ),
+  ],
+  ["link_externo", rx("https?://|www\\.")],
+  [
+    "codigo_malicioso",
+    rx(
+      `<${ESP}*/?${ESP}*(script|iframe|img|svg|object|embed)${B}|javascript:` +
+        `|${B}on${PAL}+${ESP}*=|drop${ESP}+table|union${ESP}+select|;${ESP}*--|\\{\\{|\\$\\{`,
+    ),
+  ],
 ];
+
+/** `guardrails.CONFUSABLES`: letras cirílicas e gregas que se passam por latinas. */
+const CONFUSAVEIS = new Map(
+  Array.from("аеорсухіјѕԁԛԝАЕОРСТХІЈЅВНКМαεορτυνικΑΕΟΡΤΥΝΙΚΒΗΜ").map((c, i) => [
+    c,
+    "aeopcyxijsdqwAEOPCTXIJSBHKMaeoptyvikAEOPTYNIKBHM"[i],
+  ]),
+);
+/** `guardrails.LEET`: números e símbolos no lugar de letras, só para a forma compacta. */
+const LEET = new Map(Array.from("013457@$").map((c, i) => [c, "oieastas"[i]]));
+/** `guardrails.COMPACT_KEYWORDS`. */
+const PALAVRAS_COMPACTAS = [
+  "ignoreasregras",
+  "ignoretodas",
+  "ignoreasinstrucoes",
+  "ignoreprevious",
+  "ignoretudo",
+  "desconsidereasregras",
+  "desconsideretudo",
+  "systemprompt",
+  "promptdosistema",
+  "voceagorae",
+  "youarenow",
+  "mododesenvolvedor",
+  "developermode",
+  "jailbreak",
+];
+/** `guardrails.BASE64_BLOCK` e `_looks_like_base64`: maiúscula, minúscula e dígito ou símbolo. */
+const BLOCO_BASE64 = /[A-Za-z0-9+/]{24,}={0,2}/g;
+const pareceBase64 = (bloco: string): boolean => /[a-z]/.test(bloco) && /[A-Z]/.test(bloco) && /[0-9+/]/.test(bloco);
 
 /** `extraction.WEEKDAYS`, na mesma ordem (a ordem decide qual alternativa casa primeiro). */
 const DIAS_DA_SEMANA: ReadonlyArray<readonly [string, number]> = [
@@ -154,15 +246,31 @@ export function sanitizar(texto: string): string {
   return aparar(cortado);
 }
 
+/** `guardrails.detection_text`: sem invisíveis, letras latinas, sem acento e minúsculo. */
+export function textoDeDeteccao(bruto: string): string {
+  const semInvisiveis = bruto.normalize("NFKC").replace(TODOS_OS_CONTROLES, "");
+  const latinas = Array.from(semInvisiveis, (c) => CONFUSAVEIS.get(c) ?? c).join("");
+  return normalizar(latinas);
+}
+
 /** `guardrails.detect_injection`: códigos dos sinais de injeção de prompt no texto bruto. */
 export function detectarInjecao(bruto: string): string[] {
   const sinais: string[] = [];
   const tamanho = bruto.length > MAX_TEXTO ? Array.from(bruto).length : bruto.length;
   if (tamanho > MAX_TEXTO) sinais.push("texto_longo");
   if (TEM_CONTROLE.test(bruto)) sinais.push("caracteres_controle");
-  const normalizado = normalizar(bruto);
+  const texto = textoDeDeteccao(bruto);
   for (const [codigo, padrao] of PADROES_DE_INJECAO) {
-    if (padrao.test(normalizado)) sinais.push(codigo);
+    if (padrao.test(texto)) sinais.push(codigo);
+  }
+  const codificado = Array.from(bruto.matchAll(BLOCO_BASE64), (m) => m[0]).some(pareceBase64);
+  if (codificado && !sinais.includes("codificacao")) sinais.push("codificacao");
+  const compacto = Array.from(texto, (c) => LEET.get(c) ?? c)
+    .join("")
+    .replace(/[^a-z0-9]/g, "");
+  // A forma compacta só conta quando revela o que os padrões não viram ("i g n o r e", "1gn0r3").
+  if (sinais.length === 0 && PALAVRAS_COMPACTAS.some((palavra) => compacto.includes(palavra))) {
+    sinais.push("ofuscacao");
   }
   return sinais;
 }

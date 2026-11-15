@@ -26,7 +26,7 @@ Preparação para a apresentação de **17/11/2026** e para a conversa depois de
 | Carga real (04/11) | 126.803 chamadas, 0 falhas; p95 de 518 ms no fluxo completo | [carga](../resultados/metricas-carga-api.md) |
 | Risco | **Médio (preliminar)**, Res. CFM 2.454 | [classificação](../conformidade/classificacao-de-risco.md) |
 | Leitura do pedido pelo Gemini | **54 de 54 certos** quando ele respondeu; com o limite de 6 s da API, **22 de 24** pedidos naturais contra 20 das regras; 16 de 56 respostas passaram de 6 s | [extração](../resultados/metricas-extracao.md) |
-| Injeção de prompt | 60 de 60 sinalizados, 0 de 340 normais por engano; no Gemini real, nenhum dos 10 tipos foi obedecido | [solução de IA](../solucao-ia.md) |
+| Injeção de prompt | 60 de 60 do gerador; contra ataques nunca vistos, **7 de 20** (antes, 2 de 20), com 0 de 386 normais por engano; no Gemini real, nenhum dos 10 tipos foi obedecido | [solução de IA](../solucao-ia.md) |
 
 ---
 
@@ -74,9 +74,9 @@ Preparação para a apresentação de **17/11/2026** e para a conversa depois de
 
 ### 1.7 "O LLM não é um risco? Injeção de prompt?"
 
-**O que dizer.** O Gemini só lê o pedido e escreve o motivo; não tem ferramentas, não tem segredos, devolve esquema fechado, e o texto suspeito nem chega a ele. Quem decide é o coordenador. Nos 400 pedidos sintéticos, 60 de 60 ataques foram sinalizados e nenhum pedido normal por engano; no Gemini real, nenhum dos 10 tipos foi obedecido. O que resta é um ataque novo. Se o Gemini cai ou passa do teto diário de 100 chamadas, a leitura segue pelas regras.
+**O que dizer.** O Gemini só lê o pedido e escreve o motivo; não tem ferramentas, não tem segredos, devolve esquema fechado, e o texto suspeito nem chega a ele. Quem decide é o coordenador. Nos 400 pedidos sintéticos, 60 de 60 ataques foram sinalizados e nenhum pedido normal por engano; no Gemini real, nenhum dos 10 tipos foi obedecido. O que resta é um ataque novo, e medimos isso: contra 20 ataques que o detector nunca viu, ele pega 7 (antes da ampliação de 15/11, pegava 2), sem sinalizar nenhum texto normal. Por isso o detector é só a primeira de cinco camadas: o ataque que passa chega a um modelo sem ferramentas, cuja resposta só vale no esquema fechado, e nada sai sem o coordenador. Se o Gemini cai ou passa do teto diário de 100 chamadas, a leitura segue pelas regras.
 
-**Onde:** [solução de IA, seção 4](../solucao-ia.md), [teste manual do Gemini](../teste-manual-gemini.md).
+**Onde:** [solução de IA, seção 4](../solucao-ia.md), [teste manual do Gemini](../teste-manual-gemini.md), [red team](../resultados/metricas-injecao.md).
 
 ### 1.8 "O Gemini lê bem o pedido? O que ele acrescenta às regras?"
 
