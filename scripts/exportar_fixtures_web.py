@@ -63,6 +63,13 @@ from app.ranking.compute import FeatureStore  # noqa: E402
 from app.ranking.evaluate import evaluate  # noqa: E402
 from app.ranking.features import RANKING_FEATURES  # noqa: E402
 from app.ranking.model import LogisticModel  # noqa: E402
+from app.redteam import (  # noqa: E402
+    ATAQUES_DE_TESTE,
+    ATAQUES_NOVOS,
+    BASE,
+    NORMAIS_DE_TESTE,
+    NORMAIS_PARECIDOS,
+)
 from app.rules import Check, evaluate_candidate  # noqa: E402
 
 # ---------------------------------------------------------------------------
@@ -654,6 +661,11 @@ def montar_paridade(
             por_estilo[estilo] += 1
             candidatos.append((pedido["raw_text"], "amostra"))
     candidatos += [(texto, "caso_limite") for texto in CASOS_LIMITE]
+    # A bateria de ataques do red team (`app/redteam.py`) e os textos normais parecidos: o porte
+    # em TypeScript tem de sinalizar exatamente o mesmo que o Python.
+    ataques = ATAQUES_NOVOS + ATAQUES_DE_TESTE
+    candidatos += [(f"{BASE} {texto}", "caso_limite") for _, texto in ataques]
+    candidatos += [(texto, "caso_limite") for texto in NORMAIS_PARECIDOS + NORMAIS_DE_TESTE]
     vistos: set[str] = set()
     resultado = []
     for texto, origem in candidatos:

@@ -441,6 +441,30 @@ def cmd_extraction(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_redteam(args: argparse.Namespace) -> int:
+    from app.extraction_eval import NATURAL_CASES
+    from app.redteam import avaliar_deteccao, render_injecao
+
+    dataset, _ = _load(Path(args.data))
+    normais = [r.raw_text for r in dataset.requests if not r.is_adversarial]
+    adversariais = [r.raw_text for r in dataset.requests if r.is_adversarial]
+    naturais = [texto for _, texto, _ in NATURAL_CASES]
+    metrics = avaliar_deteccao(normais, adversariais, naturais)
+    if args.report_dir:
+        report_dir = Path(args.report_dir)
+        report_dir.mkdir(parents=True, exist_ok=True)
+        (report_dir / "metricas-injecao.md").write_text(render_injecao(metrics), encoding="utf-8")
+        (report_dir / "metricas-injecao.json").write_text(
+            json.dumps(metrics, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+    novos, teste = metrics["novos"], metrics["teste"]
+    print("Detector de injeção contra ataques novos (textos sintéticos)")
+    print(f"  ampliação: {novos['pegos']} de {novos['total']}")
+    print(f"  teste, nunca visto: {teste['pegos']} de {teste['total']}")
+    print(f"  normais sinalizados: {sum(metrics['normais']['falsos_positivos'].values())}")
+    return 0
+
+
 def cmd_costs(args: argparse.Namespace) -> int:
     from app.costs import costs_chart, evaluate_costs, render_costs
 
@@ -661,6 +685,11 @@ def build_parser() -> argparse.ArgumentParser:
     extraction.add_argument("--pause", type=float, default=6.5, help="segundos entre pedidos")
     extraction.add_argument("--limit", type=int, default=100, help="teto de pedidos ao Gemini")
     extraction.set_defaults(func=cmd_extraction)
+
+    redteam = sub.add_parser("redteam", help="detector de injeção contra ataques novos")
+    redteam.add_argument("--data", default=str(DEFAULT_DATA))
+    redteam.add_argument("--report-dir", default=None)
+    redteam.set_defaults(func=cmd_redteam)
 
     costs = sub.add_parser("costs", help="custo total, preço e retorno (premissas)")
     costs.add_argument("--report-dir", default=None)

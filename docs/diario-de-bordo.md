@@ -4,6 +4,20 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 15/11/2026 (domingo): guardrails contra injeção de prompt, com ataques novos
+
+**Pedido do Victor:** "temos guardrails como prompt injection e etc, vamos revisar e caso precise aplicar, vamos aplicar para também usar no slide".
+
+**O que a revisão achou:** a defesa é forte no desenho (o Gemini não tem ferramentas, segredos nem dado pessoal no prompt; a saída passa por um esquema fechado; o ranking não lê o texto; nada sai sem o coordenador), mas o detector de injeção, que decide se o texto vai ao Gemini, foi escrito junto com os 10 ataques do gerador. Uma bateria de 35 ataques com técnicas novas mostrou que ele pegava só **2 de 35**.
+
+**O que mudou:** o detector ganhou uma preparação do texto contra ofuscação (caracteres invisíveis, letras cirílicas e gregas, números no lugar de letras, letras separadas), sinônimos em português e seis categorias novas (delimitador falso, codificação, favorecimento, critério discriminatório, link externo e código malicioso), na API e na cópia em TypeScript do modo de demonstração, com a paridade conferida. Relatório em [metricas-injecao.md](resultados/metricas-injecao.md), pelo comando `redteam`.
+
+**Resultado, sem se enganar:** pega os 35 usados na ampliação, mas esse número é circular. Num conjunto de teste de 20 ataques escrito depois e nunca usado para ajustar, pega **7 de 20** (antes, 2 de 20), sem sinalizar nenhum dos 386 textos normais. **Detector por padrões generaliza mal**, e por isso ele é a primeira camada, e não a única.
+
+**O que falta:** republicar a API no servidor, com o ok do Victor, para o detector novo valer no sistema real; a web vai pela Vercel no merge.
+
+**Uso de IA:** o Claude Code escreveu os ataques, ampliou o detector, mediu antes e depois e escreveu o relatório; o conjunto de teste foi escrito depois da ampliação e medido uma vez só.
+
 ## 13/11/2026 (sexta): a fase G fica de fora
 
 **Pedido do Victor:** "nao precisa da fase G".
