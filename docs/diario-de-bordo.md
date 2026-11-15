@@ -4,6 +4,18 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 15/11/2026 (domingo): as falas da apresentação, slide a slide
+
+**Pedido do Victor:** "revise todos os slides, melhore o que precisar melhorar e me dê a fala slide a slide", sem dividir por integrante, em duas versões: uma para 18 minutos e outra sem minutagem.
+
+**O que mudou (só documento):** [falas-da-apresentacao.md](apresentacao/falas-da-apresentacao.md), com uma fala por slide. A versão de 18 minutos tem o tempo de cada slide e o relógio acumulado (soma de 18:00, a cerca de 130 palavras por minuto); a versão completa traz mais contexto e números, para estudar e para as perguntas, e dá cerca de 28 minutos. Cada fala tem um "cuidado" para quem apresenta. As mesmas falas estão nas notas do deck.
+
+**O que a revisão dos slides corrigiu:** o título do resultado técnico dizia mais do que medimos e passou a dizer que o Gemini acerta quando lê, mas às vezes demora (16 de 56 respostas passaram de 6 segundos); o slide de reserva de LGPD saiu, porque repetia o slide principal.
+
+**O que contrariou o esperado:** para caber em 18 minutos, a demonstração fica com 4:35, e não com os 5 minutos do [roteiro da demonstração](apresentacao/roteiro-da-demonstracao.md); a contestação do médico só entra se sobrar tempo.
+
+**Uso de IA:** o Claude Code revisou os slides contra os relatórios de origem, escreveu as falas e mediu o tempo pela contagem de palavras; o tempo real só sai do ensaio com cronômetro.
+
 ## 15/11/2026 (domingo): guardrails contra injeção de prompt, com ataques novos
 
 **Pedido do Victor:** "temos guardrails como prompt injection e etc, vamos revisar e caso precise aplicar, vamos aplicar para também usar no slide".
