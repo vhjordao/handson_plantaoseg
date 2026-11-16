@@ -3,7 +3,7 @@
 -- Cenário: organizações A e B. D1 recebeu oferta em A e contestou; D2 recebeu oferta em B.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(11);
+select plan(12);
 
 insert into public.organizations (id, name, kind) values
   ('a0000000-0000-4000-8000-00000000000a', 'Rede A', 'rede_hospitais_privados'),
@@ -104,6 +104,10 @@ select lives_ok(
        answered_by = '10000000-0000-4000-8000-00000000000a', answered_at = now()
      where protocol = 'CT-TESTE-A' $$,
   'a API responde, com texto, autor e hora'
+);
+select lives_ok(
+  $$ delete from public.contestations where protocol = 'CT-TESTE-A' $$,
+  'a limpeza da demonstração apaga a contestação, só com a chave de serviço'
 );
 reset role;
 

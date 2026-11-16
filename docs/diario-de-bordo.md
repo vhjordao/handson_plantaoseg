@@ -4,6 +4,18 @@ Decisões e mudanças do dia, para os seis integrantes acompanharem. Registra ta
 
 > **Nota de 31/10/2026 (Victor).** O trabalho deste projeto foi feito **em conjunto** entre o Victor e o Claude Code, e nem tudo foi feito pela IA: a sugestão dos dados partiu do Victor. As linhas de "Uso de IA" abaixo descrevem o apoio da IA em cada dia; não significam que tudo foi escrito por ela.
 
+## 16/11/2026 (segunda): ensaio no sistema real e a limpeza que travava
+
+**Pedido do Victor:** entrar com os logins e rodar a demonstração. O login foi feito por ele no navegador; o Claude Code conduziu a partir daí.
+
+**O que funcionou no sistema real:** leitura pelo Gemini ("Leitura pela IA"), aprovação com prazo de 2 minutos, a cascata do n8n por prazo (a oferta do 1º expirou e a do 2º saiu sozinha), a contestação aberta pelo médico e respondida pelo coordenador, e "A cadeia confere" na auditoria. No modo de demonstração, o roteiro inteiro, com recusa e aceite.
+
+**O que falhou:** (1) com uma vaga de ensaio anterior no banco, o rodízio tirou os médicos com login das posições do roteiro, como o roteiro avisa; (2) `limpar-demonstracao` parou com 42501 ao apagar contestações, porque a chave de serviço não tinha DELETE nessa tabela, e a primeira contestação da organização da demonstração foi a deste ensaio; (3) a auditoria filtrada pela vaga não mostra as ofertas nem a contestação (os registros delas usam o id da oferta ou da contestação), no sistema real e no modo de demonstração.
+
+**O que mudou:** a migração `20261116180000_limpeza_apaga_contestacao.sql` dá DELETE em `contestations` só à chave de serviço; o navegador continua sem apagar, e a trilha guarda a abertura e a resposta. Um teste novo confere a permissão. O filtro da auditoria fica para outra decisão.
+
+**Uso de IA:** o Claude Code conduziu o ensaio com o login feito pelo Victor, achou a causa da falha da limpeza e escreveu a migração; aplicar no banco é com o ok do Victor.
+
 ## 15/11/2026 (domingo): as falas da apresentação, slide a slide
 
 **Pedido do Victor:** "revise todos os slides, melhore o que precisar melhorar e me dê a fala slide a slide", sem dividir por integrante, em duas versões: uma para 18 minutos e outra sem minutagem.
